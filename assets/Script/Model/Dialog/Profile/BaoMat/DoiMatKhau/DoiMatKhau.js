@@ -68,7 +68,7 @@ cc.Class({
         !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
     },
     isTop: function() {
-        return !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+        return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     onChangerClick: function() {
         if (this.OldPassword.string.length < 6 ||
@@ -78,13 +78,13 @@ cc.Class({
             this.ReNewPassword.string.length < 6 ||
             this.ReNewPassword.string.length > 32)
         {
-            cc.RedT.notice.show({title: "LỖI", text: "Mật khẩu từ 6 đến 32 ký tự.\n\nHãy kiểm tra lại các thông tin."});
+            cc.RedT.inGame.notice.show({title: "LỖI", text: "Mật khẩu từ 6 đến 32 ký tự.\n\nHãy kiểm tra lại các thông tin."});
         }else if (this.OldPassword.string == this.NewPassword.string) {
-            cc.RedT.notice.show({title: "LỖI", text: "Mật khẩu mới không trùng với mật khẩu cũ."});
+            cc.RedT.inGame.notice.show({title: "LỖI", text: "Mật khẩu mới không trùng với mật khẩu cũ."});
         }else if (this.NewPassword.string != this.ReNewPassword.string) {
-            cc.RedT.notice.show({title: "LỖI", text: "Nhập lại mật khẩu mới không khớp."});
+            cc.RedT.inGame.notice.show({title: "LỖI", text: "Nhập lại mật khẩu mới không khớp."});
         }else{
-            cc.RedT.loading.active = !0;
+            cc.RedT.inGame.loading.active = !0;
             cc.RedT.send({user: {doi_pass: {passOld: this.OldPassword.string, passNew: this.NewPassword.string, passNew2: this.ReNewPassword.string}}})
         }
     },

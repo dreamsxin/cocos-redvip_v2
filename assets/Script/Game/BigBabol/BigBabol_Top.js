@@ -46,13 +46,13 @@ cc.Class({
     onData: function(data){
         var self = this;
         this.page.onSet(data.page, data.kmess, data.total);
-        var top = (data.page-1)*data.kmess+1;
+        var top = (data.page-1)*data.kmess;
         Promise.all(this.content2.map(function(obj, i){
             var dataT = data.data[i];
 
             if (void 0 !== dataT) {
                 self.content.children[i].active = true
-                obj[0].string = top+1;
+                obj[0].string = top+i+1;
                 obj[1].string = Helper.getStringDateByTime(dataT.time);
                 obj[2].string = dataT.name;
                 obj[3].string = dataT.bet;

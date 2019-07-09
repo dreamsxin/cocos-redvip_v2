@@ -34,8 +34,8 @@ cc.Class({
     },
     onInfoClick: function() {
         if (this.info) {
-            cc.RedT.dialog.profile.LichSu.lichSuRut.isView = true;
-            cc.RedT.dialog.the_cao.getData(this.idT);
+            cc.RedT.inGame.dialog.profile.LichSu.lichSuRut.isView = true;
+            cc.RedT.inGame.dialog.the_cao.getData(this.idT);
             cc.RedT.audio.playClick();
         }
     },

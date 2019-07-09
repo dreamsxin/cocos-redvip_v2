@@ -32,7 +32,19 @@ cc.Class({
 		red: false,
 		bet: "",
 	},
-
+	init: function(obj){
+		this.RedT = obj;
+		cc.RedT.setting.topHu = cc.RedT.setting.topHu || {};
+		if (void 0 !== cc.RedT.setting.topHu.position) {
+			this.node.position = cc.RedT.setting.topHu.position;
+		}
+		if (void 0 !== cc.RedT.setting.topHu.open) {
+			this.body.scaleX = this.body.active = cc.RedT.setting.topHu.open ? 1 : 0;
+		}
+		if (void 0 !== cc.RedT.setting.topHu.data) {
+			this.onData(cc.RedT.setting.topHu.data);
+		}		
+	},
 	onLoad () {
 		this.ttOffset     = null;
 		this.ttOffset2    = null;
@@ -57,9 +69,10 @@ cc.Class({
 		this.ttOffset2 = cc.v2(e.touch.getLocationX() - (e.touch.getLocationX() - this.node.position.x), e.touch.getLocationY() - (e.touch.getLocationY() - this.node.position.y))
 	},
 	eventMove: function(e){
-		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y)
+		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
 	},
 	eventEnd: function(e){
+		cc.RedT.setting.topHu.position = this.node.position;
 		this.xChanger = this.ttOffset2.x - (e.touch.getLocationX() - this.ttOffset.x)
 		this.yChanger = this.ttOffset2.y - (e.touch.getLocationY() - this.ttOffset.y)
 		if (this.xChanger <  5 &&
@@ -75,11 +88,12 @@ cc.Class({
 			this.toggleRuning = true;
 			this.body.stopAllActions();
 			if (this.body.active) {
+				cc.RedT.setting.topHu.open = false;
 				this.body.runAction(cc.sequence(cc.scaleTo(0.2, 0, 1), cc.callFunc(function(){
 					this.toggleRuning = this.body.active = false;
 				}, this)));
 			}else{
-				this.body.active = true;
+				this.body.active = cc.RedT.setting.topHu.open = true;
 				this.onChangerData();
 				this.body.runAction(cc.sequence(cc.scaleTo(0.2, 1, 1), cc.callFunc(function(){
 					this.toggleRuning = false;
@@ -89,8 +103,8 @@ cc.Class({
 	},
 	onChangerCoint: function(){
 		this.red     = !this.red;
-		this.nodeRed = !this.nodeRed;
-		this.nodeXu  = !this.nodeXu;
+		this.nodeRed.active = !this.nodeRed.active;
+		this.nodeXu.active  = !this.nodeXu.active;
 		this.onChangerData();
 	},
 	onChangerBet: function(e, value){
@@ -105,18 +119,19 @@ cc.Class({
 		this.onChangerData();
 	},
 	onData: function(data){
-		this.data = data;
+		cc.RedT.setting.topHu.data = data;
 		if (this.body.active) {
 			this.onChangerData();
 		}
+		this.onChangerGame();
 	},
 	onChangerData: function(){
-		if (void 0 !== this.data) {
+		if (void 0 !== cc.RedT.setting.topHu.data) {
 			var self = this;
 			var dataName = [];
 			Promise.all(this.content.children.map(function(obj){
 				var name = obj.name;
-				var T = self.data[name].filter(function(temp){
+				var T = cc.RedT.setting.topHu.data[name].filter(function(temp){
 					return temp.type == self.bet && temp.red == self.red
 				});
 				dataName[name] = obj;
@@ -132,11 +147,19 @@ cc.Class({
 					var y = -(70*(index+1)-70/2);
 						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
-						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 3000, true);
+						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 2000, true);
 					}
 				}));
-			})
+			});
 		}
+	},
+	onChangerGame: function(){
+		this.RedT.MiniPoker.onGetHu();
+        this.RedT.BaCay.onGetHu();
+        this.RedT.BigBabol.onGetHu();
+        if (void 0 !== cc.RedT.inGame.onGetHu) {
+        	cc.RedT.inGame.onGetHu();
+        }
 	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);

@@ -106,7 +106,7 @@ cc.Class({
         !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
     },
     isTop: function() {
-        return !this.moreNhaMang.active && !this.moreMenhGia.active && !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+        return !this.moreNhaMang.active && !this.moreMenhGia.active && !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
         this.editSoLuong.string = '';
@@ -166,7 +166,7 @@ cc.Class({
     onClickMua: function(){
         var isN = parseInt(this.editSoLuong.string);
         if (isN > 3 || isN < 0) {
-            cc.RedT.notice.show({title: "MUA THẺ", text: "Số lượng không hợp lệ..."})
+            cc.RedT.inGame.notice.show({title: "MUA THẺ", text: "Số lượng không hợp lệ..."})
         }else{
             cc.RedT.send({shop:{mua_the:{nhamang: this.NhanhMang.string, menhgia: helper.getOnlyNumberInString(this.MenhGia.string), soluong: this.editSoLuong.string}}});
         }

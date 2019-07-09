@@ -85,13 +85,13 @@ cc.Class({
     	if (this.isGui) {
     		data.gui = helper.getOnlyNumberInString(this.inputGui.string);
     		if (data.gui < 10000) {
-    			cc.RedT.notice.show({title: "GỬI RED", text: "Số tiền gửi phải lớn hơn 10.000"});
+    			cc.RedT.inGame.notice.show({title: "GỬI RED", text: "Số tiền gửi phải lớn hơn 10.000"});
     			return void 0;
     		}
     	}else{
     		data.rut = helper.getOnlyNumberInString(this.inputRut.string);
     		if (data.rut < 10000) {
-    			cc.RedT.notice.show({title: "RÚT RED", text: "Số tiền rút phải lớn hơn 10.000"});
+    			cc.RedT.inGame.notice.show({title: "RÚT RED", text: "Số tiền rút phải lớn hơn 10.000"});
     			return void 0;
     		}
     	}

@@ -9,7 +9,7 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
-		this.mainLineInit();
+		this.mainLineInit(void 0 !== cc.RedT.setting.big_babol.line);
 	},
 	onEnable: function() {
 		this.background.on(cc.Node.EventType.MOUSE_ENTER,  this.RedT.setTop, this.RedT);
@@ -18,7 +18,7 @@ cc.Class({
 		this.background.off(cc.Node.EventType.MOUSE_ENTER, this.RedT.setTop, this.RedT);
 	},
 	toggle: function(){
-		if (this.node.active && this.data.length < 1) {
+		if (this.node.active && cc.RedT.setting.big_babol.line.length < 1) {
 			this.RedT.addNotice('Chọn ít nhất 1 dòng');
 		}else{
 			this.node.active = !this.node.active;
@@ -51,7 +51,7 @@ cc.Class({
 				return void 0 !== data;
 			}))
 			.then(data => {
-				this.data = data;
+				cc.RedT.setting.big_babol.line = data;
 				this.RedT.labelLine.string = data.length;
 			})
 		})
@@ -77,7 +77,7 @@ cc.Class({
 				return void 0 !== data;
 			}))
 			.then(data => {
-				this.data = data;
+				cc.RedT.setting.big_babol.line = data;
 				this.RedT.labelLine.string = data.length;
 			})
 		})
@@ -103,7 +103,7 @@ cc.Class({
 				return void 0 !== data;
 			}))
 			.then(data => {
-				this.data = data;
+				cc.RedT.setting.big_babol.line = data;
 				this.RedT.labelLine.string = data.length;
 			})
 		})
@@ -127,15 +127,14 @@ cc.Class({
 				return check;
 			}))
 			.then(data => {
-				this.data = data;
+				cc.RedT.setting.big_babol.line = data;
 				this.RedT.labelLine.string = data.length;
 			})
 		});
 	},
 
 	// Main line
-	mainLineInit: function(){
-		console.log(this)
+	mainLineInit: function(reInit){
 		var self = this;;
 		Promise.all(this.mainLine.children.map(function(line){
 			return line.getComponent('BigBabol_main_line')
@@ -143,7 +142,25 @@ cc.Class({
 		}))
 		.then(result => {
 			this.mainLine = result;
-			this.selectAll(null, "1");
+			if (reInit) {
+				this.RedT.labelLine.string = cc.RedT.setting.big_babol.line.length;
+				Promise.all(this.nodeLine.children.map(function(line, index){
+					var check = cc.RedT.setting.big_babol.line.filter(function(a){
+						return a == line.name;
+					});
+					if (check.length) {
+						line.children[0].active = false;
+						line.children[1].active = true;
+						self.mainLine[index].onSet();
+					}else{
+						line.children[0].active = true;
+						line.children[1].active = false;
+						self.mainLine[index].offSet();
+					}
+				}));
+			}else{
+				this.selectAll(null, "1");
+			}
 		})
 	},
 });

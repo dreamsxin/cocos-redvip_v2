@@ -22,12 +22,12 @@ cc.Class({
 	},
 	onEnable: function () {
 		cc.sys.isBrowser && this.addEvent();
-		this.node.runAction(cc.RedT.dialog.actionShow);
+		this.node.runAction(cc.RedT.inGame.dialog.actionShow);
 	},
 	onDisable: function () {
 		cc.sys.isBrowser && this.removeEvent();
 		this.clean();
-		cc.RedT.dialog.resetSizeDialog(this.node);
+		cc.RedT.inGame.dialog.resetSizeDialog(this.node);
 	},
 	addEvent: function() {
 		cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -50,14 +50,14 @@ cc.Class({
 		BrowserUtil.focusEditBox(this.username)
 	},
 	isTop: function() {
-		return !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+		return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
 	},
 	clean: function(){
 		this.username.string = '';
 	},
 	onSignNameClick: function() {
 		if (this.username.string.length > 14 || this.username.string.length < 3 || this.username.string.match(new RegExp("^[a-zA-Z0-9]+$")) === null){
-			cc.RedT.notice.show({title:"TÊN NHÂN VẬT", text:'Tên Nhân vật từ 3 đến 14 ký tự và không chứa ký tự đặc biệt!!'});
+			cc.RedT.inGame.notice.show({title:"TÊN NHÂN VẬT", text:'Tên Nhân vật từ 3 đến 14 ký tự và không chứa ký tự đặc biệt!!'});
 		}else{
 			cc.RedT.send({signName: this.username.string});
 		}

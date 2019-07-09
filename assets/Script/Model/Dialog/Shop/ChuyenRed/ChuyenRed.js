@@ -110,7 +110,7 @@ cc.Class({
 		!t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
 	},
 	isTop: function() {
-		return !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+		return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
 	},
 	clean: function(){
 		this.nickname.string = this.renickname.string = this.red.string = this.messenger.string = this.otp.string = this.rednhan.string = "";
@@ -132,7 +132,7 @@ cc.Class({
 		//	error = "Mã OTP Không được bỏ trống."
 		}
 		if (error)
-			cc.RedT.notice.show({title: "CHUYỂN RED", text: error});
+			cc.RedT.inGame.notice.show({title: "CHUYỂN RED", text: error});
 		else{
 			var data = {name: this.nickname.string, red: helper.getOnlyNumberInString(this.red.string)};
 			if (!helper.isEmpty(this.messenger.string.trim())) {

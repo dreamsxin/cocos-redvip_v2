@@ -107,6 +107,14 @@ cc.Class({
 	init(obj){
 		this.RedT  = obj;
 
+		if (void 0 !== cc.RedT.setting.taixiu.tk_position) {
+			this.node.position = cc.RedT.setting.taixiu.tk_position;
+		}
+
+		if (void 0 !== cc.RedT.setting.taixiu.tk_active) {
+			this.node.active = cc.RedT.setting.taixiu.tk_active;
+		}
+
 		//KetQuaDot
 		Promise.all(this.KetQuaDot.children.map(function(obj){
 			return obj.getComponent(cc.Sprite);
@@ -201,7 +209,9 @@ cc.Class({
 	eventMove: function(e){
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
 	},
-	eventEnd: function(){},
+	eventEnd: function(){
+		cc.RedT.setting.taixiu.tk_position = this.node.position;
+	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop();
@@ -223,8 +233,9 @@ cc.Class({
 		}));
 	},
 	onToggleClick: function() {
+		cc.RedT.audio.playClick();
 		this.setTop();
-		this.node.active = !this.node.active;
+		this.node.active = cc.RedT.setting.taixiu.tk_active = !this.node.active;
 	},
 	onChangerClick: function() {
 		this.node1.active = !this.node1.active;

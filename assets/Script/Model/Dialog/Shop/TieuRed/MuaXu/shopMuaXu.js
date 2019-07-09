@@ -53,7 +53,7 @@ cc.Class({
         BrowserUtil.focusEditBox(this.red)
     },
     isTop: function() {
-        return !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+        return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
         this.red.string = '';
@@ -67,7 +67,7 @@ cc.Class({
     },
     onClickMua: function() {
         if (parseInt(helper.getOnlyNumberInString(this.red.string)) < 1000) {
-            cc.RedT.notice.show({title: "MUA XU", text: "Số RED mua XU tối thiểu là 1.000"})
+            cc.RedT.inGame.notice.show({title: "MUA XU", text: "Số RED mua XU tối thiểu là 1.000"})
         }else{
             cc.RedT.send({shop:{mua_xu:{red: helper.getOnlyNumberInString(this.red.string)}}});
         }

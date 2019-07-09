@@ -4,8 +4,9 @@ var signIn   = require('SignIn'),
 	signName = require('SignName'),
 	shop     = require('Shop'),
 	profile  = require('Profile'),
-	Settings  = require('Settings'),
-	the_cao  = require('TheCao');
+	Settings = require('Settings'),
+	the_cao  = require('TheCao'),
+	GiftCode = require('GiftCode');
 
 cc.Class({
 	extends: cc.Component,
@@ -17,10 +18,11 @@ cc.Class({
 			type: cc.Node,
 		},
 		signName: signName,
-		shop: shop,
-		profile: profile,
-		the_cao: the_cao,
+		shop:     shop,
+		profile:  profile,
+		the_cao:  the_cao,
 		settings: Settings,
+		GiftCode: GiftCode,
 	},
 	init: function() {
 		this.actionShow = cc.spawn(cc.scaleTo(0.5, 1).easing(cc.easeBackOut(2.5)), cc.fadeTo(0.5, 255));
@@ -111,5 +113,13 @@ cc.Class({
 	showSetting: function(event, name){
 		this.node.active = this.settings.node.active = true;
 		this.objShow     = this.settings.node;
+	},
+	showGiftCode: function(event, name){
+		if (cc.RedT.IS_LOGIN) {
+			this.node.active = this.GiftCode.node.active = true;
+			this.objShow     = this.GiftCode.node;
+		}else{
+			this.showSignIn();
+		}
 	},
 });

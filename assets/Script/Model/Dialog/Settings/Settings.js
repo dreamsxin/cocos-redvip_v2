@@ -17,10 +17,10 @@ cc.Class({
 		}
 	},
 	onEnable: function () {
-        this.node.runAction(cc.RedT.dialog.actionShow);
+        this.node.runAction(cc.RedT.inGame.dialog.actionShow);
     },
     onDisable: function () {
-        cc.RedT.dialog.resetSizeDialog(this.node);
+        cc.RedT.inGame.dialog.resetSizeDialog(this.node);
     },
 	setMusic: function(){
 		var check = localStorage.getItem('SOUND_BACKGROUND');
@@ -56,6 +56,6 @@ cc.Class({
 		}
 	},
 	OnSignOutClick: function() {
-		cc.RedT.notice.show({title: "ĐĂNG XUẤT", text: "Xác nhận hành động.\nHành động thực hiện đăng xuất khỏi tài khoản này?", button:{type: "sign_out", text: "ĐĂNG XUẤT"}})
+		cc.RedT.inGame.notice.show({title: "ĐĂNG XUẤT", text: "Xác nhận hành động.\nHành động thực hiện đăng xuất khỏi tài khoản này?", button:{type: "sign_out", text: "ĐĂNG XUẤT"}})
 	},
 });

@@ -20,8 +20,8 @@ cc.Class({
 			type: cc.Node
 		},
 	},
-
 	onLoad () {
+		cc.RedT.setting.popupMini = cc.RedT.setting.popupMini || {};
 		this.ttOffset     = null;
 		this.ttOffset2    = null;
 		this.toggleRuning = false;
@@ -30,6 +30,21 @@ cc.Class({
 		this.panel.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.panel.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.panel.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
+
+		if (void 0 !== cc.RedT.setting.popupMini.position) {
+			this.node.position = cc.RedT.setting.popupMini.position;
+		}
+		if (void 0 !== cc.RedT.setting.popupMini.open) {
+			if(cc.RedT.setting.popupMini.open){
+				this.list.active = true;
+				this.nodeTime.position = cc.v2(-155.7, -5.6);
+				this.list.scale = 1;
+			}else{
+				this.nodeTime.position = cc.v2(25, 43);
+				this.list.scale = 0.2;
+				this.list.active = false
+			}
+		}
 	},
 	eventStart: function(e){
 		this.setTop();
@@ -40,6 +55,7 @@ cc.Class({
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y)
 	},
 	eventEnd: function(e){
+		cc.RedT.setting.popupMini.position = this.node.position;
 		this.xChanger = this.ttOffset2.x - (e.touch.getLocationX() - this.ttOffset.x)
 		this.yChanger = this.ttOffset2.y - (e.touch.getLocationY() - this.ttOffset.y)
 		if (this.xChanger <  5 &&
@@ -55,6 +71,7 @@ cc.Class({
 			this.toggleRuning = true
 			this.list.stopAllActions()
 			if (this.list.active) {
+				cc.RedT.setting.popupMini.open = false;
 				if (this.nodeTime.active) {
 					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(25, 43)));
 				}else {
@@ -64,7 +81,7 @@ cc.Class({
 					this.toggleRuning = this.list.active = false
 				}, this)))
 			}else{
-				this.list.active = true
+				this.list.active = cc.RedT.setting.popupMini.open = true
 				if (this.nodeTime.active) {
 					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(-155.7, -5.6)))
 				}else {

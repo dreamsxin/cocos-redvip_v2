@@ -38,10 +38,10 @@ cc.Class({
 		});
 	},
 	onEnable: function () {
-		cc.RedT.header.node.active = false;
+		cc.RedT.inGame.header.node.active = false;
 	},
 	onDisable: function () {
-		cc.RedT.header.node.active = true;
+		cc.RedT.inGame.header.node.active = true;
 	},
 	onSelectHead: function(event, name){
 		Promise.all(this.header.map(function(header) {

@@ -33,6 +33,6 @@ cc.Class({
         },
     },
     onShowMesenger: function() {
-        cc.RedT.notice.show({title: "LỜI NHẮN", text: this.mesenger});
+        cc.RedT.inGame.notice.show({title: "LỜI NHẮN", text: this.mesenger});
     },
 });

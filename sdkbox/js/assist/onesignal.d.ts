@@ -1,4 +1,5 @@
-declare module sdkbox {     module PluginOneSignal {        /**        *  initialize the plugin instance.        */        export function init() : boolean;
+declare module sdkbox {     module PluginOneSignal {        /**        * Set GDPR        *        * **NOTE**: please call before 'init' function        */        export function setGDPR(enabled : boolean) : object;
+        /**        *  initialize the plugin instance.        */        export function init() : boolean;
         /**        * Set listener to listen for onesignal events        */        export function setListener(listener : object) : object;
         /**        * Get the listener        */        export function getListener() : object;
         /**        * Remove the listener, and can't listen to events anymore        */        export function removeListener() : object;

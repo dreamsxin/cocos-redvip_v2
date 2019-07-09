@@ -16,7 +16,6 @@ cc.Class({
     },
 
     onLoad () {
-        console.log(this);
         var page = cc.instantiate(this.page);
         page.y = -323;
         this.node.addChild(page);
@@ -69,7 +68,7 @@ cc.Class({
                 self.content.children[i].active = true;
                 obj[0].string = Helper.getStringDateByTime(dataT.time);
                 obj[1].string = dataT.name;
-                obj[2].string = dataT.bet;
+                obj[2].string = Helper.numberWithCommas(dataT.bet);
                 obj[3].string = Helper.numberWithCommas(dataT.win+dataT.bet);
             }else{
                 self.content.children[i].active = false;

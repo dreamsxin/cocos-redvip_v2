@@ -89,13 +89,15 @@ function numberTo(obj, start, end, duration, currency = false){
 	var endTime = startTime + duration;
 
 	obj.timer = setInterval(function(){
-		var now = new Date().getTime();
-		var remaining = Math.max((endTime - now) / duration, 0);
-		var value = Math.round(end - (remaining * range));
-		obj.string = currency === true ? numberWithCommas(value) : value;
-		if (value == end) {
-			clearInterval(obj.timer);
-		}
+		if (!!obj.node) {
+			var now = new Date().getTime();
+			var remaining = Math.max((endTime - now) / duration, 0);
+			var value = (end - (remaining * range))>>0;
+			obj.string = currency ? numberWithCommas(value) : value;
+			if (value == end) {
+				clearInterval(obj.timer);
+			}
+		}else clearInterval(obj.timer);
 	}, stepTime);
 }
 function getStringDateByTime(t) {

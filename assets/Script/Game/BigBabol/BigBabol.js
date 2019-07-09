@@ -63,6 +63,24 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
+		cc.RedT.setting.big_babol = cc.RedT.setting.big_babol || {};
+
+		var check = localStorage.getItem('big_babol');
+		if (check == "true") {
+			this.node.active = true;
+		}
+		if (void 0 !== cc.RedT.setting.big_babol.position) {
+			this.node.position = cc.RedT.setting.big_babol.position;
+		}
+		if (void 0 !== cc.RedT.setting.big_babol.bet && cc.RedT.setting.big_babol.bet != this.cuoc) {
+			this.intChangerBet();
+		}
+		if (void 0 !== cc.RedT.setting.big_babol.red && this.red != cc.RedT.setting.big_babol.red) {
+			this.changerCoint();
+		}
+		if (void 0 !== cc.RedT.setting.big_babol.isAuto && this.isAuto != cc.RedT.setting.big_babol.isAuto) {
+			this.onClickAuto();
+		}
 	},
 	onLoad () {
 		var self = this;
@@ -74,7 +92,7 @@ cc.Class({
 		}))
 	},
 	onEnable: function() {
-		//this.onGetInfo();
+		this.onGetHu();
 		this.background.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.background.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.background.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
@@ -96,9 +114,26 @@ cc.Class({
 	eventMove: function(e){
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y)
 	},
-	eventEnd: function(){},
+	eventEnd: function(){
+		cc.RedT.setting.big_babol.position = this.node.position;
+	},
 	setTop:function(){
 		this.node.parent.insertChild(this.node);
+	},
+	openGame: function () {
+		cc.RedT.audio.playClick();
+		if (cc.RedT.IS_LOGIN){
+			this.node.active = !0;
+			localStorage.setItem('big_babol', true);
+			this.setTop();
+		}
+		else
+			cc.RedT.inGame.dialog.showSignIn();
+	},
+	closeGame:function(){
+		cc.RedT.audio.playUnClick();
+		this.node.active = !1;
+		localStorage.setItem('big_babol', false);
 	},
 	autoSpin: function(){
 		Promise.all(this.reels.map(function(reel, index) {
@@ -115,7 +150,9 @@ cc.Class({
 		}))
 	},
 	offSpin: function(){
-		this.isSpin = this.buttonStop.active = false;
+		this.isSpin = this.buttonStop.active = this.isAuto = false;
+		this.buttonAuto.color  = cc.color(155,155,155);
+		this.buttonAuto.active = true;
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
@@ -124,7 +161,7 @@ cc.Class({
 		}))
 	},
 	onClickSpin: function(){
-		if (this.line.data.length < 1) {
+		if (cc.RedT.setting.big_babol.line.length < 1) {
 			this.addNotice('Chọn ít nhất 1 dòng');
 		}else{
 			if (!this.isSpin) {
@@ -135,7 +172,7 @@ cc.Class({
 		}
 	},
 	onClickAuto: function(){
-		this.isAuto            = !this.isAuto;
+		this.isAuto            = cc.RedT.setting.big_babol.isAuto = !this.isAuto;
 		this.buttonAuto.color  = this.isAuto ? cc.Color.WHITE : cc.color(155,155,155);
 		this.buttonStop.active = this.isSpin ? (this.isAuto ? true : false) : false;
 		this.buttonAuto.active = !this.buttonStop.active;
@@ -145,13 +182,26 @@ cc.Class({
 		this.buttonStop.active = false;
 	},
 	changerCoint: function(){
-		this.red            = !this.red;
+		this.red            = cc.RedT.setting.big_babol.red = !this.red;
 		this.nodeRed.active = !this.nodeRed.active;
 		this.nodeXu.active  = !this.nodeXu.active;
-		//this.onGetInfo();
+		this.onGetHu();
+	},
+	intChangerBet: function(){
+		var self = this;
+		Promise.all(this.bet.children.map(function(obj){
+			if (obj.name == cc.RedT.setting.big_babol.bet) {
+				self.cuoc = obj.name;
+				obj.children[0].active = true;
+				obj.pauseSystemEvents();
+			}else{
+				obj.children[0].active = false;
+				obj.resumeSystemEvents();
+			}
+		}))
 	},
 	changerBet: function(event, bet){
-		this.cuoc = bet;
+		this.cuoc = cc.RedT.setting.big_babol.bet = bet;
 		var target = event.target;
 		Promise.all(this.bet.children.map(function(obj){
 			if (obj == target) {
@@ -162,13 +212,13 @@ cc.Class({
 				obj.resumeSystemEvents();
 			}
 		}))
-		//this.onGetInfo();
+		this.onGetHu();
 	},
 	onGetInfo: function(){
 		cc.RedT.send({g:{big_babol:{info:{cuoc:this.cuoc, red: this.red}}}});
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{big_babol:{spin:{cuoc:this.cuoc, red: this.red, line: this.line.data}}}});
+		cc.RedT.send({g:{big_babol:{spin:{cuoc:this.cuoc, red: this.red, line: cc.RedT.setting.big_babol.line}}}});
 	},
 	onCloseGame: function(){
 		this.isSpin = false;
@@ -187,7 +237,8 @@ cc.Class({
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				this.win = data.win;
+				this.win  = data.win;
+				this.nohu = data.nohu;
 				this.buttonStop.active = this.isAuto ? true : false;
 				this.buttonAuto.active = !this.buttonStop.active;
 				Promise.all(data.cel.map(function(cel, cel_index){
@@ -199,9 +250,6 @@ cc.Class({
 			}else{
 				this.offSpin();
 			}
-		}
-		if (void 0 !== data.hu) {
-			helper.numberTo(this.hu, helper.getOnlyNumberInString(this.hu.string), data.hu, 2000, true);
 		}
 		if (void 0 !== data.phien) {
 			this.phien.string = data.phien;
@@ -218,49 +266,92 @@ cc.Class({
 	},
 	copy: function(){
 		Promise.all(this.reels.map(function(reel){
-			reel.icons[25].setIcon(reel.icons[2].data);
-			reel.icons[24].setIcon(reel.icons[1].data);
-			reel.icons[23].setIcon(reel.icons[0].data);
+			if (void 0 !== reel.icons &&
+				void 0 !== reel.icons[25] &&
+				void 0 !== reel.icons[25].setIcon)
+			{
+				reel.icons[25].setIcon(reel.icons[2].data);
+				reel.icons[24].setIcon(reel.icons[1].data);
+				reel.icons[23].setIcon(reel.icons[0].data);
+			}
 			//reel.node.y = 0;
 		}));
 	},
-	delay1: function(){
-		if (!!this.win) {
-			if (void 0 !== this.noHu && this.noHu == true) {
-				return cc.delayTime(3);
-			}else{
-				return cc.delayTime(1.5);
-			}
-		}else
-			return cc.delayTime(0.3);
-	},
 	hieuUng: function(){
-		if (void 0 !== this.win && this.win > 0) {
-			this.congTien(this.win)
-		}
-	},
-	congTien: function(tien){
-		var node = new cc.Node;
+		if (this.nohu) {
+			this.nohu = false;
+			// Nổ Hũ
+			if (this.isAuto == true) {
+				this.onClickStop();
+			}
+
+			var nohu = cc.instantiate(this.RedT.PrefabNoHu);
+			nohu = nohu.getComponent(cc.Animation);
+			var text = nohu.node.children[6].getComponent(cc.Label);
+
+			var Play = function(){
+				var huong = cc.callFunc(function(){
+					helper.numberTo(text, 0, this.win, 1000, true);
+				}, this);
+				nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));
+			};
+
+			var Finish = function(){
+				nohu.node.destroy();
+				this.win = 0;
+				this.hieuUng();
+			};
+			this.RedT.nodeEfect.addChild(nohu.node);
+			nohu.on('play',     Play,   this);
+			nohu.on('finished', Finish, this);
+			nohu.play();
+		}else if (this.win > 0) {
+			var node = new cc.Node;
 			node.addComponent(cc.Label);
 			node = node.getComponent(cc.Label);
-			helper.numberTo(node, 0, tien, 800, true);
-			node.font = this.red ? this.RedT.TaiXiu.TX_Main.fontCong : this.RedT.TaiXiu.TX_Main.fontTru;
-			node.lineHeight = 80;
+			helper.numberTo(node, 0, this.win, 600, true);
+			node.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+			node.lineHeight = 130;
 			node.fontSize   = 25;
 			node.node.position = cc.v2(-6,166);
 			node.node.runAction(cc.sequence(cc.delayTime(1.5), cc.callFunc(function() {
-            	this.node.destroy();
-        	}, node)));
-
+				node.node.destroy();
+				this.hieuUng();
+			}, this)));
 			this.notice.addChild(node.node);
+			this.win = 0;
+		}else{
+			if (this.isAuto) {
+    			this.timeOut = setTimeout(function(){
+					this.onGetSpin();
+				}
+				.bind(this), 300);
+    		}else{
+    			this.offSpin();
+    		}
+		}
 	},
 	random: function(){
 		Promise.all(this.reels.map(function(reel){
 			Promise.all(reel.icons.map(function(icon, index){
 				if (index > 2 && index < 23) {
-	            	icon.random();
-	            }
+					icon.random();
+				}
 			}));
 		}));
+	},
+	onGetHu: function(){
+		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
+			var self = this;
+			Promise.all(cc.RedT.setting.topHu.data['big_babol'].filter(function(temp){
+				return temp.type == self.cuoc && temp.red == self.red;
+			}))
+			.then(result => {
+				var s = helper.getOnlyNumberInString(this.hu.string);
+				var bet = result[0].bet;
+				if (s-bet != 0) 
+					helper.numberTo(this.hu, s, bet, 2000, true);
+			});
+		}
 	},
 });

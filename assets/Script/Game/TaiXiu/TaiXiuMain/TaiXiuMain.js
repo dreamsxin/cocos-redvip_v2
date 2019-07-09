@@ -179,27 +179,31 @@ cc.Class({
 	},
 	init: function(obj) {
 		this.RedT = obj;
-		this.data = {taixiu:{}, chanle:{}, du_day:{}};
-		this.isNan  = this.getLogs = false;
-	},
-	onLoad () {
-		var self      = this;
-		this.ttOffset = null;
-		this.editboxs = [this.inputLeft, this.inputRight];
-		this.TX_Board.init(this);
-		this.TX_Chat.init(this);
+		cc.RedT.setting.taixiu.data = cc.RedT.setting.taixiu.data || {taixiu:{}, chanle:{}, du_day:{}};
 
-		this.diaNan.getComponent('TaiXiu_DiaNan')
-		.init(this);
+		this.isNan = false;
 
-		this.keyHandle = function(t) {
-			return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
-				t.preventDefault && t.preventDefault(),
-				!1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onCuocClick(),
-				t.preventDefault && t.preventDefault(),
-				!1) : void 0
+		if (void 0 === cc.RedT.util.fontCong) {
+			cc.RedT.util.fontCong = this.fontCong;
+			cc.RedT.util.fontTru  = this.fontTru;
 		}
 
+		if (void 0 === cc.RedT.setting.taixiu.red) {
+			cc.RedT.setting.taixiu.red    = this.red;
+		}
+		if (void 0 === cc.RedT.setting.taixiu.taixiu) {
+			cc.RedT.setting.taixiu.taixiu = this.taixiu;
+		}
+
+		if (void 0 !== cc.RedT.setting.taixiu.position) {
+			this.node.position = cc.RedT.setting.taixiu.position;
+		}
+		if (void 0 === cc.RedT.setting.taixiu.getLogs) {
+			cc.RedT.setting.taixiu.getLogs = false;
+		}
+		if (void 0 === cc.RedT.setting.taixiu.isNan) {
+			cc.RedT.setting.taixiu.isNan = false;
+		}
 		Promise.all(this.dotLogs.children.map(function(dot){
 			var temp = dot.getComponent(cc.Sprite);
 			temp.mod = dot.getComponent('TaiXiuMain_logTips');
@@ -207,7 +211,17 @@ cc.Class({
 		}))
 		.then(resulf => {
 			this.dotLogs = resulf;
-		})
+
+			if (cc.RedT.setting.taixiu.red != this.red) {
+				this.onChangerRED();
+			}
+			if (cc.RedT.setting.taixiu.taixiu != this.taixiu) {
+				this.onChangerGame(false);
+			}
+			if (cc.RedT.setting.taixiu.isNan != this.isNan) {
+				this.onChangerNan();
+			}
+		});
 
 		this.onDiceAnimationFinish = function(event){
 			this.setDice(true);
@@ -228,6 +242,30 @@ cc.Class({
 			}
 			this.diceAnimation.node.active = false;
 		}
+
+		if (void 0 !== cc.RedT.setting.taixiu.time_remain) {
+			cc.RedT.setting.taixiu.time_remain++;
+			this.nextRealTime();
+		}
+	},
+	onLoad () {
+		var self      = this;
+		this.ttOffset = null;
+		this.editboxs = [this.inputLeft, this.inputRight];
+		this.TX_Board.init(this);
+		this.TX_Chat.init(this);
+
+		this.diaNan.getComponent('TaiXiu_DiaNan')
+		.init(this);
+
+		this.keyHandle = function(t) {
+			return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
+				t.preventDefault && t.preventDefault(),
+				!1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onCuocClick(),
+				t.preventDefault && t.preventDefault(),
+				!1) : void 0
+		}
+
 		this.diceAnimation.on('finished', this.onDiceAnimationFinish, this);
 
 		this.onCuocClick = function(){
@@ -244,6 +282,7 @@ cc.Class({
 				cc.RedT.send({taixiu: {cuoc: {red: self.red, taixiu: self.taixiu, select: (self.input.node.name == "inputLeft"), bet: bet}}});
 			}
 		}
+
 	},
 	onEnable: function () {
 		this.background.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -289,31 +328,38 @@ cc.Class({
 	clean: function(){
 		this.inputLeft.string = this.inputRight.string = '';
 	},
-	onChangerGame: function(){
-		this.taixiu = !this.taixiu;
+	initGame: function(taixiu){
+		if (taixiu != this.taixiu) {
+			this.onChangerGame();
+		}
+	},
+	onChangerGame: function(log = true){
+		cc.RedT.setting.taixiu.taixiu = this.taixiu = !this.taixiu;
 		this.gameCover.string  = this.taixiu ? "Chẵn Lẻ" : "Tài Xỉu";
 		this.nodeTaiXiu.active = this.taixiu;
 		this.nodeChanLe.active = !this.taixiu;
-		this.dataLogs();
-		this.RedT.TX_ThongKe.onChangerGame();
-		this.RedT.TX_LichSuPhien.onChangerGame();
-		this.taixiu && this.onDataTaiXiu(this.data.taixiu);
-		!this.taixiu && this.onDataChanLe(this.data.chanle);
-		this.onDuDay(this.data.du_day);
+		if(cc.RedT.setting.taixiu.getLogs){
+			log && this.dataLogs();
+			this.RedT.TX_ThongKe.onChangerGame();
+			this.RedT.TX_LichSuPhien.onChangerGame();
+			this.taixiu && this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
+			!this.taixiu && this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
+			this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
+		}
 	},
 	onChangerNan: function(){
-		this.isNan = !this.isNan;
+		cc.RedT.setting.taixiu.isNan = this.isNan = !this.isNan;
 		this.spriteNan.spriteFrame = this.isNan ? this.frameNan[1] : this.frameNan[0];
 	},
 	onChangerRED: function(){
-		this.red = !this.red;
+		cc.RedT.setting.taixiu.red = this.red = !this.red;
 		this.cointRED.active = !this.cointRED.active;
 		this.cointXU.active  = !this.cointXU.active;
 		this.totalLeft.node.color = this.totalRight.node.color = this.red ? this.totalRight.node.color.fromHEX('#FFEB0A') : this.totalRight.node.color.fromHEX('#FFFFFF');
 		this.RedT.TX_LichSuPhien.onChangerCoint();
-		this.taixiu && this.onDataTaiXiu(this.data.taixiu);
-		!this.taixiu && this.onDataChanLe(this.data.chanle);
-		this.onDuDay(this.data.du_day);
+		this.taixiu && this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
+		!this.taixiu && this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
+		this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
 	},
 	eventStart: function(e){
 		this.setTop();
@@ -322,7 +368,9 @@ cc.Class({
 	eventMove: function(e){
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
 	},
-	eventEnd: function(){},
+	eventEnd: function(){
+		cc.RedT.setting.taixiu.position = this.node.position;
+	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop();
@@ -344,13 +392,13 @@ cc.Class({
 		this.input.string = value == "0" ? "" : value;
 	},
 	setPhien:function(){
-		var phien = this.logs[0].phien+1;
+		var phien = cc.RedT.setting.taixiu.logs[0].phien+1;
 		this.labelPhien.string = "#" + phien;
 	},
 	setDice: function(bool = false, sprite = true){
 		var self = this;
 		Promise.all(this.dice.map(function(dice, index){
-			sprite && (dice.spriteFrame = self.diceSF[self.logs[0].dice[index]-1]);
+			sprite && (dice.spriteFrame = self.diceSF[cc.RedT.setting.taixiu.logs[0].dice[index]-1]);
 			dice.node.active = bool;
 		}))
 	},
@@ -365,15 +413,15 @@ cc.Class({
 			this.notice.addChild(notice);
 		}
 		if (void 0 !== data.du_day) {
-			Object.assign(this.data.du_day, data.du_day);
+			Object.assign(cc.RedT.setting.taixiu.data.du_day, data.du_day);
 			this.onDuDay(data.du_day);
 		}
 		if (void 0 !== data.taixiu) {
-			Object.assign(this.data.taixiu, data.taixiu);
+			Object.assign(cc.RedT.setting.taixiu.data.taixiu, data.taixiu);
 			this.taixiu && this.onDataTaiXiu(data.taixiu);
 		}
 		if (void 0 !== data.chanle) {
-			Object.assign(this.data.chanle, data.chanle);
+			Object.assign(cc.RedT.setting.taixiu.data.chanle, data.chanle);
 			!this.taixiu && this.onDataChanLe(data.chanle);
 		}
 		if(void 0 !== data.get_top){
@@ -389,27 +437,27 @@ cc.Class({
 			this.RedT.TX_LichSu.onData(data.get_log);
 		}
 		if(void 0 !== data.logs){
-			this.logs    = data.logs;
+			cc.RedT.setting.taixiu.logs   = data.logs;
 			this.dataLogs();
 			this.setPhien();
-			if(this.time_remain > 60){
+			if(cc.RedT.setting.taixiu.time_remain > 60){
 				this.setDice(!0);
 				this.nodeTimeWait.active  = true;
 				this.timeCuoc.node.active = false;
 			}
-			this.getLogs = true;
+			cc.RedT.setting.taixiu.getLogs = true;
 		}
 		if(void 0 !== data.time_remain){
-			this.time_remain = data.time_remain;
+			cc.RedT.setting.taixiu.time_remain = data.time_remain;
 			this.playTime();
 		}
 		if(void 0 !== data.finish){
-			if (this.getLogs) {
+			if (cc.RedT.setting.taixiu.getLogs) {
 				// Huỷ đếm
 				void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 				// Thêm kết quả
-				this.logs.unshift({dice: [data.finish.dices[0], data.finish.dices[1], data.finish.dices[2]], phien: data.finish.phien});
-				this.logs.length > 120 && this.logs.pop();
+				cc.RedT.setting.taixiu.logs.unshift({dice: [data.finish.dices[0], data.finish.dices[1], data.finish.dices[2]], phien: data.finish.phien});
+				cc.RedT.setting.taixiu.logs.length > 120 && cc.RedT.setting.taixiu.logs.pop();
 				// Đặt dữ liệu
 				this.diemSo = data.finish.dices[0]+data.finish.dices[1]+data.finish.dices[2];
 				this.labelKetQua.string = this.diemSo;
@@ -429,8 +477,8 @@ cc.Class({
 				this.nodeTimeWait.active  = true;
 				this.timeCuoc.node.active = false;
 			}
-			this.time_remain = 77;
-			//this.time_remain = 82;
+			cc.RedT.setting.taixiu.time_remain = 77;
+			//cc.RedT.setting.taixiu.time_remain = 82;
 			this.playTime();
 		}
 	},
@@ -443,14 +491,14 @@ cc.Class({
 	playTime: function(){
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.timeInterval = setInterval(function() {
-			if (this.time_remain > 61) {
-				var time = helper.numberPad(this.time_remain-62, 2);
+			if (cc.RedT.setting.taixiu.time_remain > 61) {
+				var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-62, 2);
 				this.timePopup.node.active && (this.timePopup.string = time) && (this.timePopup.node.color = cc.color(255, 0, 0, 255));
 				this.timeWait.string = '00:' + helper.numberPad(time, 2);
-				if (this.time_remain < 71) {
+				if (cc.RedT.setting.taixiu.time_remain < 71) {
 					this.efStop();
 				}
-				if (this.time_remain < 66) {
+				if (cc.RedT.setting.taixiu.time_remain < 66) {
 					this.nodeKetQua.active = false;
 					this.isNan && (this.diaNan.active = false);
 				}
@@ -462,21 +510,46 @@ cc.Class({
 				this.efStop();
 				this.nodeTimeWait.active  = this.nodeKetQua.active     = this.diaNan.active = false;
 				this.timeCuoc.node.active = this.spriteNan.node.active = true;
-				if (this.time_remain > 0) {
-					var time = helper.numberPad(this.time_remain-1, 2);
-					if(this.getLogs){
+				if (cc.RedT.setting.taixiu.time_remain > 0) {
+					var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-1, 2);
+					if(cc.RedT.setting.taixiu.getLogs){
 						this.timeCuoc.string = '00:' + time;
 					}
 					this.timePopup.node.active && (this.timePopup.string = time) && (this.timePopup.node.color = cc.color(155, 75, 2, 255))
-					if (this.time_remain <= 10)
+					if (cc.RedT.setting.taixiu.time_remain <= 10)
 						this.timeCuoc.node.color = cc.color(255, 69, 69, 255)
 					else
 						this.timeCuoc.node.color = cc.Color.WHITE
 				}else clearInterval(this.timeInterval);
 			}
-			this.time_remain--;
+			cc.RedT.setting.taixiu.time_remain--;
 		}
 		.bind(this), 1000)
+	},
+	nextRealTime: function(){
+		if (cc.RedT.setting.taixiu.time_remain > 61) {
+			this.nodeTimeWait.active  = true;
+			this.timeCuoc.node.active = false;
+			var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-62, 2);
+			this.timePopup.node.color = cc.color(255, 0, 0, 255);
+			this.timePopup.string     = time;
+			this.timeWait.string       = '00:' + helper.numberPad(time, 2);
+		}else{
+			this.nodeTimeWait.active  = false;
+			this.timeCuoc.node.active = true;
+			if (cc.RedT.setting.taixiu.time_remain > 0) {
+				var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-1, 2);
+				if(cc.RedT.setting.taixiu.getLogs){
+					this.timeCuoc.string = '00:' + time;
+				}
+				this.timePopup.node.color = cc.color(155, 75, 2, 255)
+				this.timePopup.string     = time;
+				if (cc.RedT.setting.taixiu.time_remain <= 10)
+					this.timeCuoc.node.color = cc.color(255, 69, 69, 255)
+				else
+					this.timeCuoc.node.color = cc.Color.WHITE
+			}
+		}
 	},
 	onDataChanLe: function(data){
 		if (this.red) {
@@ -496,6 +569,9 @@ cc.Class({
 		}
 	},
 	onDataTaiXiu: function(data){
+		if(void 0 !== cc.RedT.inGame.onGetTaiXiu){
+			cc.RedT.inGame.onGetTaiXiu(data.red_tai, data.red_xiu);
+		}
 		if (this.red) {
 			void 0 !== data.red_tai        && (this.totalLeft.string   = helper.numberWithCommas(data.red_tai));
 			void 0 !== data.red_xiu        && (this.totalRight.string  = helper.numberWithCommas(data.red_xiu));
@@ -540,11 +616,11 @@ cc.Class({
 		}
 	},
 	dataLogs: function(){
-		if (!!this.logs.length) {
+		if (!!cc.RedT.setting.taixiu.logs.length) {
 			var self = this;
 			//Main log
 			Promise.all(this.dotLogs.map(function(dot, index){
-				var data = self.logs[index];
+				var data = cc.RedT.setting.taixiu.logs[index];
 				if (void 0 !== data) {
 					var point = data.dice[0] + data.dice[1] + data.dice[2];
 					dot.node.active = true;
@@ -568,7 +644,7 @@ cc.Class({
 			var c_tai = 0;
 			var c_xiu = 0;
 
-			var sliced = this.logs.slice(0, 19);
+			var sliced = cc.RedT.setting.taixiu.logs.slice(0, 19);
 			sliced.reverse();
 			// Line paint
 			var Paint = new Promise(function(resolve, reject){
@@ -597,7 +673,7 @@ cc.Class({
 
 			// Ket Qua
 			var KetQua = Promise.all(this.RedT.TX_ThongKe.KetQuaDot.map(function(dot, index){
-				var data = self.logs[index];
+				var data = cc.RedT.setting.taixiu.logs[index];
 				if (void 0 !== data) {
 					dot.node.active = true;
 					var point = data.dice[0] + data.dice[1] +data.dice[2];
@@ -611,7 +687,7 @@ cc.Class({
 
 			// Diem So
 			var diemSo = new Promise((resolve, reject) => {
-				var newArr = self.logs.slice();
+				var newArr = cc.RedT.setting.taixiu.logs.slice();
 				newArr.reverse();
 				for (var newDS of newArr) {
 					var point = newDS.dice[0]+newDS.dice[1]+newDS.dice[2];
@@ -672,10 +748,10 @@ cc.Class({
 	reset: function(){
 		this.setPhien();
 		this.isNan && this.dataLogs();
-		this.data.chanle.red_chan = this.data.chanle.red_le = this.data.chanle.red_me_chan = this.data.chanle.red_me_le = this.data.chanle.red_player_chan = this.data.chanle.red_player_le = this.data.chanle.xu_chan = this.data.chanle.xu_le = this.data.chanle.xu_me_chan = this.data.chanle.xu_me_le = this.data.chanle.xu_player_chan = this.data.chanle.xu_player_le = this.data.taixiu.red_me_tai = this.data.taixiu.red_me_xiu = this.data.taixiu.red_player_tai = this.data.taixiu.red_player_xiu = this.data.taixiu.red_tai = this.data.taixiu.red_xiu = this.data.taixiu.xu_me_tai = this.data.taixiu.xu_me_xiu = this.data.taixiu.xu_player_tai = this.data.taixiu.xu_player_xiu = this.data.taixiu.xu_tai = this.data.taixiu.xu_xiu = this.totalLeft.string = this.totalRight.string = this.myLeft.string = this.myRight.string = this.playerLeft.string = this.playerRight.string = 0;
+		cc.RedT.setting.taixiu.data.chanle.red_chan = cc.RedT.setting.taixiu.data.chanle.red_le = cc.RedT.setting.taixiu.data.chanle.red_me_chan = cc.RedT.setting.taixiu.data.chanle.red_me_le = cc.RedT.setting.taixiu.data.chanle.red_player_chan = cc.RedT.setting.taixiu.data.chanle.red_player_le = cc.RedT.setting.taixiu.data.chanle.xu_chan = cc.RedT.setting.taixiu.data.chanle.xu_le = cc.RedT.setting.taixiu.data.chanle.xu_me_chan = cc.RedT.setting.taixiu.data.chanle.xu_me_le = cc.RedT.setting.taixiu.data.chanle.xu_player_chan = cc.RedT.setting.taixiu.data.chanle.xu_player_le = cc.RedT.setting.taixiu.data.taixiu.red_me_tai = cc.RedT.setting.taixiu.data.taixiu.red_me_xiu = cc.RedT.setting.taixiu.data.taixiu.red_player_tai = cc.RedT.setting.taixiu.data.taixiu.red_player_xiu = cc.RedT.setting.taixiu.data.taixiu.red_tai = cc.RedT.setting.taixiu.data.taixiu.red_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_me_tai = cc.RedT.setting.taixiu.data.taixiu.xu_me_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_player_tai = cc.RedT.setting.taixiu.data.taixiu.xu_player_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_tai = cc.RedT.setting.taixiu.data.taixiu.xu_xiu = this.totalLeft.string = this.totalRight.string = this.myLeft.string = this.myRight.string = this.playerLeft.string = this.playerRight.string = 0;
 	},
 	setDefautl: function(){
-		this.getLogs = this.nodeTimePopup.active = false;
+		cc.RedT.setting.taixiu.getLogs = this.nodeTimePopup.active = false;
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.TX_Chat.reset();
 	},
@@ -689,10 +765,20 @@ cc.Class({
 				temp.font = data.win ? this.fontCong : this.fontTru;
 				temp.lineHeight = 130;
 				temp.fontSize   = 22;
-				temp.node.color    = data.win ? cc.color(255,245,0,255) : cc.color(199,199,199,255);
 				temp.node.position = cc.v2(data.select ? -252 : 252, -50);
 				this.notice.addChild(temp.node);
-				temp.node.runAction(cc.sequence(cc.moveTo(3, cc.v2(data.select ? -252 : 252, 130)), cc.callFunc(function(){this.node.destroy()}, temp)))
+				temp.node.runAction(cc.sequence(cc.moveTo(3, cc.v2(data.select ? -252 : 252, 130)), cc.callFunc(function(){this.node.destroy()}, temp)));
+				if(void 0 !== data.thuong && data.thuong > 0){
+					var thuong = new cc.Node;
+					thuong.addComponent(cc.Label);
+					thuong = thuong.getComponent(cc.Label);
+					thuong.string = (data.win ? '+' : '-') + helper.numberWithCommas(data.thuong);
+					thuong.font = cc.RedT.util.fontEffect;
+					thuong.lineHeight = 90;
+					thuong.fontSize   = 14;
+					this.notice.addChild(thuong.node);
+					thuong.node.runAction(cc.sequence(cc.moveTo(3, cc.v2(0, 100)), cc.callFunc(function(){this.node.destroy()}, thuong)))
+				}
 			}
 			cc.RedT.send({taixiu:{get_new: true}})
 		}

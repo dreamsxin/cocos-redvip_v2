@@ -120,14 +120,14 @@ cc.Class({
 		!t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
 	},
 	isTop: function() {
-		return !this.moreNhaMang.active && !this.moreMenhGia.active && !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+		return !this.moreNhaMang.active && !this.moreMenhGia.active && !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
 	},
 	clean: function(){
 		this.SoThe.string = this.SoSeri.string = '';
 	},
 	onNapClick: function(){
 		if (this.SoThe.string.length < 11 || this.SoSeri.string.length < 11) {
-			cc.RedT.notice.show({title: "NẠP RED", text: "Thông Tin không hợp lệ..."})
+			cc.RedT.inGame.notice.show({title: "NẠP RED", text: "Thông Tin không hợp lệ..."})
 		}else{
 			cc.RedT.send({shop:{nap_the:{nhamang: this.NhanhMang.string, menhgia: helper.getOnlyNumberInString(this.MenhGia.string), mathe: this.SoThe.string, seri:this.SoSeri.string}}});
 		}

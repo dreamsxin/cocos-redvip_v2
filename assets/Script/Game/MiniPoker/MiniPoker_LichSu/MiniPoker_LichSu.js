@@ -7,12 +7,10 @@ cc.Class({
     properties: {
         page:     cc.Prefab,
         content:  cc.Node,
-        bet:      cc.Node,
         cointRed: cc.Node,
         cointXu:  cc.Node,
         red:      true,
         isLoad:   false,
-        cuoc:     "",
     },
     onLoad () {
         var page = cc.instantiate(this.page);
@@ -21,7 +19,7 @@ cc.Class({
         this.page = page.getComponent('Pagination');
         Promise.all(this.content.children.map(function(obj){
             var tea = Promise.all(obj.children.map(function(t, index){
-                if (index === 2) {
+                if (index === 3) {
                     return Promise.all(t.children.map(function(card){
                         return card.getComponent(cc.Sprite);
                     }))
@@ -45,27 +43,12 @@ cc.Class({
     },
     get_data: function(page = 1){
         this.isLoad = true;
-        cc.RedT.send({g:{mini_poker:{log:{red: this.red, bet: this.cuoc, page: page}}}});
+        cc.RedT.send({g:{mini_poker:{log:{red: this.red, page: page}}}});
     },
     changerCoint: function(){
         this.red             = !this.red;
         this.cointRed.active = !this.cointRed.active;
         this.cointXu.active  = !this.cointXu.active;
-        this.get_data();
-    },
-    changerBet: function(event, bet){
-        cc.RedT.audio.playClick();
-        this.cuoc = bet;
-        var target = event.target;
-        Promise.all(this.bet.children.map(function(bet){
-            if (bet == target) {
-                bet.children[0].active = true;
-                bet.pauseSystemEvents();
-            }else{
-                bet.children[0].active = false;
-                bet.resumeSystemEvents();
-            }
-        }))
         this.get_data();
     },
     onData: function(data){
@@ -77,17 +60,18 @@ cc.Class({
                 self.content.children[i].active = true
                 obj[0].string = Helper.getStringDateByTime(dataT.time);
                 obj[1].string = dataT.id;
-                obj[3].string = Helper.numberWithCommas(dataT.win);
-                Promise.all(obj[2].map(function(card, index){
+                obj[2].string = Helper.numberWithCommas(dataT.bet);
+                Promise.all(obj[3].map(function(card, index){
                     card.spriteFrame = cc.RedT.util.card.getCard(dataT.kq[index].card, dataT.kq[index].type);
-                }))
+                }));
+                obj[4].string = Helper.numberWithCommas(dataT.win);
             }else{
                 self.content.children[i].active = false
             }
         }))
     },
     reset: function(){
-        this.isLoad = false;
+        this.isLoad    = false;
         Promise.all(this.content.children.map(function(obj){
             obj.active = false
         }))

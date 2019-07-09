@@ -16,23 +16,23 @@ cc.Class({
 		});
 	},
 	onEnable: function () {
-        this.node.runAction(cc.RedT.dialog.actionShow);
+        this.node.runAction(cc.RedT.inGame.dialog.actionShow);
     },
     onDisable: function () {
-        cc.RedT.dialog.resetSizeDialog(this.node);
+        cc.RedT.inGame.dialog.resetSizeDialog(this.node);
     },
 	onData: function(data){
 		this.setData(data);
-		cc.RedT.loading.active = false;
-		if (cc.RedT.dialog.objShow) {
-			cc.RedT.dialog.objShow.active = false;
-			this.node.previous = cc.RedT.dialog.objShow;
+		cc.RedT.inGame.loading.active = false;
+		if (cc.RedT.inGame.dialog.objShow) {
+			cc.RedT.inGame.dialog.objShow.active = false;
+			this.node.previous = cc.RedT.inGame.dialog.objShow;
 		}
-		this.node.active = cc.RedT.dialog.node.active = true;
-		cc.RedT.dialog.objShow = this.node;
+		this.node.active = cc.RedT.inGame.dialog.node.active = true;
+		cc.RedT.inGame.dialog.objShow = this.node;
 	},
 	getData: function(id){
-		cc.RedT.loading.active = true;
+		cc.RedT.inGame.loading.active = true;
 		cc.RedT.send({user:{history:{the_cao: id}}});
 	},
 	setData: function(data){

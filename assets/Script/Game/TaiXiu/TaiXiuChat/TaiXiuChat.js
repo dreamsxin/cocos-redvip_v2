@@ -24,6 +24,9 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
+		if (void 0 !== cc.RedT.setting.taixiu.chat_active) {
+			this.node.active = cc.RedT.setting.taixiu.chat_active;
+		}
 	},
 	onLoad () {
 		var self = this;
@@ -81,14 +84,14 @@ cc.Class({
 			this.RedT.onData({err: "Nhập nội dung để chat..."});
 		}else{
 			cc.RedT.send({taixiu:{chat: this.input.string}});
-			this.onData({message:{user:cc.RedT.header.userName.string, value:this.input.string}});
+			this.onData({message:{user:cc.RedT.user.name, value:this.input.string}});
 			this.clean();
 		}
 	},
 	toggle: function(){
 		this.RedT.setTop();
 		cc.RedT.audio.playClick();
-		this.node.active = !this.node.active;
+		this.node.active = cc.RedT.setting.taixiu.chat_active = !this.node.active;
 	},
 	clean: function(){
 		this.input.string = "";

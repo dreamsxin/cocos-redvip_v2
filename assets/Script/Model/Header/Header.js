@@ -3,6 +3,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        avatar: cc.Sprite,
         nodeUsers: {
             default: null,
             type: cc.Node,
@@ -19,7 +20,7 @@ cc.Class({
             default: null,
             type: cc.Label,
         },
-
+        vip: cc.Label,
         userRed: {
             default: null,
             type: cc.Label,
@@ -28,7 +29,13 @@ cc.Class({
             default: null,
             type: cc.Label,
         },
-        expFull: 0,
+        maskFull: 0,
+    },
+    onLoad () {
+        if (cc.RedT.IS_LOGIN)
+            this.isSignIn();
+        else
+            this.isSignOut();
     },
     isSignIn: function() {
         this.nodeUsers.active = true;
@@ -38,5 +45,11 @@ cc.Class({
         this.userName.string = this.userRed.string = this.userXu.string = '';
         this.nodeUsers.active = false;
         this.nodeGuest.active = true;
+    },
+    level: function(level){
+        this.vip.string = "VIP"+level;
+    },
+    updateEXP: function(ht, next){
+        this.exp.width = ht/next*this.maskFull;
     },
 });

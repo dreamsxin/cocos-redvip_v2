@@ -1,100 +1,80 @@
 
 var helper = require('Helper');
 
-var audio  = require('MainAudio'),
-	header = require('Header'),
-	dialog = require('Dialog'),
-	notice = require('Notice'),
-	MiniPanel = require('MiniPanel');
+var baseControll = require('BaseControll');
+
+var header      = require('Header'),
+	dialog      = require('Dialog'),
+	newsContents = require('NewsContents'),
+	notice      = require('Notice');
 
 cc.Class({
 	extends: cc.Component,
 	properties: {
-		audio: audio,
+		PrefabT: {
+			default: [],
+			type: cc.Prefab
+		},
 		header: header,
-		MiniPanel: MiniPanel,
+		font:   cc.TTFFont,
 		news: {
 			default: null,
 			type: cc.Node
 		},
-		dialog: dialog,
-		game: {
+		newsContents: newsContents,
+		iconVQRed: {
 			default: null,
 			type: cc.Node
 		},
+		iconTaiXiu: {
+			default: null,
+			type: cc.Node
+		},
+		redhat: {
+			default: null,
+			type: cc.Node
+		},
+		dialog: dialog,
 		loading: {
 			default: null,
 			type: cc.Node
 		},
 		notice:      notice,
-		IS_LOGIN:    false,
-		IS_SOUND:    true,
-		isConnected: false,
 	},
 	onLoad: function () {
-		this._socket = null;
-		cc.RedT      = this;
-		this.user    = {};
-		this.dialog.init();
-		this.MiniPanel.init();
-
-		this.dialog.settings.setMusic();
-	},
-	connect: function(url, path = '/', port = false, ss = false) {
-		if (!this.isConnected) {
-			this._socket           = new WebSocket("ws" + (ss ? "s" : "") + "://" + url + (!!port ? ":" + port : "") + path);
-			this._socket.onopen    = this._onSocketConnect;
-			this._socket.onclose   = this._onSocketDisconnect;
-			this._socket.onmessage = this._onSocketData;
-			this._socket.onerror   = this._onSocketError;
-			this.isConnected       = !0;
+		if (void 0 === cc.RedT) {
+			cc.RedT = baseControll;
+			cc.RedT.audio = this.PrefabT[0].data.getComponent('MainAudio');
 		}
-	},
-	disconnect: function() {
-		this.isConnected = !1;
-		this._socket.close()
-	},
-	send: function(message) {
-		this._socket.send(this._encodeMessage(message))
-	},
-	_decodeMessage: function(message) {
-		return JSON.parse(message)
-	},
-	_encodeMessage: function(message) {
-		return JSON.stringify(message)
-	},
-	_onSocketConnect: function() {
-		cc.RedT.isConnected = true;
-	},
-	_onSocketDisconnect: function() {
-		cc.RedT.isConnected = false;
-		cc.RedT.IS_LOGIN && cc.RedT.signOut();
-		//cc.RedT.notice.show({title: 'THÔNG BÁO', text:'Mất kết nối...'});
-	},
-	_onSocketData: function(message) {
-		var data = message.data;
-		data = cc.RedT._decodeMessage(data);
-		cc.RedT.onData(data);
-	},
-	_onSocketError: function(message) {
-		//cc.RedT.signOut();
-		//cc.RedT.notice.show({title: 'THÔNG BÁO', text:'Mất kết nối...'});
-		console.log(message)
-	},
-	reconnect: function(){
-		this.connect('127.0.0.1', '/websocket');
-		//this.connect('150.95.109.43', '/websocket');
+		// Connect Server
+		//cc.RedT.reconnect();
+
+		this.dialog.init();
+		this.newsContents.init(this);
+		this.dialog.settings.setMusic();
+		cc.RedT.inGame = this;
+
+		var MiniPanel = cc.instantiate(this.PrefabT[1]);
+		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
+		this.redhat.insertChild(MiniPanel);
+
+		this.iconVQRed  = this.iconVQRed.getComponent('iconGameHu');
+		this.iconTaiXiu = this.iconTaiXiu.getComponent('iconGameTaiXiu');
+
+		if (cc.RedT.IS_LOGIN){
+			cc.RedT.send({scene:"home"});
+		}
 	},
 	auth: function(obj) {
 		var self = this;
 		this.loading.active = true;
-		this.reconnect();
-		if (this._socket == null || this._socket.readyState != 1) {
+		//cc.RedT.reconnect();
+		if (cc.RedT._socket == null || cc.RedT._socket.readyState != 1) {
 			setTimeout(function(){
-				self.send(obj);
+				cc.RedT.send(obj);
 			}, 300);
 		}else{
-			this.send(obj)
+			cc.RedT.send(obj)
 		}
 	},
 	unAuthorized: function(data){
@@ -123,15 +103,16 @@ cc.Class({
 		}
 		if (void 0 !== data.user){
 			this.dataUser(data.user);
+			cc.RedT.userData(data.user);
 		}
 		if (void 0 !== data.mini){
-			this.MiniPanel.onData(data.mini);
+			cc.RedT.MiniPanel.onData(data.mini);
 		}
 		if (void 0 !== data.TopHu){
-			this.MiniPanel.TopHu.onData(data.TopHu);
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
 		}
 		if (void 0 !== data.taixiu){
-			this.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
 		}
 		if (void 0 !== data.shop){
 			this.dialog.shop.onData(data.shop);
@@ -142,6 +123,27 @@ cc.Class({
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
 		}
+		if (void 0 !== data.news){
+			this.newsF(data.news)
+		}
+		if (void 0 !== data.captcha) {
+			this.captcha(data.captcha);
+		}
+	},
+	captcha: function(data){
+		if (void 0 !== data.signUp) {
+			this.dialog.signUp.initCaptcha(data.signUp);
+		}
+		if (void 0 !== data.giftcode) {
+			this.dialog.GiftCode.initCaptcha(data.giftcode);
+		}
+	},
+	newsF: function(data){
+		if (void 0 !== data.a)
+			this.NewsAddArray(data.a)
+
+		if (void 0 !== data.t)
+			this.NewsAddText(data.t)
 	},
 	dataUser: function(data){
 		if (void 0 !== data.name){
@@ -150,11 +152,9 @@ cc.Class({
 		}
 		if (void 0 !== data.red){
 			this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(data.red);
-			this.user.red = data.red;
 		}
 		if (void 0 !== data.xu){
 			this.header.userXu.string = helper.numberWithCommas(data.xu);
-			this.user.xu = data.xu;
 		}
 		if (void 0 !== data.ketSat){
 			this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(data.ketSat);
@@ -171,50 +171,104 @@ cc.Class({
 		if (void 0 !== data.joinedOn){
 			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(data.joinedOn);
 		}
+		if (void 0 !== data.level){
+			this.header.level(data.level);
+			this.header.updateEXP(data.vipHT, data.vipNext);
+		}
+	},
+	NewsAddArray: function(arr){
+		var self = this
+		Promise.all(arr.map(function(text){
+			var temp = new cc.Node;
+			temp.addComponent(cc.RichText);
+			temp            = temp.getComponent(cc.RichText);
+			temp.string     = text
+			temp.font       = self.font
+			temp.lineHeight = 30
+			temp.fontSize   = 20
+
+			self.newsContents.node.addChild(temp.node)
+
+			return temp;
+		})).then(result => {
+			if (!this.newsContents.node.active) {
+				this.newsContents.setNews()
+			}
+		})
+	},
+	NewsAddText: function(text){
+		var temp = new cc.Node;
+		temp.addComponent(cc.RichText);
+		temp            = temp.getComponent(cc.RichText);
+		temp.string     = text
+		temp.font       = this.font
+		temp.lineHeight = 30
+		temp.fontSize   = 20
+		this.newsContents.node.addChild(temp.node)
+
+		if (!this.newsContents.node.active) {
+			this.newsContents.setNews()
+		}
 	},
 	signOut: function(){
-		this.user     = {};
-		this.IS_LOGIN = false;
+		cc.RedT.user     = {};
+		cc.RedT.IS_LOGIN = false;
 		this.AllReset();
 	},
-	signIn:function(){
-		this.IS_LOGIN = true;
+	signIn: function(){
+		cc.RedT.IS_LOGIN = true;
 		this.header.isSignIn();
 		this.dialog.onBack();
-		this.MiniPanel.signIn();
+		cc.RedT.MiniPanel.signIn();
 	},
 	AllReset:function(){
 		this.loading.active = false;
+		this.newsContents.reset();
 		this.header.isSignOut();
 		this.dialog.onCloseDialog();
-		this.MiniPanel.newGame();
+		cc.RedT.MiniPanel.newGame();
+
+		//cc.RedT.reconnect();
 	},
-	errConnect: function(){
-		this.notice.show({title: 'THÔNG BÁO', text:'Mất kết nối...'});
+	onGetTaiXiu: function(tai, xiu){
+		var sTai = helper.getOnlyNumberInString(this.iconTaiXiu.tai.string);
+		var sXiu = helper.getOnlyNumberInString(this.iconTaiXiu.xiu.string);
+		if (sTai-tai != 0) {
+			helper.numberTo(this.iconTaiXiu.tai, sTai, tai, 1000, true);
+		}
+		if (sXiu-xiu != 0) {
+			helper.numberTo(this.iconTaiXiu.xiu, sXiu, xiu, 1000, true);
+		}
+	},
+	onGetHu: function(){
+		if (void 0 !== cc.RedT.setting.topHu.data) {
+			// Vương Quốc Red
+			var self = this;
+			Promise.all(cc.RedT.setting.topHu.data['vq_red'].filter(function(temp){
+				return temp.red == true;
+			}))
+			.then(result => {
+				var h100 = result.filter(function(temp){return temp.type == 100});
+				var h1k  = result.filter(function(temp){return temp.type == 1000});
+				var h10k = result.filter(function(temp){return temp.type == 10000});
+
+				var r100 = helper.getOnlyNumberInString(this.iconVQRed.hu100.string);
+				var r1k  = helper.getOnlyNumberInString(this.iconVQRed.hu1k.string);
+				var r10k = helper.getOnlyNumberInString(this.iconVQRed.hu10k.string);
+
+				if (r100-h100[0].bet != 0) {
+					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 2000, true);
+				}
+				if (r1k-h1k[0].bet != 0) {
+					helper.numberTo(this.iconVQRed.hu1k, helper.getOnlyNumberInString(this.iconVQRed.hu1k.string), h1k[0].bet, 2000, true);
+				}
+				if (r10k-h10k[0].bet != 0) {
+					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 2000, true);
+				}
+			});
+		}
 	},
 
-	// Function localStorage
-	setAutoLogin: function(bool){
-		localStorage.setItem('AUTO_LOGIN', bool)
-	},
-	isAutoLogin: function(){
-		var check = localStorage.getItem('AUTO_LOGIN');
-		return check == "true"
-	},
-	setSoundGame: function(bool){
-		localStorage.setItem('SOUND_GAME', bool)
-	},
-	isSoundGame: function(){
-		var check = localStorage.getItem('SOUND_GAME');
-		return check == "true"
-	},
-	setSoundBackground: function(bool){
-		localStorage.setItem('SOUND_BACKGROUND', bool)
-	},
-	isSoundBackground: function(){
-		var check = localStorage.getItem('SOUND_BACKGROUND');
-		return check == "true"
-	},
 	// END Function localStorage
 
 	/**

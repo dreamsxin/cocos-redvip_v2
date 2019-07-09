@@ -102,9 +102,8 @@ cc.Class({
     	})
     },
     config: function(){
-        cc.RedT.util = cc.RedT.util || {};
         if (void 0 === cc.RedT.util.card) {
-            cc.RedT.util.card = cc.RedT.util.card || this;
+            cc.RedT.util.card = this;
         	if (!this.red) {
         		this.red = true;
         		this.init();
@@ -114,7 +113,7 @@ cc.Class({
     getCard: function(card = 0, type = 0){
     	return this.card[card][type];
     },
-    random: function(){
-    	return this.card[~~(Math.random()*13)][~~(Math.random()*4)];
+    random: function(number = 13){
+    	return this.card[~~(Math.random()*number)][~~(Math.random()*4)];
     }
 });

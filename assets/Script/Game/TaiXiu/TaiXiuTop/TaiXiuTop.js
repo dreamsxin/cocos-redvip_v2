@@ -35,7 +35,13 @@ cc.Class({
         },
     },
     init(obj){
-    	this.RedT = obj
+    	this.RedT = obj;
+        if (void 0 !== cc.RedT.setting.taixiu.top_position) {
+            this.node.position = cc.RedT.setting.taixiu.top_position;
+        }
+        if (void 0 !== cc.RedT.setting.taixiu.top_active) {
+            this.node.active = cc.RedT.setting.taixiu.top_active;
+        }
     },
     onLoad () {
 		this.ttOffset = null;
@@ -63,7 +69,9 @@ cc.Class({
 	eventMove: function(e){
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
 	},
-	eventEnd: function(){},
+	eventEnd: function(){
+        cc.RedT.setting.taixiu.top_position = this.node.position;
+    },
 	setTop: function(){
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop();
@@ -71,7 +79,7 @@ cc.Class({
     toggle: function() {
     	this.setTop();
     	cc.RedT.audio.playClick();
-    	this.node.active = !this.node.active;
+    	this.node.active = cc.RedT.setting.taixiu.top_active = !this.node.active;
     },
     onChangerGame: function(){
     	this.taixiu = !this.taixiu;

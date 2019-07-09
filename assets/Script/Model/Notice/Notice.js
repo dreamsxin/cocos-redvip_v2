@@ -26,7 +26,7 @@ cc.Class({
     show: function(data) {
         this.node.active = true;
         if (void 0 !== data.load) {
-            cc.RedT.loading.active = !1;
+            cc.RedT.inGame.loading.active = !1;
         }
         if (void 0 !== data.title) {
             this.title.string = data.title;

@@ -22,19 +22,19 @@ cc.Class({
                 t.preventDefault && t.preventDefault(),
                 !1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onLoginClick(),
                 t.preventDefault && t.preventDefault(),
-                !1) : t.keyCode === cc.macro.KEY.escape ? (cc.RedT.dialog.onClickBack(),
+                !1) : t.keyCode === cc.macro.KEY.escape ? (cc.RedT.inGame.dialog.onClickBack(),
                 t.preventDefault && t.preventDefault(),
                 !1) : void 0
         }
     },
     onEnable: function () {
         cc.sys.isBrowser && this.addEvent();
-        this.node.runAction(cc.RedT.dialog.actionShow);
+        this.node.runAction(cc.RedT.inGame.dialog.actionShow);
     },
     onDisable: function () {
         cc.sys.isBrowser && this.removeEvent();
         this.clean();
-        cc.RedT.dialog.resetSizeDialog(this.node);
+        cc.RedT.inGame.dialog.resetSizeDialog(this.node);
     },
     addEvent: function() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -51,7 +51,7 @@ cc.Class({
     onKeyDown: function (event) {
         switch(event.keyCode) {
             case cc.macro.KEY.escape:
-                this.isTop() && cc.RedT.dialog.onClickBack();
+                this.isTop() && cc.RedT.inGame.dialog.onClickBack();
                 break;
             case cc.macro.KEY.tab:
                 this.isTop() && this.changeNextFocusEditBox();
@@ -71,7 +71,7 @@ cc.Class({
         !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
     },
     isTop: function() {
-        return !cc.RedT.notice.node.active && !cc.RedT.loading.active;
+        return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
         this.username.string = this.password.string = '';
@@ -85,9 +85,9 @@ cc.Class({
             error = 'Mật khẩu không đúng!!';
 
         if (error) {
-            cc.RedT.notice.show({title:"ĐĂNG NHẬP", text:error});
+            cc.RedT.inGame.notice.show({title:"ĐĂNG NHẬP", text:error});
             return;
         };
-        cc.RedT.auth({authentication:{username: this.username.string, password: this.password.string}});
+        cc.RedT.inGame.auth({authentication:{username: this.username.string, password: this.password.string}});
     },
 });

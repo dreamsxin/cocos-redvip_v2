@@ -11,12 +11,16 @@ cc.Class({
 		TX_Top:     TX_Top,
 	},
 	init(obj){
-		this.getLogs = false;
+		this.TX_LichSu      = obj.Dialog.TaiXiuLichSu;
+		this.TX_LichSuPhien = obj.Dialog.TaiXiuLichSuPhien;
 		this.TX_Main.init(this);
 		this.TX_ThongKe.init(this);
 		this.TX_Top.init(this);
-		this.TX_LichSu      = obj.Dialog.TaiXiuLichSu;
-		this.TX_LichSuPhien = obj.Dialog.TaiXiuLichSuPhien;
+
+		var check = localStorage.getItem('taixiu');
+		if (check == "true") {
+			this.node.active = true;
+		}
 	},
 	onEnable: function () {
 		this.regEvent(true);
@@ -25,21 +29,26 @@ cc.Class({
 		this.regEvent(false);
 	},
 	regEvent: function(bool){
-		cc.RedT.send({taixiu: !this.TX_Main.getLogs ? {view: bool, getLogs:true} : {view: bool}});
+		cc.RedT.send({taixiu: !cc.RedT.setting.taixiu.getLogs ? {view: bool, getLogs:true} : {view: bool}});
 	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);
 	},
-	openGame: function () {
+	openGame: function (e, taixiu = '1') {
 		cc.RedT.audio.playClick();
-		if (cc.RedT.IS_LOGIN)
+		if (cc.RedT.IS_LOGIN){
 			this.node.active = !0;
+			localStorage.setItem('taixiu', true);
+			this.TX_Main.initGame((taixiu == '1'));
+			this.setTop();
+		}
 		else
-			cc.RedT.dialog.showSignIn();
+			cc.RedT.inGame.dialog.showSignIn();
 	},
 	closeGame: function () {
 		cc.RedT.audio.playUnClick();
 		this.node.active = this.TX_Top.node.active = this.TX_ThongKe.node.active = this.TX_Main.TX_Board.node.active = !1;
+		localStorage.setItem('taixiu', false);
 	},
 	newGame: function(){
 		this.TX_ThongKe.node.active = this.TX_Main.TX_Board.node.active = false;

@@ -105,7 +105,7 @@ cc.Class({
 	},
 	getPhien: function(phien = null){
 		if (!!phien){
-			cc.RedT.loading.active = true;
+			cc.RedT.inGame.loading.active = true;
 			cc.RedT.send({taixiu:{get_phien: {red: this.RedT.TX_Main.red, taixiu: this.RedT.TX_Main.taixiu, phien: phien}}});
 		}
 	},
@@ -118,7 +118,7 @@ cc.Class({
 	onData: function(data){
 		var self = this;
 		this.setNew();
-		cc.RedT.loading.active  = false;
+		cc.RedT.inGame.loading.active  = false;
 		cc.RedT.MiniPanel.Dialog.showTaiXiuLichSuPhien();
 		this.leftCuoc.string    = helper.numberWithCommas(data.tong_L);
 		this.rightCuoc.string   = helper.numberWithCommas(data.tong_R);
@@ -127,7 +127,7 @@ cc.Class({
 		this.phien.string       = data.phien + '  -  ' + helper.getStringDateByTime(data.time);
 		this.isPhien            = data.phien;
 		var total               = data.dice[0] + data.dice[1] + data.dice[2];
-		var phienT = this.RedT.TX_Main.logs[0].phien - data.phien;
+		var phienT = cc.RedT.setting.taixiu.logs[0].phien - data.phien;
 		if (phienT > 17) {
 			this.nodePrevious.active = false;
 		}else{

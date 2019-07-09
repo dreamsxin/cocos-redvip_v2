@@ -44,10 +44,10 @@ cc.Class({
         });
     },
     onEnable: function () {
-		cc.RedT.header.node.active = false;
+		cc.RedT.inGame.header.node.active = false;
 	},
 	onDisable: function () {
-		cc.RedT.header.node.active = true;
+		cc.RedT.inGame.header.node.active = true;
 	},
     onSelectHead: function(event, name){
         Promise.all(this.header.map(function(header) {
@@ -85,10 +85,15 @@ cc.Class({
             this.LichSu.onData(data.history);
         }
         if (void 0 !== data.the_cao){
-            cc.RedT.dialog.the_cao.onData(data.the_cao);
+            cc.RedT.inGame.dialog.the_cao.onData(data.the_cao);
         }
         if (void 0 !== data.chuyen_red){
             //this.ChuyenRed.onData(data.chuyen_red);
+        }
+        if (void 0 !== data.level){
+            this.CaNhan.level(data.level);
+            cc.RedT.inGame.header.level(data.level.level);
+            cc.RedT.inGame.header.updateEXP(data.level.vipHT, data.level.vipNext);
         }
     },
 });

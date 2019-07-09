@@ -56,22 +56,47 @@ cc.Class({
 		this.RedT = obj;
 		this.Top    = obj.Dialog.MiniPoker_Top;
 		this.LichSu = obj.Dialog.MiniPoker_LichSu;
+		cc.RedT.setting.minipoker = cc.RedT.setting.minipoker || {};
 
+		this.card.data.getComponent('Card')
+		.config()
+
+		var check = localStorage.getItem('minipoker');
+		if (check == "true") {
+			this.node.active = true;
+		}
+
+		if (void 0 === cc.RedT.util.fontEffect) {
+			cc.RedT.util.fontEffect = this.font;
+		}
+		if (void 0 !== cc.RedT.setting.minipoker.position) {
+			this.node.position = cc.RedT.setting.minipoker.position;
+		}
+
+		if (void 0 !== cc.RedT.setting.minipoker.bet && cc.RedT.setting.minipoker.bet != this.cuoc) {
+			this.intChangerBet();
+		}
+		if (void 0 !== cc.RedT.setting.minipoker.red && this.red != cc.RedT.setting.minipoker.red) {
+			this.changerCoint();
+		}
+		if (void 0 !== cc.RedT.setting.minipoker.isSpeed && this.isSpeed != cc.RedT.setting.minipoker.isSpeed) {
+			this.onClickSpeed();
+		}
+		if (void 0 !== cc.RedT.setting.minipoker.isAuto && this.isAuto != cc.RedT.setting.minipoker.isAuto) {
+			this.onClickAuto();
+		}
 	},
 	onLoad () {
 		var self = this;
 		this.data     = null;
 		this.ttOffset = null;
-		this.card.data.getComponent('Card')
-		.config()
-		//this.card.config();
 
 		Promise.all(this.reels.map(function(reel){
 			reel.init(self);
 		}))
 	},
 	onEnable: function() {
-		this.onGetInfo();
+		this.onGetHu();
 		this.background.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.background.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.background.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
@@ -93,16 +118,23 @@ cc.Class({
 	eventMove: function(e){
 		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y)
 	},
-	eventEnd: function(){},
+	eventEnd: function(){
+		cc.RedT.setting.minipoker.position = this.node.position;
+	},
 	openGame:function(){
 		cc.RedT.audio.playClick();
-		if (cc.RedT.IS_LOGIN)
+		if (cc.RedT.IS_LOGIN){
 			this.node.active = !0;
+			localStorage.setItem('minipoker', true);
+			this.setTop();
+		}
 		else
-			cc.RedT.dialog.showSignIn();
+			cc.RedT.inGame.dialog.showSignIn();
 	},
 	closeGame:function(){
+		cc.RedT.audio.playUnClick();
 		this.node.active = !1;
+		localStorage.setItem('minipoker', false);
 	},
 	random: function(newG = false){
 		Promise.all(this.reels.map(function(reel) {
@@ -140,12 +172,12 @@ cc.Class({
 		}
 	},
 	onClickSpeed: function(){
-		this.isSpeed               = !this.isSpeed;
+		this.isSpeed               = cc.RedT.setting.minipoker.isSpeed = !this.isSpeed;
 		this.buttonSpeedDot.active = !this.buttonSpeedDot.active;
 		this.buttonSpeed.color     = this.isSpeed ? cc.Color.WHITE : cc.color(206,206,206);
 	},
 	onClickAuto: function(){
-		this.isAuto               = !this.isAuto;
+		this.isAuto               = cc.RedT.setting.minipoker.isAuto = !this.isAuto;
 		this.buttonAutoDot.active = !this.buttonAutoDot.active;
 		this.buttonAuto.color     = this.isAuto ? cc.Color.WHITE : cc.color(206,206,206);
 		this.buttonStop.active    = this.isSpin ? (this.isAuto ? true : false) : false;
@@ -155,13 +187,26 @@ cc.Class({
         this.buttonStop.active = false;
     },
 	changerCoint: function(){
-		this.red            = !this.red;
+		this.red            = cc.RedT.setting.minipoker.red = !this.red;
 		this.nodeRed.active = !this.nodeRed.active;
 		this.nodeXu.active  = !this.nodeXu.active;
-		this.onGetInfo();
+		this.onGetHu();
+	},
+	intChangerBet: function(){
+		var self = this;
+		Promise.all(this.bet.children.map(function(obj){
+			if (obj.name == cc.RedT.setting.minipoker.bet) {
+				self.cuoc = obj.name;
+				obj.children[0].active = true;
+				obj.pauseSystemEvents();
+			}else{
+				obj.children[0].active = false;
+				obj.resumeSystemEvents();
+			}
+		}))
 	},
 	changerBet: function(event, bet){
-		this.cuoc = bet;
+		this.cuoc = cc.RedT.setting.minipoker.bet = bet;
 		var target = event.target;
 		Promise.all(this.bet.children.map(function(obj){
 			if (obj == target) {
@@ -172,84 +217,27 @@ cc.Class({
 				obj.resumeSystemEvents();
 			}
 		}))
-		this.onGetInfo();
+		this.onGetHu();
 	},
 	speed: function(){
-		return this.isSpeed ? 2.5/2 : 2.5;
-	},
-	delay1: function(){
-		return cc.delayTime(this.delayN1());
-	},
-	delay2: function(){
-		return cc.delayTime(this.data.code >= 6 ? 1 : 0);
-	},
-	delayN1: function(){
-		return this.data.code >= 6 ? 2.5 : 2;
-	},
-	getAction: function(){
-		if (this.data.code >= 6) {
-			//this.ef.active      = true;
-			//helper.numberTo(this.efLabel.string, 0, this.data.win, 1500, true);
-			var title = new cc.Node;
-			title.addComponent(cc.Label);
-			title = title.getComponent(cc.Label);
-			title.string = this.data.text;
-			title.font = this.font;
-			title.lineHeight = 88;
-			title.fontSize   = 18;
-			title.node.y     = 14;
-			this.notice.addChild(title.node);
-			title.node.runAction(cc.sequence(this.delay1(), cc.callFunc(function(){this.node.destroy()}, title)));
-		}else{
-			this.addNotice(this.data.text);
-		}
-		var betWin = new cc.Node;
-		betWin.addComponent(cc.Label);
-		betWin = betWin.getComponent(cc.Label);
-		betWin.string = '+' + helper.numberWithCommas(this.data.win);
-		betWin.lineHeight = 130;
-		betWin.fontSize   = 20;
-		betWin.node.color = this.red ? cc.color(255,245,0,255) : cc.color(217,217,217,255);
-		this.notice.addChild(betWin.node);
-		betWin.node.runAction(cc.sequence(cc.moveTo(this.delayN1(), cc.v2(0, 130)), cc.callFunc(function(){this.node.destroy()}, betWin)));
-
-		if (void 0 !== this.data.thuong && this.data.thuong > 0) {
-			betWin.font = this.RedT.TaiXiu.TX_Main.fontTru;
-			var betThuong = new cc.Node;
-			betThuong.addComponent(cc.Label);
-			betThuong = betThuong.getComponent(cc.Label);
-			betThuong.string = '+' + helper.numberWithCommas(this.data.thuong);
-			betThuong.font = this.RedT.TaiXiu.TX_Main.fontCong;
-			betThuong.lineHeight = 130;
-			betThuong.fontSize   = 20;
-			betThuong.node.color    = cc.color(255,245,0,255);
-			betThuong.node.position = cc.v2(0,-28);
-			this.notice.addChild(betThuong.node);
-			betThuong.node.runAction(cc.sequence(cc.moveTo(this.delayN1()-0.2, cc.v2(0, 135)), cc.callFunc(function(){this.node.destroy()}, betThuong)));
-		}else{
-			betWin.font = this.RedT.TaiXiu.TX_Main.fontCong;
-		}
+		return this.isSpeed ? 1.2 : 2.5;
 	},
 	onData: function(data){
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
 				this.buttonStop.active = this.isAuto ? true : false;
+				this.win   = data.win;
+				this.winT  = data.text;
+				this.winC  = data.code;
+				this.winTg = void 0 !== data.thuong ? data.thuong : 0;
 				Promise.all(data.card.map(function(card, index){
 					self.reels[index].card[0].spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
 				}));
-				if(void 0 !== data.win){
-					this.data = data;
-				}else{
-					this.data = null;
-				}
 				this.autoSpin();
 			}else{
 				this.offSpin();
 			}
-		}
-		if (void 0 !== data.hu) {
-			helper.numberTo(this.hu, helper.getOnlyNumberInString(this.hu.string), data.hu, 1700, true);
 		}
 		if (void 0 !== data.phien) {
 			this.phien.string = "#" + data.phien;
@@ -273,8 +261,87 @@ cc.Class({
 	setTop:function(){
 		this.node.parent.insertChild(this.node);
 	},
-	onGetInfo: function(){
-		cc.RedT.send({g:{mini_poker:{info:{cuoc:this.cuoc, red: this.red}}}});
+	hieuUng: function(){
+    	if (void 0 !== this.winC && this.winC > 0) {
+    		if (this.winC == 9) {
+    			// Nổ Hũ
+    			if (this.isAuto == true) {
+    				this.onClickStop();
+    			}
+
+    			var nohu = cc.instantiate(this.RedT.PrefabNoHu);
+				nohu = nohu.getComponent(cc.Animation);
+				var text = nohu.node.children[6].getComponent(cc.Label);
+
+				var Play = function(){
+					var huong = cc.callFunc(function(){
+						helper.numberTo(text, 0, this.win, 1000, true);
+					}, this);
+					nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));
+				};
+
+				var Finish = function(){
+					nohu.node.destroy();
+					this.hieuUng();
+				};
+				this.RedT.nodeEfect.addChild(nohu.node);
+				nohu.on('play',     Play,   this);
+    			nohu.on('finished', Finish, this);
+    			nohu.play();
+    		}else{
+    			var temp = new cc.Node;
+				temp.addComponent(cc.Label);
+				temp = temp.getComponent(cc.Label);
+				temp.string = '+'+ helper.numberWithCommas(this.win);
+				temp.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+				temp.lineHeight = 130;
+				temp.fontSize   = 20;
+				this.notice.addChild(temp.node);
+				temp.node.runAction(cc.sequence(cc.moveTo(this.isSpeed ? 2 : 3.5, cc.v2(0, 140)), cc.callFunc(function(){
+					temp.node.destroy();
+					this.hieuUng();
+				}, this)));
+    			this.addNotice(this.winT);
+    		}
+    		if (this.winTg > 0) {
+				var thuong = new cc.Node;
+				thuong.addComponent(cc.Label);
+				thuong = thuong.getComponent(cc.Label);
+				thuong.string = helper.numberWithCommas(this.winTg);
+				thuong.font = cc.RedT.util.fontCong;
+				thuong.lineHeight = 130;
+				thuong.fontSize   = 23;
+				thuong.node.position = cc.v2(0,-28);
+				this.notice.addChild(thuong.node);
+				thuong.node.runAction(cc.sequence(cc.moveTo(this.isSpeed ? 2 : 3.5, cc.v2(0, 112)), cc.callFunc(function(){
+					this.node.destroy()
+				}, thuong)));
+			}
+    		this.winC   = 0;
+    	}else{
+    		if (this.isAuto) {
+    			this.timeOut = setTimeout(function(){
+					this.onGetSpin();
+				}
+				.bind(this), this.isSpeed ? 250 : 1000);
+    		}else{
+    			this.offSpin();
+    		}
+    	}
+    },
+	onGetHu: function(){
+		if (this.node.active && void 0 !== cc.RedT.setting.topHu.data) {
+			var self = this;
+			Promise.all(cc.RedT.setting.topHu.data['mini_poker'].filter(function(temp){
+				return temp.type == self.cuoc && temp.red == self.red
+			}))
+			.then(result => {
+				var s = helper.getOnlyNumberInString(this.hu.string);
+				var bet = result[0].bet;
+				if (s-bet != 0) 
+					helper.numberTo(this.hu, s, bet, 2000, true);
+			});
+		}
 	},
 	onGetSpin: function(){
 		cc.RedT.send({g:{mini_poker:{spin:{cuoc:this.cuoc, red: this.red}}}});
@@ -285,5 +352,6 @@ cc.Class({
 			reel.stop();
 		}));
 		this.offSpin();
+		void 0 !== this.timeOut && clearTimeout(this.timeOut);
     },
 });
