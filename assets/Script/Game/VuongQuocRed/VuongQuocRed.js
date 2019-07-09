@@ -115,6 +115,7 @@ cc.Class({
 			reel.init(self);
 		}));
 		cc.RedT.send({scene:"vq_red"});
+		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);
 	},
 	BigWinPlay: function(){
 		var huong = cc.callFunc(function(){

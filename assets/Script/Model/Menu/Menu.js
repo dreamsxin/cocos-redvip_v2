@@ -17,7 +17,9 @@ cc.Class({
             this.games = result;
         });
         this.setTimeAds();
-        this.adsContent.content
+        this.node._onPreDestroy = function(){
+            clearTimeout(this.adsTime);
+        }.bind(this);
     },
     onEnable: function() {
 		this.adsContent.content.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);

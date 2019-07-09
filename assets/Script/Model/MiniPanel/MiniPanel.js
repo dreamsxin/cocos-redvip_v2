@@ -34,7 +34,6 @@ cc.Class({
 		light:      true,
 	},
 	onLoad () {
-		cc.RedT.setting.taixiu = cc.RedT.setting.taixiu || {};
 		if (void 0 === cc.RedT.setting.light) {
 			cc.RedT.setting.light = true;
 		}

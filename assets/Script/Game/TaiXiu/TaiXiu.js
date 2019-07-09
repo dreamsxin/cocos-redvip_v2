@@ -11,6 +11,7 @@ cc.Class({
 		TX_Top:     TX_Top,
 	},
 	init(obj){
+		cc.RedT.setting.taixiu = cc.RedT.setting.taixiu || {getLogs: false};
 		this.TX_LichSu      = obj.Dialog.TaiXiuLichSu;
 		this.TX_LichSuPhien = obj.Dialog.TaiXiuLichSuPhien;
 		this.TX_Main.init(this);

@@ -47,7 +47,7 @@ cc.Class({
 			cc.RedT.audio = this.PrefabT[0].data.getComponent('MainAudio');
 		}
 		// Connect Server
-		//cc.RedT.reconnect();
+		cc.RedT.reconnect();
 
 		this.dialog.init();
 		this.newsContents.init(this);
@@ -63,6 +63,16 @@ cc.Class({
 
 		if (cc.RedT.IS_LOGIN){
 			cc.RedT.send({scene:"home"});
+			this.header.reset();
+			this.header.userName.string = cc.RedT.user.name;
+	        this.dialog.profile.CaNhan.username.string = cc.RedT.user.name;
+	        this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(cc.RedT.user.red);
+	        this.header.userXu.string = helper.numberWithCommas(cc.RedT.user.xu);
+	        this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(cc.RedT.user.ketSat);
+	        this.dialog.profile.CaNhan.UID.string = cc.RedT.user.UID;
+	        this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
+	        this.dialog.profile.CaNhan.email.string = cc.RedT.user.email;
+	        this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
 		}
 	},
 	auth: function(obj) {

@@ -52,4 +52,8 @@ cc.Class({
     updateEXP: function(ht, next){
         this.exp.width = ht/next*this.maskFull;
     },
+    reset: function(){
+        this.level(cc.RedT.user.level);
+        this.updateEXP(cc.RedT.user.vipHT, cc.RedT.user.vipNext);
+    },
 });

@@ -103,6 +103,14 @@ module.exports = {
 		if (void 0 !== data.email){
 			this.user.email = data.email;
 		}
+		if (void 0 !== data.joinedOn){
+			this.user.joinedOn = data.joinedOn;
+		}
+		if (void 0 !== data.security){
+			this.user.security = data.security;
+		}
+
+		// Level
 		if (void 0 !== data.level){
 			this.user.level = data.level;
 		}
@@ -112,5 +120,7 @@ module.exports = {
 		if (void 0 !== data.vipNext){
 			this.user.vipNext = data.vipNext;
 		}
+
+		
 	},
 }

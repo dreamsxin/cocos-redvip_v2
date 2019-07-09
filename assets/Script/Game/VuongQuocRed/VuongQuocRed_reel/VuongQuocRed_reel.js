@@ -44,8 +44,8 @@ cc.Class({
 				this.RedT.random();
 			}, this);
 			var EF = cc.callFunc(function() {
-				this.RedT.hieuUng();
 				this.RedT.EF_vuathang();
+				this.RedT.hieuUng();
 			}, this);
 			this.node.runAction(cc.sequence(cc.delayTime(index*0.1), d, p, EF));
 		} else
