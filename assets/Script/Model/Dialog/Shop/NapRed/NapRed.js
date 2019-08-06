@@ -58,11 +58,16 @@ cc.Class({
 			default: null,
 			type: cc.Prefab,
 		},
+		captcha: {
+			default: null,
+			type: cc.EditBox,
+		},
+		capchaSprite: cc.Sprite,
 	},
 	init(){
 		var self = this;
 		this.isLoaded = false;
-		this.editboxs = [this.SoThe, this.SoSeri];
+		this.editboxs = [this.SoThe, this.SoSeri, this.captcha];
 		this.keyHandle = function(t) {
 			return t.keyCode === cc.macro.KEY.tab ? (self.isTop() && self.changeNextFocusEditBox(),
 				t.preventDefault && t.preventDefault(),
@@ -79,6 +84,7 @@ cc.Class({
 	},
 	onEnable: function () {
 		cc.sys.isBrowser && this.addEvent();
+		this.reCaptcha();
 		if(!this.isLoaded) {
 			cc.RedT.send({shop:{info_nap: true}})
 		}
@@ -123,13 +129,16 @@ cc.Class({
 		return !this.moreNhaMang.active && !this.moreMenhGia.active && !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
 	},
 	clean: function(){
-		this.SoThe.string = this.SoSeri.string = '';
+		this.SoThe.string = this.SoSeri.string = this.captcha.string = '';
 	},
 	onNapClick: function(){
 		if (this.SoThe.string.length < 11 || this.SoSeri.string.length < 11) {
 			cc.RedT.inGame.notice.show({title: "NẠP RED", text: "Thông Tin không hợp lệ..."})
+		}else if(helper.isEmpty(this.captcha.string)){
+            cc.RedT.inGame.notice.show({title: "NẠP RED", text: "Vui lòng nhập chính xác mã xác nhận."})
 		}else{
-			cc.RedT.send({shop:{nap_the:{nhamang: this.NhanhMang.string, menhgia: helper.getOnlyNumberInString(this.MenhGia.string), mathe: this.SoThe.string, seri:this.SoSeri.string}}});
+			cc.RedT.inGame.bgLoading.onData({active: true, text: 'Đang gửi dữ liệu...'});
+			cc.RedT.send({shop:{nap_the:{nhamang: this.NhanhMang.string, menhgia: helper.getOnlyNumberInString(this.MenhGia.string), mathe: this.SoThe.string, seri:this.SoSeri.string, captcha: this.captcha.string}}});
 		}
 	},
 	onSelectHead: function(event, name){
@@ -199,5 +208,22 @@ cc.Class({
 				this.infoSet(data.info.menhgia, "menhgiaList", "MenhGia");
 			}
 		}
+	},
+	initCaptcha: function(t) {
+		var i = this
+		  , o = new Image;
+		o.src = t,
+		o.width = 150,
+		o.height = 50,
+		setTimeout(function() {
+			var t = new cc.Texture2D;
+			t.initWithElement(o),
+			t.handleLoadedTexture();
+			var e = new cc.SpriteFrame(t);
+			i.capchaSprite.spriteFrame = e
+		}, 10)
+	},
+	reCaptcha: function(){
+		cc.RedT.send({captcha: 'chargeCard'});
 	},
 });

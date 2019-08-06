@@ -26,6 +26,7 @@ cc.Class({
 			default: null,
 			type:    cc.Label,
 		},
+		cmt: cc.Label,
 
 		nodeRank: cc.Node,
 		nodeNhan: cc.Node,

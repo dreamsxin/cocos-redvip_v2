@@ -28,12 +28,14 @@ cc.Class({
 		this.RedT.input.string = helper.numberWithCommas(helper.getOnlyNumberInString(this.RedT.input.string+value));
 	},
 	onBackClick: function(){
-		this.RedT.input.string = helper.numberWithCommas(this.RedT.input.string.slice(0, this.RedT.input.string.length-1));
+		var number = helper.getOnlyNumberInString(this.RedT.input.string);
+		this.RedT.input.string = helper.numberWithCommas(number.slice(0, number.length-1));
 	},
 	onCleanClick: function(){
 		this.RedT.input.string = "";
 	},
 	onAllClick: function(){
+		this.RedT.input.string = helper.numberWithCommas(this.RedT.red ? cc.RedT.user.red : cc.RedT.user.xu);
 	},
 	onChangerTypeClick: function(){
 		if (this.nodeChonTien.active) {

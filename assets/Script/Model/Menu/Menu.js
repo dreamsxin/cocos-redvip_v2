@@ -1,5 +1,4 @@
 
-
 cc.Class({
     extends: cc.Component,
 
@@ -24,22 +23,24 @@ cc.Class({
     onEnable: function() {
 		this.adsContent.content.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.adsContent.content.on(cc.Node.EventType.TOUCH_END,    this.setTimeAds, this);
+        this.adsContent.content.on(cc.Node.EventType.TOUCH_CANCEL, this.setTimeAds,   this);
 		this.adsContent.content.on(cc.Node.EventType.MOUSE_ENTER,  this.eventStart, this);
 		this.adsContent.content.on(cc.Node.EventType.MOUSE_LEAVE,  this.setTimeAds, this);
 	},
 	onDisable: function() {
 		this.adsContent.content.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.adsContent.content.off(cc.Node.EventType.TOUCH_END,    this.setTimeAds, this);
+        this.adsContent.content.off(cc.Node.EventType.TOUCH_CANCEL, this.setTimeAds,   this);
 		this.adsContent.content.off(cc.Node.EventType.MOUSE_ENTER,  this.eventStart, this);
 		this.adsContent.content.off(cc.Node.EventType.MOUSE_LEAVE,  this.setTimeAds, this);
 	},
     nextAds: function(){
     	var self = this;
     	if (this.adsContent._curPageIdx == this.adsContent._pages.length-1) {
-    		this.adsContent.scrollToPage(0);
+    		this.adsContent.scrollToPage(0, 1.5);
 
     	}else{
-    		this.adsContent.scrollToPage(this.adsContent._curPageIdx+1);
+    		this.adsContent.scrollToPage(this.adsContent._curPageIdx+1, 0.85);
     	}
         this.setTimeAds();
     },
@@ -47,6 +48,7 @@ cc.Class({
     	clearTimeout(this.adsTime);
     },
     setTimeAds: function(){
+        this.eventStart();
     	this.adsTime =  setTimeout(function(){
 			this.nextAds();
 		}

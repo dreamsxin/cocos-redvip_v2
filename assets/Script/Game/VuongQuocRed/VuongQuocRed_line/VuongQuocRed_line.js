@@ -9,7 +9,8 @@ cc.Class({
 		nodeLine:   cc.Node,
 		mainLine:   cc.Node,
 	},
-	init(obj){
+	init: function(obj){
+		//console.log(this);
 		this.lines = {
 			'1':  [1,1,1,1,1],
 			'2':  [0,0,0,0,0],
@@ -42,24 +43,6 @@ cc.Class({
 			this.mainLine = result;
 		});
 		this.selectAll(null, "1");
-	},
-	showEfLineWin: function(line){
-	},
-	showAllEfLineWin: function(lines){
-		var self = this;
-		Promise.all(lines.map(function(line){
-			var lineD = self.lines[line];
-			Promise.all(self.nodeEfLine.children.map(function(icon, index){
-				icon.children[lineD[index]].active = true;
-			});
-		});
-	},
-	hiddenAllEfLineWin: function(){
-		Promise.all(this.nodeEfLine.children.map(function(cel){
-			Promise.all(cel.children.map(function(icon){
-				icon.active = false;
-			});
-		});
 	},
 	onOpen: function(){
 		cc.RedT.audio.playClick();

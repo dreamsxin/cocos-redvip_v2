@@ -275,6 +275,7 @@ cc.Class({
 
 				var Play = function(){
 					var huong = cc.callFunc(function(){
+						cc.RedT.audio.playEf('winHu');
 						helper.numberTo(text, 0, this.win, 1000, true);
 					}, this);
 					nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));

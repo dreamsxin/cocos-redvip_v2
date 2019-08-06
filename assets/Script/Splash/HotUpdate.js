@@ -53,7 +53,6 @@ cc.Class({
 		this.star.position = cc.v2(0,0)
 	},
 	checkUpdate: function() {
-		console.log("HOTUPDATE checkUpdate"),
 		this._updating ? this.messageLabel.string = Message.HOT_UPDATE_CHECKING_VERSION : (this._am.getState() === jsb.AssetsManager.State.UNINITED && (console.log("HOTUPDATE loadLocalManifest"),
 		this._am.loadLocalManifest(this.manifestUrl)),
 		this._checkListener = new jsb.EventListenerAssetsManager(this._am,this.checkCb.bind(this)),

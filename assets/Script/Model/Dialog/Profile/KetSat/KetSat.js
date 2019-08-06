@@ -42,6 +42,7 @@ cc.Class({
             type:    cc.EditBox,
         },
         isGui: true,
+        typeOTP: '',
     },
     init(){
     	Promise.all(this.header.children.map(function(obj) {
@@ -89,7 +90,7 @@ cc.Class({
     			return void 0;
     		}
     	}else{
-    		data.rut = helper.getOnlyNumberInString(this.inputRut.string);
+    		data.rut = {red: helper.getOnlyNumberInString(this.inputRut.string), otp: this.inputOTP.string};
     		if (data.rut < 10000) {
     			cc.RedT.inGame.notice.show({title: "RÚT RED", text: "Số tiền rút phải lớn hơn 10.000"});
     			return void 0;
@@ -121,5 +122,11 @@ cc.Class({
     },
     clear: function(){
     	this.inputGui.string = this.inputRut.string = this.inputOTP.string = "";
+    },
+    changerTypeOTP: function(e){
+        this.typeOTP = e.node.name;
+    },
+    onClickOTP: function(){
+        cc.RedT.send({otp:{type: this.typeOTP}});
     },
 });

@@ -147,5 +147,6 @@ module.exports = {
 	anPhanTram:            anPhanTram,
 	numberTo:              numberTo,
 	getStringDateByTime:   getStringDateByTime,
-	numberToTime: numberToTime,
+	numberToTime:          numberToTime,
+	validateEmail:         validateEmail,
 }

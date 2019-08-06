@@ -2,10 +2,6 @@
 cc.Class({
     extends: cc.Component,
     properties: {
-    	audioBackground: {
-            default: null,
-            type: cc.AudioClip
-        },
     	audioClick: {
             default: null,
             type: cc.AudioClip
@@ -14,31 +10,51 @@ cc.Class({
             default: null,
             type: cc.AudioClip
         },
-    },
-    onLoad(){
-    	//cc.audioEngine.setMusicVolume(0.3);
-        //this.playMusic();
-    },
-    playMusic: function() {
-        cc.audioEngine.playMusic(this.audioBackground, true);
-    },
-    pauseMusic: function() {
-        cc.audioEngine.pauseMusic();
-    },
-    resumeMusic: function() {
-        cc.audioEngine.resumeMusic();
+        thongbao_jackpot: {
+            default: null,
+            type: cc.AudioClip
+        },
+    	jackpot:  {
+            default: null,
+            type: cc.AudioClip
+        },
+        bigWin:   {
+            default: null,
+            type: cc.AudioClip
+        },
+        moneywin:   {
+            default: null,
+            type: cc.AudioClip
+        },
+        bonus:   {
+            default: null,
+            type: cc.AudioClip
+        },
+        megaWin:   {
+            default: null,
+            type: cc.AudioClip
+        },
+        winHu:   {
+            default: null,
+            type: cc.AudioClip
+        },
     },
     _playSFX: function(clip) {
-        if (this.isSound){
+        if (cc.RedT.IS_SOUND){
             cc.audioEngine.playEffect(clip, false);
         }
     },
-
     // Audio Effect
     playClick: function(){
     	this._playSFX(this.audioClick);
     },
     playUnClick: function(){
         this._playSFX(this.audioClick2);
+    },
+    playNoticeJackP: function(){
+        this._playSFX(this.thongbao_jackpot);
+    },
+    playEf: function(audio){
+        this._playSFX(this[audio]);
     },
 });

@@ -1,11 +1,13 @@
 
-var TaiXiu    = require('TaiXiu'),
-	MiniPoker = require('MiniPoker'),
-	BigBabol  = require('BigBabol'),
-	BauCua    = require('BauCua'),
-	BaCay     = require('Mini3Cay'),
-	TopHu     = require('popupTopHu'),
-	Dialog    = require('MiniDialog');
+var TaiXiu     = require('TaiXiu'),
+	MiniPoker  = require('MiniPoker'),
+	BigBabol   = require('BigBabol'),
+	BauCua     = require('BauCua'),
+	BaCay      = require('Mini3Cay'),
+	CaoThap    = require('CaoThap'),
+	AngryBirds = require('AngryBirds'),
+	TopHu      = require('popupTopHu'),
+	Dialog     = require('MiniDialog');
 
 cc.Class({
 	extends: cc.Component,
@@ -21,6 +23,9 @@ cc.Class({
 		BigBabol:  BigBabol,
 		BauCua:    BauCua,
 		BaCay:     BaCay,
+		CaoThap:   CaoThap,
+		AngryBirds: AngryBirds,
+
 		TopHu:     TopHu,
 
 		bgLight:    cc.Node,
@@ -30,7 +35,8 @@ cc.Class({
 
 		nodeEfect:  cc.Node,
 		// Prefab
-		PrefabNoHu: cc.Prefab,
+		PrefabNoHu:   cc.Prefab,
+		prefabBigWin: cc.Prefab,
 		light:      true,
 	},
 	onLoad () {
@@ -47,6 +53,8 @@ cc.Class({
 		this.BigBabol.init(this);
 		this.BauCua.init(this);
 		this.BaCay.init(this);
+		this.CaoThap.init(this);
+		this.AngryBirds.init(this);
 
 		this.TopHu.init(this);
 
@@ -76,6 +84,7 @@ cc.Class({
 		this.Dialog.onCloseDialog();
 		this.TaiXiu.newGame();
 		this.BauCua.newGame();
+		this.CaoThap.newGame();
 	},
 	onData: function(data){
 		if (void 0 !== data.poker){
@@ -90,9 +99,22 @@ cc.Class({
 		if (void 0 !== data.bacay){
 			this.BaCay.onData(data.bacay);
 		}
+		if (void 0 !== data.caothap){
+			this.CaoThap.onData(data.caothap);
+		}
+		if (void 0 !== data.arb){
+			this.AngryBirds.onData(data.arb);
+		}
 	},
 	onDestroy: function(){
 		clearInterval(this.TaiXiu.TX_Main.timeInterval);
 		clearInterval(this.BauCua.timeInterval);
+		void 0 !== this.CaoThap.timeInterval && clearInterval(this.CaoThap.timeInterval);
+	},
+	playClick: function(){
+		cc.RedT.audio.playClick();
+	},
+	playUnClick: function(){
+		cc.RedT.audio.playUnClick();
 	},
 });

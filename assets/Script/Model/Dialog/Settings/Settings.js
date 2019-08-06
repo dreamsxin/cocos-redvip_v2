@@ -23,36 +23,31 @@ cc.Class({
         cc.RedT.inGame.dialog.resetSizeDialog(this.node);
     },
 	setMusic: function(){
-		var check = localStorage.getItem('SOUND_BACKGROUND');
-		if(check == null || cc.RedT.isSoundBackground()){
-			cc.RedT.setSoundBackground(true);
-			cc.RedT.audio.playMusic();
-		}
-		check = localStorage.getItem('SOUND_GAME');
+		var check = localStorage.getItem('SOUND_GAME');
 		if(check == null){
 			cc.RedT.setSoundGame(true);
 		}else{
 			if (cc.RedT.isSoundGame()) {
-				cc.RedT.audio.isSound = true;
+				cc.RedT.IS_SOUND = true;
 			}else{
-				cc.RedT.audio.isSound = false;
+				cc.RedT.IS_SOUND = false;
 			}
 		}
 	},
 	OnChangerNhacNen: function() {
 		cc.RedT.setSoundBackground(this.NhacNen.isChecked);
 		if (this.NhacNen.isChecked) {
-			cc.RedT.audio.playMusic();
+			cc.RedT.inGame.playMusic();
 		}else{
-			cc.RedT.audio.pauseMusic();
+			cc.RedT.inGame.pauseMusic();
 		}
 	},
 	OnChangerNhacGame: function() {
 		cc.RedT.setSoundGame(this.NhacGame.isChecked);
 		if (this.NhacGame.isChecked) {
-			cc.RedT.audio.isSound = true;
+			cc.RedT.IS_SOUND = true;
 		}else{
-			cc.RedT.audio.isSound = false;
+			cc.RedT.IS_SOUND = false;
 		}
 	},
 	OnSignOutClick: function() {

@@ -46,6 +46,7 @@ cc.Class({
 			default: null,
 			type: cc.Prefab,
 		},
+		typeOTP: '',
 	},
 	init(){
 		this.isdaily = false;
@@ -128,13 +129,13 @@ cc.Class({
 			error = "Tên nhân vật không khớp.!!"
 		} else if(helper.getOnlyNumberInString(this.red.string) < 10000){
 			error = "Số tiền chuyển tối thiểu là 10.000 Red."
-		//} else if(helper.isEmpty(this.inputOTP.string)){
-		//	error = "Mã OTP Không được bỏ trống."
+		} else if(helper.isEmpty(this.otp.string)){
+			error = "Vui lòng nhập mã OTP."
 		}
 		if (error)
 			cc.RedT.inGame.notice.show({title: "CHUYỂN RED", text: error});
 		else{
-			var data = {name: this.nickname.string, red: helper.getOnlyNumberInString(this.red.string)};
+			var data = {name: this.nickname.string, red: helper.getOnlyNumberInString(this.red.string), otp: this.otp.string};
 			if (!helper.isEmpty(this.messenger.string.trim())) {
 				data = Object.assign(data, {message: this.messenger.string});
 			}
@@ -216,5 +217,11 @@ cc.Class({
 			var valueT = helper.getOnlyNumberInString(value);
 			this.rednhan.string = helper.numberWithCommas(Math.floor(valueT-valueT*2/100))
 		}
+	},
+	onClickOTP: function(){
+		cc.RedT.send({otp:{type: this.typeOTP}});
+	},
+	changerTypeOTP: function(e){
+		this.typeOTP = e.node.name;
 	},
 });

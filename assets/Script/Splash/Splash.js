@@ -1,7 +1,6 @@
 
 var Message   = require("Message");
 var HotUpdate = require("HotUpdate");
-var Audio     = require("MainAudio");
 
 cc.Class({
 	extends: cc.Component,
@@ -9,7 +8,6 @@ cc.Class({
 		HotUpdate: HotUpdate,
 		messageLabel: cc.Label,
 		retryGetDataButtonNode: cc.Node,
-		//Audio: Audio,
 	},
 	onLoad: function() {
 		this.isLoadScene  = !1,

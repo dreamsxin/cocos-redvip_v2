@@ -1,6 +1,5 @@
 
 var DangKyOTP      = require('DangKyOTP'),
-	BaoMatDangNhap = require('BaoMatDangNhap'),
 	DoiMatKhau     = require('DoiMatKhau'),
 	BaoMatGame     = require('BaoMatGame'),
 	BaoMatTaiKhoan = require('BaoMatTaiKhoan');
@@ -14,15 +13,12 @@ cc.Class({
 			type:    cc.Node,
 		},
     	DangKyOTP:      DangKyOTP,
-    	BaoMatDangNhap: BaoMatDangNhap,
     	DoiMatKhau:     DoiMatKhau,
     	BaoMatGame:     BaoMatGame,
     	BaoMatTaiKhoan: BaoMatTaiKhoan,
     },
     init(){
-    },
-    onLoad(){
-    	this.body = [this.DangKyOTP.node, this.BaoMatDangNhap.node, this.DoiMatKhau.node, this.BaoMatGame.node, this.BaoMatTaiKhoan.node];
+    	this.body = [this.DangKyOTP.node, this.DoiMatKhau.node, this.BaoMatGame.node, this.BaoMatTaiKhoan.node];
     	Promise.all(this.header.children.map(function(obj) {
 			return obj.getComponent('itemContentMenu');
 		}))

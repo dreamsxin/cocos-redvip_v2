@@ -194,16 +194,13 @@ cc.Class({
 		if (void 0 === cc.RedT.setting.taixiu.taixiu) {
 			cc.RedT.setting.taixiu.taixiu = this.taixiu;
 		}
-
-		if (void 0 !== cc.RedT.setting.taixiu.position) {
-			this.node.position = cc.RedT.setting.taixiu.position;
-		}
 		if (void 0 === cc.RedT.setting.taixiu.getLogs) {
 			cc.RedT.setting.taixiu.getLogs = false;
 		}
 		if (void 0 === cc.RedT.setting.taixiu.isNan) {
 			cc.RedT.setting.taixiu.isNan = false;
 		}
+
 		Promise.all(this.dotLogs.children.map(function(dot){
 			var temp = dot.getComponent(cc.Sprite);
 			temp.mod = dot.getComponent('TaiXiuMain_logTips');
@@ -211,16 +208,6 @@ cc.Class({
 		}))
 		.then(resulf => {
 			this.dotLogs = resulf;
-
-			if (cc.RedT.setting.taixiu.red != this.red) {
-				this.onChangerRED();
-			}
-			if (cc.RedT.setting.taixiu.taixiu != this.taixiu) {
-				this.onChangerGame(false);
-			}
-			if (cc.RedT.setting.taixiu.isNan != this.isNan) {
-				this.onChangerNan();
-			}
 		});
 
 		this.onDiceAnimationFinish = function(event){
@@ -243,9 +230,15 @@ cc.Class({
 			this.diceAnimation.node.active = false;
 		}
 
-		if (void 0 !== cc.RedT.setting.taixiu.time_remain) {
-			cc.RedT.setting.taixiu.time_remain++;
-			this.nextRealTime();
+		if (cc.RedT.setting.taixiu.getLogs) {
+			if (void 0 !== cc.RedT.setting.taixiu.position) {
+				this.node.position = cc.RedT.setting.taixiu.position;
+			}
+			if (void 0 !== cc.RedT.setting.taixiu.time_remain) {
+				cc.RedT.setting.taixiu.time_remain++;
+				this.nextRealTime();
+			}
+			this.reLoadGame();
 		}
 	},
 	onLoad () {
@@ -333,13 +326,13 @@ cc.Class({
 			this.onChangerGame();
 		}
 	},
-	onChangerGame: function(log = true){
+	onChangerGame: function(){
 		cc.RedT.setting.taixiu.taixiu = this.taixiu = !this.taixiu;
 		this.gameCover.string  = this.taixiu ? "Chẵn Lẻ" : "Tài Xỉu";
 		this.nodeTaiXiu.active = this.taixiu;
 		this.nodeChanLe.active = !this.taixiu;
 		if(cc.RedT.setting.taixiu.getLogs){
-			log && this.dataLogs();
+			this.dataLogs();
 			this.RedT.TX_ThongKe.onChangerGame();
 			this.RedT.TX_LichSuPhien.onChangerGame();
 			this.taixiu && this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
@@ -349,7 +342,32 @@ cc.Class({
 	},
 	onChangerNan: function(){
 		cc.RedT.setting.taixiu.isNan = this.isNan = !this.isNan;
-		this.spriteNan.spriteFrame = this.isNan ? this.frameNan[1] : this.frameNan[0];
+		this.spriteNan.spriteFrame   = this.isNan ? this.frameNan[1] : this.frameNan[0];
+	},
+	reLoadGame: function(){
+		setTimeout(function(){
+			if (cc.RedT.setting.taixiu.red != this.red) {
+				this.onChangerRED();
+			}
+			if (cc.RedT.setting.taixiu.taixiu != this.taixiu) {
+				this.onChangerGame();
+			}else{
+				this.dataLogs();
+			}
+			if (cc.RedT.setting.taixiu.isNan != this.isNan) {
+				this.onChangerNan();
+			}
+			//if (void 0 !== data.du_day) {
+				this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
+			//}
+			if (cc.RedT.setting.taixiu.taixiu) {
+				this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
+			}else{
+				this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
+			}
+		}
+		.bind(this), 50);
+		this.setPhien();
 	},
 	onChangerRED: function(){
 		cc.RedT.setting.taixiu.red = this.red = !this.red;
@@ -528,6 +546,7 @@ cc.Class({
 	},
 	nextRealTime: function(){
 		if (cc.RedT.setting.taixiu.time_remain > 61) {
+			this.setDice(true);
 			this.nodeTimeWait.active  = true;
 			this.timeCuoc.node.active = false;
 			var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-62, 2);
@@ -591,27 +610,27 @@ cc.Class({
 	onDuDay: function(data){
 		if (this.taixiu) {
 			if (this.red) {
-				this.WIN_HT.string  = data.t_day_thang_red_ht;
-				this.WIN_DN.string  = data.t_day_thang_red;
-				this.LOST_HT.string = data.t_day_thua_red_ht;
-				this.LOST_DN.string = data.t_day_thua_red;
+				this.WIN_HT.string  = data.tLineWinRedH;
+				this.WIN_DN.string  = data.tLineWinRed;
+				this.LOST_HT.string = data.tLineLostRedH;
+				this.LOST_DN.string = data.tLineLostRed;
 			}else{
-				this.WIN_HT.string  = data.t_day_thang_xu_ht;
-				this.WIN_DN.string  = data.t_day_thang_xu;
-				this.LOST_HT.string = data.t_day_thua_xu_ht;
-				this.LOST_DN.string = data.t_day_thua_xu;
+				this.WIN_HT.string  = data.tLineWinXuH;
+				this.WIN_DN.string  = data.tLineWinXu;
+				this.LOST_HT.string = data.tLineLostXuH;
+				this.LOST_DN.string = data.tLineLostXu;
 			}
 		}else{
 			if (this.red) {
-				this.WIN_HT.string  = data.c_day_thang_red_ht;
-				this.WIN_DN.string  = data.c_day_thang_red;
-				this.LOST_HT.string = data.c_day_thua_red_ht;
-				this.LOST_DN.string = data.c_day_thua_red;
+				this.WIN_HT.string  = data.cLineWinRedH;
+				this.WIN_DN.string  = data.cLineWinRed;
+				this.LOST_HT.string = data.cLineLostRedH;
+				this.LOST_DN.string = data.cLineLostRed;
 			}else{
-				this.WIN_HT.string  = data.c_day_thang_xu_ht;
-				this.WIN_DN.string  = data.c_day_thang_xu;
-				this.LOST_HT.string = data.c_day_thua_xu_ht;
-				this.LOST_DN.string = data.c_day_thua_xu;
+				this.WIN_HT.string  = data.cLineWinXuH;
+				this.WIN_DN.string  = data.cLineWinXu;
+				this.LOST_HT.string = data.cLineLostXuH;
+				this.LOST_DN.string = data.cLineLostXu;
 			}
 		}
 	},

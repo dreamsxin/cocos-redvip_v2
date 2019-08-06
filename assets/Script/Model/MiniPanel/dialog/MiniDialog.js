@@ -6,9 +6,14 @@ var TaiXiuLichSuPhien = require('TaiXiuLichSuPhien'),
 	BigBabol_LichSu   = require('BigBabol_LichSu'),
 	BigBabol_Top      = require('BigBabol_Top'),
 	BauCua_LichSu     = require('BauCua_LichSu'),
-
+	BauCua_top        = require('BauCua_top'),
 	Mini3Cay_history  = require('Mini3Cay_history'),
 	Mini3Cay_top      = require('Mini3Cay_top'),
+	CaoThap_history   = require('CaoThap_history'),
+	CaoThap_top       = require('CaoThap_top'),
+
+	AngryBird_history = require('AngryBird_history'),
+	AngryBird_top     = require('AngryBird_top'),
 
 	HuongDan          = require('dialogHuongDan');
 
@@ -23,8 +28,13 @@ cc.Class({
 		BigBabol_LichSu:   BigBabol_LichSu,
 		BigBabol_Top:      BigBabol_Top,
 		BauCua_LichSu:     BauCua_LichSu,
+		BauCua_top:        BauCua_top,
 		Mini3Cay_history:  Mini3Cay_history,
 		Mini3Cay_top:      Mini3Cay_top,
+		CaoThap_history:   CaoThap_history,
+		CaoThap_top:       CaoThap_top,
+		AngryBird_history: AngryBird_history,
+		AngryBird_top:     AngryBird_top,
 
 		HuongDan:          HuongDan,
 	},
@@ -111,6 +121,10 @@ cc.Class({
 		this.node.active = this.BauCua_LichSu.node.active = true;
 		this.objShow     = this.BauCua_LichSu.node;
 	},
+	showBauCuaTop: function(){
+		this.node.active = this.BauCua_top.node.active = true;
+		this.objShow     = this.BauCua_top.node;
+	},
 	showMini3Cay_history: function(){
 		this.node.active = this.Mini3Cay_history.node.active = true;
 		this.objShow     = this.Mini3Cay_history.node;
@@ -120,7 +134,23 @@ cc.Class({
 		this.objShow     = this.Mini3Cay_top.node;
 	},
 
+	showCaoThap_history: function(){
+		this.node.active = this.CaoThap_history.node.active = true;
+		this.objShow     = this.CaoThap_history.node;
+	},
+	showCaoThap_top: function(){
+		this.node.active = this.CaoThap_top.node.active = true;
+		this.objShow     = this.CaoThap_top.node;
+	},
 
+	showAngryBird_history: function(){
+		this.node.active = this.AngryBird_history.node.active = true;
+		this.objShow     = this.AngryBird_history.node;
+	},
+	showAngryBird_top: function(){
+		this.node.active = this.AngryBird_top.node.active = true;
+		this.objShow     = this.AngryBird_top.node;
+	},
 
 
 	showHuongDan: function(e, name){

@@ -79,14 +79,32 @@
       "__id__": 1
     },
     "_enabled": true,
-    "audioBackground": {
-      "__uuid__": "4439f4a2-630a-48da-ab63-c8868a09e036"
-    },
     "audioClick": {
       "__uuid__": "ca1da100-e6d1-4e06-8b1f-db5764ca4abe"
     },
     "audioClick2": {
       "__uuid__": "0f5b5114-fb9f-40a2-b220-f82fa8597bf5"
+    },
+    "thongbao_jackpot": {
+      "__uuid__": "de584386-ceb1-4c23-9667-b6191d9db7d5"
+    },
+    "jackpot": {
+      "__uuid__": "687f0aec-fc80-4743-aa7c-d4de0d7ee99f"
+    },
+    "bigWin": {
+      "__uuid__": "99746e16-1bb2-40c5-8fab-6a3504503203"
+    },
+    "moneywin": {
+      "__uuid__": "da109e72-3eb3-4a9c-88c0-624840f423e2"
+    },
+    "bonus": {
+      "__uuid__": "016e7309-f14b-461a-aac2-73af605aba15"
+    },
+    "megaWin": {
+      "__uuid__": "f23a7407-e4d1-4585-8025-21acc99a55e2"
+    },
+    "winHu": {
+      "__uuid__": "ec1fe368-b516-4194-afeb-3eebbca25138"
     },
     "_id": ""
   },

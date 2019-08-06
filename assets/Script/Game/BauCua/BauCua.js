@@ -53,7 +53,7 @@ cc.Class({
     },
     init(obj){
 		this.RedT = obj;
-		//this.Top    = obj.Dialog.BauCua_Top;
+		this.Top    = obj.Dialog.BauCua_top;
 		this.LichSu = obj.Dialog.BauCua_LichSu;
 		cc.RedT.setting.baucua = cc.RedT.setting.baucua || {regOpen: false, data:{meXuBau: 0, meXuCa: 0, meXuCua: 0, meXuGa: 0, meXuHuou: 0, meXuTom: 0, meRedBau: 0, meRedCa: 0, meRedCua: 0, meRedGa: 0, meRedHuou: 0, meRedTom: 0, redBau: 0, redCa: 0, redCua: 0, redGa: 0, redHuou: 0, redTom: 0, xuBau: 0, xuCa: 0, xuCua: 0, xuGa: 0, xuHuou: 0, xuTom: 0}, logLV:{}, red: true, bet: "100"};
 
@@ -245,6 +245,9 @@ cc.Class({
 		if (void 0 !== data.logs) {
 			cc.RedT.setting.baucua.logs = data.logs;
 			this.addLogs();
+		}
+		if (void 0 !== data.tops) {
+			this.Top.onData(data.tops);
 		}
 		if (void 0 !== data.viewlogs) {
 			this.LichSu.onData(data.viewlogs);

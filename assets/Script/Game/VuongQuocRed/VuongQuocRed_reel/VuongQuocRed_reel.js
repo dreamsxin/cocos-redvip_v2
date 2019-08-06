@@ -2,7 +2,6 @@
 cc.Class({
 	extends: cc.Component,
 	init(obj){
-		console.log(this)
 		this.RedT = obj;
 		this.icons = [];
 		var self  = this;
@@ -30,7 +29,7 @@ cc.Class({
 	spin: function(index){
 		this.node.stopAllActions();
 		var self = this;
-		var d = cc.moveTo(1.2, cc.v2(this.node.x,-(this.node.height-418))).easing(cc.easeInOut(3));
+		var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-418))).easing(cc.easeInOut(3));
 		var p2 = cc.callFunc(function() {
 			if (index === 0) {
 				this.RedT.copy();
@@ -39,15 +38,13 @@ cc.Class({
 		}, this);
 
 		if (index === 4){
-			var p = cc.callFunc(function() {
-				this.node.y = 0;
-				this.RedT.random();
-			}, this);
 			var EF = cc.callFunc(function() {
 				this.RedT.EF_vuathang();
+				this.node.y = 0;
+				this.RedT.random();
 				this.RedT.hieuUng();
 			}, this);
-			this.node.runAction(cc.sequence(cc.delayTime(index*0.1), d, p, EF));
+			this.node.runAction(cc.sequence(cc.delayTime(index*0.1), d, EF));
 		} else
 			this.node.runAction(cc.sequence(cc.delayTime(index*0.1), d, p2));
 	},

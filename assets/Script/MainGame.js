@@ -3,10 +3,12 @@ var helper = require('Helper');
 
 var baseControll = require('BaseControll');
 
-var header      = require('Header'),
-	dialog      = require('Dialog'),
+var header       = require('Header'),
+	dialog       = require('Dialog'),
+	ThongBaoNoHu = require('PushNohu'),
 	newsContents = require('NewsContents'),
-	notice      = require('Notice');
+	bgLoading    = require('bgLoading'),
+	notice       = require('Notice');
 
 cc.Class({
 	extends: cc.Component,
@@ -22,6 +24,7 @@ cc.Class({
 			type: cc.Node
 		},
 		newsContents: newsContents,
+		bgLoading:    bgLoading,
 		iconVQRed: {
 			default: null,
 			type: cc.Node
@@ -39,7 +42,9 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		notice:      notice,
+		notice:       notice,
+		ThongBaoNoHu: ThongBaoNoHu,
+		audioBG: cc.AudioSource,
 	},
 	onLoad: function () {
 		if (void 0 === cc.RedT) {
@@ -51,7 +56,6 @@ cc.Class({
 
 		this.dialog.init();
 		this.newsContents.init(this);
-		this.dialog.settings.setMusic();
 		cc.RedT.inGame = this;
 
 		var MiniPanel = cc.instantiate(this.PrefabT[1]);
@@ -73,6 +77,13 @@ cc.Class({
 	        this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
 	        this.dialog.profile.CaNhan.email.string = cc.RedT.user.email;
 	        this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
+		}else{
+			this.dialog.settings.setMusic();
+		}
+		var check = localStorage.getItem('SOUND_BACKGROUND');
+		if(check == null || cc.RedT.isSoundBackground()){
+			cc.RedT.setSoundBackground(true);
+			this.playMusic();
 		}
 	},
 	auth: function(obj) {
@@ -139,13 +150,34 @@ cc.Class({
 		if (void 0 !== data.captcha) {
 			this.captcha(data.captcha);
 		}
+		if (void 0 !== data.pushnohu) {
+			this.ThongBaoNoHu.onData(data.pushnohu);
+		}
+		if (void 0 !== data.loading) {
+			this.bgLoading.onData(data.loading);
+		}
 	},
 	captcha: function(data){
-		if (void 0 !== data.signUp) {
-			this.dialog.signUp.initCaptcha(data.signUp);
-		}
-		if (void 0 !== data.giftcode) {
-			this.dialog.GiftCode.initCaptcha(data.giftcode);
+		switch(data.name){
+			case "signUp":
+				this.dialog.signUp.initCaptcha(data.data);
+				break;
+
+			case "giftcode":
+				this.dialog.GiftCode.initCaptcha(data.data);
+				break;
+
+			case "forgotpass":
+				this.dialog.ForGotPass.initCaptcha(data.data);
+				break;
+
+			case "chargeCard":
+				this.dialog.shop.NapRed.initCaptcha(data.data);
+				break;
+
+			case "withdrawXu":
+				this.dialog.shop.TieuRed.MuaXu.initCaptcha(data.data);
+				break;
 		}
 	},
 	newsF: function(data){
@@ -174,9 +206,22 @@ cc.Class({
 		}
 		if (void 0 !== data.phone){
 			this.dialog.profile.CaNhan.phone.string = data.phone;
+			this.dialog.profile.BaoMat.DangKyOTP.statusOTP(!helper.isEmpty(data.phone));
+			if (!helper.isEmpty(data.phone)) {
+				this.dialog.profile.BaoMat.DangKyOTP.labelPhone.string = data.phone;
+			}
 		}
 		if (void 0 !== data.email){
 			this.dialog.profile.CaNhan.email.string = data.email;
+			if (!helper.isEmpty(data.email)) {
+				this.dialog.profile.BaoMat.DangKyOTP.labelEmail.string = data.email;
+			}
+		}
+		if (void 0 !== data.cmt){
+			this.dialog.profile.CaNhan.cmt.string = data.cmt;
+			if (!helper.isEmpty(data.cmt)) {
+				this.dialog.profile.BaoMat.DangKyOTP.labelCMT.string = data.cmt;
+			}
 		}
 		if (void 0 !== data.joinedOn){
 			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(data.joinedOn);
@@ -237,8 +282,6 @@ cc.Class({
 		this.header.isSignOut();
 		this.dialog.onCloseDialog();
 		cc.RedT.MiniPanel.newGame();
-
-		//cc.RedT.reconnect();
 	},
 	onGetTaiXiu: function(tai, xiu){
 		var sTai = helper.getOnlyNumberInString(this.iconTaiXiu.tai.string);
@@ -278,10 +321,27 @@ cc.Class({
 			});
 		}
 	},
+	playMusic: function() {
+        this.audioBG.play();
+    },
+    pauseMusic: function() {
+        this.audioBG.pause();
+    },
+    resumeMusic: function() {
+        //cc.audioEngine.resumeMusic();
+    },
+	audioClick: function(){
+		cc.RedT.audio.playClick();
+	},
+	audioUnClick: function(){
+		cc.RedT.audio.playUnClick();
+	},
+	fanpage: function(){
+		cc.sys.openURL('https://www.facebook.com/RedVipClub-1180384875447855/');
+	},
 
-	// END Function localStorage
+/**
 
-	/**
 	checkLoginFacebook: function() {
 		if (cc.sys.isBrowser && FB) {
 			var self = this;
@@ -306,8 +366,7 @@ cc.Class({
 		}
 	},
 	loginFacebook: function() {
-		//if (cc.sys.isBrowser && FB) {
-		//if (FB) {
+		if (cc.sys.isBrowser && FB) {
 			var self = this;
 			self.loading.active = true;
 			FB && (FB.init({
@@ -328,7 +387,7 @@ cc.Class({
 				} else
 					self.setAutoLogin(!1),
 			}))
-		//}
+		}
 	},
 	loginSocial: function(e, i, o, n, t) {
 		var s = this

@@ -217,7 +217,6 @@ cc.Class({
     },
     onData: function(data){
     	var self = this;
-    	console.log(data);
     	if (void 0 !== data.status) {
 			if (data.status === 1) {
 				this.buttonStop.active = this.isAuto ? true : false;
@@ -261,6 +260,7 @@ cc.Class({
 
 				var Play = function(){
 					var huong = cc.callFunc(function(){
+						cc.RedT.audio.playEf('winHu');
 						helper.numberTo(text, 0, this.win, 1000, true);
 						this.win = 0;
 					}, this);

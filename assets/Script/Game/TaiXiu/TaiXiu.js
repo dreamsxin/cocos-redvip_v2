@@ -38,9 +38,9 @@ cc.Class({
 	openGame: function (e, taixiu = '1') {
 		cc.RedT.audio.playClick();
 		if (cc.RedT.IS_LOGIN){
+			this.TX_Main.initGame((taixiu == '1'));
 			this.node.active = !0;
 			localStorage.setItem('taixiu', true);
-			this.TX_Main.initGame((taixiu == '1'));
 			this.setTop();
 		}
 		else

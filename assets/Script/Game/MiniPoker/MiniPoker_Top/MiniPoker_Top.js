@@ -1,42 +1,20 @@
 
-var Helper = require('Helper')
+var helper = require('Helper');
 
 cc.Class({
     extends: cc.Component,
-
     properties: {
-        page:     cc.Prefab,
+        item:     cc.Prefab,
         content:  cc.Node,
         cointRed: cc.Node,
         cointXu:  cc.Node,
-        header:   cc.Node,
         red:      true,
-        isLoad:   false,
-        hu:       true,
-    },
-
-    onLoad () {
-        var page = cc.instantiate(this.page);
-        page.y = -323;
-        this.node.addChild(page);
-        this.page = page.getComponent('Pagination');
-        this.content2 = this.content.children.map(function(obj){return obj.children.map(function(t, index){return t.getComponent(cc.Label)})});
-        this.page.init(this);
-        Promise.all(this.header.children.map(function(obj) {
-            return obj.getComponent('itemContentMenu');
-        }))
-        .then(result => {
-            this.header = result;
-        });
     },
     onEnable: function() {
-        !this.isLoad && this.get_data();
-    },
-    onDisable: function() {
+        this.get_data();
     },
     get_data: function(page = 1){
-        this.isLoad = true;
-        cc.RedT.send({g:{mini_poker:{top:{red: this.red, hu: this.hu, page: page}}}});
+        cc.RedT.send({g:{mini_poker:{top: this.red}}});
     },
     changerCoint: function(){
         this.red             = !this.red;
@@ -44,36 +22,19 @@ cc.Class({
         this.cointXu.active  = !this.cointXu.active;
         this.get_data();
     },
-    subHeadClick:function(event, value){
-        if (value == "hu") {
-            this.hu = true;
-        }else{
-            this.hu = false;
-        }
-        Promise.all(this.header.map(function(header) {
-            if (header.node == event.target) {
-                header.select();
-            }else{
-                header.unselect();
-            }
-        }));
-        this.get_data();
-    },
     onData: function(data){
-        var self = this
-        this.page.onSet(data.page, data.kmess, data.total)
-        this.content2.map(function(obj, i){
-            var dataT = data.data[i]
-            if (void 0 !== dataT) {
-                self.content.children[i].active = true;
-                obj[0].string = Helper.getStringDateByTime(dataT.time);
-                obj[1].string = dataT.name;
-                obj[2].string = Helper.numberWithCommas(dataT.bet);
-                obj[3].string = Helper.numberWithCommas(dataT.win+dataT.bet);
-            }else{
-                self.content.children[i].active = false;
-            }
-        })
-
+        this.content.removeAllChildren();
+        var self = this;
+        Promise.all(data.map(function(obj, index){
+            var item = cc.instantiate(self.item);
+            var itemComponent = item.getComponent('VQRed_history_item');
+            itemComponent.time.string  = helper.getStringDateByTime(obj.time);
+            itemComponent.phien.string = obj.name;
+            itemComponent.cuoc.string  = helper.numberWithCommas(obj.bet);
+            itemComponent.line.string  = helper.numberWithCommas(obj.win);
+            itemComponent.win.string   = obj.type == 9 ? "Nổ Hũ" : "Thắng lớn";
+            item.children[0].active    = !(index&1);
+            self.content.addChild(item);
+        }))
     },
 });

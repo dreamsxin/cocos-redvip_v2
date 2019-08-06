@@ -21,6 +21,7 @@ cc.Class({
 			default: null,
 			type: cc.Layout
 		},
+		isLoad: false,
 	},
 	init(obj){
 		this.RedT = obj;
@@ -38,6 +39,9 @@ cc.Class({
 	},
 	onEnable: function () {
 		cc.sys.isBrowser && this.addEvent();
+		if (!this.isLoad) {
+			this.getData();
+		}
 	},
 	onDisable: function () {
 		cc.sys.isBrowser && this.removeEvent();
@@ -49,6 +53,10 @@ cc.Class({
 	removeEvent: function() {
 		BrowserUtil.getHTMLElementByEditBox(this.input).removeEventListener("keydown", this.keyHandle, !1);
 	},
+	getData: function(){
+		this.isLoad = true;
+		cc.RedT.send({taixiu:{getLogChat: true}});
+	},
 	message: function(data, tobot = false){
 		var item = cc.instantiate(this.item)
 		var itemComponent = item.getComponent(cc.Label);
@@ -56,19 +64,23 @@ cc.Class({
 		var name = item.children[0].getComponent(cc.Label);
 		name.string = data.user;
 		this.content.content.addChild(item);
-		if(tobot){
-			this.layout.updateLayout();
-			if(this.layout.node.height > 300 && this.layout.node.height-this.layout.node.position.y-134 < 70) {
+		if(tobot && this.layout.node.height > 300 && this.layout.node.height-this.layout.node.position.y-134 < 70){
+			setTimeout(function(){
 				this.content.scrollToBottom(0.1);
-			}
+			}.bind(this), 100);
 		}
 	},
 	logs: function(logs){
 		if (logs.length) {
 			var self = this;
 			Promise.all(logs.map(function(message){
-				self.message(message);
+				return self.message(message);
 			}))
+			.then(result => {
+				setTimeout(function(){
+					this.content.scrollToBottom(0.1);
+				}.bind(this), 100);
+			})
 		}
 	},
 	onData: function(data){

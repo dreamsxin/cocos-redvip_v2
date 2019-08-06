@@ -17,19 +17,19 @@ cc.Class({
     	}));
     },
     random: function(){
-    	var icon = ~~(Math.random()*7);
+    	var icon = ~~(Math.random()*6);
     	this.setIcon(icon);
         return icon;
     },
     setIcon:function(icon, data = false){
-    	if (icon < 5) {
+    	if (icon < 4) {
     		this.node.children[0].active = true;
     		this.icon.spriteFrame        = this.RedT.icons[icon];
     		this.node.children[1].active = this.node.children[2].active = false;
-    	}else if (icon == 5) {
+    	}else if (icon == 4) {
     		this.node.children[1].active = true;
     		this.node.children[0].active = this.node.children[2].active = false;
-    	}else if (icon == 6) {
+    	}else if (icon == 5) {
     		this.node.children[2].active = true;
     		this.node.children[0].active = this.node.children[1].active = false;
     	}

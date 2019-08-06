@@ -1,14 +1,18 @@
 
-var helper = require('Helper');
-var reel   = require('VuongQuocRed_reel');
-var Line   = require('VuongQuocRed_line');
-var gameBonus = require('VuongQuocRed_playBonus');
-var notice = require('Notice');
+var helper = require('Helper'),
+	reel   = require('VuongQuocRed_reel'),
+	Line   = require('VuongQuocRed_line'),
+	gameBonus = require('VuongQuocRed_playBonus'),
+	notice = require('Notice'),
+	dialog = require('VQRed_dialog');
 
 cc.Class({
 	extends: cc.Component,
 	properties: {
 		gameBonus: gameBonus,
+		audioBG:      cc.AudioSource,
+		audioClick:   cc.AudioSource,
+
 		redhat: {
 			default: null,
 			type: cc.Node
@@ -77,14 +81,16 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		notice:      notice,
-		Line: Line,
-		hu:        cc.Label,
-		taikhoan:  cc.Label,
-		tong:      cc.Label,
-		vuathang:  cc.Label,
-		labelLine: cc.Label,
+		notice:     notice,
+		dialog:     dialog,
+		Line:       Line,
+		hu:         cc.Label,
+		taikhoan:   cc.Label,
+		tong:       cc.Label,
+		vuathang:   cc.Label,
+		labelLine:  cc.Label,
 		bangThuong: cc.Node,
+		efline:     cc.Node,
 		onColor:  "",
 		offColor: "",
 		isAuto:     false,
@@ -110,15 +116,23 @@ cc.Class({
 		var self = this;
 		this.gameBonus.init(this);
 		this.Line.init(this);
+		this.dialog.init();
 
 		Promise.all(this.reels.map(function(reel) {
 			reel.init(self);
 		}));
 		cc.RedT.send({scene:"vq_red"});
 		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);
+		this.speed = 400;
+
+		if(cc.RedT.isSoundBackground()){
+			cc.RedT.setSoundBackground(true);
+			this.playMusic();
+		}
 	},
 	BigWinPlay: function(){
 		var huong = cc.callFunc(function(){
+			cc.RedT.audio.playEf('megaWin');
 			helper.numberTo(this.BigWin_Label, 0, this.H_win, 2000, true);
 		}, this);
 		this.BigWin.node.runAction(cc.sequence(cc.delayTime(0.3), huong));
@@ -127,10 +141,12 @@ cc.Class({
 		this.isBigWin = false;
 		this.BigWin.node.active = false;
 		this.BigWin_Label.string = "";
+		this.showLineWin(false);
 		this.hieuUng();
 	},
 	NoHuPlay: function(){
 		var huong = cc.callFunc(function(){
+			cc.RedT.audio.playEf('jackpot');
 			helper.numberTo(this.NoHu_Label, 0, this.H_win, 2000, true);
 		}, this);
 		this.NoHu.node.runAction(cc.sequence(cc.delayTime(0.3), huong));
@@ -139,19 +155,26 @@ cc.Class({
 		this.isNoHu = false;
 		this.NoHu.node.active  = false;
 		this.NoHu_Label.string = "";
+		if (this.isAuto) {
+			this.onAuto();
+		}
+		this.showLineWin(false);
 		this.hieuUng();
 	},
 	EF_BonusFinish: function(){
 		this.isBonus = false;
 		this.EF_Bonus.node.active = false;
 		this.gameBonus.onPlay();
+		this.showLineWin(false);
 	},
 	EF_FreeFinish: function(){
 		this.isFree = false;
 		this.EF_Free.node.active = false;
+		this.showLineWin(false);
 		this.hieuUng();
 	},
 	EF_vuathang: function(){
+		this.showLineWin(true);
 		this.vuathang.string = helper.numberWithCommas(this.H_win);
 		this.buttonFree.active = !!this.H_free;
 		this.buttonSpin.active = !this.H_free;
@@ -181,11 +204,11 @@ cc.Class({
 		this.onGetHu();
 	},
 	onClickSpin: function(){
-		cc.RedT.audio.playClick();
+		cc.RedT.IS_SOUND && this.audioClick.play();
 		this.onSpin();
 	},
 	onAutoSpin: function(){
-		cc.RedT.audio.playClick();
+		cc.RedT.IS_SOUND && this.audioClick.play();
 		this.onGetSpin();
 	},
 	onClickAuto: function(){
@@ -201,6 +224,9 @@ cc.Class({
 			this.addNotice('Chọn ít nhất 1 dòng');
 		}else{
 			if (!this.isSpin) {
+				this.node.stopAllActions();
+				void 0 !== this.eflineN && void 0 !== this.H_line_win && this.H_line_win.length && this.efOneLineWin(this.eflineN, false);
+				this.eflineO = this.eflineN = 0;
 				this.isSpin = true;
 				this.setSpin();
 				this.onGetSpin();
@@ -210,12 +236,12 @@ cc.Class({
 	onAuto: function(){
 		this.isAuto = !this.isAuto;
 		this.buttonAuto.color = this.isAuto ? cc.Color.WHITE : cc.color(200,200,200);
+		this.buttonStop.active = this.isSpin;
 	},
 	onStop: function(){
 		this.isAuto = this.buttonStop.active = false;
 		this.buttonAuto.active = true;
 		this.buttonAuto.color  = cc.color(200,200,200);
-
 	},
 	setSpin: function(){
 		this.buttonLine.pauseSystemEvents();
@@ -225,7 +251,10 @@ cc.Class({
 		this.nodeChangerBetR.pauseSystemEvents();
 	},
 	resetSpin: function(){
-		this.isSpin = this.buttonStop.active = this.isAuto = false;
+		if (this.isAuto) {
+			this.onAuto();
+		}
+		this.isSpin = this.buttonStop.active = false;
 		this.buttonAuto.active = true;
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
@@ -254,6 +283,61 @@ cc.Class({
 			}));
 		}));
 	},
+	onLineWin: function(bool){
+		var self = this;
+		Promise.all(this.H_line_win.map(function(obj){
+			Promise.all(self.Line.lines[obj.line].map(function(icon, index){
+				self.efline.children[index].children[icon].active = bool;
+			}))
+			let TRed = self.Line.mainLine[obj.line-1];
+			if (bool) {
+				TRed.onhover();
+				TRed.node.pauseSystemEvents();
+			}else{
+				TRed.offhover();
+				TRed.node.resumeSystemEvents();
+			}
+		}))
+	},
+	showLineWin: function(bool){
+		this.onLineWin(bool);
+		if (!bool && !this.isNoHu && !this.isNoHu && !this.isBigWin && !this.isAuto && !this.isFreeSpin) {
+			this.eflineN = 0;
+			this.efLineWin();
+		}
+	},
+	efLineWin: function(bool){
+		if (this.H_line_win.length) {
+			this.node.stopAllActions();
+			var self = this;
+
+			if (void 0 === this.H_line_win[this.eflineN]) {
+				this.eflineN = 0;
+			}
+			this.efOneLineWin(this.eflineN, true);
+			var next = cc.callFunc(function() {
+				this.efOneLineWin(this.eflineN, false);
+				this.eflineN += 1;
+				this.efLineWin();
+			}, this);
+			this.node.runAction(cc.sequence(cc.delayTime(1.5), next));
+		}
+	},
+	efOneLineWin: function(number, bool){
+		var self = this;
+		number = this.H_line_win[this.eflineN].line;
+		Promise.all(this.Line.lines[number].map(function(icon, index){
+			self.efline.children[index].children[icon].active = bool;
+		}))
+		let TRed = this.Line.mainLine[number-1];
+		if (bool) {
+			TRed.onhover();
+			TRed.node.pauseSystemEvents();
+		}else{
+			TRed.offhover();
+			TRed.node.resumeSystemEvents();
+		}
+	},
 	hieuUng: function(){
 		if (this.isBigWin && !this.isNoHu) {
 			// Big Win
@@ -267,6 +351,7 @@ cc.Class({
 			// Bonus
 			this.EF_Bonus.node.active = true;
 			this.EF_Bonus.play();
+			cc.RedT.audio.playEf('bonus');
 		}else if (this.isFree){
 			// Free
 			this.EF_Free.node.active = true;
@@ -281,17 +366,20 @@ cc.Class({
 			temp.fontSize   = 25;
 			temp.node.position = cc.v2(0, 21);
 			this.nodeNotice.addChild(temp.node);
-			temp.node.runAction(cc.sequence(cc.moveTo(1.5, cc.v2(0, 74)), cc.callFunc(function(){
+			temp.node.runAction(cc.sequence(cc.moveTo(1.2, cc.v2(0, 105)), cc.callFunc(function(){
+				this.speed = 0;
 				temp.node.destroy();
 				this.hieuUng();
+				this.showLineWin(false);
 			}, this)));
 			this.H_win = 0;
 		}else{
 			if (this.isAuto || this.isFreeSpin) {
 				this.timeOut = setTimeout(function(){
 					this.onAutoSpin();
+					this.speed = 400;
 				}
-				.bind(this), 400);
+				.bind(this), this.speed);
 			}else{
 				this.resetSpin();
 			}
@@ -339,7 +427,7 @@ cc.Class({
 				this.H_win      = data.win;
 				this.H_free     = data.free;
 				this.isBonus    = data.isBonus;
-				this.isNoHu     = data.nohu;
+				this.isNoHu     = data.isNoHu;
 				this.isBigWin   = data.isBigWin;
 				this.isFree     = data.isFree;
 				this.isFreeSpin = !!data.free;
@@ -350,14 +438,12 @@ cc.Class({
 		if (void 0 !== data.bonus) {
 			this.gameBonus.onData(data.bonus);
 		}
-		/**
 		if (void 0 !== data.log) {
-			//this.RedT.Dialog.BigBabol_LichSu.onData(data.log);
+			this.dialog.history.onData(data.log);
 		}
 		if (void 0 !== data.top) {
-			//this.RedT.Dialog.BigBabol_Top.onData(data.top);
+			this.dialog.top.onData(data.top);
 		}
-		*/
 		if (void 0 !== data.notice) {
 			this.addNotice(data.notice);
 		}
@@ -378,7 +464,6 @@ cc.Class({
 	},
 	signOut: function(){
 		cc.director.loadScene('MainGame', function(){
-			console.log(cc.RedT.inGame);
 			cc.RedT.inGame.signOut();
 		});
 	},
@@ -401,4 +486,10 @@ cc.Class({
 		cc.RedT.audio.playClick();
 		this.bangThuong.active = !this.bangThuong.active;
 	},
+	playMusic: function() {
+        this.audioBG.play();
+    },
+    pauseMusic: function() {
+        this.audioBG.pause();
+    },
 });

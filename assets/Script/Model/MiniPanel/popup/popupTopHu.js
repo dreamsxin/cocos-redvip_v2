@@ -39,7 +39,7 @@ cc.Class({
 			this.node.position = cc.RedT.setting.topHu.position;
 		}
 		if (void 0 !== cc.RedT.setting.topHu.open) {
-			this.body.scaleX = this.body.active = cc.RedT.setting.topHu.open ? 1 : 0;
+			this.body.active = cc.RedT.setting.topHu.open;
 		}
 		if (void 0 !== cc.RedT.setting.topHu.data) {
 			this.onData(cc.RedT.setting.topHu.data);
@@ -56,12 +56,21 @@ cc.Class({
 			return obj.children[0].getComponent(cc.Label);
 		})).then(result => {
 			this.header = result;
-		})
+		});
+	},
+	onEnable: function () {
 		this.panel.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.panel.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.panel.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.panel.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.panel.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
+	},
+	onDisable: function () {
+		this.panel.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
+		this.panel.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
+		this.panel.off(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
+		this.panel.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
+		this.panel.off(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
 	},
 	eventStart: function(e){
 		this.setTop();
@@ -75,31 +84,18 @@ cc.Class({
 		cc.RedT.setting.topHu.position = this.node.position;
 		this.xChanger = this.ttOffset2.x - (e.touch.getLocationX() - this.ttOffset.x)
 		this.yChanger = this.ttOffset2.y - (e.touch.getLocationY() - this.ttOffset.y)
-		if (this.xChanger <  5 &&
+		if (this.xChanger < 5 &&
 			this.xChanger > -5 &&
-			this.yChanger <  5 &&
-			this.yChanger > -5) {
-			this.toggle()
+			this.yChanger < 5 &&
+			this.yChanger > -5)
+		{
+			this.toggle();
 		}
 	},
 	toggle: function(){
 		cc.RedT.audio.playClick();
-		if (!this.toggleRuning){
-			this.toggleRuning = true;
-			this.body.stopAllActions();
-			if (this.body.active) {
-				cc.RedT.setting.topHu.open = false;
-				this.body.runAction(cc.sequence(cc.scaleTo(0.2, 0, 1), cc.callFunc(function(){
-					this.toggleRuning = this.body.active = false;
-				}, this)));
-			}else{
-				this.body.active = cc.RedT.setting.topHu.open = true;
-				this.onChangerData();
-				this.body.runAction(cc.sequence(cc.scaleTo(0.2, 1, 1), cc.callFunc(function(){
-					this.toggleRuning = false;
-				}, this)));
-			}
-		}
+		this.body.active = cc.RedT.setting.topHu.open = !this.body.active;
+		this.onChangerData();
 	},
 	onChangerCoint: function(){
 		this.red     = !this.red;
@@ -135,7 +131,11 @@ cc.Class({
 					return temp.type == self.bet && temp.red == self.red
 				});
 				dataName[name] = obj;
-				T[0].name = name;
+				if (!T.length) {
+					T[0] = {name: name, bet: 0};
+				}else{
+					T[0].name = name;
+				}
 				return T[0];
 			})).then(result => {
 				var TT = result.sort(function(a, b){
@@ -144,10 +144,10 @@ cc.Class({
 				Promise.all(TT.map(function(obj, index){
 					var temp = dataName[obj.name];
 						temp.stopAllActions();
-					var y = -(70*(index+1)-70/2);
+					var y = -(75*(index+1)-37.5);
 						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
-						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 2000, true);
+						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 1500, true);
 					}
 				}));
 			});
@@ -157,6 +157,8 @@ cc.Class({
 		this.RedT.MiniPoker.onGetHu();
         this.RedT.BaCay.onGetHu();
         this.RedT.BigBabol.onGetHu();
+        this.RedT.CaoThap.onGetHu();
+        this.RedT.AngryBirds.onGetHu();
         if (void 0 !== cc.RedT.inGame.onGetHu) {
         	cc.RedT.inGame.onGetHu();
         }

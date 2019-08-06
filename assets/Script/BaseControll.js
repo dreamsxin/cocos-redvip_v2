@@ -27,7 +27,8 @@ module.exports = {
 	},
 	send: function(message) {
 		try {
-			this._socket.send(this._encodeMessage(message))
+			//this._socket.readyState == 1 && this._socket.send(this._encodeMessage(message))
+			this._socket.send(this._encodeMessage(message));
 		} catch(err) {
 			this.inGame.loading.active = false;
 			this.inGame.notice.show({title: 'THÔNG BÁO', text: 'KHÔNG thể kết nối tới máy chủ...'});
@@ -44,7 +45,11 @@ module.exports = {
 	},
 	_onSocketDisconnect: function() {
 		cc.RedT.isConnected = false;
-		cc.RedT.IS_LOGIN && cc.RedT.inGame.signOut();
+		if (cc.RedT.IS_LOGIN) {
+			cc.RedT.inGame.signOut();
+		}else{
+			cc.RedT.inGame.dialog.onCloseDialog();
+		}
 		cc.RedT.reconnect();
 	},
 	_onSocketData: function(message) {
@@ -57,6 +62,7 @@ module.exports = {
 	reconnect: function(){
 		this.connect('127.0.0.1', '/websocket');
 		//this.connect('150.95.109.43', '/websocket');
+		//this.connect('redvip.club', '/websocket');
 	},
 
 	// Function localStorage

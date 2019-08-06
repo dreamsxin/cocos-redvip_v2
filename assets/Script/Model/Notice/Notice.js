@@ -49,10 +49,20 @@ cc.Class({
         this.node.active = false;
     },
     onClickButton: function(){
+        cc.RedT.audio.playClick();
         switch(this.type) {
             case 'sign_out':
                 cc.RedT._socket.close();
                 this.node.active = false;
+            break;
+            case 'reg_otp':
+                this.node.active = false;
+                if (cc.RedT.inGame.dialog.objShow != null) {
+                    cc.RedT.inGame.dialog.profile.node.previous = cc.RedT.inGame.dialog.objShow;
+                    cc.RedT.inGame.dialog.objShow.active = false;
+                }
+                cc.RedT.inGame.dialog.showProfile(null, 'BaoMat');
+                cc.RedT.inGame.dialog.profile.BaoMat.onSelectHead(null, 'DangKyOTP');
             break;
         }
     },

@@ -138,7 +138,7 @@ cc.Class({
 	autoSpin: function(){
 		Promise.all(this.reels.map(function(reel, index) {
 			reel.spin(index);
-		}))
+		}));
 	},
 	onSpin: function(){
 		this.buttonLine.pauseSystemEvents();
@@ -237,8 +237,10 @@ cc.Class({
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				this.win  = data.win;
-				this.nohu = data.nohu;
+				this.notice.removeAllChildren();
+				this.win      = data.win;
+				this.nohu     = data.nohu;
+				this.isBigWin = data.isBigWin;
 				this.buttonStop.active = this.isAuto ? true : false;
 				this.buttonAuto.active = !this.buttonStop.active;
 				Promise.all(data.cel.map(function(cel, cel_index){
@@ -251,6 +253,11 @@ cc.Class({
 				this.offSpin();
 			}
 		}
+
+		if (void 0 !== data.line_win) {
+			this.line_win = data.line_win;
+		}
+
 		if (void 0 !== data.phien) {
 			this.phien.string = data.phien;
 		}
@@ -291,6 +298,7 @@ cc.Class({
 
 			var Play = function(){
 				var huong = cc.callFunc(function(){
+					cc.RedT.audio.playEf('winHu');
 					helper.numberTo(text, 0, this.win, 1000, true);
 				}, this);
 				nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));
@@ -305,7 +313,34 @@ cc.Class({
 			nohu.on('play',     Play,   this);
 			nohu.on('finished', Finish, this);
 			nohu.play();
-		}else if (this.win > 0) {
+		}else if (!this.nohu && this.isBigWin) {
+			// BigWin
+			this.isBigWin = false;
+			var BigWin = cc.instantiate(this.RedT.prefabBigWin);
+			BigWin     = BigWin.getComponent(cc.Animation);
+
+			var BigWinFinish = function(){
+				BigWin.node.destroy();
+				if (this.isAuto) {
+					this.onGetSpin();
+		    	}else{
+		    		this.offSpin();
+		    	}
+			}
+
+			BigWin.on('finished', BigWinFinish, this);
+			BigWin.node.bet = this.win;
+			BigWin.node.red = this.red;
+			BigWin.node.position = cc.v2(0,140);
+
+			this.notice.addChild(BigWin.node);
+
+			this.win = 0;
+
+			if (!this.isAuto) {
+				this.offSpin();
+			}
+		}else if (!this.isBigWin && this.win > 0) {
 			var node = new cc.Node;
 			node.addComponent(cc.Label);
 			node = node.getComponent(cc.Label);
@@ -313,13 +348,15 @@ cc.Class({
 			node.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
 			node.lineHeight = 130;
 			node.fontSize   = 25;
-			node.node.position = cc.v2(-6,166);
+			node.node.position = cc.v2(-6,140);
 			node.node.runAction(cc.sequence(cc.delayTime(1.5), cc.callFunc(function() {
 				node.node.destroy();
 				this.hieuUng();
+				this.offLineWin();
 			}, this)));
 			this.notice.addChild(node.node);
 			this.win = 0;
+			this.onLineWin();
 		}else{
 			if (this.isAuto) {
     			this.timeOut = setTimeout(function(){
@@ -330,6 +367,22 @@ cc.Class({
     			this.offSpin();
     		}
 		}
+	},
+	onLineWin: function(){
+		var self = this;
+		Promise.all(this.line_win.map(function(obj){
+			let TRed = self.line.mainLine[obj.line-1];
+			TRed.onhover();
+			TRed.node.pauseSystemEvents();
+		}))
+	},
+	offLineWin: function(){
+		var self = this;
+		Promise.all(this.line_win.map(function(obj){
+			let TRed = self.line.mainLine[obj.line-1];
+			TRed.offhover();
+			TRed.node.resumeSystemEvents();
+		}))
 	},
 	random: function(){
 		Promise.all(this.reels.map(function(reel){

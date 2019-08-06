@@ -25,12 +25,6 @@ cc.Class({
 		this.ttOffset     = null;
 		this.ttOffset2    = null;
 		this.toggleRuning = false;
-		this.panel.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
-		this.panel.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
-		this.panel.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
-		this.panel.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
-		this.panel.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
-
 		if (void 0 !== cc.RedT.setting.popupMini.position) {
 			this.node.position = cc.RedT.setting.popupMini.position;
 		}
@@ -45,6 +39,20 @@ cc.Class({
 				this.list.active = false
 			}
 		}
+	},
+	onEnable: function () {
+		this.panel.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
+		this.panel.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
+		this.panel.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
+		this.panel.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
+		this.panel.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
+	},
+	onDisable: function () {
+		this.panel.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
+		this.panel.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
+		this.panel.off(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
+		this.panel.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
+		this.panel.off(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
 	},
 	eventStart: function(e){
 		this.setTop();

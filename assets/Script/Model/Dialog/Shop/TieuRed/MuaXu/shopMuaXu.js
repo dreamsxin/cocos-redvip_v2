@@ -14,9 +14,15 @@ cc.Class({
             default: null,
             type: cc.EditBox,
         },
+        captcha: {
+            default: null,
+            type: cc.EditBox,
+        },
+        capchaSprite: cc.Sprite,
     },
     onLoad(){
         var self = this;
+        this.editboxs = [this.red, this.captcha];
         this.keyHandle = function(t) {
             return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
                 t.preventDefault && t.preventDefault(),
@@ -27,6 +33,7 @@ cc.Class({
     },
     onEnable: function () {
         cc.sys.isBrowser && this.addEvent();
+        this.reCaptcha();
     },
     onDisable: function () {
         cc.sys.isBrowser && this.removeEvent();
@@ -34,10 +41,14 @@ cc.Class({
     },
     addEvent: function() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        BrowserUtil.getHTMLElementByEditBox(this.red).addEventListener("keydown", this.keyHandle, !1)
+        for (var t in this.editboxs) {
+            BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).addEventListener("keydown", this.keyHandle, !1)
+        }
     },
     removeEvent: function() {
-        BrowserUtil.getHTMLElementByEditBox(this.red).removeEventListener("keydown", this.keyHandle, !1)
+        for (var t in this.editboxs) {
+            BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).removeEventListener("keydown", this.keyHandle, !1)
+        }
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     },
     onKeyDown: function (event) {
@@ -50,13 +61,20 @@ cc.Class({
         }
     },
     changeNextFocusEditBox: function() {
-        BrowserUtil.focusEditBox(this.red)
+        for (var t = !1, e = 0, i = this.editboxs.length; e < i; e++)
+            if (BrowserUtil.checkEditBoxFocus(this.editboxs[e])) {
+                i <= ++e && (e = 0),
+                BrowserUtil.focusEditBox(this.editboxs[e]),
+                t = !0;
+                break
+            }
+        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
     },
     isTop: function() {
         return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
-        this.red.string = '';
+        this.red.string = this.captcha.string = '';
     },
     onChanger: function(red) {
         var value    = helper.getOnlyNumberInString(red);
@@ -66,10 +84,29 @@ cc.Class({
         this.red.string = valueRed == "0" ? "" : valueRed;
     },
     onClickMua: function() {
-        if (parseInt(helper.getOnlyNumberInString(this.red.string)) < 1000) {
+        if (parseInt(helper.isEmpty(this.red.string) || helper.getOnlyNumberInString(this.red.string)) < 1000) {
             cc.RedT.inGame.notice.show({title: "MUA XU", text: "Số RED mua XU tối thiểu là 1.000"})
+        }else if(helper.isEmpty(this.captcha.string)){
+            cc.RedT.inGame.notice.show({title: "MUA XU", text: "Vui lòng nhập chính xác mã xác nhận."})
         }else{
-            cc.RedT.send({shop:{mua_xu:{red: helper.getOnlyNumberInString(this.red.string)}}});
+            cc.RedT.send({shop:{mua_xu:{red: helper.getOnlyNumberInString(this.red.string), captcha: this.captcha.string}}});
         }
+    },
+    initCaptcha: function(t) {
+        var i = this
+          , o = new Image;
+        o.src = t,
+        o.width = 150,
+        o.height = 50,
+        setTimeout(function() {
+            var t = new cc.Texture2D;
+            t.initWithElement(o),
+            t.handleLoadedTexture();
+            var e = new cc.SpriteFrame(t);
+            i.capchaSprite.spriteFrame = e
+        }, 10)
+    },
+    reCaptcha: function(){
+        cc.RedT.send({captcha: 'withdrawXu'});
     },
 });
