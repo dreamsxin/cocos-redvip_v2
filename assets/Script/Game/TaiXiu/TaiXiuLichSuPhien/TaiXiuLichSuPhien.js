@@ -157,7 +157,7 @@ cc.Class({
 		Promise.all(data.dataL.map(function(obj){
 			var item = cc.instantiate(self.itemPrefab)
 			var itemComponent = item.getComponent('TaiXiuLichSuPhien_item')
-			itemComponent.tralai.string = helper.getStringDateByTime(obj.time)
+			itemComponent.time.string = helper.getStringHourByTime(obj.time)
 			itemComponent.user.string   = obj.name
 			itemComponent.cuoc.string   = helper.numberWithCommas(obj.bet)
 			itemComponent.tralai.string = helper.numberWithCommas(obj.tralai)
@@ -166,7 +166,7 @@ cc.Class({
 		Promise.all(data.dataR.map(function(obj){
 			var item = cc.instantiate(self.itemPrefab)
 			var itemComponent = item.getComponent('TaiXiuLichSuPhien_item')
-			itemComponent.tralai.string = helper.getStringDateByTime(obj.time)
+			itemComponent.time.string = helper.getStringHourByTime(obj.time)
 			itemComponent.user.string   = obj.name
 			itemComponent.cuoc.string   = helper.numberWithCommas(obj.bet)
 			itemComponent.tralai.string = helper.numberWithCommas(obj.tralai)

@@ -24,9 +24,9 @@ cc.Class({
 	},
 	onDestroy: function() {
 		if (this._updateListener) {
-            this._am.setEventCallback(null);
-            this._updateListener = null;
-        }
+			this._am.setEventCallback(null);
+			this._updateListener = null;
+		}
 	},
 	initHotUpdate: function() {
 		this.updateProgress(0);
@@ -41,19 +41,17 @@ cc.Class({
 	},
 	checkUpdate: function() {
 		if (this._updating) {
-            this.Splash.messageLabel.string = Message.HOT_UPDATE_CHECKING_VERSION;
-            return;
-        }
-        if (this._am.getState() === jsb.AssetsManager.State.UNINITED) {
-            this._am.loadLocalManifest(this.manifestUrl.nativeUrl);
-        }
-        if (!this._am.getLocalManifest() || !this._am.getLocalManifest().isLoaded()) {
-            this.Splash.messageLabel.string = Message.HOT_UPDATE_DOWNLOAD_MANIFEST_FAILED;
-            return;
-        }
-        this._am.setEventCallback(this.checkCb.bind(this));
-        this._am.checkUpdate();
-        this._updating = true;
+			this.Splash.messageLabel.string = Message.HOT_UPDATE_CHECKING_VERSION;
+			return;
+		}
+
+		if (this._am.getState() === jsb.AssetsManager.State.UNINITED) {
+			this._am.loadLocalManifest(this.manifestUrl.nativeUrl);
+		}
+
+		this._am.setEventCallback(this.checkCb.bind(this));
+		this._am.checkUpdate();
+		this._updating = true;
 	},
 	hotUpdate: function() {
 		if (this._am && !this._updating) {
@@ -99,7 +97,7 @@ cc.Class({
 			return
 		}
 		this._am.setEventCallback(null);
-        this._checkListener = null;
+		this._checkListener = null;
 		this._updating = !1,
 		e && this.Splash.loadAssets(),
 		i && (this.hotUpdate())
