@@ -60,9 +60,8 @@ module.exports = {
 	_onSocketError: function(message) {
 	},
 	reconnect: function(){
-		this.connect('127.0.0.1', '/websocket');
-		//this.connect('150.95.109.43', '/websocket');
-		//this.connect('redvip.club', '/websocket');
+		//this.connect('127.0.0.1', '/websocket');
+		this.connect('redvip.club', '/websocket');
 	},
 
 	// Function localStorage

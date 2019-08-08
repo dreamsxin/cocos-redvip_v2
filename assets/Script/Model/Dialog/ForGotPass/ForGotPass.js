@@ -43,13 +43,13 @@ cc.Class({
 		}
 	},
 	onEnable: function () {
-		cc.sys.isBrowser && this.addEvent();
+		//cc.sys.isBrowser && this.addEvent();
 		this.node.runAction(cc.RedT.inGame.dialog.actionShow);
-		this.reCaptcha();
+		//this.reCaptcha();
 	},
 	onDisable: function () {
-		cc.sys.isBrowser && this.removeEvent();
-		this.clean();
+		//cc.sys.isBrowser && this.removeEvent();
+		//this.clean();
 		cc.RedT.inGame.dialog.resetSizeDialog(this.node);
 	},
 	addEvent: function() {

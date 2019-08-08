@@ -90,7 +90,9 @@ cc.Class({
     			return void 0;
     		}
     	}else{
-    		data.rut = {red: helper.getOnlyNumberInString(this.inputRut.string), otp: this.inputOTP.string};
+    		//data.rut = {red: helper.getOnlyNumberInString(this.inputRut.string), otp: this.inputOTP.string};
+            data.rut = {red: helper.getOnlyNumberInString(this.inputRut.string)};
+
     		if (data.rut < 10000) {
     			cc.RedT.inGame.notice.show({title: "RÚT RED", text: "Số tiền rút phải lớn hơn 10.000"});
     			return void 0;
@@ -127,6 +129,6 @@ cc.Class({
         this.typeOTP = e.node.name;
     },
     onClickOTP: function(){
-        cc.RedT.send({otp:{type: this.typeOTP}});
+        //cc.RedT.send({otp:{type: this.typeOTP}});
     },
 });

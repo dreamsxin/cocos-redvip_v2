@@ -7,7 +7,6 @@ cc.Class({
 	properties: {
 		HotUpdate: HotUpdate,
 		messageLabel: cc.Label,
-		retryGetDataButtonNode: cc.Node,
 	},
 	onLoad: function() {
 		this.isLoadScene  = !1,
@@ -31,34 +30,22 @@ cc.Class({
 		!1)
 	},
 	loadAssets: function() {
-		this.loadConfig(),
-		this.loadScene()
+		this.HotUpdate.updateProgress(0);
+		this.messageLabel.string = Message.SPLASH_GET_GET_DATA;
+		setTimeout(function(){
+			this.loadScene();
+		}.bind(this), 100);
 	},
 	loadScene: function() {
-		var t = this;
-		cc.director.preloadScene("MainGame", function() {
-			t.isLoadScene = !0,
-			t.isLoadConfig && cc.director.loadScene("MainGame")
-		})
+		cc.director.preloadScene("MainGame", this.onProgress.bind(this), this.onLoaded.bind(this));
 	},
-	loadConfig: function() {
-		var i = this;
-		i.isLoadConfig = !0,
-		i.isLoadScene && cc.director.loadScene("MainGame");
-		/**
-		var e = this;
-		this.messageLabel.string = Message.SPLASH_GET_GET_DATA;
-		this.api.getConfig({}, function(t) {
-			e.setGeneralConfig(t.data),
-		}, function(t) {
-			e.messageLabel.string = Message.SPLASH_GET_CONFIG_FAILED,
-			e.retryGetDataButtonNode.active = !0
-		})
-		*/
+	onProgress: function(completedCount, totalCount){
+		// đang tải cảnh
+		var RedT = ((completedCount/totalCount)*838)>>0;
+		this.HotUpdate.updateProgress(RedT);
 	},
-	onRetryGetDataClick: function() {
-		//this.Audio.playClick(),
-		this.retryGetDataButtonNode.active = !1,
-		this.loadConfig()
+	onLoaded: function(err, asset){
+		// Tải cảnh thành công
+		cc.director.loadScene("MainGame");
 	},
 });
