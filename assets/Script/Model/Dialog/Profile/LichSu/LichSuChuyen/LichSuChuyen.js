@@ -32,7 +32,7 @@ cc.Class({
 			var dataT = data[index];
 			if (void 0 !== dataT) {
 				obj.node.active   = true;
-				//obj.GD.string     = dataT.GD;
+				obj.GD.string     = !!dataT.id ? dataT.id : '';
 				obj.Time.string   = Helper.getStringDateByTime(dataT.time);
 				obj.uFrom.string  = dataT.from;
 				obj.uTo.string    = dataT.to;

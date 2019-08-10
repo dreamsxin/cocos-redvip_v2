@@ -36,11 +36,11 @@ cc.Class({
     spin: function(index){
         this.node.stopAllActions();
         var self = this;
-        var d = cc.moveTo(1.2, cc.v2(this.node.x, -(this.node.height-225.84))).easing(cc.easeInOut(3));
+        var d = cc.moveTo(1.1, cc.v2(this.node.x, -(this.node.height-225.84))).easing(cc.easeInOut(3));
         var p = cc.callFunc(function() {
             this.copy();
         }, this);
-        this.node.runAction(cc.sequence(cc.delayTime(index*0.15), d, p));
+        this.node.runAction(cc.sequence(cc.delayTime(index*0.1), d, p));
     },
     stop: function(){
         this.node.stopAllActions();

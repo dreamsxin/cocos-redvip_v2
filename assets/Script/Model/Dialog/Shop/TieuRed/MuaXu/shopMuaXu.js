@@ -74,7 +74,7 @@ cc.Class({
         return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
-        this.red.string = this.captcha.string = '';
+        this.red.string = this.xu.string = this.captcha.string = '';
     },
     onChanger: function(red) {
         var value    = helper.getOnlyNumberInString(red);
