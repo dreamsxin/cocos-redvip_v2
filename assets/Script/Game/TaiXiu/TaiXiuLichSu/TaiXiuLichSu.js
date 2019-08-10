@@ -12,7 +12,6 @@ cc.Class({
 		this.RedT = obj;
 	},
 	onLoad () {
-		console.log(this);
 		this.page.init(this);
 		Promise.all(this.content.children.map(function(obj) {
 			return obj.getComponent('TaiXiuLichSu_item');

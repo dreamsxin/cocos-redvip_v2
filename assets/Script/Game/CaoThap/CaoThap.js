@@ -347,7 +347,6 @@ cc.Class({
 		if (cc.RedT.setting.caothap.win) {
 			if (!!this.nohu) {
 				// Nổ Hũ
-				this.nohu = false;
 				var nohu = cc.instantiate(this.RedT.PrefabNoHu);
 				nohu = nohu.getComponent(cc.Animation);
 				var text = nohu.node.children[6].getComponent(cc.Label);
@@ -355,12 +354,13 @@ cc.Class({
 				var Play = function(){
 					var huong = cc.callFunc(function(){
 						cc.RedT.audio.playEf('winHu');
-						helper.numberTo(text, 0, cc.RedT.setting.caothap.win, 1000, true);
+						helper.numberTo(text, 0, this.nohu, 1000, true);
 					}, this);
 					nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));
 				};
 
 				var Finish = function(){
+					this.nohu = false;
 					this.offPlay();
 					nohu.node.destroy();
 					cc.RedT.setting.caothap.win = 0;
