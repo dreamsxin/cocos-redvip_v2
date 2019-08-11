@@ -60,10 +60,20 @@ module.exports = {
 	_onSocketError: function(message) {
 	},
 	reconnect: function(){
-		//this.connect('127.0.0.1', '/websocket');
-		this.connect('redvip.club', '/websocket');
+		this.connect('127.0.0.1', '/websocket');
+		//this.connect('redvip.club', '/websocket');
 	},
-
+	init: function(){
+		this.initPrototype();
+	},
+	initPrototype: function() {
+		String.format || (String.format = function(t){
+			var i = Array.prototype.slice.call(arguments, 1);
+			return t.replace(/{(\d+)}/g, function(t, e) {
+				return void 0 !== i[e] ? i[e] : t
+			})
+		});
+	},
 	// Function localStorage
 	setAutoLogin: function(bool){
 		localStorage.setItem('AUTO_LOGIN', bool)

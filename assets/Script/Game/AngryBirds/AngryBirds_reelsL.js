@@ -4,9 +4,7 @@ cc.Class({
 
     properties: {
     },
-
     init(obj){
-        console.log(this);
         this.RedT = obj;
         this.icons = [];
         var self  = this;

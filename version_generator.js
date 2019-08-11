@@ -7,7 +7,7 @@ var manifest = {
 	packageUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/',
 	remoteManifestUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/project.manifest',
 	remoteVersionUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/version.manifest',
-	version: '0.17.2.0',
+	version: '1.17.2.0',
 	assets: {},
 	searchPaths: []
 };

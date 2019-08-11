@@ -41,9 +41,9 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.2544529262086514,
-      "y": 0.2544529262086514,
-      "z": 0.2544529262086514
+      "x": 0.539440203562341,
+      "y": 0.539440203562341,
+      "z": 0.539440203562341
     },
     "_quat": {
       "__type__": "cc.Quat",
@@ -80,10 +80,10 @@
     "_level": 0,
     "_components": [
       {
-        "__id__": 31
+        "__id__": 30
       },
       {
-        "__id__": 32
+        "__id__": 31
       }
     ],
     "_prefab": null,
@@ -555,9 +555,6 @@
       },
       {
         "__id__": 29
-      },
-      {
-        "__id__": 30
       }
     ],
     "_prefab": null,
@@ -1278,32 +1275,6 @@
     "_id": "22G5oeQLRGAZwaP3IU342R"
   },
   {
-    "__type__": "dff82xXmpRANIScT1UemSB8",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 12
-    },
-    "_enabled": true,
-    "manifestUrl": {
-      "__uuid__": "4e35b17c-580b-40ca-892b-ab3f1d503b20"
-    },
-    "retryButtonNode": {
-      "__id__": 20
-    },
-    "updateProgressBar": {
-      "__id__": 13
-    },
-    "star": {
-      "__id__": 18
-    },
-    "_am": null,
-    "_updating": false,
-    "_canRetry": false,
-    "_storagePath": "",
-    "_id": "bfxK29ZJBFgbUu4HWktOq2"
-  },
-  {
     "__type__": "cc.Sprite",
     "_name": "",
     "_objFlags": 0,
@@ -1371,8 +1342,8 @@
       "width": 1398,
       "height": 786
     },
-    "_fitWidth": true,
-    "_fitHeight": false,
+    "_fitWidth": false,
+    "_fitHeight": true,
     "_id": "76Xw++6YBKc6hV/FUgPqgS"
   },
   {
@@ -1383,12 +1354,25 @@
       "__id__": 2
     },
     "_enabled": true,
-    "HotUpdate": {
-      "__id__": 28
-    },
     "messageLabel": {
       "__id__": 27
     },
+    "manifestUrl": {
+      "__uuid__": "4e35b17c-580b-40ca-892b-ab3f1d503b20"
+    },
+    "retryButtonNode": {
+      "__id__": 20
+    },
+    "updateProgressBar": {
+      "__id__": 13
+    },
+    "star": {
+      "__id__": 18
+    },
+    "_am": null,
+    "_updating": false,
+    "_canRetry": false,
+    "_storagePath": "",
     "_id": "26vO7ccbFC3qjPNjTibMaE"
   }
 ]

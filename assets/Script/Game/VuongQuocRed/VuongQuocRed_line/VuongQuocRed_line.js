@@ -10,7 +10,6 @@ cc.Class({
 		mainLine:   cc.Node,
 	},
 	init: function(obj){
-		//console.log(this);
 		this.lines = {
 			'1':  [1,1,1,1,1],
 			'2':  [0,0,0,0,0],

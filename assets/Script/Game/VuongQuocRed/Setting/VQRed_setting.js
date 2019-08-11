@@ -23,7 +23,6 @@ cc.Class({
         cc.RedT.inGame.dialog.resetSizeDialog(this.node);
     },
     OnChangerNhacNen: function() {
-        console.log(this.NhacNen.isChecked);
         cc.RedT.setSoundBackground(this.NhacNen.isChecked);
         if (this.NhacNen.isChecked) {
             cc.RedT.inGame.playMusic();

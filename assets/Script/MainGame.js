@@ -49,6 +49,7 @@ cc.Class({
 	onLoad: function () {
 		if (void 0 === cc.RedT) {
 			cc.RedT = baseControll;
+			cc.RedT.init();
 			cc.RedT.audio = this.PrefabT[0].data.getComponent('MainAudio');
 		}
 		// Connect Server
@@ -115,7 +116,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		console.log(data);
+		//console.log(data);
 		if (void 0 !== data["unauth"]){
 			this.unAuthorized(data["unauth"]);
 		}
