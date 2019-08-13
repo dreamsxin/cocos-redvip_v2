@@ -18,7 +18,6 @@ cc.Class({
 			type: cc.Prefab
 		},
 		header: header,
-		font:   cc.TTFFont,
 		news: {
 			default: null,
 			type: cc.Node
@@ -146,7 +145,7 @@ cc.Class({
 			this.notice.show(data.notice);
 		}
 		if (void 0 !== data.news){
-			this.newsF(data.news)
+			this.newsContents.onData(data.news);
 		}
 		if (void 0 !== data.captcha) {
 			this.captcha(data.captcha);
@@ -180,13 +179,6 @@ cc.Class({
 				this.dialog.shop.TieuRed.MuaXu.initCaptcha(data.data);
 				break;
 		}
-	},
-	newsF: function(data){
-		if (void 0 !== data.a)
-			this.NewsAddArray(data.a)
-
-		if (void 0 !== data.t)
-			this.NewsAddText(data.t)
 	},
 	dataUser: function(data){
 		if (void 0 !== data.name){
@@ -230,40 +222,6 @@ cc.Class({
 		if (void 0 !== data.level){
 			this.header.level(data.level);
 			this.header.updateEXP(data.vipHT, data.vipNext);
-		}
-	},
-	NewsAddArray: function(arr){
-		var self = this
-		Promise.all(arr.map(function(text){
-			var temp = new cc.Node;
-			temp.addComponent(cc.RichText);
-			temp            = temp.getComponent(cc.RichText);
-			temp.string     = text
-			temp.font       = self.font
-			temp.lineHeight = 30
-			temp.fontSize   = 20
-
-			self.newsContents.node.addChild(temp.node)
-
-			return temp;
-		})).then(result => {
-			if (!this.newsContents.node.active) {
-				this.newsContents.setNews()
-			}
-		})
-	},
-	NewsAddText: function(text){
-		var temp = new cc.Node;
-		temp.addComponent(cc.RichText);
-		temp            = temp.getComponent(cc.RichText);
-		temp.string     = text
-		temp.font       = this.font
-		temp.lineHeight = 30
-		temp.fontSize   = 20
-		this.newsContents.node.addChild(temp.node)
-
-		if (!this.newsContents.node.active) {
-			this.newsContents.setNews()
 		}
 	},
 	signOut: function(){

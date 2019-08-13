@@ -28,13 +28,19 @@ cc.Class({
 			this.addNotice(data);
 		}
 		this.isPush = true;
+		this.addNews(data);
 	},
 	addNotice: function(data){
 		var notice = cc.instantiate(this.prefab);
 		var notice = notice.getComponent('ThongBaoNoHu');
 		notice.title.string = data.title;
-		notice.text.string  = "<color=#00FF1F>" + data.name + "</color> vừa\n<color=#FFFF00>Nổ Hũ</color> <color=#00EBFF>" + helper.numberWithCommas(data.bet) + "</color>";
+		notice.users.string = data.name;
+		notice.bet.string   = helper.numberWithCommas(data.bet);
+
 		notice.init(this);
 		this.node.addChild(notice.node);
+	},
+	addNews: function(data){
+		cc.RedT.inGame.newsContents.NewsAddText({users: data.name, bet: helper.numberWithCommas(data.bet), game: data.title, status: 1});
 	},
 });

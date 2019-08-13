@@ -50,6 +50,7 @@ cc.Class({
 	},
 	init(){
 		this.isdaily = false;
+		this.meDaily = false;
 		this.daily_list = [];
 		var self = this;
 		this.isLoaded = false;
@@ -70,6 +71,7 @@ cc.Class({
 		});
 	},
 	onEnable: function () {
+		this.reCheckMeDL();
 		cc.sys.isBrowser && this.addEvent();
 		if(!this.isLoaded) {
 			cc.RedT.send({shop:{get_daily: true}});
@@ -115,6 +117,9 @@ cc.Class({
 	},
 	clean: function(){
 		this.nickname.string = this.renickname.string = this.red.string = this.messenger.string = this.rednhan.string = "";
+		Promise.all(this.daily_list.map(function(obj){
+			obj.bg.active = false;
+		}))
 	},
 	onChuyenClick: function(){
 		var error = null;
@@ -160,8 +165,10 @@ cc.Class({
 	},
 	onDaiLy: function(data){
 		if (data.length) {
-			var self = this;
+			var self  = this;
+			var regex = new RegExp("^" + cc.RedT.user.name + "$", 'i');
 			Promise.all(data.map(function(daily, index){
+				!self.meDaily && (self.meDaily = regex.test(daily.nickname));
 				var item = cc.instantiate(self.prefabDaiLy);
 				var component = item.getComponent('ChuyenRed_daily');
 				component.init(self, daily, index);
@@ -171,6 +178,16 @@ cc.Class({
 			.then(result => {
 				this.daily_list = result;
 			})
+		}
+	},
+	reCheckMeDL: function(){
+		this.meDaily = false;
+		if (this.daily_list.length) {
+			var self  = this;
+			var regex = new RegExp("^" + cc.RedT.user.name + "$", 'i');
+			Promise.all(this.daily_list.map(function(daily){
+				!self.meDaily && (self.meDaily = regex.test(daily.NICKNAME.string));
+			}))
 		}
 	},
 	onData: function(data) {
@@ -211,7 +228,7 @@ cc.Class({
 		value = !!superT ? this.red.string : value;
 		value = helper.numberWithCommas(helper.getOnlyNumberInString(value));
 		this.red.string = value == 0 ? "" : value;
-		if(this.isdaily){
+		if(this.isdaily || this.meDaily){
 			this.rednhan.string = value
 		}else{
 			var valueT = helper.getOnlyNumberInString(value);

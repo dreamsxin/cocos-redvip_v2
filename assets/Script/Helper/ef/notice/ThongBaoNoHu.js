@@ -7,7 +7,8 @@ cc.Class({
     properties: {
     	animation: cc.Animation,
         title:     cc.Label,
-        text:      cc.RichText,
+        users:     cc.Label,
+        bet:       cc.Label,
     },
     init: function(obj){
     	this.RedT = obj;

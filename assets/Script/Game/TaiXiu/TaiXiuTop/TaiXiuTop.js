@@ -105,6 +105,7 @@ cc.Class({
             itemComponent.time.string  = index+1;
             itemComponent.phien.string = obj.name;
             itemComponent.dat.string   = helper.numberWithCommas(obj.bet);
+            itemComponent.node.children[0].active = index%2;
             self.scrollview.content.addChild(item);
         }))
     },
