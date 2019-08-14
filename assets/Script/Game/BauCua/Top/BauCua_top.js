@@ -33,7 +33,7 @@ cc.Class({
             var itemComponent = item.getComponent('BauCua_top_item');
             itemComponent.stt.string  = index+1;
             itemComponent.nick.string = obj.name;
-            itemComponent.win.string  = helper.numberWithCommas(self.red ? obj.red : obj.xu);
+            itemComponent.win.string  = helper.numberWithCommas(obj.bet);
             item.children[0].active   = !(index&1);
             self.content.addChild(item);
         }))
