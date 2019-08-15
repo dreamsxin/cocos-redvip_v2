@@ -7,7 +7,8 @@ var signIn     = require('SignIn'),
 	profile    = require('Profile'),
 	Settings   = require('Settings'),
 	the_cao    = require('TheCao'),
-	GiftCode   = require('GiftCode');
+	GiftCode   = require('GiftCode'),
+	DEvent     = require('DEvent');
 
 cc.Class({
 	extends: cc.Component,
@@ -21,6 +22,7 @@ cc.Class({
 		the_cao:    the_cao,
 		settings:   Settings,
 		GiftCode:   GiftCode,
+		DEvent:     DEvent,
 	},
 	init: function() {
 		this.actionShow = cc.spawn(cc.scaleTo(0.5, 1).easing(cc.easeBackOut(2.5)), cc.fadeTo(0.5, 255));
@@ -124,6 +126,14 @@ cc.Class({
 		if (cc.RedT.IS_LOGIN) {
 			this.node.active = this.GiftCode.node.active = true;
 			this.objShow     = this.GiftCode.node;
+		}else{
+			this.showSignIn();
+		}
+	},
+	showDEvent: function(event, name){
+		if (cc.RedT.IS_LOGIN) {
+			this.node.active = this.DEvent.node.active = true;
+			this.objShow     = this.DEvent.node;
 		}else{
 			this.showSignIn();
 		}

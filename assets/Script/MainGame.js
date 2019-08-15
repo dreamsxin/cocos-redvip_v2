@@ -115,7 +115,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		//console.log(data);
+		console.log(data);
 		if (void 0 !== data["unauth"]){
 			this.unAuthorized(data["unauth"]);
 		}
@@ -131,6 +131,7 @@ cc.Class({
 		}
 		if (void 0 !== data.TopHu){
 			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+			this.dialog.DEvent.onHU(data.TopHu);
 		}
 		if (void 0 !== data.taixiu){
 			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);

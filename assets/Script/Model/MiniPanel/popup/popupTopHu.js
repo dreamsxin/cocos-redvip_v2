@@ -50,7 +50,7 @@ cc.Class({
 		this.ttOffset2    = null;
 		this.toggleRuning = false;
 		Promise.all(this.content.children.map(function(obj){
-			obj.hu = obj.children[2].getComponent(cc.Label);
+			obj.hu = obj.children[3].getComponent(cc.Label);
 		}));
 		Promise.all(this.header.children.map(function(obj){
 			return obj.children[0].getComponent(cc.Label);
@@ -148,6 +148,11 @@ cc.Class({
 						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
 						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 1500, true);
+					}
+					if (obj.X6 > 0) {
+						temp.children[0].active = true;
+					}else{
+						temp.children[0].active = false;
 					}
 				}));
 			});
