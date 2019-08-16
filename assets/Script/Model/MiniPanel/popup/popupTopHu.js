@@ -29,6 +29,10 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
+		x: {
+			default: [],
+			type: cc.SpriteFrame,
+		},
 		red: false,
 		bet: "",
 	},
@@ -50,7 +54,8 @@ cc.Class({
 		this.ttOffset2    = null;
 		this.toggleRuning = false;
 		Promise.all(this.content.children.map(function(obj){
-			obj.hu = obj.children[3].getComponent(cc.Label);
+			obj.hu  = obj.children[3].getComponent(cc.Label);
+			obj.xHu = obj.children[0].getComponent(cc.Sprite);
 		}));
 		Promise.all(this.header.children.map(function(obj){
 			return obj.children[0].getComponent(cc.Label);
@@ -149,10 +154,11 @@ cc.Class({
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
 						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 1500, true);
 					}
-					if (obj.X6 > 0) {
-						temp.children[0].active = true;
+					if (obj.balans > 0 && !!self.x[obj.x-2]) {
+						temp.xHu.node.active = true;
+						temp.xHu.spriteFrame = self.x[obj.x-2];
 					}else{
-						temp.children[0].active = false;
+						temp.xHu.node.active = false;
 					}
 				}));
 			});
