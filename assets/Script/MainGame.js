@@ -157,6 +157,9 @@ cc.Class({
 		if (void 0 !== data.loading) {
 			this.bgLoading.onData(data.loading);
 		}
+		if (void 0 !== data.event) {
+			this.dialog.DEvent.onData(data.event);
+		}
 	},
 	captcha: function(data){
 		switch(data.name){

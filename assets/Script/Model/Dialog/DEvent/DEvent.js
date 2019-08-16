@@ -1,4 +1,5 @@
 
+var eventTaiXiu    = require('EventTaiXiu');
 var eventAngrybird = require('EventAngrybird');
 var eventBigBabol  = require('EventBigBabol');
 var eventMiniPoker = require('EventMiniPoker');
@@ -12,6 +13,7 @@ cc.Class({
 		eventAngrybird: eventAngrybird,
 		eventBigBabol:  eventBigBabol,
 		eventMiniPoker: eventMiniPoker,
+		eventTaiXiu:    eventTaiXiu,
 	},
 	selectEvent: function(event) {
 		Promise.all(this.menu.children.map(function(menu){
@@ -30,7 +32,9 @@ cc.Class({
 		}));
 	},
 	onData: function(data){
-
+		if (!!data.taixiu) {
+			this.eventTaiXiu.onData(data.taixiu);
+		}
 	},
 	onHU: function(hu){
 		var miniPoker100 = hu.mini_poker.filter(function(obj){

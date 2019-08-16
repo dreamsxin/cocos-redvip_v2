@@ -7,6 +7,5 @@ cc.Class({
         users: cc.Label,
         day:   cc.Label,
         gift:  cc.Label,
-
     },
 });
