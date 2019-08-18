@@ -115,7 +115,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		console.log(data);
+		//console.log(data);
 		if (void 0 !== data["unauth"]){
 			this.unAuthorized(data["unauth"]);
 		}
@@ -301,6 +301,9 @@ cc.Class({
 	},
 	fanpage: function(){
 		cc.sys.openURL('https://www.facebook.com/RedVipClub-1180384875447855/');
+	},
+	android: function(){
+		cc.sys.openURL('http://redvip.club/download/RedVip.apk');
 	},
 
 /**
