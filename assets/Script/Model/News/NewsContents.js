@@ -53,8 +53,8 @@ cc.Class({
 			item = item.getComponent('NewsItem');
 
 		if (!!text.status) {
+			item.status.node.active = true;
 			if (text.status == 1) {
-				item.status.node.active = true;
 				item.status.string      = "(Nổ Hũ)";
 				item.win.string         = "nổ hũ";
 			}else{
