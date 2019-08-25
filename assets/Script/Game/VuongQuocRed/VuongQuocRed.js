@@ -100,7 +100,7 @@ cc.Class({
 		betSelect: 0,
 	},
 	onLoad () {
-		cc.RedT.inGame    = this;
+		cc.RedT.inGame = this;
 		var MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
@@ -301,7 +301,7 @@ cc.Class({
 	},
 	showLineWin: function(bool){
 		this.onLineWin(bool);
-		if (!bool && !this.isNoHu && !this.isNoHu && !this.isBigWin && !this.isAuto && !this.isFreeSpin) {
+		if (!bool && !this.isNoHu && !this.isBigWin && !this.isAuto && !this.isFreeSpin) {
 			this.eflineN = 0;
 			this.efLineWin();
 		}

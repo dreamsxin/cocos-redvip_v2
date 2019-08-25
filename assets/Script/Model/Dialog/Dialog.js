@@ -8,7 +8,8 @@ var signIn     = require('SignIn'),
 	Settings   = require('Settings'),
 	the_cao    = require('TheCao'),
 	GiftCode   = require('GiftCode'),
-	DEvent     = require('DEvent');
+	DEvent     = require('DEvent'),
+	PokerNap   = require('PokerNap');
 
 cc.Class({
 	extends: cc.Component,
@@ -23,6 +24,7 @@ cc.Class({
 		settings:   Settings,
 		GiftCode:   GiftCode,
 		DEvent:     DEvent,
+		PokerNap:   PokerNap,
 	},
 	init: function() {
 		this.actionShow = cc.spawn(cc.scaleTo(0.5, 1).easing(cc.easeBackOut(2.5)), cc.fadeTo(0.5, 255));
@@ -118,11 +120,11 @@ cc.Class({
 		this.objShow     = this.profile.node;
 		this.profile.superView(name);
 	},
-	showSetting: function(event, name){
+	showSetting: function(event){
 		this.node.active = this.settings.node.active = true;
 		this.objShow     = this.settings.node;
 	},
-	showGiftCode: function(event, name){
+	showGiftCode: function(event){
 		if (cc.RedT.IS_LOGIN) {
 			this.node.active = this.GiftCode.node.active = true;
 			this.objShow     = this.GiftCode.node;
@@ -130,12 +132,17 @@ cc.Class({
 			this.showSignIn();
 		}
 	},
-	showDEvent: function(event, name){
+	showDEvent: function(event){
 		if (cc.RedT.IS_LOGIN) {
 			this.node.active = this.DEvent.node.active = true;
 			this.objShow     = this.DEvent.node;
 		}else{
 			this.showSignIn();
 		}
+	},
+	showPokerNap: function(obj){
+		this.node.active = this.PokerNap.node.active = true;
+		this.objShow     = this.PokerNap.node;
+		this.PokerNap.init(obj);
 	},
 });

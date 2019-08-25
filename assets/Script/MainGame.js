@@ -8,39 +8,27 @@ var header       = require('Header'),
 	ThongBaoNoHu = require('PushNohu'),
 	newsContents = require('NewsContents'),
 	bgLoading    = require('bgLoading'),
+	MenuRoom     = require('MenuRoom'),
 	notice       = require('Notice');
 
 cc.Class({
 	extends: cc.Component,
 	properties: {
+		MenuRoom: MenuRoom,
 		PrefabT: {
 			default: [],
 			type: cc.Prefab
 		},
 		header: header,
-		news: {
-			default: null,
-			type: cc.Node
-		},
+		news: cc.Node,
 		newsContents: newsContents,
 		bgLoading:    bgLoading,
-		iconVQRed: {
-			default: null,
-			type: cc.Node
-		},
-		iconTaiXiu: {
-			default: null,
-			type: cc.Node
-		},
-		redhat: {
-			default: null,
-			type: cc.Node
-		},
+		iconVQRed:  cc.Node,
+		iconCandy:  cc.Node,
+		iconTaiXiu: cc.Node,
+		redhat: cc.Node,
 		dialog: dialog,
-		loading: {
-			default: null,
-			type: cc.Node
-		},
+		loading:      cc.Node,
 		notice:       notice,
 		ThongBaoNoHu: ThongBaoNoHu,
 		audioBG: cc.AudioSource,
@@ -62,6 +50,7 @@ cc.Class({
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
+		this.iconCandy  = this.iconCandy.getComponent('iconGameHu');
 		this.iconVQRed  = this.iconVQRed.getComponent('iconGameHu');
 		this.iconTaiXiu = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
@@ -115,7 +104,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		//console.log(data);
+		console.log(data);
 		if (void 0 !== data["unauth"]){
 			this.unAuthorized(data["unauth"]);
 		}
@@ -159,6 +148,9 @@ cc.Class({
 		}
 		if (void 0 !== data.event) {
 			this.dialog.DEvent.onData(data.event);
+		}
+		if (!!data.toGame) {
+			this.MenuRoom.onData(data.toGame);
 		}
 	},
 	captcha: function(data){
@@ -244,6 +236,7 @@ cc.Class({
 		this.newsContents.reset();
 		this.header.isSignOut();
 		this.dialog.onCloseDialog();
+		this.MenuRoom.onBack();
 		cc.RedT.MiniPanel.newGame();
 	},
 	onGetTaiXiu: function(tai, xiu){
@@ -258,19 +251,19 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data) {
-			// Vương Quốc Red
 			var self = this;
+			// Vương Quốc Red
 			Promise.all(cc.RedT.setting.topHu.data['vq_red'].filter(function(temp){
 				return temp.red == true;
 			}))
 			.then(result => {
-				var h100 = result.filter(function(temp){return temp.type == 100});
-				var h1k  = result.filter(function(temp){return temp.type == 1000});
-				var h10k = result.filter(function(temp){return temp.type == 10000});
+				let h100 = result.filter(function(temp){return temp.type == 100});
+				let h1k  = result.filter(function(temp){return temp.type == 1000});
+				let h10k = result.filter(function(temp){return temp.type == 10000});
 
-				var r100 = helper.getOnlyNumberInString(this.iconVQRed.hu100.string);
-				var r1k  = helper.getOnlyNumberInString(this.iconVQRed.hu1k.string);
-				var r10k = helper.getOnlyNumberInString(this.iconVQRed.hu10k.string);
+				let r100 = helper.getOnlyNumberInString(this.iconVQRed.hu100.string);
+				let r1k  = helper.getOnlyNumberInString(this.iconVQRed.hu1k.string);
+				let r10k = helper.getOnlyNumberInString(this.iconVQRed.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
 					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 2000, true);
@@ -280,6 +273,30 @@ cc.Class({
 				}
 				if (r10k-h10k[0].bet != 0) {
 					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 2000, true);
+				}
+			});
+
+			// Candy
+			Promise.all(cc.RedT.setting.topHu.data['candy'].filter(function(temp){
+				return temp.red == true;
+			}))
+			.then(result => {
+				let h100 = result.filter(function(temp){return temp.type == 100});
+				let h1k  = result.filter(function(temp){return temp.type == 1000});
+				let h10k = result.filter(function(temp){return temp.type == 10000});
+
+				let r100 = helper.getOnlyNumberInString(this.iconCandy.hu100.string);
+				let r1k  = helper.getOnlyNumberInString(this.iconCandy.hu1k.string);
+				let r10k = helper.getOnlyNumberInString(this.iconCandy.hu10k.string);
+
+				if (r100-h100[0].bet != 0) {
+					helper.numberTo(this.iconCandy.hu100, helper.getOnlyNumberInString(this.iconCandy.hu100.string), h100[0].bet, 2000, true);
+				}
+				if (r1k-h1k[0].bet != 0) {
+					helper.numberTo(this.iconCandy.hu1k, helper.getOnlyNumberInString(this.iconCandy.hu1k.string), h1k[0].bet, 2000, true);
+				}
+				if (r10k-h10k[0].bet != 0) {
+					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 2000, true);
 				}
 			});
 		}

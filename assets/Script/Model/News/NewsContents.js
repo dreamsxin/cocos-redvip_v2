@@ -8,7 +8,7 @@ cc.Class({
 		this.RedT = obj;
 	},
 	update: function(t){
-		this.node.position = cc.v2(this.node.position.x-(130*t), 0);
+		this.node.position = cc.v2(this.node.position.x-(160*t), 0);
 		if (-this.node.width > this.node.position.x) {
 			this.reset();
 		}

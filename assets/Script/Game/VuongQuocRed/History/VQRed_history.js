@@ -45,36 +45,11 @@ cc.Class({
 			var dataT = data.data[i];
 			if (void 0 !== dataT) {
 				obj.node.active = true;
-
 				obj.time.string  = Helper.getStringDateByTime(dataT.time);
 				obj.phien.string = dataT.id;
 				obj.cuoc.string  = Helper.numberWithCommas(dataT.bet);
-
 				obj.line.string  = dataT.kq + " Dòng";
-
 				obj.win.string   = Helper.numberWithCommas(dataT.win);
-
-
-				/**
-				
-				time:  cc.Label,
-				phien: cc.Label,
-				cuoc:  cc.Label,
-				line:  cc.Label,
-				win:   cc.Label,
-
-				obj[2].string = Helper.numberWithCommas(dataT.bet);
-				obj[3].string = dataT.kq + " Dòng";
-				obj[4].string = Helper.numberWithCommas(dataT.win);
-				var temp = obj[2].node;
-				if (self.red) {
-					temp.color = temp.color.fromHEX('#FFF500');
-					obj[4].node.color = temp.color;
-				}else{
-					temp.color = temp.color.fromHEX('#FFFFFF');
-					obj[4].node.color = temp.color;
-				}
-				*/
 			}else{
 				obj.node.active = false;
 			}
