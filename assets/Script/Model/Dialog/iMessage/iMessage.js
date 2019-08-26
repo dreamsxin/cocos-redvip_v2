@@ -57,11 +57,23 @@ cc.Class({
 			this.getContent();
 
 			obj.dot.active = true;
-			Promise.all(this.content.children.map(function(node){
+
+			Promise.all(this.content.children.filter(function(node){
 				if (node != obj.node) {
 					node.children[0].active = false;
 				}
-			}));
+				return node.children[1].active;
+			}))
+			.then(result => {
+				result = result.length;
+				console.log(result);
+				if (result > 0) {
+					this.news.node.active = true;
+					this.news.string = result;
+				}else{
+					this.news.node.active = false;
+				}
+			})
 		}
 	},
 	getContent: function(obj){
