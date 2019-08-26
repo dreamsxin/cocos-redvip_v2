@@ -214,7 +214,8 @@ cc.Class({
 		if (this.daily_list.length > 0) {
 			var self = this;
 			Promise.all(this.daily_list.map(function(obj){
-				if (value === obj.NICKNAME.string) {
+				var regex = new RegExp("^" + value + "$", 'i');
+				if (regex.test(obj.NICKNAME.string)) {
 					self.isdaily  = true;
 					obj.bg.active = true;
 				}else{
