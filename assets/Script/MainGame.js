@@ -152,6 +152,9 @@ cc.Class({
 		if (!!data.toGame) {
 			this.MenuRoom.onData(data.toGame);
 		}
+		if (!!data.message) {
+			this.dialog.iMessage.onData(data.message);
+		}
 	},
 	captcha: function(data){
 		switch(data.name){
@@ -238,6 +241,7 @@ cc.Class({
 		this.dialog.onCloseDialog();
 		this.MenuRoom.onBack();
 		cc.RedT.MiniPanel.newGame();
+		this.dialog.iMessage.reset();
 	},
 	onGetTaiXiu: function(tai, xiu){
 		var sTai = helper.getOnlyNumberInString(this.iconTaiXiu.tai.string);

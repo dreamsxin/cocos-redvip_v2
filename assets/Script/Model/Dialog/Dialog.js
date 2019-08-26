@@ -9,7 +9,8 @@ var signIn     = require('SignIn'),
 	the_cao    = require('TheCao'),
 	GiftCode   = require('GiftCode'),
 	DEvent     = require('DEvent'),
-	PokerNap   = require('PokerNap');
+	PokerNap   = require('PokerNap'),
+	iMessage  = require('iMessage');
 
 cc.Class({
 	extends: cc.Component,
@@ -25,6 +26,7 @@ cc.Class({
 		GiftCode:   GiftCode,
 		DEvent:     DEvent,
 		PokerNap:   PokerNap,
+		iMessage:  iMessage,
 	},
 	init: function() {
 		this.actionShow = cc.spawn(cc.scaleTo(0.5, 1).easing(cc.easeBackOut(2.5)), cc.fadeTo(0.5, 255));
@@ -144,5 +146,9 @@ cc.Class({
 		this.node.active = this.PokerNap.node.active = true;
 		this.objShow     = this.PokerNap.node;
 		this.PokerNap.init(obj);
+	},
+	showiMessage: function(obj){
+		this.node.active = this.iMessage.node.active = true;
+		this.objShow     = this.iMessage.node;
 	},
 });
