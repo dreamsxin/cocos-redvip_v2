@@ -42,6 +42,7 @@ cc.Class({
 		cc.RedT.send({user:{getLevel: true}});
 	},
 	level: function(data){
+		cc.RedT.userData(data);
 		var self = this;
 		cc.RedT.user.vipHT  = data.vipHT-data.vipPre;
 		cc.RedT.user.vipNext = data.vipNext-data.vipPre;
