@@ -1,41 +1,66 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
+
+var helper = require('Helper');
 
 cc.Class({
-    extends: cc.Component,
+	extends: cc.Component,
 
-    properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
-    },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
-
-    start () {
-
-    },
-
-    // update (dt) {},
+	properties: {
+		numberBonus: cc.Label,
+		listBox:     cc.Node,
+		notice:      cc.Node,
+		numberWin:   cc.Label,
+		icons: {
+			default: [],
+			type: cc.SpriteFrame,
+		},
+	},
+	init: function(obj){
+		this.RedT = obj;
+		Promise.all(this.listBox.children.map(function(box){
+			return box.getComponent('CoTrang_bonus_item');
+		}))
+		.then(result => {
+			this.listBox = result;
+		})
+	},
+	onPlay: function(){
+		this.reset();
+		this.node.active = true;
+		this.numberBonus.string = 10;
+	},
+	onClickBox: function(e) {
+		if (!!this.numberBonus.string) {
+			this.RedT.playClick();
+			this.onSend(e.target.name);
+		}
+	},
+	closeNotice: function(){
+		this.notice.active = this.node.active = false;
+		this.RedT.hieuUng();
+	},
+	onData: function(data){
+		if (void 0 !== data.box) {
+			var obj = this.listBox[data.box];
+			obj.open.active  = true;
+			obj.close.active = false;
+			obj.text.string  = helper.numberWithCommas(data.bet);
+			this.numberBonus.string = data.bonus;
+		}
+		if (void 0 !== data.win) {
+			this.notice.active = true;
+			this.numberWin.string = helper.numberWithCommas(data.win);
+			this.RedT.vuathang.string = helper.numberWithCommas(helper.getOnlyNumberInString(this.RedT.vuathang.string)*1 + data.win);
+		}
+	},
+	onSend: function(box){
+		cc.RedT.send({g:{longlan:{bonus:{box:box}}}});
+	},
+	reset: function(){
+		var self = this;
+		Promise.all(this.listBox.map(function(box){
+			box.open.active  = false;
+			box.close.active = true;
+			box.text.string  = "";
+		}));
+	},
 });

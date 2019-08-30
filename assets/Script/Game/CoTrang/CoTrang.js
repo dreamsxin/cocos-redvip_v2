@@ -120,15 +120,13 @@ cc.Class({
 		this.BigWin.on('play',      this.BigWinPlay,   this);
 		this.EF_Free.on('finished', this.EF_FreeFinish,  this);
 
-
-		//this.gameBonus.init(this);
-		this.dialog.init();
-		/**
 		this.NoHu.on('finished', this.NoHuFinish, this);
 		this.NoHu.on('play',     this.NoHuPlay,   this);
 
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
-		*/
+
+		this.gameBonus.init(this);
+		this.dialog.init();
 
 		Promise.all(this.reels.map(function(reel) {
 			reel.init(self);
