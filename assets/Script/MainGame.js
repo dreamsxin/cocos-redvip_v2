@@ -23,9 +23,10 @@ cc.Class({
 		news: cc.Node,
 		newsContents: newsContents,
 		bgLoading:    bgLoading,
-		iconVQRed:  cc.Node,
-		iconCandy:  cc.Node,
-		iconTaiXiu: cc.Node,
+		iconVQRed:   cc.Node,
+		iconCandy:   cc.Node,
+		iconLongLan: cc.Node,
+		iconTaiXiu:  cc.Node,
 		redhat: cc.Node,
 		dialog: dialog,
 		loading:      cc.Node,
@@ -50,9 +51,10 @@ cc.Class({
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
-		this.iconCandy  = this.iconCandy.getComponent('iconGameHu');
-		this.iconVQRed  = this.iconVQRed.getComponent('iconGameHu');
-		this.iconTaiXiu = this.iconTaiXiu.getComponent('iconGameTaiXiu');
+		this.iconCandy   = this.iconCandy.getComponent('iconGameHu');
+		this.iconVQRed   = this.iconVQRed.getComponent('iconGameHu');
+		this.iconLongLan = this.iconLongLan.getComponent('iconGameHu');
+		this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
 		if (cc.RedT.IS_LOGIN){
 			cc.RedT.send({scene:"home"});
@@ -104,7 +106,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		console.log(data);
+		//console.log(data);
 		if (void 0 !== data["unauth"]){
 			this.unAuthorized(data["unauth"]);
 		}
@@ -301,6 +303,30 @@ cc.Class({
 				}
 				if (r10k-h10k[0].bet != 0) {
 					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 2000, true);
+				}
+			});
+
+			// Long Lan
+			Promise.all(cc.RedT.setting.topHu.data['long'].filter(function(temp){
+				return temp.red == true;
+			}))
+			.then(result => {
+				let h100 = result.filter(function(temp){return temp.type == 100});
+				let h1k  = result.filter(function(temp){return temp.type == 1000});
+				let h10k = result.filter(function(temp){return temp.type == 10000});
+
+				let r100 = helper.getOnlyNumberInString(this.iconLongLan.hu100.string);
+				let r1k  = helper.getOnlyNumberInString(this.iconLongLan.hu1k.string);
+				let r10k = helper.getOnlyNumberInString(this.iconLongLan.hu10k.string);
+
+				if (r100-h100[0].bet != 0) {
+					helper.numberTo(this.iconLongLan.hu100, helper.getOnlyNumberInString(this.iconLongLan.hu100.string), h100[0].bet, 2000, true);
+				}
+				if (r1k-h1k[0].bet != 0) {
+					helper.numberTo(this.iconLongLan.hu1k, helper.getOnlyNumberInString(this.iconLongLan.hu1k.string), h1k[0].bet, 2000, true);
+				}
+				if (r10k-h10k[0].bet != 0) {
+					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 2000, true);
 				}
 			});
 		}

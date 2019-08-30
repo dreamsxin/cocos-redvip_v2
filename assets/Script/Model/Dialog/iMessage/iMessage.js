@@ -79,9 +79,6 @@ cc.Class({
 	getContent: function(obj){
 		cc.RedT.send({message:{view: this.message}});
 	},
-	test: function(){
-		cc.RedT.send({message:{test: true}});
-	},
 	reset: function(){
 		this.content.removeAllChildren();
 		this.text.string = this.news.string = "";

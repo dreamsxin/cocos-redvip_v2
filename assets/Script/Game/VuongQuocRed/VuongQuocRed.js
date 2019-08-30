@@ -223,12 +223,12 @@ cc.Class({
 		if (this.Line.data.length < 1) {
 			this.addNotice('Chọn ít nhất 1 dòng');
 		}else{
+			this.setSpin();
 			if (!this.isSpin) {
 				this.node.stopAllActions();
 				void 0 !== this.eflineN && void 0 !== this.H_line_win && this.H_line_win.length && this.efOneLineWin(this.eflineN, false);
 				this.eflineO = this.eflineN = 0;
 				this.isSpin = true;
-				this.setSpin();
 				this.onGetSpin();
 			}
 		}
