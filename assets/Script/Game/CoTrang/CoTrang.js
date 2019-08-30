@@ -120,7 +120,6 @@ cc.Class({
 		this.BigWin.on('play',      this.BigWinPlay,   this);
 		this.EF_Free.on('finished', this.EF_FreeFinish,  this);
 
-		this.NoHu.on('finished', this.NoHuFinish, this);
 		this.NoHu.on('play',     this.NoHuPlay,   this);
 
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
@@ -172,10 +171,14 @@ cc.Class({
 			helper.numberTo(this.NoHu_Label, 0, this.H_win, 2000, true);
 		}, this);
 		this.NoHu.node.runAction(cc.sequence(cc.delayTime(0.3), huong));
+
+		var huongT = cc.callFunc(function(){
+			this.NoHu_close.active = true;
+		}, this);
+		this.NoHu.node.runAction(cc.sequence(cc.delayTime(4), huongT));
 	},
 	NoHuFinish: function(){
 		this.isNoHu = false;
-		this.NoHu_close.active = true;
 		if (this.isAuto) {
 			this.onAuto();
 		}
@@ -184,6 +187,7 @@ cc.Class({
 	},
 	NoHuClose: function(){
 		this.NoHu.node.active = this.NoHu_close.active = false;
+		this.NoHuFinish();
 	},
 	EF_BonusFinish: function(){
 		this.isBonus = false;
@@ -420,6 +424,7 @@ cc.Class({
 		this.buttonLine.pauseSystemEvents();
 		this.buttonSpin.pauseSystemEvents();
 		this.buttonCoint.pauseSystemEvents();
+		this.buttonBet.pauseSystemEvents();
 	},
 	resetSpin: function(){
 		if (this.isAuto) {
@@ -429,6 +434,7 @@ cc.Class({
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
+		this.buttonBet.resumeSystemEvents();
 	},
 	runReels: function(){
 		Promise.all(this.reels.map(function(reel, index) {

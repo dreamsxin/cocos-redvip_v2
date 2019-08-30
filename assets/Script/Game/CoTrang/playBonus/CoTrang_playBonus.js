@@ -26,7 +26,7 @@ cc.Class({
 	onPlay: function(){
 		this.reset();
 		this.node.active = true;
-		this.numberBonus.string = 10;
+		this.numberBonus.string = 5;
 	},
 	onClickBox: function(e) {
 		if (!!this.numberBonus.string) {
