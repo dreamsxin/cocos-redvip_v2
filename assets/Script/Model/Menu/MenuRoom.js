@@ -54,9 +54,9 @@ cc.Class({
 		if (this.game.table2) {
 			if (red) {
 				Promise.all(this.rooms.map(function(room, index){
-					if (index < 2) {
+					if (index < 4) {
 						room.spriteFrame = self.table2[3];
-					}else if (index < 4) {
+					}else if (index < 8) {
 						room.spriteFrame = self.table2[4];
 					}else{
 						room.spriteFrame = self.table2[5];
@@ -64,9 +64,9 @@ cc.Class({
 				}));
 			}else{
 				Promise.all(this.rooms.map(function(room, index){
-					if (index < 2) {
+					if (index < 4) {
 						room.spriteFrame = self.table2[0];
-					}else if (index < 4) {
+					}else if (index < 8) {
 						room.spriteFrame = self.table2[1];
 					}else{
 						room.spriteFrame = self.table2[2];
@@ -76,9 +76,9 @@ cc.Class({
 		}else{
 			if (red) {
 				Promise.all(this.rooms.map(function(room, index){
-					if (index < 2) {
+					if (index < 4) {
 						room.spriteFrame = self.table1[3];
-					}else if (index < 4) {
+					}else if (index < 8) {
 						room.spriteFrame = self.table1[4];
 					}else{
 						room.spriteFrame = self.table1[5];
@@ -86,9 +86,9 @@ cc.Class({
 				}));
 			}else{
 				Promise.all(this.rooms.map(function(room, index){
-					if (index < 2) {
+					if (index < 4) {
 						room.spriteFrame = self.table1[0];
-					}else if (index < 4) {
+					}else if (index < 8) {
 						room.spriteFrame = self.table1[1];
 					}else{
 						room.spriteFrame = self.table1[2];

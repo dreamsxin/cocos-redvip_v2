@@ -111,10 +111,7 @@ cc.Class({
 		this.redhat.insertChild(MiniPanel);
 
 		var self = this;
-		console.log(this);
-
 		this.Line.init(this);
-
 
 		this.BigWin.on('finished',  this.BigWinFinish, this);
 		this.BigWin.on('play',      this.BigWinPlay,   this);
@@ -202,7 +199,6 @@ cc.Class({
 		this.hieuUng();
 	},
 	onData: function(data) {
-		console.log(data);
 		if (void 0 !== data.user){
 			this.userData(data.user);
 			cc.RedT.userData(data.user);
