@@ -187,9 +187,9 @@ cc.Class({
 		this.NoHuFinish();
 	},
 	EF_BonusFinish: function(){
-		this.isBonus = false;
 		this.EF_Bonus.node.active = false;
-		this.gameBonus.onPlay();
+		this.gameBonus.onPlay(this.isBonus);
+		this.isBonus = 0;
 		this.showLineWin(false);
 	},
 	EF_FreeFinish: function(){
@@ -327,7 +327,7 @@ cc.Class({
 			// Nổ Hũ
 			this.NoHu.node.active = true;
 			this.NoHu.play();
-		}else if (this.isBonus){
+		}else if (!!this.isBonus){
 			// Bonus
 			this.EF_Bonus.node.active = true;
 			this.EF_Bonus.play();

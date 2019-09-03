@@ -23,10 +23,10 @@ cc.Class({
 			this.listBox = result;
 		})
 	},
-	onPlay: function(){
+	onPlay: function(box){
 		this.reset();
 		this.node.active = true;
-		this.numberBonus.string = 5;
+		this.numberBonus.string = box;
 	},
 	onClickBox: function(e) {
 		if (!!this.numberBonus.string) {
