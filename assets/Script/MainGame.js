@@ -272,13 +272,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconVQRed.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 2000, true);
+					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 4900, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu1k, helper.getOnlyNumberInString(this.iconVQRed.hu1k.string), h1k[0].bet, 2000, true);
+					helper.numberTo(this.iconVQRed.hu1k, helper.getOnlyNumberInString(this.iconVQRed.hu1k.string), h1k[0].bet, 4900, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 2000, true);
+					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 4900, true);
 				}
 			});
 
@@ -296,13 +296,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconCandy.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu100, helper.getOnlyNumberInString(this.iconCandy.hu100.string), h100[0].bet, 2000, true);
+					helper.numberTo(this.iconCandy.hu100, helper.getOnlyNumberInString(this.iconCandy.hu100.string), h100[0].bet, 4900, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu1k, helper.getOnlyNumberInString(this.iconCandy.hu1k.string), h1k[0].bet, 2000, true);
+					helper.numberTo(this.iconCandy.hu1k, helper.getOnlyNumberInString(this.iconCandy.hu1k.string), h1k[0].bet, 4900, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 2000, true);
+					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 4900, true);
 				}
 			});
 
@@ -320,13 +320,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconLongLan.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu100, helper.getOnlyNumberInString(this.iconLongLan.hu100.string), h100[0].bet, 2000, true);
+					helper.numberTo(this.iconLongLan.hu100, helper.getOnlyNumberInString(this.iconLongLan.hu100.string), h100[0].bet, 4900, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu1k, helper.getOnlyNumberInString(this.iconLongLan.hu1k.string), h1k[0].bet, 2000, true);
+					helper.numberTo(this.iconLongLan.hu1k, helper.getOnlyNumberInString(this.iconLongLan.hu1k.string), h1k[0].bet, 4900, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 2000, true);
+					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 4900, true);
 				}
 			});
 		}

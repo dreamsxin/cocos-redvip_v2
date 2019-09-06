@@ -35,12 +35,12 @@ cc.Class({
 		var notice = notice.getComponent('ThongBaoNoHu');
 		notice.title.string = data.title;
 		notice.users.string = data.name;
-		notice.bet.string   = helper.numberWithCommas(data.bet);
+		notice.bet.string   = data.bet;
 
 		notice.init(this);
 		this.node.addChild(notice.node);
 	},
 	addNews: function(data){
-		cc.RedT.inGame.newsContents.NewsAddText({users: data.name, bet: helper.numberWithCommas(data.bet), game: data.title, status: 1});
+		cc.RedT.inGame.newsContents.NewsAddText({users: data.name, bet: data.bet, game: data.title, status: 1});
 	},
 });
