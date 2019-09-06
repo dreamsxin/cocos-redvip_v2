@@ -152,7 +152,7 @@ cc.Class({
 					var y = -(75*(index+1)-37.5);
 						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
-						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 1500, true);
+						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 4900, true);
 					}
 					if (obj.balans > 0 && !!self.x[obj.x-2]) {
 						temp.xHu.node.active = true;
