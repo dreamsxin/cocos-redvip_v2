@@ -347,7 +347,7 @@ cc.Class({
 		cc.RedT.audio.playUnClick();
 	},
 	fanpage: function(){
-		cc.sys.openURL('https://www.facebook.com/RedVipClub-1180384875447855/');
+		cc.sys.openURL('https://www.facebook.com/RedVip-101994004505333');
 	},
 	android: function(){
 		cc.sys.openURL('http://redvip.club/download/RedVip.apk');
