@@ -13,8 +13,20 @@ cc.Class({
 		contentNowRight: cc.Node,
 		contentHQLeft:   cc.Node,
 		contentHQRight:  cc.Node,
+
+		LabelDate:     cc.Label,
+		LabelDateMore: cc.Label,
+		nodeDateMore:  cc.Node,
+		dataOld: false,
+	},
+	onLoad: function () {
+		this.dateTop = new Date();
+		this.dateTop.setDate(this.dateTop.getDate()-1);
+		let stringTime = this.dateTop.getDate() + '/' + helper.numberPad(this.dateTop.getMonth()+1, 2) + '/' + this.dateTop.getFullYear();
+		this.LabelDate.string = this.LabelDateMore.string = stringTime;
 	},
 	selectEvent: function(event) {
+		this.nodeDateMore.active = false;
 		if (event.target.name == "top") {
 			this.onGetTop();
 		}else if (event.target.name == "homqua") {
@@ -41,13 +53,36 @@ cc.Class({
 		cc.RedT.send({event:{taixiu:{getTop:   true}}});
 	},
 	onGetHomQua: function(){
-		cc.RedT.send({event:{taixiu:{getTopHQ: true}}});
+		!this.dataOld && cc.RedT.send({event:{taixiu:{getTopHQ: true}}});
+	},
+	dateToggle: function(){
+		this.nodeDateMore.active = !this.nodeDateMore.active;
+	},
+	datePlus: function(){
+		let test = test = new Date(this.dateTop);
+		test.setDate(test.getDate()+2);
+		if (new Date() > test) {
+			this.dateTop.setDate(this.dateTop.getDate()+1);
+			this.LabelDateMore.string = helper.numberPad(this.dateTop.getDate(), 2) + '/' + helper.numberPad(this.dateTop.getMonth()+1, 2) + '/' + this.dateTop.getFullYear();
+		}
+	},
+	dateMinus: function(){
+		this.dateTop.setDate(this.dateTop.getDate()-1);
+		this.LabelDateMore.string = helper.numberPad(this.dateTop.getDate(), 2) + '/' + helper.numberPad(this.dateTop.getMonth()+1, 2) + '/' + this.dateTop.getFullYear();
+	},
+	dateView: function(){
+		if (this.LabelDateMore.string != this.LabelDate.string) {
+			this.LabelDate.string = this.LabelDateMore.string;
+			this.onGetHomQua();
+		}
+		this.nodeDateMore.active = false;
 	},
 	onData: function(data){
 		if (!!data.topHT) {
 			this.topHT(data.topHT);
 		}
 		if (!!data.topHQ) {
+			this.dataOld = true;
 			this.topHQ(data.topHQ);
 		}
 	},
