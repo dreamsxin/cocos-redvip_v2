@@ -50,10 +50,10 @@ cc.Class({
 		}));
 	},
 	onGetTop: function(){
-		cc.RedT.send({event:{taixiu:{getTop:   true}}});
+		cc.RedT.send({event:{taixiu:{getTop: true}}});
 	},
 	onGetHomQua: function(){
-		!this.dataOld && cc.RedT.send({event:{taixiu:{getTopHQ: true}}});
+		!this.dataOld && cc.RedT.send({event:{taixiu:{getTopHQ: this.LabelDate.string}}});
 	},
 	dateToggle: function(){
 		this.nodeDateMore.active = !this.nodeDateMore.active;
@@ -72,6 +72,7 @@ cc.Class({
 	},
 	dateView: function(){
 		if (this.LabelDateMore.string != this.LabelDate.string) {
+			this.dataOld = false;
 			this.LabelDate.string = this.LabelDateMore.string;
 			this.onGetHomQua();
 		}
