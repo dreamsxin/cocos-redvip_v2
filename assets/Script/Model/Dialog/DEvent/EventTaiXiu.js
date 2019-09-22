@@ -119,10 +119,10 @@ cc.Class({
 		Promise.all(data.win.map(function(user, index){
 			var item = cc.instantiate(self.item);
             var item = item.getComponent('EventTaiXiu_item');
-            item.top.string   = index+1;
+            item.top.string   = user.top;
             item.users.string = user.name;
-            item.day.string   = user.top;
-            item.gift.string  = helper.numberWithCommas(user.gift);
+            item.day.string   = user.line;
+            item.gift.string  = helper.numberWithCommas(user.reward);
             item.node.children[0].active = !(index&1);
             self.contentHQLeft.addChild(item.node);
 		}));
@@ -130,10 +130,10 @@ cc.Class({
 		Promise.all(data.lost.map(function(user, index){
 			var item = cc.instantiate(self.item);
             var item = item.getComponent('EventTaiXiu_item');
-            item.top.string   = index+1;
+            item.top.string   = user.top;
             item.users.string = user.name;
-            item.day.string   = user.top;
-            item.gift.string  = helper.numberWithCommas(user.gift);
+            item.day.string   = user.line;
+            item.gift.string  = helper.numberWithCommas(user.reward);
             item.node.children[0].active = !(index&1);
             self.contentHQRight.addChild(item.node);
 		}));
