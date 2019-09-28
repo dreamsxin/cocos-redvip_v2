@@ -28,7 +28,10 @@ cc.Class({
     		}else{
     			obj.unSelect()
     		}
-    	}))
+    	}));
+        if (!!this.controll.backT) {
+            this.controll.backT(this.data);
+        }
     },
     onSelect: function(){
         this.background.active = true;

@@ -1,4 +1,6 @@
 
+var Bank = require('Bank');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -19,6 +21,7 @@ cc.Class({
 			default: null,
 			type:    cc.Node,
 		},
+		Bank: Bank,
 	},
 	init(){
 		this.NapRed    = this.NapRed.getComponent('NapRed');
@@ -28,8 +31,9 @@ cc.Class({
 		this.NapRed.init();
 		this.TieuRed.init();
 		this.ChuyenRed.init();
+		this.Bank.init();
 
-		this.body = [this.NapRed, this.TieuRed, this.ChuyenRed];
+		this.body = [this.NapRed, this.TieuRed, this.ChuyenRed, this.Bank];
 		Promise.all(this.header.children.map(function(obj) {
 			return obj.getComponent('itemHeadMenu');
 		}))
@@ -80,6 +84,9 @@ cc.Class({
 		}
 		if (void 0 !== data.chuyen_red){
 			this.ChuyenRed.onData(data.chuyen_red);
+		}
+		if (!!data.bank){
+			this.Bank.onData(data.bank);
 		}
 	},
 });

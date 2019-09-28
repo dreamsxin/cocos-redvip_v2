@@ -27,6 +27,7 @@ cc.Class({
 			default: null,
 			type:    cc.Node,
 		},
+		lichSuBank: cc.Node,
 	},
 	onLoad(){
 		this.history = "LichSuNap";
@@ -34,7 +35,9 @@ cc.Class({
 		this.lichSuRut    = this.lichSuRut.getComponent('LichSuRut');
 		this.lichSuMuaXu  = this.lichSuMuaXu.getComponent('LichSuMuaXu');
 		this.lichSuChuyen = this.lichSuChuyen.getComponent('LichSuChuyen');
-		this.body = [this.lichSuNap.node, this.lichSuRut.node, this.lichSuMuaXu.node, this.lichSuChuyen.node];
+		this.lichSuBank   = this.lichSuBank.getComponent('LichSuBank');
+
+		this.body = [this.lichSuNap.node, this.lichSuRut.node, this.lichSuMuaXu.node, this.lichSuChuyen.node, this.lichSuBank.node];
 
 		this.pagination = this.pagination.getComponent('Pagination');
 		this.pagination.init(this);
@@ -80,6 +83,10 @@ cc.Class({
 			case "LichSuChuyen":
 				this.lichSuChuyen.get_data(page);
 			break;
+
+			case "LichSuBank":
+				this.lichSuChuyen.get_data(page);
+			break;
 		}
 	},
 	onData: function(data){
@@ -96,6 +103,9 @@ cc.Class({
 		}
 		if (void 0 !== data.chuyen_red){
 			this.lichSuChuyen.onData(data.chuyen_red);
+		}
+		if (void 0 !== data.bank){
+			this.lichSuBank.onData(data.bank);
 		}
 	},
 });

@@ -55,7 +55,7 @@ cc.Class({
 		var self = this;
 		this.isLoaded = false;
 
-		this.editboxs = [this.nickname, this.renickname, this.red, this.messenger];
+		this.editboxs = [this.nickname, this.renickname, this.red, this.messenger, this.otp];
 		this.keyHandle = function(t) {
 			return t.keyCode === cc.macro.KEY.tab ? (self.isTop() && self.changeNextFocusEditBox(),
 				t.preventDefault && t.preventDefault(),
@@ -134,13 +134,13 @@ cc.Class({
 			error = "Tên nhân vật không khớp.!!"
 		} else if(helper.getOnlyNumberInString(this.red.string) < 10000){
 			error = "Số tiền chuyển tối thiểu là 10.000 Red."
-		//} else if(helper.isEmpty(this.otp.string)){
-		//	error = "Vui lòng nhập mã OTP."
+		} else if(helper.isEmpty(this.otp.string)){
+			error = "Vui lòng nhập mã OTP."
 		}
 		if (error)
 			cc.RedT.inGame.notice.show({title: "CHUYỂN RED", text: error});
 		else{
-			var data = {name: this.nickname.string, red: helper.getOnlyNumberInString(this.red.string)};
+			var data = {name:this.nickname.string, red:helper.getOnlyNumberInString(this.red.string), otp:this.otp.string};
 			if (!helper.isEmpty(this.messenger.string.trim())) {
 				data = Object.assign(data, {message: this.messenger.string});
 			}
@@ -237,7 +237,7 @@ cc.Class({
 		}
 	},
 	onClickOTP: function(){
-		//cc.RedT.send({otp:{type: this.typeOTP}});
+		cc.RedT.send({otp:{type: this.typeOTP}});
 	},
 	changerTypeOTP: function(e){
 		this.typeOTP = e.node.name;

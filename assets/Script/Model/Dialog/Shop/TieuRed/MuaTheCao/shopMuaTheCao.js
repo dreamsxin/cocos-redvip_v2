@@ -55,7 +55,7 @@ cc.Class({
 	init(){
 		var self = this;
 		this.isLoaded = false;
-		this.editboxs = [this.editSoLuong];
+		this.editboxs = [this.editSoLuong, this.editOTP];
 		this.keyHandle = function(t) {
 			return t.keyCode === cc.macro.KEY.tab ? (self.isTop() && self.changeNextFocusEditBox(),
 				t.preventDefault && t.preventDefault(),
@@ -168,14 +168,14 @@ cc.Class({
 		var isN = this.editSoLuong.string>>0;
 		if (isN > 3 || isN < 0) {
 			cc.RedT.inGame.notice.show({title: "MUA THẺ", text: "Số lượng không hợp lệ..."})
-		//}else if(this.editOTP.string.length != 4){
-		//	cc.RedT.inGame.notice.show({title: "LỖI", text: "Mã OTP không đúng..."})
+		}else if(this.editOTP.string.length != 4){
+			cc.RedT.inGame.notice.show({title: "LỖI", text: "Mã OTP không đúng..."})
 		}else{
-			cc.RedT.send({shop:{mua_the:{nhamang: this.NhanhMang.string, menhgia: helper.getOnlyNumberInString(this.MenhGia.string), soluong: this.editSoLuong.string}}});
+			cc.RedT.send({shop:{mua_the:{nhamang:this.NhanhMang.string, menhgia:helper.getOnlyNumberInString(this.MenhGia.string), soluong:this.editSoLuong.string, otp:this.editOTP.string}}});
 		}
 	},
 	onClickOTP: function(){
-		cc.RedT.send({otp:{type: this.typeOTP}});
+		cc.RedT.send({otp:{type:this.typeOTP}});
 	},
 	changerTypeOTP: function(e){
 		this.typeOTP = e.node.name;

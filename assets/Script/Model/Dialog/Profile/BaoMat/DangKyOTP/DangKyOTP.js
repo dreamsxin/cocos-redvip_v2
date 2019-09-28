@@ -85,7 +85,7 @@ cc.Class({
         if (!helper.checkPhoneValid(this.phone.string)){
             cc.RedT.inGame.notice.show({title:'LỖI!', text: 'Số điện thoại không hợp lệ.'});
         }else{
-            cc.RedT.send({user:{security:{sendOTP: this.phone.string}}});
+            cc.RedT.send({user:{security:{sendOTP:this.phone.string}}});
         }
     },
     onRegClick: function() {

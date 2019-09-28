@@ -24,9 +24,6 @@ cc.Class({
 	get_data: function(page = 1){
 		cc.RedT.send({user:{history:{chuyen_red:{page:page}}}});
 	},
-	//onDisable: function () {
-	//},
-
 	onData: function(data){
 		Promise.all(this.content.map(function(obj, index){
 			var dataT = data[index];
