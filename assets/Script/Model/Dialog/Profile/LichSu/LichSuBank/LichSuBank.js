@@ -26,7 +26,7 @@ cc.Class({
             var dataT = data[index];
             if (void 0 !== dataT) {
                 obj.node.active  = true;
-                obj.GD.string    = !!dataT.id ? dataT.id : '';
+                obj.GD.string    = !!dataT.GD ? dataT.GD : '';
                 obj.time.string  = Helper.getStringDateByTime(dataT.time);
                 obj.bank.string  = dataT.bank.toUpperCase();
                 obj.act.string   = dataT.type == 0 ? 'NẠP' : 'RÚT';
