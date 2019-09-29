@@ -27,7 +27,7 @@
     "portrait": false,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.redvip",
+  "packageName": "org.cocos2d.bem68",
   "privateKey": "",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",
@@ -35,7 +35,7 @@
     "zip": false
   },
   "startScene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
-  "title": "RedVip",
+  "title": "Bem68",
   "webOrientation": "landscape",
   "wechatgame": {
     "REMOTE_SERVER_ROOT": "",

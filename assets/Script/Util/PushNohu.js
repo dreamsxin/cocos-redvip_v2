@@ -35,7 +35,7 @@ cc.Class({
 		var notice = notice.getComponent('ThongBaoNoHu');
 		notice.title.string = data.title;
 		notice.users.string = data.name;
-		notice.bet.string   = data.bet;
+		notice.bet.string   = helper.numberWithCommas(data.bet);
 
 		notice.init(this);
 		this.node.addChild(notice.node);

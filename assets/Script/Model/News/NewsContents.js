@@ -1,4 +1,6 @@
 
+var helper = require('Helper');
+
 cc.Class({
 	extends: cc.Component,
 	properties: {
@@ -37,7 +39,7 @@ cc.Class({
 				item = item.getComponent('NewsItem');
 
 			item.users.string = text.users;
-			item.bet.string   = text.bet;
+			item.bet.string   = helper.numberWithCommas(text.bet);
 			item.game.string  = text.game;
 
 			self.node.addChild(item.node);
@@ -62,7 +64,7 @@ cc.Class({
 			}
 		}
 		item.users.string = text.users;
-		item.bet.string   = text.bet;
+		item.bet.string   = helper.numberWithCommas(text.bet);
 		item.game.string  = text.game;
 
 		this.node.addChild(item.node);

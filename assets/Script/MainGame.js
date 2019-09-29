@@ -350,7 +350,7 @@ cc.Class({
 		cc.sys.openURL('https://www.facebook.com/RedVip-101994004505333');
 	},
 	android: function(){
-		cc.sys.openURL('http://redvip.club/download/RedVip.apk');
+		cc.sys.openURL('http://bem68.com/download/Bem68.apk');
 	},
 
 /**
