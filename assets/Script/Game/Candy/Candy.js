@@ -153,7 +153,6 @@ cc.Class({
 		this.hieuUng();
 	},
 	onData: function(data) {
-		//console.log(data);
 		if (void 0 !== data.user){
 			this.userData(data.user);
 			cc.RedT.userData(data.user);

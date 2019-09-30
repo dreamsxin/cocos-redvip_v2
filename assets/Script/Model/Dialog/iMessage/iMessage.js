@@ -66,7 +66,6 @@ cc.Class({
 			}))
 			.then(result => {
 				result = result.length;
-				console.log(result);
 				if (result > 0) {
 					this.news.node.active = true;
 					this.news.string = result;

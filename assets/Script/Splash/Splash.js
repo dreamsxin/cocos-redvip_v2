@@ -187,7 +187,6 @@ cc.Class({
             // Prepend the manifest's search path
             var searchPaths = jsb.fileUtils.getSearchPaths();
             var newPaths = this._am.getLocalManifest().getSearchPaths();
-            console.log(JSON.stringify(newPaths));
             Array.prototype.unshift.apply(searchPaths, newPaths);
             // This value will be retrieved and appended to the default search path during game startup,
             // please refer to samples/js-tests/main.js for detailed usage.

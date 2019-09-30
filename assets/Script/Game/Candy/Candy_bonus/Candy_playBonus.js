@@ -56,7 +56,6 @@ cc.Class({
     reset: function(){
         var self = this;
         Promise.all(this.listBox.map(function(box){
-            console.log(box);
             var icon = (Math.random()*5)>>0;
             box.item.spriteFrame = self.icons[icon];
             box.text.string      = "";
