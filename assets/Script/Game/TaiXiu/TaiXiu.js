@@ -9,6 +9,7 @@ cc.Class({
 		TX_Main:    TX_Main,
 		TX_ThongKe: TX_ThongKe,
 		TX_Top:     TX_Top,
+		board:      true,
 	},
 	init(obj){
 		cc.RedT.setting.taixiu = cc.RedT.setting.taixiu || {getLogs: false};

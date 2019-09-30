@@ -12,6 +12,10 @@ cc.Class({
 			default: null,
 			type:    cc.Node
 		},
+		inputL: cc.Node,
+		inputR: cc.Node,
+		inputLTxt: cc.Label,
+		inputRTxt: cc.Label,
 		inputLeft: {
 			default: null,
 			type:    cc.EditBox
@@ -272,10 +276,13 @@ cc.Class({
 				noticeComponent.text.string = "Tiền cược phải lớn hơn 1.000 " + (self.red ? "Red" : "Xu");
 				self.notice.addChild(notice);
 			}else{
-				cc.RedT.send({taixiu: {cuoc: {red: self.red, taixiu: self.taixiu, select: (self.input.node.name == "inputLeft"), bet: bet}}});
+				cc.RedT.send({taixiu: {cuoc: {red: self.red, taixiu: self.taixiu, select: (self.inputOld == "left"), bet: bet}}});
 			}
 		}
-
+		if (this.RedT.board) {
+			this.inputL.active = this.inputR.active = false;
+			this.inputLeft.node.active = this.inputRight.node.active = true;
+		}
 	},
 	onEnable: function () {
 		this.background.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -284,7 +291,7 @@ cc.Class({
 		this.background.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.background.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
 
-		cc.sys.isBrowser && this.addEvent();
+		this.RedT.board && cc.sys.isBrowser && this.addEvent();
 		this.nodeTimePopup.active = false;
 	},
 	onDisable: function () {
@@ -294,7 +301,7 @@ cc.Class({
 		this.background.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.background.off(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
 
-		cc.sys.isBrowser && this.removeEvent();
+		this.RedT.board && cc.sys.isBrowser && this.removeEvent();
 		this.clean();
 		!!cc.RedT.IS_LOGIN && (this.nodeTimePopup.active = true);
 	},
@@ -395,13 +402,14 @@ cc.Class({
 	},
 	onSelectInput: function(event, select){
 		this.TX_Board.node.active = true;
+		this.inputOld = select;
 		switch(select) {
 			case 'right':
-				this.input = this.inputRight;
+				this.input = this.RedT.board ? this.inputRight : this.inputRTxt;
 			break;
 
 			case 'left':
-				this.input = this.inputLeft;
+				this.input = this.RedT.board ? this.inputLeft : this.inputLTxt;
 			break;
 		}
 	},
