@@ -347,7 +347,7 @@ cc.Class({
 		cc.RedT.audio.playUnClick();
 	},
 	fanpage: function(){
-		cc.sys.openURL('https://www.facebook.com/RedVip-101994004505333');
+		cc.sys.openURL('http://bem68.com/fanpage/');
 	},
 	android: function(){
 		cc.sys.openURL('http://bem68.com/download/Bem68.apk');

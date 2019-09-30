@@ -3,31 +3,13 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		header: {
-			default: null,
-			type:    cc.Node,
-		},
-		pagination: {
-			default: null,
-			type: cc.Node
-		},
-		lichSuNap: {
-			default: null,
-			type:    cc.Node,
-		},
-		lichSuRut: {
-			default: null,
-			type:    cc.Node,
-		},
-		lichSuMuaXu: {
-			default: null,
-			type:    cc.Node,
-		},
-		lichSuChuyen: {
-			default: null,
-			type:    cc.Node,
-		},
-		lichSuBank: cc.Node,
+		header:       cc.Node,
+		pagination:   cc.Node,
+		lichSuNap:    cc.Node,
+		lichSuRut:    cc.Node,
+		lichSuMuaXu:  cc.Node,
+		lichSuChuyen: cc.Node,
+		lichSuBank:   cc.Node,
 	},
 	onLoad(){
 		this.history = "LichSuNap";
