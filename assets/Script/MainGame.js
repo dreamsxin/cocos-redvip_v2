@@ -349,6 +349,9 @@ cc.Class({
 	fanpage: function(){
 		cc.sys.openURL('http://bem68.com/fanpage/');
 	},
+	ios: function(){
+		cc.sys.openURL('http://bem68.com/help/ios');
+	},
 	android: function(){
 		cc.sys.openURL('http://bem68.com/download/Bem68.apk');
 	},

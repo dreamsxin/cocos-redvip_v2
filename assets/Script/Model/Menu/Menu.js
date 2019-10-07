@@ -75,14 +75,23 @@ cc.Class({
     openMiniGame: function(e, name){
         cc.RedT.MiniPanel[name].openGame();
     },
+    regGame: function(e, name){
+        cc.RedT.audio.playClick();
+        if (cc.RedT.IS_LOGIN){
+            cc.RedT.inGame.loading.active = true;
+            cc.RedT.send({g:{reg:name}});
+        }else{
+            cc.RedT.inGame.dialog.showSignIn();
+        }
+    },
     openGame: function(e, name){
         cc.RedT.audio.playClick();
         if (cc.RedT.IS_LOGIN){
             cc.RedT.inGame.loading.active = true;
             cc.director.loadScene(name);
-        }
-        else
+        }else{
             cc.RedT.inGame.dialog.showSignIn();
+        }
     },
     openTXCL: function(e, taixiu){ // Open Tài Xỉu | Chẵn Lẻ
         cc.RedT.MiniPanel.TaiXiu.openGame(null, taixiu);

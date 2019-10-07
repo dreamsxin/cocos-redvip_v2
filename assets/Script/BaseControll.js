@@ -137,6 +137,5 @@ module.exports = {
 			this.user.vipNext = data.vipNext;
 		}
 
-		
 	},
 }
