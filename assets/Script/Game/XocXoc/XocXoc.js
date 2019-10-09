@@ -1,4 +1,7 @@
 
+let helper = require('Helper');
+let notice = require('Notice');
+
 cc.Class({
     extends: cc.Component,
 
@@ -45,7 +48,11 @@ cc.Class({
         dot_white: cc.SpriteFrame,
 
         redH:    cc.Node,
-        notice:  cc.Node,
+        miniNotice:  cc.Node,
+
+        MiniPanel: cc.Prefab,
+        loading:   cc.Node,
+        notice:    notice,
 
         red: true,
     },
@@ -56,5 +63,52 @@ cc.Class({
     */
     onLoad () {
         console.log(this);
+        cc.RedT.inGame = this;
+        var MiniPanel = cc.instantiate(this.MiniPanel);
+        cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
+        this.redH.insertChild(MiniPanel);
+        cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
+
+        this.me_name.string = cc.RedT.user.name;
+        this.me_balans.string = helper.numberWithCommas(cc.RedT.user.red);
+    },
+    onData: function(data) {
+        console.log(data);
+        if (void 0 !== data.user){
+			this.userData(data.user);
+			cc.RedT.userData(data.user);
+		}
+		if (void 0 !== data.xocxoc){
+			this.xocxoc(data.xocxoc);
+		}
+		if (void 0 !== data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (void 0 !== data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (void 0 !== data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+    },
+    backGame: function(){
+        cc.RedT.send({g:{xocxoc:{outgame:true}}});
+        this.loading.active = true;
+        void 0 !== this.timeOut && clearTimeout(this.timeOut);
+        cc.director.loadScene('MainGame');
+    },
+    signOut: function(){
+        cc.director.loadScene('MainGame', function(){
+            cc.RedT.inGame.signOut();
+        });
+    },
+    userData: function(data){
+    	if (this.red) {
+			this.me_balans.string = helper.numberWithCommas(data.red);
+		}else{
+			this.me_balans.string = helper.numberWithCommas(data.xu);
+		}
+    },
+    xocxoc: function(data){
     },
 });
