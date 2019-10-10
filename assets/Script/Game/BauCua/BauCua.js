@@ -284,9 +284,9 @@ cc.Class({
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.timeInterval = setInterval(function() {
 			if (cc.RedT.setting.baucua.time_remain > 61) {
-				var time = helper.numberPad(cc.RedT.setting.baucua.time_remain-62, 2);
+				let time = helper.numberPad(cc.RedT.setting.baucua.time_remain-62, 2);
 				this.labelTime.node.color = cc.Color.RED;
-				this.labelTime.string = helper.numberPad(time, 2);
+				this.labelTime.string = time;
 				this.titleTime.string = "Xem phiên";
 				if (cc.RedT.setting.baucua.time_remain < 66) {
 					this.Animation.node.active = false;
@@ -298,7 +298,7 @@ cc.Class({
 				}
 				this.titleTime.string = "Đặt cược"
 				if (cc.RedT.setting.baucua.time_remain > 0) {
-					var time = helper.numberPad(cc.RedT.setting.baucua.time_remain-1, 2);
+					let time = helper.numberPad(cc.RedT.setting.baucua.time_remain-1, 2);
 					this.labelTime.string = time;
 					this.labelTime.node.color = cc.Color.WHITE
 				}else clearInterval(this.timeInterval);

@@ -36,11 +36,6 @@ cc.Class({
 			type: cc.AudioClip
 		},
 
-		audioClick: {
-			default: null,
-			type: cc.AudioClip
-		},
-
 		redhat: cc.Node,
 		reels: {
 			default: [],
