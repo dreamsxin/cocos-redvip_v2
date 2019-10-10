@@ -38,6 +38,9 @@ cc.Class({
         users_bg:    cc.Node,
         users_count: cc.Label,
 
+        nodeDia: cc.Node,
+        nodeBat: cc.Node,
+
         chip_1000:    cc.SpriteFrame,
         chip_10000:   cc.SpriteFrame,
         chip_50000:   cc.SpriteFrame,
