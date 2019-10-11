@@ -585,7 +585,7 @@ cc.Class({
 		newN.node.scale    = 0.67;
 
 		nodeBox.children[1].addChild(newN.node);
-		newN.node.runAction(cc.spawn(cc.scaleTo(0.3, 0.3), cc.moveTo(0.3, cc.v2((Math.random()*(max.x+1))>>0, (Math.random()*(max.y+1))>>0))));
+		newN.node.runAction(cc.sequence(cc.spawn(cc.scaleTo(0.3, 0.3), cc.moveTo(0.3, cc.v2((Math.random()*(max.x+1))>>0, (Math.random()*(max.y+1))>>0))), cc.callFunc(function(){this._playSFX(this.audioSingleChip)}, this)));
 	},
 	meChip: function(data){
 		let nodeBet = null;
@@ -635,7 +635,8 @@ cc.Class({
 		newN.node.position = position;
 
 		nodeBox.children[1].addChild(newN.node);
-		newN.node.runAction(cc.spawn(cc.scaleTo(0.3, 0.3), cc.moveTo(0.3, cc.v2((Math.random()*(max.x+1))>>0, (Math.random()*(max.y+1))>>0))));
+		newN.node.runAction(cc.sequence(cc.spawn(cc.scaleTo(0.3, 0.3), cc.moveTo(0.3, cc.v2((Math.random()*(max.x+1))>>0, (Math.random()*(max.y+1))>>0))), cc.callFunc(function(){this._playSFX(this.audioSingleChip)}, this)));
+		//newN.node.runAction(cc.spawn(cc.scaleTo(0.3, 0.3), cc.moveTo(0.3, cc.v2((Math.random()*(max.x+1))>>0, (Math.random()*(max.y+1))>>0))));
 	},
 	updateMe: function(data){
 		if (data.red) {
