@@ -49,13 +49,11 @@ cc.Class({
 
 		labelTime: cc.Label,
 		timeWait:  cc.Label,
-		nodeTime:  cc.Node,
 		nodeWait:  cc.Node,
 
 		users_bg:    cc.Node,
 		users_count: cc.Label,
 
-		nodeDia: cc.Node,
 		nodeBat: cc.Node,
 
 		chip_1000:    cc.SpriteFrame,
@@ -67,11 +65,24 @@ cc.Class({
 		dot_red:   cc.SpriteFrame,
 		dot_white: cc.SpriteFrame,
 
-		redH:    cc.Node,
-		miniNotice:  cc.Node,
+		dot: {
+			default: [],
+			type: cc.Sprite,
+		},
 
-		Progress: cc.ProgressBar,
+		log_chan: cc.Label,
+		log_le:   cc.Label,
+		log_top:  cc.Node,
+		logMain:  cc.Node,
+
+		redH:    cc.Node,
+		miniNotice: cc.Node,
+
 		Animation: cc.Animation,
+
+		bet:     cc.Node,
+        nodeRed: cc.Node,
+		nodeXu:  cc.Node,
 
 		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
@@ -84,16 +95,50 @@ cc.Class({
 	var position = node.parent.convertToWorldSpaceAR(node.position);
 	position = canvasNode.convertToNodeSpaceAR(position);
 	*/
+	ctor: function(){
+		this.logs = [];
+		this.nan  = false;
+		this.cuoc = 1000;
+		this.actionBatOpen  = cc.moveTo(0.5, cc.v2(0, 246));
+		this.actionBatClose = cc.sequence(cc.moveTo(0.5, cc.v2(0, 0)), cc.delayTime(0.5), cc.callFunc(function(){
+			this._playSFX(this.audioXocDia);
+			this.Animation.play();
+			this.resetData();
+		}, this));
+		this.maxDot = {x:44, y:44};
+
+		this.maxBox1_3 = {x:103, y:104};
+		this.maxBox1_1 = {x:121, y:184};
+	},
 	onLoad () {
 		console.log(this);
 		cc.RedT.inGame = this;
 		var MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redH.insertChild(MiniPanel);
-		cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
+
+		this.logMain = this.logMain.children.map(function(obj){
+			return obj.children[0].getComponent(cc.Sprite);
+		});
+
+		this.logMain.reverse();
+
+		this.log_top = this.log_top.children.map(function(obj){
+			let data = {'cell':obj};
+			let cell = obj.children.map(function(obj){
+				return {c:obj.children[0].getComponent(cc.Sprite), t:obj.children[1].getComponent(cc.Label)};
+			});
+			cell.reverse();
+			data.data = cell;
+			return data;
+		});
+
+		this.log_top.reverse();
 
 		this.me_name.string = cc.RedT.user.name;
 		this.me_balans.string = helper.numberWithCommas(cc.RedT.user.red);
+
+		cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
 	},
 	_playSFX: function(clip) {
 		if (cc.RedT.IS_SOUND){
@@ -172,42 +217,100 @@ cc.Class({
 		if (!!data.time) {
 			this.time_remain = data.time-1;
 			this.playTime();
-			if (this.time_remain <= 30) {
-				this.startProgress(this.time_remain, (this.time_remain+2)/30);
+			if (this.time_remain > 32 && data.logs.length) {
+				this.nodeBat.position = cc.v2(0, 246);
+				this.setDot([data.logs[0].red1, data.logs[0].red2, data.logs[0].red3, data.logs[0].red4]);
 			}
 		}
 
 		if (!!data.data) {
 			this.updateData(data.data);
 		}
+
+		if (!!data.logs) {
+			this.logs = data.logs;
+			this.setLogs();
+		}
+		if (!!data.chats) {
+		}
+		if (!!data.cuoc) {
+		}
 	},
 	xocxocFinish: function(data){
+		let dice = {red1:data[0], red2:data[1], red3:data[2], red4:data[3]};
+		this.logs.unshift(dice);
+		this.logs.length > 48 && this.logs.pop();
+		this.setDot(data);
+		this.labelTime.node.active = false;
 		this._playSFX(this.audioMoBat);
-		this.time_remain = 41;
+		this.time_remain = 43;
 		this.playTime();
+
+		if (!this.nan) {
+			this.nodeBat.runAction(this.actionBatOpen);
+			this.setLogs();
+		}
+	},
+	setDot: function(data){
+		let self = this;
+		let Dot_x = (Math.random()*(this.maxDot.x+1))>>0;
+		let Dot_y = (Math.random()*(this.maxDot.y+1))>>0;
+		let DotCheck = Dot_y-Dot_x;
+		if (DotCheck > 22) {
+			Dot_y = Dot_y-Dot_y/1.4;
+		}
+		this.dot[0].node.position = cc.v2(Dot_x, Dot_y);
+
+		Dot_x = (Math.random()*(this.maxDot.x+1))>>0;
+		Dot_y = (Math.random()*(this.maxDot.y+1))>>0;
+		DotCheck = Dot_y-Dot_x;
+		if (DotCheck > 22) {
+			Dot_y = Dot_y-Dot_y/1.4;
+		}
+		this.dot[1].node.position = cc.v2(Dot_x, Dot_y);
+
+		Dot_x = (Math.random()*(this.maxDot.x+1))>>0;
+		Dot_y = (Math.random()*(this.maxDot.y+1))>>0;
+		DotCheck = Dot_y-Dot_x;
+		if (DotCheck > 22) {
+			Dot_y = Dot_y-Dot_y/1.4;
+		}
+		this.dot[2].node.position = cc.v2(Dot_x, Dot_y);
+
+		Dot_x = (Math.random()*(this.maxDot.x+1))>>0;
+		Dot_y = (Math.random()*(this.maxDot.y+1))>>0;
+		DotCheck = Dot_y-Dot_x;
+		if (DotCheck > 22) {
+			Dot_y = Dot_y-Dot_y/1.4;
+		}
+		this.dot[3].node.position = cc.v2(Dot_x, Dot_y);
+
+		this.dot.forEach(function(dot, index){
+			let check = data[index];
+			if (check) {
+				dot.spriteFrame = self.dot_red;
+			}else{
+				dot.spriteFrame = self.dot_white;
+			}
+		});
 	},
 	playTime: function(){
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.timeInterval = setInterval(function(){
-			if (this.time_remain > 31) {
-				var time = helper.numberPad(this.time_remain-31, 2);
+			if (this.time_remain > 32) {
+				var time = helper.numberPad(this.time_remain-33, 2);
 				this.timeWait.string = time;
-				this.nodeTime.active = false;
+				this.labelTime.node.active = false;
 				this.nodeWait.active = true;
-			}else if(this.time_remain === 31){
+			}else if(this.time_remain > 30){
 				// Xoc Dia
-				this.nodeTime.active = false;
+				this.labelTime.node.active = false;
 				this.nodeWait.active = false;
-				this._playSFX(this.audioXocDia);
-				this.Animation.play();
-				this.resetData();
+				this.time_remain === 32 && this.nodeBat.runAction(this.actionBatClose);
 			}else{
-				if (this.time_remain === 30) {
-					this.startProgress(30);
-				}
 				if (this.time_remain > -1) {
 					var time = helper.numberPad(this.time_remain, 2);
-					this.nodeTime.active  = true;
+					this.labelTime.node.active  = true;
 					this.nodeWait.active  = false;
 					this.labelTime.string = time;
 
@@ -242,12 +345,12 @@ cc.Class({
 		}
 	},
 	resetData: function(){
-		this.total_chan.string   = '';
-		this.total_le.string     = '';
-		this.total_red3.string   = '';
-		this.total_red4.string   = '';
-		this.total_white3.string = '';
-		this.total_white4.string = '';
+		this.total_chan.string   = '0';
+		this.total_le.string     = '0';
+		this.total_red3.string   = '0';
+		this.total_red4.string   = '0';
+		this.total_white3.string = '0';
+		this.total_white4.string = '0';
 
 		this.me_chan.string   = '';
 		this.me_le.string     = '';
@@ -256,17 +359,116 @@ cc.Class({
 		this.me_white3.string = '';
 		this.me_white4.string = '';
 	},
-	startProgress: function(time, progress = 1) {
-		this.Progress.progress = progress;
-		this.progressTime = time;
-	},
-	update: function(t){
-		if (!!this.progressTime) {
-			this.Progress.progress = this.Progress.progress-(t/this.progressTime);
-			if (this.Progress.progress <= 0) {
-				this.Progress.progress = 0;
-				this.progressTime = 0;
+	setLogs: function(){
+		let self = this;
+		this.logMain.forEach(function(obj, index){
+			let data = self.logs[index];
+			if (data) {
+				obj.node.active = true;
+				data = Object.values(data);
+				let gameChan = 0;     // Là chẵn
+				data.forEach(function(kqH){
+					if (kqH) {
+						gameChan++;
+					}
+				});
+				if (!(gameChan%2)) {
+					obj.spriteFrame = self.dot_white;
+				}else{
+					obj.spriteFrame = self.dot_red;
+				}
+			}else{
+				obj.node.active = false;
 			}
-		}
+		});
+
+		let tmp_DS = -1;
+		let tmp_arrA = [];
+		let tmp_arrB = [];
+		let c_chan = 0;
+		let c_le = 0;
+
+		let newArr = self.logs.slice();
+		newArr.reverse();
+		newArr.forEach(function(newDS){
+			let data = Object.values(newDS);
+			let gameChan = 0;
+			data.forEach(function(kqH){
+				if (kqH) {
+					gameChan++;
+				}
+			});
+
+			let type  = !(gameChan%2);
+			if (tmp_DS === -1) {
+				tmp_DS = type;
+			}
+			if (type !== tmp_DS || tmp_arrB.length > 3) {
+				tmp_DS = type;
+				//tmp_arrB.reverse();
+				tmp_arrA.push(tmp_arrB);
+				tmp_arrB = [];
+			}
+			if (type === tmp_DS) {
+				tmp_arrB.push(gameChan)
+			}
+		});
+
+		//tmp_arrB.reverse();
+		tmp_arrA.push(tmp_arrB);
+		tmp_arrA.reverse();
+		tmp_arrA = tmp_arrA.slice(0, 12);
+
+		this.log_top.forEach(function(obj, index){
+			let data = tmp_arrA[index];
+			if (data) {
+				obj.cell.active = true;
+
+				obj.data.forEach(function(cell, j){
+					let jD = data[j];
+					if (void 0 !== jD) {
+						cell.c.node.parent.active = true;
+						cell.c.spriteFrame = !(jD%2) ? (jD === 4 ? self.dot_red : self.dot_white) : self.dot_red;
+						cell.t.string = jD === 0 ? 4 : jD;
+
+						if (!(jD%2)) {
+							c_chan++;
+						}else{
+							c_le++;
+						}
+					}else{
+						cell.c.node.parent.active = false;
+					}
+				});
+			}else{
+				obj.cell.active = false;
+			}
+		});
+
+		this.log_chan.string = c_chan;
+		this.log_le.string   = c_le;
+	},
+	changerBet: function(event, bet){
+		let target = event.target;
+		this.cuoc = target.name;
+		this.bet.children.forEach(function(obj){
+			if (obj == target) {
+				obj.children[0].active = false;
+				obj.children[1].active = true;
+				obj.pauseSystemEvents();
+			}else{
+				obj.children[0].active = true;
+				obj.children[1].active = false;
+				obj.resumeSystemEvents();
+			}
+		})
+	},
+	changerCoint: function(){
+		this.red            = !this.red;
+		this.nodeRed.active = !this.nodeRed.active;
+		this.nodeXu.active  = !this.nodeXu.active;
+	},
+	onCuoc: function(event, cuoc){
+		console.log(cuoc);
 	},
 });
