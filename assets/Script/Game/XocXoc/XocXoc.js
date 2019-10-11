@@ -80,6 +80,8 @@ cc.Class({
 
 		Animation: cc.Animation,
 
+		prefabNotice: cc.Prefab,
+
 		bet:     cc.Node,
         nodeRed: cc.Node,
 		nodeXu:  cc.Node,
@@ -98,7 +100,7 @@ cc.Class({
 	ctor: function(){
 		this.logs = [];
 		this.nan  = false;
-		this.cuoc = 1000;
+		this.cuoc = '1000';
 		this.actionBatOpen  = cc.moveTo(0.5, cc.v2(0, 246));
 		this.actionBatClose = cc.sequence(cc.moveTo(0.5, cc.v2(0, 0)), cc.delayTime(0.5), cc.callFunc(function(){
 			this._playSFX(this.audioXocDia);
@@ -197,7 +199,6 @@ cc.Class({
 			this.xocxocIngame(data.ingame);
 		}
 		if (!!data.finish) {
-			// ket qua
 			this.xocxocFinish(data.finish);
 		}
 		if (!!data.log) {
@@ -206,7 +207,19 @@ cc.Class({
 		if (!!data.top) {
 			//top win
 		}
-		if (!!data.status) {
+
+		if (!!data.chip) {
+			// người chơi khác đặt
+		}
+		if (!!data.mechip) {
+			// người chơi hiện tại đặt
+		}
+		if (!!data.me) {
+			//
+		}
+
+		if (void 0 !== data.notice) {
+			this.addNotice(data.notice);
 		}
 	},
 	xocxocIngame: function(data){
@@ -468,7 +481,13 @@ cc.Class({
 		this.nodeRed.active = !this.nodeRed.active;
 		this.nodeXu.active  = !this.nodeXu.active;
 	},
-	onCuoc: function(event, cuoc){
-		console.log(cuoc);
+	onCuoc: function(event, box){
+		cc.RedT.send({g:{xocxoc:{cuoc:{red:this.red, cuoc:this.cuoc, box:box}}}});
+	},
+	addNotice:function(text){
+		var notice = cc.instantiate(this.prefabNotice)
+		var noticeComponent = notice.getComponent('mini_warning')
+		noticeComponent.text.string = text;
+		this.miniNotice.addChild(notice);
 	},
 });

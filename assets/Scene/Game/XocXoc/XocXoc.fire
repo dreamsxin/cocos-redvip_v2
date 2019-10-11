@@ -27801,6 +27801,9 @@
     "Animation": {
       "__id__": 37
     },
+    "prefabNotice": {
+      "__uuid__": "33b0ebea-3392-4bf8-aa8c-7ea614252597"
+    },
     "bet": {
       "__id__": 372
     },
