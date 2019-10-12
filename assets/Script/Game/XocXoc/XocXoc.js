@@ -146,7 +146,6 @@ cc.Class({
 		};
 	},
 	onLoad () {
-		console.log(this);
 		cc.RedT.inGame = this;
 		var MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
@@ -176,7 +175,7 @@ cc.Class({
 		cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
 	},
 	onData: function(data) {
-		console.log(data);
+		//console.log(data);
 		if (void 0 !== data.user){
 			this.userData(data.user);
 			cc.RedT.userData(data.user);
@@ -226,6 +225,9 @@ cc.Class({
 		}
 		if (!!data.top) {
 			//top win
+		}
+		if (!!data.status) {
+			//Trạng thái cược
 		}
 
 		if (!!data.chip) {
@@ -465,6 +467,10 @@ cc.Class({
 						),
 					);
 				}));
+			break;
+
+			case 2:
+				audioLost += this.box_red3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white3.children[1].children.length+this.box_white4.children[1].children.length;
 			break;
 
 			case 3:
