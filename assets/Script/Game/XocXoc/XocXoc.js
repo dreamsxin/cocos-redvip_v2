@@ -227,9 +227,8 @@ cc.Class({
 			//top win
 		}
 		if (!!data.status) {
-			//Trạng thái cược
+			this.status(data.status);
 		}
-
 		if (!!data.chip) {
 			this.clientsChip(data.chip);
 		}
@@ -471,6 +470,38 @@ cc.Class({
 
 			case 2:
 				audioLost += this.box_red3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white3.children[1].children.length+this.box_white4.children[1].children.length;
+				Promise.all(this.box_red3.children[1].children.map(function(chip){
+					chip.runAction(
+						cc.spawn(
+							cc.scaleTo(0.4, 0.5),
+							cc.moveTo(0.4, red3)
+						),
+					);
+				}));
+				Promise.all(this.box_red4.children[1].children.map(function(chip){
+					chip.runAction(
+						cc.spawn(
+							cc.scaleTo(0.4, 0.5),
+							cc.moveTo(0.4, red4)
+						),
+					);
+				}));
+				Promise.all(this.box_white3.children[1].children.map(function(chip){
+					chip.runAction(
+						cc.spawn(
+							cc.scaleTo(0.4, 0.5),
+							cc.moveTo(0.4, white4)
+						),
+					);
+				}));
+				Promise.all(this.box_white4.children[1].children.map(function(chip){
+					chip.runAction(
+						cc.spawn(
+							cc.scaleTo(0.4, 0.5),
+							cc.moveTo(0.4, white4)
+						),
+					);
+				}));
 			break;
 
 			case 3:
@@ -1166,5 +1197,33 @@ cc.Class({
 			this.total_white3.string = this.clients.xu.white3 > 0 ? helper.numberWithCommas(this.clients.xu.white3) : '';
 			this.total_white4.string = this.clients.xu.white4 > 0 ? helper.numberWithCommas(this.clients.xu.white4) : '';
 		}
+	},
+	status: function(data){
+		console.log(data);
+		setTimeout(function() {
+			var temp = new cc.Node;
+			temp.addComponent(cc.Label);
+			temp = temp.getComponent(cc.Label);
+			temp.string = (data.win ? '+' : '-') + helper.numberWithCommas(data.bet);
+			temp.font = data.win ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+			temp.lineHeight = 130;
+			temp.fontSize   = 25;
+			temp.node.position = cc.v2(0, 90);
+			this.miniNotice.addChild(temp.node);
+			temp.node.runAction(cc.sequence(cc.moveTo(4, cc.v2(0, 200)), cc.callFunc(function(){this.node.destroy()}, temp)));
+			data.win && cc.RedT.send({user:{updateCoint: true}});
+			if(void 0 !== data.thuong && data.thuong > 0){
+				var thuong = new cc.Node;
+				thuong.addComponent(cc.Label);
+				thuong = thuong.getComponent(cc.Label);
+				thuong.string = '+' + helper.numberWithCommas(data.thuong);
+				thuong.font = cc.RedT.util.fontEffect;
+				thuong.lineHeight = 90;
+				thuong.fontSize   = 14;
+				this.miniNotice.addChild(thuong.node);
+				thuong.node.runAction(cc.sequence(cc.moveTo(3, cc.v2(0, 100)), cc.callFunc(function(){this.node.destroy()}, thuong)))
+			}
+		}
+		.bind(this), 4e3)
 	},
 });
