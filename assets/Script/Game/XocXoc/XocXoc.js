@@ -2,6 +2,8 @@
 let helper = require('Helper');
 let notice = require('Notice');
 
+let dialog = require('XocXoc_dialog');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -84,6 +86,7 @@ cc.Class({
 		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		notice:    notice,
+		dialog:    dialog,
 
 		red: true,
 	},
@@ -214,14 +217,15 @@ cc.Class({
 		}
 	},
 	xocxoc: function(data){
+		//console.log(data);
 		if (!!data.ingame) {
 			this.xocxocIngame(data.ingame);
 		}
 		if (!!data.finish) {
 			this.xocxocFinish(data.finish);
 		}
-		if (!!data.log) {
-			// me log
+		if (!!data.history) {
+			this.dialog.history.onData(data.history);
 		}
 		if (!!data.top) {
 			//top win
@@ -893,10 +897,12 @@ cc.Class({
 				obj.children[0].active = false;
 				obj.children[1].active = true;
 				obj.pauseSystemEvents();
+				obj.opacity = 255;
 			}else{
 				obj.children[0].active = true;
 				obj.children[1].active = false;
 				obj.resumeSystemEvents();
+				obj.opacity = 99;
 			}
 		})
 	},
@@ -1199,7 +1205,6 @@ cc.Class({
 		}
 	},
 	status: function(data){
-		console.log(data);
 		setTimeout(function() {
 			var temp = new cc.Node;
 			temp.addComponent(cc.Label);
@@ -1221,7 +1226,7 @@ cc.Class({
 				thuong.lineHeight = 90;
 				thuong.fontSize   = 14;
 				this.miniNotice.addChild(thuong.node);
-				thuong.node.runAction(cc.sequence(cc.moveTo(3, cc.v2(0, 100)), cc.callFunc(function(){this.node.destroy()}, thuong)))
+				thuong.node.runAction(cc.sequence(cc.moveTo(4, cc.v2(0, 100)), cc.callFunc(function(){this.node.destroy()}, thuong)))
 			}
 		}
 		.bind(this), 4e3)
