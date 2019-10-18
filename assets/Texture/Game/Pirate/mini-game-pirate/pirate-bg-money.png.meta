@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "a224805f-5b5c-4a64-a14a-5b20213c95f0",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "pirate-bg-money": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "0de87174-b3b3-4393-bb49-675c6f036aee",
       "rawTextureUuid": "a224805f-5b5c-4a64-a14a-5b20213c95f0",
       "trimType": "auto",

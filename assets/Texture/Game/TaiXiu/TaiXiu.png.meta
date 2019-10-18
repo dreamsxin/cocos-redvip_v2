@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "778230b5-e0fe-426e-a167-aa2a37960ba9",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "TaiXiu": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "3279be4f-686f-4217-8564-e0d90af4bdfd",
       "rawTextureUuid": "778230b5-e0fe-426e-a167-aa2a37960ba9",
       "trimType": "auto",

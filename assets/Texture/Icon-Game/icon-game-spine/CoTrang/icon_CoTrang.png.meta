@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "dc92aa09-392d-41c3-b751-47039a0f274f",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "icon_CoTrang": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "f647dfa2-906d-4ae8-82c1-fd4353384a38",
       "rawTextureUuid": "dc92aa09-392d-41c3-b751-47039a0f274f",
       "trimType": "auto",

@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "d6be48f1-d697-4684-83e0-de1da7e3c1a9",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "candy_bg": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "e53f2d54-0bcd-4901-af35-f5e78629ed94",
       "rawTextureUuid": "d6be48f1-d697-4684-83e0-de1da7e3c1a9",
       "trimType": "auto",

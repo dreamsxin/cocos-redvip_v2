@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "c5b4e698-a877-4608-8a36-07b876105304",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "daichienC": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "43f15fad-4fee-462a-9363-c0f47a12e8e1",
       "rawTextureUuid": "c5b4e698-a877-4608-8a36-07b876105304",
       "trimType": "auto",

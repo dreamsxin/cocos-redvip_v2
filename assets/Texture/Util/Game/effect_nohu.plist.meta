@@ -9,7 +9,7 @@
   "type": "Texture Packer",
   "subMetas": {
     "GLOW.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "650d3ccd-c578-4030-8b3d-d8f7779aba06",
       "rawTextureUuid": "7179e248-097c-4a3f-b1d4-b0bfecd8660a",
       "trimType": "auto",
@@ -31,7 +31,7 @@
       "subMetas": {}
     },
     "Layer222.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "6eea998d-0d2c-4dd6-a312-2f12fcd73b2b",
       "rawTextureUuid": "7179e248-097c-4a3f-b1d4-b0bfecd8660a",
       "trimType": "auto",
@@ -53,7 +53,7 @@
       "subMetas": {}
     },
     "Spot.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "5161a959-2cba-4377-8d6d-390fcef9d90a",
       "rawTextureUuid": "7179e248-097c-4a3f-b1d4-b0bfecd8660a",
       "trimType": "auto",
@@ -75,7 +75,7 @@
       "subMetas": {}
     },
     "StarBigFull.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "404299a4-ed0a-40a0-9ee2-dde124ae3bb0",
       "rawTextureUuid": "7179e248-097c-4a3f-b1d4-b0bfecd8660a",
       "trimType": "auto",
@@ -97,7 +97,7 @@
       "subMetas": {}
     },
     "nohu.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "b1eb6e22-fa43-430f-8fab-4b96eb8cbe89",
       "rawTextureUuid": "7179e248-097c-4a3f-b1d4-b0bfecd8660a",
       "trimType": "auto",

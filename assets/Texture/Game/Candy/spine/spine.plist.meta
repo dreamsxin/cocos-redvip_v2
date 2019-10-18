@@ -9,7 +9,7 @@
   "type": "Texture Packer",
   "subMetas": {
     "bigwin.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "518c55c5-756b-4271-b0bd-5ed3f38351c0",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -31,7 +31,7 @@
       "subMetas": {}
     },
     "bonus.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "7497de9e-b04e-4abf-ab68-7840a05bec4b",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -53,7 +53,7 @@
       "subMetas": {}
     },
     "box1.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "bcf2aeb1-6714-4e45-af6b-be2acc5edab9",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -75,7 +75,7 @@
       "subMetas": {}
     },
     "box2.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "6b789918-d7e5-4b5e-ae96-4bae8b2ee0e9",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -97,7 +97,7 @@
       "subMetas": {}
     },
     "freespin.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "a5d532fd-610d-4a14-959f-581cea3cbe77",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -119,7 +119,7 @@
       "subMetas": {}
     },
     "jackpot.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "7761dd01-0008-402f-958b-df3b25324551",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -141,7 +141,7 @@
       "subMetas": {}
     },
     "light.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "75767ad7-2eef-4e30-9781-dd78cc93773a",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",
@@ -163,7 +163,7 @@
       "subMetas": {}
     },
     "light2.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "eef2ec9f-1b9a-4d25-bfc2-a462634f901d",
       "rawTextureUuid": "c2e56569-2226-48d4-820d-2b5b56a30559",
       "trimType": "auto",

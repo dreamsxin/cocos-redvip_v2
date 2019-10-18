@@ -16,7 +16,9 @@ cc.Class({
     },
     onLoad () {
         var self = this;
+        console.log(this);
         this.editboxs = [this.username, this.password];
+        this.editboxs_i = 0;
         this.keyHandle = function(t) {
             return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
                 t.preventDefault && t.preventDefault(),
@@ -61,14 +63,14 @@ cc.Class({
         }
     },
     changeNextFocusEditBox: function() {
-        for (var t = !1, e = 0, i = this.editboxs.length; e < i; e++)
+        for (var t = !1, e = 0, i = this.editboxs.length; e < i; e++){
             if (BrowserUtil.checkEditBoxFocus(this.editboxs[e])) {
-                i <= ++e && (e = 0),
-                BrowserUtil.focusEditBox(this.editboxs[e]),
+                BrowserUtil.focusEditBox(this.editboxs[e]);
                 t = !0;
                 break
             }
-        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0])
+        }
+        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0]);
     },
     isTop: function() {
         return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;

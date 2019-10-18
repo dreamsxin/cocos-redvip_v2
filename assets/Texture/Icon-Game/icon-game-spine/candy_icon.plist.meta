@@ -9,7 +9,7 @@
   "type": "Texture Packer",
   "subMetas": {
     "candy_bg.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "f1e7cb3a-6d5b-4566-876e-2e251de63468",
       "rawTextureUuid": "64db01ca-c41e-425a-8bb0-276a5f6aa8d3",
       "trimType": "auto",
@@ -31,7 +31,7 @@
       "subMetas": {}
     },
     "candy_title.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "670fac9a-8956-4864-b9ad-0602aab998a3",
       "rawTextureUuid": "64db01ca-c41e-425a-8bb0-276a5f6aa8d3",
       "trimType": "auto",

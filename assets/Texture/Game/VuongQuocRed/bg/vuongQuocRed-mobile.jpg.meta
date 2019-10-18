@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "71368b50-8d90-432f-b7cb-f19b498f5b4a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "vuongQuocRed-mobile": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "e79e333f-18f3-448b-9bb5-c4975b1e1092",
       "rawTextureUuid": "71368b50-8d90-432f-b7cb-f19b498f5b4a",
       "trimType": "auto",

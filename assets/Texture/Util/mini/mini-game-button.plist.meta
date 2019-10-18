@@ -9,7 +9,7 @@
   "type": "Texture Packer",
   "subMetas": {
     "button-chat.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "d88d5713-c7f0-4345-a112-a658de3dfb70",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -31,7 +31,7 @@
       "subMetas": {}
     },
     "button-close-2.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "b29aa8c2-adc8-447c-9398-3fed54b36532",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -53,7 +53,7 @@
       "subMetas": {}
     },
     "button-close.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "bd5097ef-0f85-4392-8b2a-0c60e99d64b7",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -75,7 +75,7 @@
       "subMetas": {}
     },
     "button-down.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "7f6728c7-49a2-490f-93ed-3bdaf00b9b5c",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -97,7 +97,7 @@
       "subMetas": {}
     },
     "button-help.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "9eb0a847-150e-4b9f-bd2a-69337a0d5c10",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -119,7 +119,7 @@
       "subMetas": {}
     },
     "button-next-preview-2.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "dcdea60b-ecce-4fa3-a2c8-3dc33a8e9c87",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -141,7 +141,7 @@
       "subMetas": {}
     },
     "button-next-preview.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "087b52be-f436-4884-846b-d7eb9b9b567b",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -163,7 +163,7 @@
       "subMetas": {}
     },
     "button-rank.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "2118069b-5104-4322-aec0-1de4a43b3b46",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -185,7 +185,7 @@
       "subMetas": {}
     },
     "button-send.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "b7f18803-db96-4b86-b110-55ac1fe7b84b",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -207,7 +207,7 @@
       "subMetas": {}
     },
     "button-tutorial.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "29288ba6-f2b5-4d44-816c-35482a8f80ab",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",
@@ -229,7 +229,7 @@
       "subMetas": {}
     },
     "icon-chip-bg.png": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "133a64f1-3b87-4eb6-a2f5-af211996947a",
       "rawTextureUuid": "473e4061-c3d7-4665-8c9d-2702b7fc59bd",
       "trimType": "auto",

@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "a9367c4e-154a-4a3c-bbdf-8afcfca08d53",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "thandoantx": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "d3192a0e-204f-4e80-ba51-57633fd275e4",
       "rawTextureUuid": "a9367c4e-154a-4a3c-bbdf-8afcfca08d53",
       "trimType": "auto",

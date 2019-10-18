@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "5d15ea1b-90f0-4d78-8722-aa880c2af07c",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "icon_haitac": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "75bf3c04-e357-4e66-8fff-4785fb9df03c",
       "rawTextureUuid": "5d15ea1b-90f0-4d78-8722-aa880c2af07c",
       "trimType": "auto",

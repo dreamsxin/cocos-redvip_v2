@@ -32,6 +32,7 @@ cc.Class({
 		loading:      cc.Node,
 		notice:       notice,
 		ThongBaoNoHu: ThongBaoNoHu,
+
 		audioBG: cc.AudioSource,
 	},
 	onLoad: function () {

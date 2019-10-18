@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "4726b0f2-6a8d-431f-96c1-ff5217fcff95",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "bigbabol-logo": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "cf20a553-d998-40f5-8740-2a1f72c2d1e3",
       "rawTextureUuid": "4726b0f2-6a8d-431f-96c1-ff5217fcff95",
       "trimType": "auto",

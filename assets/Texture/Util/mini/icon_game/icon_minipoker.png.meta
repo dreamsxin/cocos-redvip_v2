@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "8770278c-3cc0-4c00-b520-d1cd9ffeecd2",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "icon_minipoker": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "e89ff00a-b8c0-48cc-bb71-30651f35436d",
       "rawTextureUuid": "8770278c-3cc0-4c00-b520-d1cd9ffeecd2",
       "trimType": "auto",

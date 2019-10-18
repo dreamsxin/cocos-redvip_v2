@@ -32,7 +32,8 @@ cc.Class({
 	onLoad () {
 		var self = this;
 		this.keyHandle = function(t) {
-			return t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onChatClick(),
+			return t.keyCode === cc.macro.KEY.tab ? (t.preventDefault && t.preventDefault(),
+				!1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onChatClick(),
 				t.preventDefault && t.preventDefault(),
 				!1) : void 0
 		}

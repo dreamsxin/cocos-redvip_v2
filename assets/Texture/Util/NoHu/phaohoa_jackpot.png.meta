@@ -1,14 +1,16 @@
 {
-  "ver": "2.3.0",
+  "ver": "2.3.3",
   "uuid": "6445d4c3-264a-4e25-9c65-9fcf95240736",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
   "platformSettings": {},
   "subMetas": {
     "phaohoa_jackpot": {
-      "ver": "1.0.3",
+      "ver": "1.0.4",
       "uuid": "d1724251-2533-4706-bedc-1ec65ac7c850",
       "rawTextureUuid": "6445d4c3-264a-4e25-9c65-9fcf95240736",
       "trimType": "auto",

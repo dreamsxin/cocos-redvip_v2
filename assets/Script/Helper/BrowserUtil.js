@@ -30,20 +30,20 @@ module.exports = {
 		cc.sys.isBrowser && document.getElementsByTagName("canvas")[0].focus()
 	},
 	getHTMLElementByEditBox: function(t) {
-		return t._impl._edTxt
+		return t._impl._elem
 	},
 	checkEditBoxFocus: function(t) {
-		return t.isFocused()
+		return t.isFocused();
 	},
 	focusEditBox: function(t) {
-		t._impl._edTxt.style.display = "block",
-		t._impl._edTxt.focus()
-		t.setFocus()
+		t._impl._elem.style.display = "block";
+		t._impl._elem.focus();
+		t.focus();
 	},
 	unFocusEditBox: function(t) {
-		t._impl._edTxt.style.display = "none"
+		t._impl._elem.style.display = "none";
 	},
 	readOnlyEditBox: function(t) {
-		t.readOnly = !0
+		t.readOnly = !0;
 	}
 }
