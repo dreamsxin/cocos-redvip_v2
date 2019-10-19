@@ -60,6 +60,8 @@ cc.Class({
 		this.CaoThap.init(this);
 		this.AngryBirds.init(this);
 
+		this.MegaJackpot.init(this);
+
 		this.TopHu.init(this);
 
 		if (cc.RedT.IS_LOGIN){
@@ -108,6 +110,9 @@ cc.Class({
 		}
 		if (void 0 !== data.arb){
 			this.AngryBirds.onData(data.arb);
+		}
+		if (void 0 !== data.megaj){
+			this.MegaJackpot.onData(data.megaj);
 		}
 	},
 	onDestroy: function(){

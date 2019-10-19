@@ -16,7 +16,6 @@ cc.Class({
     },
     onLoad () {
         var self = this;
-        console.log(this);
         this.editboxs = [this.username, this.password];
         this.editboxs_i = 0;
         this.keyHandle = function(t) {

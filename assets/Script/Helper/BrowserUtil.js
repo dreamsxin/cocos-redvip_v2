@@ -36,12 +36,18 @@ module.exports = {
 		return t.isFocused();
 	},
 	focusEditBox: function(t) {
-		t._impl._elem.style.display = "block";
+		//t._impl._elem.style.display = "block";
 		t._impl._elem.focus();
 		t.focus();
 	},
 	unFocusEditBox: function(t) {
-		t._impl._elem.style.display = "none";
+		//t._impl._elem.style.display = "none";
+	},
+	inputAddEvent: function(input, event, callback) {
+		input._impl._elem.addEventListener(event, callback);
+	},
+	inputRemoveEvent: function(input, event, callback) {
+		input._impl._elem.removeEventListener(event, callback);
 	},
 	readOnlyEditBox: function(t) {
 		t.readOnly = !0;

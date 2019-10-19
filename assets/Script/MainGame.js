@@ -356,6 +356,9 @@ cc.Class({
 	android: function(){
 		cc.sys.openURL('http://bem68.com/download/Bem68.apk');
 	},
+	telegram: function(){
+		cc.sys.openURL('http://bem68.com/help/telegram');
+	},
 
 /**
 

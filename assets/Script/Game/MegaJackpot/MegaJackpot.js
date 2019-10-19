@@ -6,24 +6,38 @@ cc.Class({
 		background:  sp.Skeleton,
 		bg_move:     cc.Node,
 		menuGame:    cc.Node,
+
+		bgVQ:        cc.Node,
 		imgVQ:       cc.Sprite,
+
 		vqthanhdong: cc.SpriteFrame,
 		vqbachkim:   cc.SpriteFrame,
 		vqhoangkim:  cc.SpriteFrame,
+
+		hu:          cc.Label,
+		luot:        cc.Label,
 	},
-	onLoad () {
-		console.log(this);
-		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {};
+	init: function(obj){
+		this.RedT = obj;
+		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {users:{100:0, 1000:0, 10000:0}};
 		this.game = 100;
+		this.bgAnim = {100:"thanhdong", 1000:"bachkim", 10000:"hoangkim"};
+
+		let check = localStorage.getItem('MegaJackpot');
+		if (check == "true") {
+			this.node.active = true;
+		}
+
 		if (void 0 !== cc.RedT.setting.MegaJackpot.game) {
 			if (cc.RedT.setting.MegaJackpot.game !== this.game) {
-				this.game = cc.RedT.setting.MegaJackpot.game;
 				this.changerGame(null, cc.RedT.setting.MegaJackpot.game);
 			}
 		}else{
 			cc.RedT.setting.MegaJackpot.game = this.game = '100';
 		}
-		this.bgAnim = {100:"thanhdong", 1000:"bachkim", 10000:"hoangkim"}
+		if (void 0 !== cc.RedT.setting.MegaJackpot.position) {
+			this.node.position = cc.RedT.setting.MegaJackpot.position;
+		}
 	},
 	onEnable: function() {
 		//this.onGetHu();
@@ -62,6 +76,7 @@ cc.Class({
 			this.background.setAnimation(0, this.bgAnim[game], true);
 			this.imgVQ.spriteFrame = this['vq'+this.bgAnim[game]];
 		}
+		this.luot = cc.RedT.setting.MegaJackpot.users[game] + ' Lượt';
 		this.menuGame.children.forEach(function(item){
 			if (item.name === game) {
 				item.pauseSystemEvents();
@@ -85,5 +100,7 @@ cc.Class({
 	closeGame:function(){
 		this.node.active = !1;
 		localStorage.setItem('MegaJackpot', false);
+	},
+	onData: function(data){
 	},
 });

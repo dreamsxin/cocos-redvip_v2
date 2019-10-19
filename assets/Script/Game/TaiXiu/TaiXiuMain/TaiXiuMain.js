@@ -293,6 +293,11 @@ cc.Class({
 
 		this.RedT.board && cc.sys.isBrowser && this.addEvent();
 		this.nodeTimePopup.active = false;
+
+		if (this.RedT.board) {
+			BrowserUtil.inputAddEvent(this.inputLeft, 'input', this.updateValue);
+			BrowserUtil.inputAddEvent(this.inputRight, 'input', this.updateValue);
+		}
 	},
 	onDisable: function () {
 		this.background.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -304,14 +309,23 @@ cc.Class({
 		this.RedT.board && cc.sys.isBrowser && this.removeEvent();
 		this.clean();
 		!!cc.RedT.IS_LOGIN && (this.nodeTimePopup.active = true);
+
+		if (this.RedT.board) {
+			BrowserUtil.inputRemoveEvent(this.inputLeft, 'input', this.updateValue);
+			BrowserUtil.inputRemoveEvent(this.inputRight, 'input', this.updateValue);
+		}
+	},
+	updateValue: function(e){
+		let value = helper.numberWithCommas(helper.getOnlyNumberInString(this.value));
+		this.value = value == "0" ? "" : value;
 	},
 	addEvent: function() {
-		for (var t in this.editboxs) {
+		for (let t in this.editboxs) {
 			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).addEventListener("keydown", this.keyHandle, !1);
 		}
 	},
 	removeEvent: function() {
-		for (var t in this.editboxs) {
+		for (let t in this.editboxs) {
 			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).removeEventListener("keydown", this.keyHandle, !1);
 		}
 	},
@@ -323,7 +337,7 @@ cc.Class({
                 break
             }
         }
-        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[0]);
+        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[1]);
 	},
 	clean: function(){
 		this.inputLeft.string = this.inputRight.string = '';
