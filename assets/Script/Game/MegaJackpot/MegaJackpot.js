@@ -74,4 +74,16 @@ cc.Class({
 			}
 		});
 	},
+	openGame: function () {
+		cc.RedT.audio.playClick();
+		if (cc.RedT.IS_LOGIN){
+			this.node.active = !0;
+			localStorage.setItem('MegaJackpot', true);
+			this.setTop();
+		} else cc.RedT.inGame.dialog.showSignIn();
+	},
+	closeGame:function(){
+		this.node.active = !1;
+		localStorage.setItem('MegaJackpot', false);
+	},
 });

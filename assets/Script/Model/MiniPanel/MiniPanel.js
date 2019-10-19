@@ -9,6 +9,9 @@ var TaiXiu     = require('TaiXiu'),
 	TopHu      = require('popupTopHu'),
 	Dialog     = require('MiniDialog');
 
+var MegaJackpot = require('MegaJackpot');
+
+
 cc.Class({
 	extends: cc.Component,
 
@@ -17,23 +20,24 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		Dialog:    Dialog,
-		TaiXiu:    TaiXiu,
-		MiniPoker: MiniPoker,
-		BigBabol:  BigBabol,
-		BauCua:    BauCua,
-		BaCay:     BaCay,
-		CaoThap:   CaoThap,
-		AngryBirds: AngryBirds,
+		Dialog:      Dialog,
+		TaiXiu:      TaiXiu,
+		MiniPoker:   MiniPoker,
+		BigBabol:    BigBabol,
+		BauCua:      BauCua,
+		BaCay:       BaCay,
+		CaoThap:     CaoThap,
+		AngryBirds:  AngryBirds,
+		MegaJackpot: MegaJackpot,
 
-		TopHu:     TopHu,
+		TopHu:       TopHu,
 
-		bgLight:    cc.Node,
-		spriteLight:      cc.Sprite,
-		onLight:    cc.SpriteFrame,
-		offLight:   cc.SpriteFrame,
+		bgLight:     cc.Node,
+		spriteLight: cc.Sprite,
+		onLight:     cc.SpriteFrame,
+		offLight:    cc.SpriteFrame,
 
-		nodeEfect:  cc.Node,
+		nodeEfect:   cc.Node,
 		// Prefab
 		PrefabNoHu:   cc.Prefab,
 		prefabBigWin: cc.Prefab,
