@@ -1,4 +1,6 @@
 
+var helper = require('Helper');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -16,6 +18,15 @@ cc.Class({
 
 		hu:          cc.Label,
 		luot:        cc.Label,
+
+		notice:       cc.Node,
+		noticePrefab: cc.Prefab,
+
+		spinNode:     cc.Node,
+		spinSprite:   cc.Sprite,
+		spinOn:       cc.SpriteFrame,
+		spinOff:      cc.SpriteFrame,
+		isSpin:       false,
 	},
 	init: function(obj){
 		this.RedT = obj;
@@ -40,8 +51,8 @@ cc.Class({
 		}
 	},
 	onEnable: function() {
-		//this.onGetHu();
-		//this.regEvent(true);
+		this.onGetHu();
+		this.regUpdate();
 		this.bg_move.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.bg_move.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.bg_move.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
@@ -49,13 +60,11 @@ cc.Class({
 		this.bg_move.on(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
 	},
 	onDisable: function() {
-		//this.regEvent(false);
 		this.bg_move.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.bg_move.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.bg_move.off(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.bg_move.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.bg_move.off(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
-		//this.onCloseGame();
 	},
 	eventStart: function(e){
 		this.setTop();
@@ -88,6 +97,7 @@ cc.Class({
 				item.children[1].active = false;
 			}
 		});
+		this.onGetHu();
 	},
 	openGame: function () {
 		cc.RedT.audio.playClick();
@@ -101,6 +111,53 @@ cc.Class({
 		this.node.active = !1;
 		localStorage.setItem('MegaJackpot', false);
 	},
+	spin: function(){
+		this.spinNode.pauseSystemEvents();
+		this.spinSprite.spriteFrame = this.spinOff;
+		if (!this.isSpin) {
+			cc.RedT.send({g:{megaj:{spin:this.game}}});
+		}
+	},
 	onData: function(data){
+		//console.log(data);
+		if (!!data.status) {
+			this.updateStatus(data.status);
+		}
+		if (!!data.notice) {
+			this.addNotice(data.notice);
+		}
+	},
+	updateStatus: function(data){
+		if (data.status === true) {
+			this.isSpin = true;
+			//this.spinNode.resumeSystemEvents();
+			//this.spinSprite.spriteFrame = this.spinOn;
+		}else{
+			this.isSpin = false;
+			this.spinNode.resumeSystemEvents();
+			this.spinSprite.spriteFrame = this.spinOn;
+		}
+	},
+	regUpdate: function(){
+		cc.RedT.send({g:{megaj:{update:true}}});
+	},
+	addNotice:function(text){
+		var notice = cc.instantiate(this.noticePrefab)
+		var noticeComponent = notice.getComponent('mini_warning')
+		noticeComponent.text.string = text;
+		this.notice.addChild(notice);
+	},
+	onGetHu: function(){
+		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
+			var self = this;
+			let data = cc.RedT.setting.topHu.data['megaj'].filter(function(temp){
+				return temp.type == self.game;
+			});
+			var s = helper.getOnlyNumberInString(this.hu.string);
+			var bet = data[0].bet;
+			if (s-bet !== 0){
+				helper.numberTo(this.hu, s, bet, 2000, true);
+			}
+		}
 	},
 });

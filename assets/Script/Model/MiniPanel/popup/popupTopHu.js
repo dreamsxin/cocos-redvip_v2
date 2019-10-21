@@ -170,6 +170,7 @@ cc.Class({
         this.RedT.BigBabol.onGetHu();
         this.RedT.CaoThap.onGetHu();
         this.RedT.AngryBirds.onGetHu();
+        this.RedT.MegaJackpot.onGetHu();
         if (void 0 !== cc.RedT.inGame.onGetHu) {
         	cc.RedT.inGame.onGetHu();
         }

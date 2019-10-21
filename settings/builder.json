@@ -7,6 +7,13 @@
     "scheme": "https",
     "skipRecord": false
   },
+  "appBundle": false,
+  "baidugame": {
+    "REMOTE_SERVER_ROOT": "",
+    "appid": "testappid",
+    "orientation": "portrait",
+    "subContext": ""
+  },
   "encryptJs": true,
   "excludeScenes": [],
   "fb-instant-games": {},
@@ -38,12 +45,5 @@
     "subContext": ""
   },
   "xxteaKey": "d7b79ac9-5d15-44",
-  "zipCompressJs": true,
-  "baidugame": {
-    "appid": "testappid",
-    "orientation": "portrait",
-    "REMOTE_SERVER_ROOT": "",
-    "subContext": ""
-  },
-  "appBundle": false
+  "zipCompressJs": true
 }

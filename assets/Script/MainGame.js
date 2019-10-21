@@ -27,6 +27,7 @@ cc.Class({
 		iconCandy:   cc.Node,
 		iconLongLan: cc.Node,
 		iconTaiXiu:  cc.Node,
+		iconMegaJ:   cc.Node,
 		redhat: cc.Node,
 		dialog: dialog,
 		loading:      cc.Node,
@@ -55,6 +56,7 @@ cc.Class({
 		this.iconCandy   = this.iconCandy.getComponent('iconGameHu');
 		this.iconVQRed   = this.iconVQRed.getComponent('iconGameHu');
 		this.iconLongLan = this.iconLongLan.getComponent('iconGameHu');
+		this.iconMegaJ   = this.iconMegaJ.getComponent('iconGameHu');
 		this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
 		if (cc.RedT.IS_LOGIN){
@@ -328,6 +330,30 @@ cc.Class({
 				}
 				if (r10k-h10k[0].bet != 0) {
 					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 4900, true);
+				}
+			});
+
+			// MegaJacpot
+			Promise.all(cc.RedT.setting.topHu.data['megaj'].filter(function(temp){
+				return temp.red == true;
+			}))
+			.then(result => {
+				let h100 = result.filter(function(temp){return temp.type == 100});
+				let h1k  = result.filter(function(temp){return temp.type == 1000});
+				let h10k = result.filter(function(temp){return temp.type == 10000});
+
+				let r100 = helper.getOnlyNumberInString(this.iconMegaJ.hu100.string);
+				let r1k  = helper.getOnlyNumberInString(this.iconMegaJ.hu1k.string);
+				let r10k = helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string);
+
+				if (r100-h100[0].bet != 0) {
+					helper.numberTo(this.iconMegaJ.hu100, helper.getOnlyNumberInString(this.iconMegaJ.hu100.string), h100[0].bet, 4900, true);
+				}
+				if (r1k-h1k[0].bet != 0) {
+					helper.numberTo(this.iconMegaJ.hu1k, helper.getOnlyNumberInString(this.iconMegaJ.hu1k.string), h1k[0].bet, 4900, true);
+				}
+				if (r10k-h10k[0].bet != 0) {
+					helper.numberTo(this.iconMegaJ.hu10k, helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string), h10k[0].bet, 4900, true);
 				}
 			});
 		}
