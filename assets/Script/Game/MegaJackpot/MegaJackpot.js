@@ -29,6 +29,7 @@ cc.Class({
 		isSpin:       false,
 	},
 	init: function(obj){
+		//console.log(this);
 		this.RedT = obj;
 		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {users:{100:0, 1000:0, 10000:0}};
 		this.game = 100;
@@ -126,16 +127,72 @@ cc.Class({
 		if (!!data.notice) {
 			this.addNotice(data.notice);
 		}
+		if (!!data.info) {
+			this.info(data.info);
+		}
+	},
+	info: function(data){
+		cc.RedT.setting.MegaJackpot.users[100]   = data[100];
+		cc.RedT.setting.MegaJackpot.users[1000]  = data[1000];
+		cc.RedT.setting.MegaJackpot.users[10000] = data[10000];
+		this.luot = data[game] + ' Lượt';
 	},
 	updateStatus: function(data){
+		//console.log(data);
 		if (data.status === true) {
 			this.isSpin = true;
-			//this.spinNode.resumeSystemEvents();
-			//this.spinSprite.spriteFrame = this.spinOn;
+			this.oldData = data;
+			let action = cc.rotateTo(10,  -((360*7)+data.data.position)).easing(cc.easeQuinticActionOut());
+			let action2 = cc.rotateTo(10, -((360*7)+data.data.position)).easing(cc.easeQuinticActionOut());
+
+			var p2 = cc.callFunc(function() {
+				this.bgVQ.angle       = -this.oldData.data.position;
+				this.imgVQ.node.angle = -this.oldData.data.position;
+
+				this.isSpin = false;
+				this.spinNode.resumeSystemEvents();
+				this.spinSprite.spriteFrame = this.spinOn;
+
+				this.bgVQ.stopAllActions();
+				this.imgVQ.node.stopAllActions();
+				this.updateKQ();
+			}, this);
+
+			this.bgVQ.runAction(action);
+			this.imgVQ.node.runAction(cc.sequence(action2, p2));
+
 		}else{
 			this.isSpin = false;
 			this.spinNode.resumeSystemEvents();
 			this.spinSprite.spriteFrame = this.spinOn;
+		}
+	},
+	updateKQ: function(){
+		if (this.oldData.kq === 5) {
+			// Thêm lượt
+		}else if (this.oldData.kq === 12) {
+			// Nổ hũ
+		}else{
+			/**
+			if (this.oldData.data.thuong >= this.oldData.game*1000) {
+				// Thắng lớn
+			}else{
+				// Thắng thường
+			}
+			*/
+
+			var temp = new cc.Node;
+			temp.addComponent(cc.Label);
+			temp = temp.getComponent(cc.Label);
+			temp.string = helper.numberWithCommas(this.oldData.data.thuong);
+			temp.font = cc.RedT.util.fontCong;
+			temp.lineHeight = 130;
+			temp.fontSize   = 20;
+			temp.node.position = cc.v2(0, 30);
+			this.notice.addChild(temp.node);
+			temp.node.runAction(cc.sequence(cc.moveTo(2.5, cc.v2(0, 150)), cc.callFunc(function(){
+				temp.node.destroy();
+			}, this)));
 		}
 	},
 	regUpdate: function(){
