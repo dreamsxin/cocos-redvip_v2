@@ -17,6 +17,10 @@ var TaiXiuLichSuPhien = require('TaiXiuLichSuPhien'),
 
 	HuongDan          = require('dialogHuongDan');
 
+var MegaJ_history     = require('MegaJ_history');
+var MegaJ_top         = require('MegaJ_top');
+
+
 cc.Class({
 	extends: cc.Component,
 
@@ -35,6 +39,9 @@ cc.Class({
 		CaoThap_top:       CaoThap_top,
 		AngryBird_history: AngryBird_history,
 		AngryBird_top:     AngryBird_top,
+
+		MegaJ_history:     MegaJ_history,
+		MegaJ_top:         MegaJ_top,
 
 		HuongDan:          HuongDan,
 	},
@@ -152,6 +159,15 @@ cc.Class({
 		this.objShow     = this.AngryBird_top.node;
 	},
 
+	showMegaJ_history: function(){
+		this.node.active = this.MegaJ_history.node.active = true;
+		this.objShow     = this.MegaJ_history.node;
+	},
+
+	showMegaJ_top: function(){
+		this.node.active = this.MegaJ_top.node.active = true;
+		this.objShow     = this.MegaJ_top.node;
+	},
 
 	showHuongDan: function(e, name){
 		this.node.active = this.HuongDan.node.active = true;

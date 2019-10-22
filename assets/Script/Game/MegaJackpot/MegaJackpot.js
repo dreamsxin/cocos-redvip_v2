@@ -29,7 +29,6 @@ cc.Class({
 		isSpin:       false,
 	},
 	init: function(obj){
-		//console.log(this);
 		this.RedT = obj;
 		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {users:{100:0, 1000:0, 10000:0}};
 		this.game = 100;
@@ -51,6 +50,10 @@ cc.Class({
 			this.node.position = cc.RedT.setting.MegaJackpot.position;
 		}
 	},
+	onLoad () {
+		this.RedT.Dialog.MegaJ_history.init(this);
+		this.RedT.Dialog.MegaJ_top.init(this);
+	},
 	onEnable: function() {
 		this.onGetHu();
 		this.regUpdate();
@@ -69,10 +72,10 @@ cc.Class({
 	},
 	eventStart: function(e){
 		this.setTop();
-		this.ttOffset = cc.v2(e.touch.getLocationX() - this.node.position.x, e.touch.getLocationY() - this.node.position.y)
+		this.ttOffset = cc.v2(e.touch.getLocationX() - this.node.position.x, e.touch.getLocationY() - this.node.position.y);
 	},
 	eventMove: function(e){
-		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y)
+		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
 	},
 	eventEnd: function(){
 		cc.RedT.setting.MegaJackpot.position = this.node.position;
@@ -130,12 +133,18 @@ cc.Class({
 		if (!!data.info) {
 			this.info(data.info);
 		}
+		if (!!data.history) {
+			this.RedT.Dialog.MegaJ_history.onData(data.history);
+		}
+		if (!!data.top) {
+			this.RedT.Dialog.MegaJ_top.onData(data.top);
+		}
 	},
 	info: function(data){
 		cc.RedT.setting.MegaJackpot.users[100]   = data[100];
 		cc.RedT.setting.MegaJackpot.users[1000]  = data[1000];
 		cc.RedT.setting.MegaJackpot.users[10000] = data[10000];
-		this.luot = data[game] + ' Lượt';
+		this.luot = data[this.game] + ' Lượt';
 	},
 	updateStatus: function(data){
 		//console.log(data);
