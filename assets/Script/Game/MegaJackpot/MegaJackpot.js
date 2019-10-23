@@ -89,7 +89,7 @@ cc.Class({
 			this.background.setAnimation(0, this.bgAnim[game], true);
 			this.imgVQ.spriteFrame = this['vq'+this.bgAnim[game]];
 		}
-		this.luot = cc.RedT.setting.MegaJackpot.users[game] + ' Lượt';
+		this.luot.string = cc.RedT.setting.MegaJackpot.users[game] + ' Lượt';
 		this.menuGame.children.forEach(function(item){
 			if (item.name === game) {
 				item.pauseSystemEvents();
@@ -144,7 +144,7 @@ cc.Class({
 		cc.RedT.setting.MegaJackpot.users[100]   = data[100];
 		cc.RedT.setting.MegaJackpot.users[1000]  = data[1000];
 		cc.RedT.setting.MegaJackpot.users[10000] = data[10000];
-		this.luot = data[this.game] + ' Lượt';
+		this.luot.string = data[this.game] + ' Lượt';
 	},
 	updateStatus: function(data){
 		//console.log(data);

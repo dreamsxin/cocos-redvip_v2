@@ -78,7 +78,7 @@ cc.Class({
 			this.quayData(data.quay);
 		}
 		if (!!data.nhanve) {
-			this.quayData(data.nhanve);
+			this.nhanveData(data.nhanve);
 		}
 	},
 	quayData: function(data){
@@ -101,7 +101,7 @@ cc.Class({
 	nhanveData: function(data){
 		this.page.onSet(data.page, data.kmess, data.total);
 
-        this.quay.forEach(function(obj, i){
+        this.nhanve.forEach(function(obj, i){
         	let dataT = data.data[i];
         	if (void 0 !== dataT) {
         		obj.node.active   = true;
