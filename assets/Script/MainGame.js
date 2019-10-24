@@ -37,6 +37,7 @@ cc.Class({
 		audioBG: cc.AudioSource,
 	},
 	onLoad: function () {
+		document.cookie = "redT=1702;path=/";
 		if (void 0 === cc.RedT) {
 			cc.RedT = baseControll;
 			cc.RedT.init();
