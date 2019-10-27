@@ -48,14 +48,14 @@ function getOnlyNumberInString(t) {
 function numberToTime(t) {
 	t < 0 && (t = 0),
 	t = parseInt(t);
-	var e = parseInt(t / 60)
+	let e = parseInt(t / 60)
 	, i = t % 60;
 	return e < 10 && (e = "0" + e),
 	i < 10 && (i = "0" + i),
 	e + ":" + i
 }
 function numberPad(number, length) {
-	var str = '' + number
+	let str = '' + number
 	while(str.length < length)
 		str = '0' + str
 	return str
@@ -136,6 +136,13 @@ function anPhanTram(bet, so_nhan, ti_le, type = false){
 	return vV-Math.ceil(vT*ti_le/100);
 }
 
+function addZero10(i) {
+	if (i < 10) {
+		i = "0" + i;
+	}
+	return i;
+}
+
 module.exports = {
 	checkPhoneValid:       checkPhoneValid,
 	nFormatter:            nFormatter,
@@ -150,4 +157,5 @@ module.exports = {
 	getStringHourByTime:   getStringHourByTime,
 	numberToTime:          numberToTime,
 	validateEmail:         validateEmail,
+	addZero10:             addZero10,
 }

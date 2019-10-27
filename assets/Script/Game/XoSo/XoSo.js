@@ -35,7 +35,7 @@ cc.Class({
 			cc.RedT.userData(data.user);
 		}
 		if (void 0 !== data.XoSo){
-			//this.VuongQuocRed(data.VuongQuocRed);
+			this.XoSo(data.XoSo);
 		}
 		if (void 0 !== data.mini){
 			cc.RedT.MiniPanel.onData(data.mini);
@@ -45,6 +45,11 @@ cc.Class({
 		}
 		if (void 0 !== data.taixiu){
 			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+	},
+	XoSo: function(data){
+		if (void 0 !== data.notice) {
+			this.addNotice(data.notice);
 		}
 	},
 	userData: function(data){
@@ -75,7 +80,7 @@ cc.Class({
 	},
 	update: function(){
 		let timestamp = new Date();
-		this.today.string = this.day(timestamp.getDay()) + ' ' + this.addZero(timestamp.getDate()) + '/' + this.addZero((timestamp.getMonth()+1)) + '/' + timestamp.getFullYear() + ' ' + this.addZero(timestamp.getHours()) + ':' + this.addZero(this.addZero(timestamp.getMinutes())) + ':' + this.addZero(timestamp.getSeconds());
+		this.today.string = this.day(timestamp.getDay()) + ' ' + helper.addZero10(timestamp.getDate()) + '/' + helper.addZero10((timestamp.getMonth()+1)) + '/' + timestamp.getFullYear() + ' ' + helper.addZero10(timestamp.getHours()) + ':' + helper.addZero10(helper.addZero10(timestamp.getMinutes())) + ':' + helper.addZero10(timestamp.getSeconds());
 	},
 	day: function(day){
 		let weekday = new Array(7);
@@ -87,12 +92,6 @@ cc.Class({
 		weekday[5] = "T6";
 		weekday[6] = "T7";
 		return weekday[day];
-	},
-	addZero: function(i) {
-		if (i < 10) {
-			i = "0" + i;
-		}
-		return i;
 	},
 	onSelectDat: function(event, game) {
 		this.position = game;
