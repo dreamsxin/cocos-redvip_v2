@@ -58,7 +58,9 @@ cc.Class({
 		if (void 0 !== cc.RedT.setting.caothap.red && this.red != cc.RedT.setting.caothap.red) {
 			this.changerCoint();
 		}
-
+	},
+	onLoad () {
+		this.reels.init(this);
 		if (cc.RedT.setting.caothap.isPlay && !this.isPlay) {
 			this.isPlay = true;
 			this.onPlay();
@@ -66,13 +68,10 @@ cc.Class({
 			cc.RedT.setting.caothap.time_remain++;
 			this.playTime();
 			setTimeout(function(){
-				obj.CaoThap.reels.card[obj.CaoThap.reels.card.length-1].spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.card.card, cc.RedT.setting.caothap.card.type);
+				this.reels.card[this.reels.card.length-1].spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.card.card, cc.RedT.setting.caothap.card.type);
 				this.reMainLog();
 			}.bind(this), 100);
 		}
-	},
-	onLoad () {
-		this.reels.init(this);
 	},
 
 	onEnable: function() {
