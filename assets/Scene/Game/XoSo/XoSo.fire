@@ -61925,7 +61925,7 @@
     "inputSoDiem": {
       "__id__": 1350
     },
-    "max": 10,
+    "max": 8,
     "countSelect": 0,
     "giaDiem": 1000,
     "diemToiDa": 1000000,
@@ -65934,7 +65934,7 @@
     "inputSoDiem": {
       "__id__": 1402
     },
-    "max": 10,
+    "max": 6,
     "countSelect": 0,
     "giaDiem": 1000,
     "diemToiDa": 1000000,
@@ -78387,8 +78387,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "- Chọn 4 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng đài miền Bắc. Nếu trong lô không xuất hiện cả 4 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 2.300 RED.",
-    "_N$string": "- Chọn 4 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng đài miền Bắc. Nếu trong lô không xuất hiện cả 4 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 2.300 RED.",
+    "_string": "- Chọn 8 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng. Nếu trong lô không xuất hiện cả 8 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 8.000 RED.",
+    "_N$string": "- Chọn 8 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng. Nếu trong lô không xuất hiện cả 8 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 8.000 RED.",
     "_fontSize": 20,
     "_lineHeight": 50,
     "_enableWrapText": true,
@@ -80976,8 +80976,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "- Chọn 4 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng đài miền Bắc. Nếu trong lô không xuất hiện cả 4 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 2.300 RED.",
-    "_N$string": "- Chọn 4 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng đài miền Bắc. Nếu trong lô không xuất hiện cả 4 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 2.300 RED.",
+    "_string": "- Chọn 10 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng. Nếu trong lô không xuất hiện cả 10 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 12.000 RED.",
+    "_N$string": "- Chọn 10 số khác nhau để đánh bao lô 2 chữ số cuối trong 27 lô của kết quả mở thưởng. Nếu trong lô không xuất hiện cả 10 số mà người chơi đã chọn thì thắng. Thanh toán 1.000 RED cho mỗi điểm đánh, tiền thắng cho mỗi điểm là 12.000 RED.",
     "_fontSize": 20,
     "_lineHeight": 50,
     "_enableWrapText": true,
