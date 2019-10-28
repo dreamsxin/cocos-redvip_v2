@@ -97,7 +97,7 @@ cc.Class({
 	},
 	update: function(){
 		let timestamp = new Date();
-		this.today.string = this.day(timestamp.getDay()) + ' ' + helper.addZero10(timestamp.getDate()) + '/' + helper.addZero10((timestamp.getMonth()+1)) + '/' + timestamp.getFullYear() + ' ' + helper.addZero10(timestamp.getHours()) + ':' + helper.addZero10(helper.addZero10(timestamp.getMinutes())) + ':' + helper.addZero10(timestamp.getSeconds());
+		this.today.string = this.day(timestamp.getDay()) + ' ' + helper.addZero10(timestamp.getDate()) + '/' + helper.addZero10((timestamp.getMonth()+1)) + '/' + timestamp.getFullYear() + ' ' + helper.addZero10(timestamp.getHours()) + ':' + helper.addZero10(timestamp.getMinutes()) + ':' + helper.addZero10(timestamp.getSeconds());
 	},
 	day: function(day){
 		let weekday = new Array(7);
