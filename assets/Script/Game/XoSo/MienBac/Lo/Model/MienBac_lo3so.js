@@ -6,17 +6,19 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		head_select: cc.Node,
 		node_select: cc.Node,
 		item_select: cc.Prefab,
 		soCuoc:      cc.Label,
 		soDiem:      cc.Label,
 		tongTien:    cc.Label,
 		inputSoDiem: cc.EditBox,
-		max:         10,
+		max:         8,
 		countSelect: 0,
 		giaDiem:     22000,
 		diemToiDa:   1000000,
 		game:        '',
+		head:        '100',
 	},
 	onLoad() {
 		let arr = [];
@@ -24,7 +26,7 @@ cc.Class({
 			let ooT = cc.instantiate(this.item_select);
 			ooT = ooT.getComponent('XoSo_select_item');
 			ooT.init(this);
-			ooT.text.string = helper.addZero10(i);
+			ooT.text.string = helper.numberPad(i, 3);
 			this.node_select.addChild(ooT.node);
 			arr[i] = ooT;
 		}
@@ -41,11 +43,53 @@ cc.Class({
 			BrowserUtil.inputRemoveEvent(this.inputSoDiem, 'input', this.onUpdateDiem.bind(this));
 		}
 	},
+	onSelectH: function(event){
+		let self   = this;
+		let name   = event.target.name;
+		let number = name>>0;
+		this.head  = name;
+		this.head_select.children.forEach(function(obj){
+			if (obj.name === name) {
+				obj.pauseSystemEvents();
+                obj.opacity = 255;
+			}else{
+				obj.resumeSystemEvents();
+                obj.opacity = 99;
+			}
+		});
+		for (let i = 0; i < 100; i++) {
+			this.node_select[i].text.string = helper.numberPad(i+number, 3);
+		}
+		self.node_select.forEach(function(node_select){
+				node_select.selectOff();
+		});
+		this.head_select.children.forEach(function(obj){
+			if (void 0 !== obj.data && obj.data.length > 0) {
+				obj.data.forEach(function(select){
+					self.node_select.forEach(function(node_select){
+						if (node_select.text.string === select) {
+							node_select.selectOn();
+						}
+					});
+				});
+			}
+		});
+	},
 	refresh: function() {
+		let self = this;
+		let arr = [];
 		let text = '';
 		this.node_select.forEach(function(obj){
 			if (obj.select) {
-				text += obj.text.string + ', ';
+				arr.push(obj.text.string);
+			}
+		});
+		this.head_select.children.forEach(function(obj){
+			if (obj.name === self.head) {
+				obj.data = arr;
+			}
+			if (void 0 !== obj.data && obj.data.length > 0) {
+				text += obj.data.join(', ') + ', ';
 			}
 		});
 		this.soCuoc.string = text;
@@ -98,6 +142,9 @@ cc.Class({
 			if (obj.select) {
 				obj.onChanger();
 			}
+		});
+		this.head_select.children.forEach(function(obj){
+			obj.data = [];
 		});
 	},
 	onClickCuoc: function(){

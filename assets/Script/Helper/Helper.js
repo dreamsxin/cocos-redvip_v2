@@ -55,10 +55,10 @@ function numberToTime(t) {
 	e + ":" + i
 }
 function numberPad(number, length) {
-	let str = '' + number
+	let str = '' + number;
 	while(str.length < length)
-		str = '0' + str
-	return str
+		str = '0' + str;
+	return str;
 }
 
 function inputNumber(obj){

@@ -2,6 +2,8 @@
 var helper = require('Helper');
 var notice = require('Notice');
 
+var XoSo_Main = require('XoSo_Main');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -16,6 +18,8 @@ cc.Class({
 		loading:      cc.Node,
 		notice:       notice,
 
+		XoSo_Main:    XoSo_Main,
+
 		games:       cc.Node,
 		position:    '',
 	},
@@ -28,8 +32,11 @@ cc.Class({
 		cc.RedT.send({scene:'xo_so'});
 		this.username.string = cc.RedT.user.name;
 		this.balans.string   = helper.numberWithCommas(cc.RedT.user.red);
+
+		this.XoSo_Main.init(this);
 	},
 	onData: function(data) {
+		console.log(data);
 		if (void 0 !== data.user){
 			this.userData(data.user);
 			cc.RedT.userData(data.user);
@@ -46,10 +53,16 @@ cc.Class({
 		if (void 0 !== data.taixiu){
 			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
 		}
+		if (void 0 !== data.notice){
+			this.notice.show(data.notice);
+		}
 	},
 	XoSo: function(data){
 		if (void 0 !== data.notice) {
 			this.addNotice(data.notice);
+		}
+		if (void 0 !== data.history) {
+			this.XoSo_Main.History.onData(data.history);
 		}
 	},
 	userData: function(data){
@@ -69,6 +82,10 @@ cc.Class({
 				cc.director.loadScene('MainGame');
 				break;
 			case 'MienBac':
+				this.onSelectDat(null, 'Main');
+				break;
+			case 'History':
+				this.XoSo_Main.showMain();
 				this.onSelectDat(null, 'Main');
 				break;
 		}

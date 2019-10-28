@@ -6,8 +6,7 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		node_select: cc.Node,
-		item_select: cc.Prefab,
+		inputSo:     cc.EditBox,
 		soCuoc:      cc.Label,
 		soDiem:      cc.Label,
 		tongTien:    cc.Label,
@@ -17,19 +16,6 @@ cc.Class({
 		giaDiem:     22000,
 		diemToiDa:   1000000,
 		game:        '',
-	},
-	onLoad() {
-		let arr = [];
-		for (let i = 0; i < 100; i++) {
-			let ooT = cc.instantiate(this.item_select);
-			ooT = ooT.getComponent('XoSo_select_item');
-			ooT.init(this);
-			ooT.text.string = helper.addZero10(i);
-			this.node_select.addChild(ooT.node);
-			arr[i] = ooT;
-		}
-		this.node_select = arr;
-		arr = null;
 	},
 	onEnable: function () {
 		if (cc.sys.isBrowser) {
@@ -41,31 +27,66 @@ cc.Class({
 			BrowserUtil.inputRemoveEvent(this.inputSoDiem, 'input', this.onUpdateDiem.bind(this));
 		}
 	},
-	refresh: function() {
-		let text = '';
-		this.node_select.forEach(function(obj){
-			if (obj.select) {
-				text += obj.text.string + ', ';
+	onClickChon: function(){
+		let str = this.inputSo.string;
+		if (str.length > 4) {
+			let arr = [];
+			let arrC = str.split(' ');
+			arrC.forEach(function(obj){
+				let arrC2 = obj.split(',');
+				arrC2.forEach(function(obj2){
+					let arrC3 = obj2.split('.');
+					arrC3.forEach(function(obj3){
+						let arrC4 = obj3.split(';');
+						arrC4.forEach(function(obj4){
+							let arrC5 = obj4.split(':');
+							arr = arr.concat(arrC5);
+						});
+					});
+				});
+			});
+			arr.forEach(function(obj, i){
+				arr[i] = obj.trim();
+			});
+			arr = arr.filter(function(obj){
+				if (obj.length === 4) {
+					obj = helper.getOnlyNumberInString(obj);
+					if (obj.length === 4) {
+						return true;
+					}
+				}
+				return false;
+			});
+			let check = {};
+			arr.forEach(function(datac){
+				if (void 0 === check[datac]) {
+					check[datac] = datac;
+				}
+			});
+			arr = Object.values(check);
+			if(arr.length > 0){
+				if (arr.length > this.max) {
+					cc.RedT.inGame.addNotice('1 Vé cược tối đa ' + this.max + ' số chọn...');
+				}else{
+					this.countSelect = arr.length;
+					this.soCuoc.string = arr.join(', ');
+					this.updateTien();
+				}
+			}else{
+				this.countSelect = 0;
+				cc.RedT.inGame.addNotice('Số chọn không hợp lệ.');
 			}
-		});
-		this.soCuoc.string = text;
-		this.updateTien();
-	},
-	refreshH: function(obj) {
-		if (obj.select === true) {
-			this.countSelect++;
 		}else{
-			this.countSelect--;
+			str = helper.getOnlyNumberInString(str);
+			if (str.length === 4) {
+				this.countSelect = 1;
+				this.soCuoc.string = str;
+				this.updateTien();
+			}else{
+				this.countSelect = 0;
+				cc.RedT.inGame.addNotice('Số chọn không hợp lệ.');
+			}
 		}
-		if (this.countSelect > this.max) {
-			obj.onChanger();
-			this.countSelect = this.max;
-			cc.RedT.inGame.addNotice('1 Vé cược tối đa ' + this.max + ' Số...');
-		}
-		if (this.countSelect < 0) {
-			this.countSelect = 0;
-		}
-		this.refresh();
 	},
 	onChangerDiem: function(){
 		var value = helper.numberWithCommas(helper.getOnlyNumberInString(this.inputSoDiem.string));
@@ -94,11 +115,6 @@ cc.Class({
 		this.tongTien.string    = '0';
 		this.inputSoDiem.string = '';
 		this.countSelect        = 0;
-		this.node_select.forEach(function(obj){
-			if (obj.select) {
-				obj.onChanger();
-			}
-		});
 	},
 	onClickCuoc: function(){
 		if(helper.isEmpty(this.soCuoc.string)) {

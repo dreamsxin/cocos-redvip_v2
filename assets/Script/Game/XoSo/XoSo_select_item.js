@@ -20,4 +20,14 @@ cc.Class({
 		this.onChanger();
 		this.RedT.refreshH(this);
 	},
+	selectOn: function(){
+		this.select         = true;
+		this.nodeOn.active  = true;
+		this.nodeOff.active = false;
+	},
+	selectOff: function(){
+		this.select         = false;
+		this.nodeOn.active  = false;
+		this.nodeOff.active = true;
+	},
 });
