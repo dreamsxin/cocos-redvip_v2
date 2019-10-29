@@ -63,9 +63,6 @@ cc.Class({
 			case 'lo4':
 				return 'Lô 4 Số'
 				break;
-			case 'lo2':
-				return 'Lô 2 Số'
-				break;
 			case 'xien2':
 				return 'Xiên 2'
 				break;
