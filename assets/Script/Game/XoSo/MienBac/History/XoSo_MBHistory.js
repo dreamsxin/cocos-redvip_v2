@@ -21,8 +21,6 @@ cc.Class({
 		.then(tab => {
 			this.content = tab;
 		})
-	},
-	onEnable: function() {
 		this.get_data();
 	},
 	get_data: function(page = 1){

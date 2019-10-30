@@ -64,6 +64,9 @@ cc.Class({
 		if (void 0 !== data.history) {
 			this.XoSo_Main.History.onData(data.history);
 		}
+		if (void 0 !== data.kq) {
+			this.XoSo_Main.KetQua.onData(data.kq);
+		}
 	},
 	userData: function(data){
 		this.balans.string = helper.numberWithCommas(data.red);
@@ -85,6 +88,10 @@ cc.Class({
 				this.onSelectDat(null, 'Main');
 				break;
 			case 'History':
+				this.XoSo_Main.showMain();
+				this.onSelectDat(null, 'Main');
+				break;
+			case 'KetQua':
 				this.XoSo_Main.showMain();
 				this.onSelectDat(null, 'Main');
 				break;

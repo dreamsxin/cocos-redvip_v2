@@ -7,8 +7,6 @@ cc.Class({
     	header: cc.Node,
     	body:   cc.Node,
     },
-    onLoad () {
-    },
     onSelectType: function(event) {
     	let name = event.target.name;
     	this.header.children.forEach(function(obj){
