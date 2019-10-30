@@ -75,6 +75,9 @@ cc.Class({
     openMiniGame: function(e, name){
         cc.RedT.MiniPanel[name].openGame();
     },
+    openMegaJ: function(e, name){
+        cc.RedT.MiniPanel.MegaJackpot.openGame(name);
+    },
     regGame: function(e, name){
         cc.RedT.audio.playClick();
         if (cc.RedT.IS_LOGIN){

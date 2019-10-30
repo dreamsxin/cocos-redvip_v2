@@ -29,14 +29,14 @@
     "portrait": false,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.bem68",
+  "packageName": "org.cocos2d.hunet",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait",
     "zip": false
   },
-  "startScene": "2dbb7549-feda-42b6-a6a9-86608310bcaf",
-  "title": "Bem68",
+  "startScene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
+  "title": "HuNet",
   "webOrientation": "landscape",
   "wechatgame": {
     "REMOTE_SERVER_ROOT": "",

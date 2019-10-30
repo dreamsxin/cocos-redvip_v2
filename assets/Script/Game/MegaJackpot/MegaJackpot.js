@@ -103,12 +103,15 @@ cc.Class({
 		});
 		this.onGetHu();
 	},
-	openGame: function () {
+	openGame: function (game = null) {
 		cc.RedT.audio.playClick();
 		if (cc.RedT.IS_LOGIN){
 			this.node.active = !0;
 			localStorage.setItem('MegaJackpot', true);
 			this.setTop();
+			if (!!game) {
+				this.changerGame(null, game);
+			}
 		} else cc.RedT.inGame.dialog.showSignIn();
 	},
 	closeGame:function(){

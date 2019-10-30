@@ -35,9 +35,10 @@ cc.Class({
 		ThongBaoNoHu: ThongBaoNoHu,
 
 		audioBG: cc.AudioSource,
+		url:     '',
+		fileAPK: '',
 	},
 	onLoad: function () {
-		document.cookie = "redT=1702;path=/";
 		if (void 0 === cc.RedT) {
 			cc.RedT = baseControll;
 			cc.RedT.init();
@@ -375,16 +376,16 @@ cc.Class({
 		cc.RedT.audio.playUnClick();
 	},
 	fanpage: function(){
-		cc.sys.openURL('http://bem68.com/fanpage/');
+		cc.sys.openURL(this.url + '/fanpage/');
 	},
 	ios: function(){
-		cc.sys.openURL('http://bem68.com/help/ios');
+		cc.sys.openURL(this.url + '/help/ios');
 	},
 	android: function(){
-		cc.sys.openURL('http://bem68.com/download/Bem68.apk');
+		cc.sys.openURL(this.url + '/download/' + this.fileAPK);
 	},
 	telegram: function(){
-		cc.sys.openURL('http://bem68.com/help/telegram');
+		cc.sys.openURL(this.url + '/help/telegram');
 	},
 
 /**
