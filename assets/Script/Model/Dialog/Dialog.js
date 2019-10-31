@@ -97,6 +97,11 @@ cc.Class({
 		this.node.active = this.signIn.node.active = true;
 		this.objShow     = this.signIn.node;
 	},
+	showSignInToUp: function(){
+		this.objShow.active = false;
+		this.signUp.node.previous = this.objShow;
+		this.showSignUp();
+	},
 	showSignUp: function(){
 		this.node.active = this.signUp.node.active = true;
 		this.objShow     = this.signUp.node;

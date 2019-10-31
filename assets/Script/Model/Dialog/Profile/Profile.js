@@ -15,6 +15,7 @@ cc.Class({
 		this.LichSu = this.LichSu.getComponent('LichSu');
 		this.BaoMat = this.BaoMat.getComponent('BaoMat');
 
+		this.CaNhan.init();
 		this.KetSat.init();
 		this.BaoMat.init();
 

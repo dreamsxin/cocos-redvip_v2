@@ -143,8 +143,10 @@ cc.Class({
 					componentLeft.text.string = name;
 					self.scrollviewMenhGia.content.addChild(item);
 					var itemR = cc.instantiate(self.prefabRight);
-					itemR.getComponent('NapRed_itemTT').init(name, value);
-					self.bangGia.content.addChild(itemR);
+					itemR = itemR.getComponent('NapRed_itemTT');
+					itemR.init(name, value);
+					itemR.bg.active = index%2;
+					self.bangGia.content.addChild(itemR.node);
 				}
 				return componentLeft;
 			}))

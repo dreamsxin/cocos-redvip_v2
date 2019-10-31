@@ -75,11 +75,8 @@ cc.Class({
 				t.preventDefault && t.preventDefault(),
 				!1) : void 0
 		}
-		Promise.all(this.header.children.map(function(obj) {
+		this.header = this.header.children.map(function(obj) {
 			return obj.getComponent('itemContentMenu');
-		}))
-		.then(result => {
-			this.header = result;
 		});
 	},
 	onEnable: function () {
@@ -142,20 +139,20 @@ cc.Class({
 		}
 	},
 	onSelectHead: function(event, name){
-		Promise.all(this.header.map(function(header) {
-			if (header.node.name == name) {
+		this.header.forEach(function(header) {
+			if (header.node.name === name) {
 				header.select();
 			}else{
 				header.unselect();
 			}
-		}));
-		Promise.all(this.body.children.map(function(body) {
-			if (body.name == name) {
+		});
+		this.body.children.forEach(function(body) {
+			if (body.name === name) {
 				body.active = true;
 			}else{
 				body.active = false;
 			}
-		}));
+		});
 	},
 	toggleMoreNhaMang: function(){
 		this.moreNhaMang.active = !this.moreNhaMang.active;
@@ -167,7 +164,7 @@ cc.Class({
 	infoSet: function(data, i_arg, i_text, nhamang = false){
 		var self = this;
 		if (data.length > 0) {
-			Promise.all(data.map(function(obj, index){
+			this[i_arg] = data.map(function(obj, index){
 				var item = cc.instantiate(self.prefabLeft);
 				var componentLeft = item.getComponent('NapRed_itemOne');
 				componentLeft.init(self, i_arg, i_text)
@@ -188,14 +185,13 @@ cc.Class({
 					componentLeft.text.string = name;
 					self.scrollviewMenhGia.content.addChild(item);
 					var itemR = cc.instantiate(self.prefabRight);
-					itemR.getComponent('NapRed_itemTT').init(name, value);
-					self.bangGia.content.addChild(itemR);
+					itemR = itemR.getComponent('NapRed_itemTT');
+					itemR.init(name, value);
+					itemR.bg.active = index%2;
+					self.bangGia.content.addChild(itemR.node);
 				}
 				return componentLeft;
-			}))
-			.then(result => {
-				this[i_arg] = result;
-			})
+			});
 		}
 	},
 	onData: function(data){

@@ -5,27 +5,14 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		header: cc.Node,
+		body:   cc.Node,
 		avatar: cc.Sprite,
-		UID: {
-			default: null,
-			type:    cc.Label,
-		},
-		username: {
-			default: null,
-			type:    cc.Label,
-		},
-		phone: {
-			default: null,
-			type:    cc.Label,
-		},
-		email: {
-			default: null,
-			type:    cc.Label,
-		},
-		joinedOn: {
-			default: null,
-			type:    cc.Label,
-		},
+		UID: cc.Label,
+		username: cc.Label,
+		phone: cc.Label,
+		email: cc.Label,
+		joinedOn: cc.Label,
 		cmt: cc.Label,
 
 		nodeRank: cc.Node,
@@ -34,6 +21,11 @@ cc.Class({
 		vipTong:  cc.Label,
 		vipHien:  cc.Label,
 		vipTiep:  cc.Label,
+	},
+	init(){
+		this.header = this.header.children.map(function(obj) {
+			return obj.getComponent('itemContentMenu');
+		});
 	},
 	onEnable: function () {
 		this.getLevel();
@@ -55,21 +47,37 @@ cc.Class({
 		this.vipHien.string  = helper.numberWithCommas(data.vipHT);
 		this.vipTiep.string  = helper.numberWithCommas(data.vipNext);
 
-		Promise.all(this.nodeRank.children.map(function(rank, index){
+		this.nodeRank.children.forEach(function(rank, index){
 			if (rank.name <= data.level) {
-				rank.color = rank.color.fromHEX('#FFFFFF');
+				rank.opacity = 255;
 				if(rank.name == data.level){
 					self.nodeNhan.children[index].children[3].active = true;
 				}else{
 					self.nodeNhan.children[index].children[3].active = false;
 				}
 			}else{
-				rank.color = rank.color.fromHEX('#5F5F5F');
+				rank.opacity = 99;
 				self.nodeNhan.children[index].children[3].active = false;
 			}
-		}))
+		});
 	},
 	onNhanThuong: function(){
 		cc.RedT.send({user:{nhanthuong: true}});
+	},
+	onSelectHead: function(event, name){
+		this.header.forEach(function(header) {
+			if (header.node.name === name) {
+				header.select();
+			}else{
+				header.unselect();
+			}
+		});
+		this.body.children.forEach(function(body) {
+			if (body.name === name) {
+				body.active = true;
+			}else{
+				body.active = false;
+			}
+		});
 	},
 });

@@ -7,22 +7,15 @@ cc.Class({
             default: null,
             type: cc.Node,
         },
-        MuaXu: {
-            default: null,
-            type: cc.Node,
-        },
         MuaTheCao: {
             default: null,
             type: cc.Node,
         },
     },
     init(){
-        this.MuaXu     = this.MuaXu.getComponent('shopMuaXu');
         this.MuaTheCao = this.MuaTheCao.getComponent('shopMuaTheCao');
-
         this.MuaTheCao.init();
-
-        this.body = [this.MuaXu, this.MuaTheCao];
+        this.body = [this.MuaTheCao];
         Promise.all(this.header.children.map(function(obj) {
             return obj.getComponent('itemContentMenu');
         }))

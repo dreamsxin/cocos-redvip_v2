@@ -3,14 +3,9 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		menhgia: {
-			default: null,
-			type: cc.Label,
-		},
-		red: {
-			default: null,
-			type: cc.Label,
-		},
+		bg: cc.Node,
+		menhgia: cc.Label,
+		red: cc.Label,
 	},
 
 	init: function(menhgia, red) {

@@ -91,4 +91,6 @@ cc.Class({
         };
         cc.RedT.inGame.auth({authentication:{username: this.username.string, password: this.password.string}});
     },
+    onSingUpClick: function() {
+    },
 });
