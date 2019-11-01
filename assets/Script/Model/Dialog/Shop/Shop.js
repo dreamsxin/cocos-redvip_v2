@@ -29,12 +29,6 @@ cc.Class({
 			return obj.getComponent('itemHeadMenu');
 		});
 	},
-	onEnable: function () {
-		cc.RedT.inGame.header.node.active = false;
-	},
-	onDisable: function () {
-		cc.RedT.inGame.header.node.active = true;
-	},
 	onSelectHead: function(event, name){
 		this.header.forEach(function(header) {
 			if (header.node.name === name) {

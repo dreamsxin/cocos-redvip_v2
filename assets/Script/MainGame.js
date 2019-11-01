@@ -65,14 +65,13 @@ cc.Class({
 			cc.RedT.send({scene:"home"});
 			this.header.reset();
 			this.header.userName.string = cc.RedT.user.name;
-	        this.dialog.profile.CaNhan.username.string = cc.RedT.user.name;
-	        this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(cc.RedT.user.red);
-	        this.header.userXu.string = helper.numberWithCommas(cc.RedT.user.xu);
-	        this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(cc.RedT.user.ketSat);
-	        this.dialog.profile.CaNhan.UID.string = cc.RedT.user.UID;
-	        this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
-	        this.dialog.profile.CaNhan.email.string = cc.RedT.user.email;
-	        this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
+			this.dialog.profile.CaNhan.username.string = cc.RedT.user.name;
+			this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(cc.RedT.user.red);
+			this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(cc.RedT.user.ketSat);
+			this.dialog.profile.CaNhan.UID.string = cc.RedT.user.UID;
+			this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
+			this.dialog.profile.CaNhan.email.string = cc.RedT.user.email;
+			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
 		}else{
 			this.dialog.settings.setMusic();
 		}
@@ -193,9 +192,6 @@ cc.Class({
 		}
 		if (void 0 !== data.red){
 			this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(data.red);
-		}
-		if (void 0 !== data.xu){
-			this.header.userXu.string = helper.numberWithCommas(data.xu);
 		}
 		if (void 0 !== data.ketSat){
 			this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(data.ketSat);
@@ -361,14 +357,14 @@ cc.Class({
 		}
 	},
 	playMusic: function() {
-        this.audioBG.play();
-    },
-    pauseMusic: function() {
-        this.audioBG.pause();
-    },
-    resumeMusic: function() {
-        //cc.audioEngine.resumeMusic();
-    },
+		this.audioBG.play();
+	},
+	pauseMusic: function() {
+		this.audioBG.pause();
+	},
+	resumeMusic: function() {
+		//cc.audioEngine.resumeMusic();
+	},
 	audioClick: function(){
 		cc.RedT.audio.playClick();
 	},

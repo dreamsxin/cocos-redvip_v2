@@ -19,7 +19,7 @@ var TaiXiuLichSuPhien = require('TaiXiuLichSuPhien'),
 
 var MegaJ_history     = require('MegaJ_history');
 var MegaJ_top         = require('MegaJ_top');
-
+var TaiXiuTop         = require('TaiXiuTop');
 
 cc.Class({
 	extends: cc.Component,
@@ -27,6 +27,7 @@ cc.Class({
 	properties: {
 		TaiXiuLichSuPhien: TaiXiuLichSuPhien,
 		TaiXiuLichSu:      TaiXiuLichSu,
+		TaiXiuTop:         TaiXiuTop,
 		MiniPoker_LichSu:  MiniPoker_LichSu,
 		MiniPoker_Top:     MiniPoker_Top,
 		BigBabol_LichSu:   BigBabol_LichSu,
@@ -107,6 +108,10 @@ cc.Class({
 	showTaiXiuLichSu: function(){
 		this.node.active = this.TaiXiuLichSu.node.active = true;
 		this.objShow     = this.TaiXiuLichSu.node;
+	},
+	showTaiXiuTop: function(){
+		this.node.active = this.TaiXiuTop.node.active = true;
+		this.objShow     = this.TaiXiuTop.node;
 	},
 	showMiniPokerLichSu: function(){
 		this.node.active = this.MiniPoker_LichSu.node.active = true;

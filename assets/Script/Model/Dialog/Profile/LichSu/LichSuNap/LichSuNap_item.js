@@ -3,33 +3,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        GD: {
-            default: null,
-            type:    cc.Label,
-        },
-        Time: {
-            default: null,
-            type:    cc.Label,
-        },
-        NhaMang: {
-            default: null,
-            type:    cc.Label,
-        },
-        MenhGia: {
-            default: null,
-            type:    cc.Label,
-        },
-        Nhan: {
-            default: null,
-            type:    cc.Label,
-        },
-        Seri: {
-            default: null,
-            type:    cc.Label,
-        },
-        Status: {
-            default: null,
-            type:    cc.Label,
-        },
+        Time:    cc.Label,
+        NhaMang: cc.Label,
+        MenhGia: cc.Label,
+        Nhan:    cc.Label,
+        pin:     cc.Label,
+        seri:    cc.Label,
+        Status:  cc.Label,
     },
 });

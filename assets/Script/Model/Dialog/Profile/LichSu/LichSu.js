@@ -5,13 +5,18 @@ cc.Class({
 	properties: {
 		page:         cc.Prefab,
 		header:       cc.Node,
-		pagination:   cc.Node,
 		lichSuNap:    cc.Node,
 		lichSuRut:    cc.Node,
 		lichSuChuyen: cc.Node,
 		lichSuBank:   cc.Node,
 	},
 	onLoad(){
+		this.page = cc.instantiate(this.page);
+        this.page.y = -279;
+        this.node.addChild(this.page);
+        this.page = this.page.getComponent('Pagination');
+        this.page.init(this);
+
 		this.history = "LichSuNap";
 		this.lichSuNap    = this.lichSuNap.getComponent('LichSuNap');
 		this.lichSuRut    = this.lichSuRut.getComponent('LichSuRut');
@@ -19,9 +24,6 @@ cc.Class({
 		this.lichSuBank   = this.lichSuBank.getComponent('LichSuBank');
 
 		this.body = [this.lichSuNap.node, this.lichSuRut.node, this.lichSuChuyen.node, this.lichSuBank.node];
-
-		this.pagination = this.pagination.getComponent('Pagination');
-		this.pagination.init(this);
 
 		this.header = this.header.children.map(function(obj) {
 			return obj.getComponent('itemContentMenu');
@@ -64,7 +66,7 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		this.pagination.onSet(data.page, data.kmess, data.total);
+		this.page.onSet(data.page, data.kmess, data.total);
 
 		if (void 0 !== data.nap_red){
 			this.lichSuNap.onData(data.nap_red);

@@ -20,34 +20,25 @@ cc.Class({
 		this.BaoMat.init();
 
 		this.body = [this.CaNhan, this.KetSat, this.LichSu, this.BaoMat];
-		Promise.all(this.header.children.map(function(obj) {
+		this.header = this.header.children.map(function(obj) {
 			return obj.getComponent('itemHeadMenu');
-		}))
-		.then(result => {
-			this.header = result;
 		});
 	},
-	onEnable: function () {
-		cc.RedT.inGame.header.node.active = false;
-	},
-	onDisable: function () {
-		cc.RedT.inGame.header.node.active = true;
-	},
 	onSelectHead: function(event, name){
-		Promise.all(this.header.map(function(header) {
+		this.header.forEach(function(header) {
 			if (header.node.name == name) {
 				header.select();
 			}else{
 				header.unselect();
 			}
-		}));
-		Promise.all(this.body.map(function(body) {
+		});
+		this.body.forEach(function(body) {
 			if (body.node.name == name) {
 				body.node.active = true;
 			}else{
 				body.node.active = false;
 			}
-		}));
+		});
 	},
 	superView:function(name){
 		if(name == "CaNhan"){

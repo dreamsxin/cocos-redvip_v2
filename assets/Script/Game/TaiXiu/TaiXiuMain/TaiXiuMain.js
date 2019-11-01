@@ -8,10 +8,9 @@ var TX_Board    = require('TaiXiuBoard'),
 cc.Class({
 	extends: cc.Component,
 	properties: {
-		background: {
-			default: null,
-			type:    cc.Node
-		},
+		background: cc.Node,
+		bg_Dice:   cc.Node,
+		bg_efDice: cc.Node,
 		inputL: cc.Node,
 		inputR: cc.Node,
 		inputLTxt: cc.Label,
@@ -24,74 +23,23 @@ cc.Class({
 			default: null,
 			type:    cc.EditBox
 		},
-		totalLeft: {
-			default: null,
-			type:    cc.Label
-		},
-		totalRight: {
-			default: null,
-			type:    cc.Label
-		},
-		myLeft: {
-			default: null,
-			type:    cc.Label
-		},
-		myRight: {
-			default: null,
-			type:    cc.Label
-		},
-		playerLeft: {
-			default: null,
-			type:    cc.Label
-		},
-		playerRight: {
-			default: null,
-			type:    cc.Label
-		},
-		nodeKetQua: {
-			default: null,
-			type:    cc.Node
-		},
-		labelKetQua: {
-			default: null,
-			type:    cc.Label
-		},
-		timeWait: {
-			default: null,
-			type:    cc.Label
-		},
-		nodeTimeWait: {
-			default: null,
-			type:    cc.Node
-		},
-		timeCuoc: {
-			default: null,
-			type:    cc.Label
-		},
-		timePopup: {
-			default: null,
-			type:    cc.Label
-		},
-		nodeChanLe: {
-			default: null,
-			type:    cc.Node
-		},
-		nodeTaiXiu: {
-			default: null,
-			type:    cc.Node
-		},
-		nodeTimePopup: {
-			default: null,
-			type:    cc.Node
-		},
-		labelPhien: {
-			default: null,
-			type:    cc.Label
-		},
-		diaNan: {
-			default: null,
-			type:    cc.Node
-		},
+		totalLeft: cc.Label,
+		totalRight: cc.Label,
+		myLeft: cc.Label,
+		myRight: cc.Label,
+		playerLeft: cc.Label,
+		playerRight: cc.Label,
+		nodeKetQua: cc.Node,
+		labelKetQua: cc.Label,
+		timeWait: cc.Label,
+		nodeTimeWait: cc.Node,
+		timeCuoc: cc.Label,
+		timePopup: cc.Label,
+		nodeChanLe: cc.Node,
+		nodeTaiXiu: cc.Node,
+		nodeTimePopup: cc.Node,
+		labelPhien: cc.Label,
+		diaNan: cc.Node,
 		dice: {
 			default: [],
 			type:    cc.Sprite
@@ -100,22 +48,10 @@ cc.Class({
 			default: [],
 			type:    cc.SpriteFrame
 		},
-		cointRED: {
-			default: null,
-			type:    cc.Node
-		},
-		cointXU: {
-			default: null,
-			type:    cc.Node
-		},
-		dotLogs: {
-			default: null,
-			type:    cc.Node
-		},
-		gameCover: {
-			default: null,
-			type:    cc.Label
-		},
+		cointRED: cc.Node,
+		cointXU: cc.Node,
+		dotLogs: cc.Node,
+		gameCover: cc.Label,
 		diceAnimation: {
 			default: null,
 			type:    cc.Animation
@@ -144,14 +80,8 @@ cc.Class({
 			default: null,
 			type:    cc.SpriteFrame
 		},
-		notice: {
-			default: null,
-			type:    cc.Node
-		},
-		mini_warning: {
-			default: null,
-			type:    cc.Prefab
-		},
+		notice: cc.Node,
+		mini_warning: cc.Prefab,
 		fontCong: {
 			default: null,
 			type:    cc.BitmapFont
@@ -160,22 +90,10 @@ cc.Class({
 			default: null,
 			type:    cc.BitmapFont
 		},
-		WIN_HT: {
-			default: null,
-			type:    cc.Label
-		},
-		WIN_DN: {
-			default: null,
-			type:    cc.Label
-		},
-		LOST_HT: {
-			default: null,
-			type:    cc.Label
-		},
-		LOST_DN: {
-			default: null,
-			type:    cc.Label
-		},
+		WIN_HT: cc.Label,
+		WIN_DN: cc.Label,
+		LOST_HT: cc.Label,
+		LOST_DN: cc.Label,
 		TX_Chat: TX_Chat,
 		TX_Board: TX_Board,
 		red:    true,
@@ -205,14 +123,12 @@ cc.Class({
 			cc.RedT.setting.taixiu.isNan = false;
 		}
 
-		Promise.all(this.dotLogs.children.map(function(dot){
-			var temp = dot.getComponent(cc.Sprite);
+		this.dotLogs = this.dotLogs.children.map(function(dot){
+			let temp = dot.getComponent(cc.Sprite);
 			temp.mod = dot.getComponent('TaiXiuMain_logTips');
 			return temp;
-		}))
-		.then(resulf => {
-			this.dotLogs = resulf;
 		});
+		this.dotLogs.reverse();
 
 		this.onDiceAnimationFinish = function(event){
 			this.setDice(true);
@@ -331,13 +247,13 @@ cc.Class({
 	},
 	changeNextFocusEditBox: function() {
 		for (var t = !1, e = 0, i = this.editboxs.length; e < i; e++){
-            if (BrowserUtil.checkEditBoxFocus(this.editboxs[e])) {
-                BrowserUtil.focusEditBox(this.editboxs[e]);
-                t = !0;
-                break
-            }
-        }
-        !t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[1]);
+			if (BrowserUtil.checkEditBoxFocus(this.editboxs[e])) {
+				BrowserUtil.focusEditBox(this.editboxs[e]);
+				t = !0;
+				break
+			}
+		}
+		!t && 0 < this.editboxs.length && BrowserUtil.focusEditBox(this.editboxs[1]);
 	},
 	clean: function(){
 		this.inputLeft.string = this.inputRight.string = '';
@@ -437,10 +353,10 @@ cc.Class({
 	},
 	setDice: function(bool = false, sprite = true){
 		var self = this;
-		Promise.all(this.dice.map(function(dice, index){
+		this.dice.forEach(function(dice, index){
 			sprite && (dice.spriteFrame = self.diceSF[cc.RedT.setting.taixiu.logs[0].dice[index]-1]);
 			dice.node.active = bool;
-		}))
+		});
 	},
 	onData: function(data){
 		if (void 0 !== data.get_phien) {
@@ -503,7 +419,7 @@ cc.Class({
 				this.labelKetQua.string = this.diemSo;
 				if(this.isNan){
 					this.diaNan.active         = true;
-					this.diaNan.position       = cc.v2(0,-11.5);
+					this.diaNan.position       = cc.v2(0,-8);
 					this.spriteNan.node.active = false;
 					this.onDiceAnimationFinish();
 				} else {
@@ -660,10 +576,10 @@ cc.Class({
 		if (!!cc.RedT.setting.taixiu.logs.length) {
 			var self = this;
 			//Main log
-			Promise.all(this.dotLogs.map(function(dot, index){
-				var data = cc.RedT.setting.taixiu.logs[index];
+			this.dotLogs.forEach(function(dot, index){
+				let data = cc.RedT.setting.taixiu.logs[index];
 				if (void 0 !== data) {
-					var point = data.dice[0] + data.dice[1] + data.dice[2];
+					let point = data.dice[0] + data.dice[1] + data.dice[2];
 					dot.node.active = true;
 					dot.node.phien = data.phien;
 					dot.mod.text.string = data.dice[0] + '-' + data.dice[1] + '-' + data.dice[2];
@@ -671,8 +587,7 @@ cc.Class({
 				}else{
 					dot.node.active = false;
 				}
-			}));
-			//this.dotLogs
+			});
 
 			var line_dice1 = [];
 			var line_dice2 = [];
@@ -688,7 +603,7 @@ cc.Class({
 			var sliced = cc.RedT.setting.taixiu.logs.slice(0, 19);
 			sliced.reverse();
 			// Line paint
-			var Paint = new Promise(function(resolve, reject){
+			//var Paint = new Promise(function(resolve, reject){
 				for (var i = 0; i < sliced.length; i++) {
 					var data = sliced[i];
 					if (void 0 !== data) {
@@ -710,7 +625,7 @@ cc.Class({
 				self.RedT.TX_ThongKe.draw(self.RedT.TX_ThongKe.dice2_line, self.RedT.TX_ThongKe.dice2_dots, line_dice2);
 				self.RedT.TX_ThongKe.draw(self.RedT.TX_ThongKe.dice3_line, self.RedT.TX_ThongKe.dice3_dots, line_dice3);
 				self.RedT.TX_ThongKe.draw_Tong(self.RedT.TX_ThongKe.tong_line, line_tong);
-			});
+			//});
 
 			// Ket Qua
 			var KetQua = Promise.all(this.RedT.TX_ThongKe.KetQuaDot.map(function(dot, index){

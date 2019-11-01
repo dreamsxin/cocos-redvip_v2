@@ -3,34 +3,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        GD: {
-            default: null,
-            type:    cc.Label,
-        },
-        Time: {
-            default: null,
-            type:    cc.Label,
-        },
-        NhaMang: {
-            default: null,
-            type:    cc.Label,
-        },
-        MenhGia: {
-            default: null,
-            type:    cc.Label,
-        },
-        SoLuong: {
-            default: null,
-            type:    cc.Label,
-        },
-        Cost: {
-            default: null,
-            type:    cc.Label,
-        },
-        Status: {
-            default: null,
-            type:    cc.Label,
-        },
+        Time:    cc.Label,
+        NhaMang: cc.Label,
+        MenhGia: cc.Label,
+        SoLuong: cc.Label,
+        Cost:    cc.Label,
+        Status:  cc.Label,
     },
     onInfoClick: function() {
         if (this.info) {

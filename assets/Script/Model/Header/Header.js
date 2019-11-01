@@ -4,31 +4,12 @@ cc.Class({
 
     properties: {
         avatar: cc.Sprite,
-        nodeUsers: {
-            default: null,
-            type: cc.Node,
-        },
-        nodeGuest: {
-            default: null,
-            type: cc.Node,
-        },
-        exp: {
-            default: null,
-            type: cc.Node,
-        },
-        userName: {
-            default: null,
-            type: cc.Label,
-        },
-        vip: cc.Label,
-        userRed: {
-            default: null,
-            type: cc.Label,
-        },
-        userXu: {
-            default: null,
-            type: cc.Label,
-        },
+        nodeUsers: cc.Node,
+        nodeGuest: cc.Node,
+        exp: cc.Node,
+        userName: cc.Label,
+        vip:      cc.Label,
+        userRed:  cc.Label,
         maskFull: 0,
     },
     onLoad () {
@@ -42,7 +23,7 @@ cc.Class({
         this.nodeGuest.active = false;
     },
     isSignOut: function() {
-        this.userName.string = this.userRed.string = this.userXu.string = '';
+        this.userName.string = this.userRed.string = '';
         this.nodeUsers.active = false;
         this.nodeGuest.active = true;
     },

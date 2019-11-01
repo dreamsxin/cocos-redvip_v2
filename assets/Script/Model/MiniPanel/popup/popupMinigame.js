@@ -31,7 +31,7 @@ cc.Class({
 		if (void 0 !== cc.RedT.setting.popupMini.open) {
 			if(cc.RedT.setting.popupMini.open){
 				this.list.active = true;
-				this.nodeTime.position = cc.v2(-155.7, -5.6);
+				this.nodeTime.position = cc.v2(-155.7, 43);
 				this.list.scale = 1;
 			}else{
 				this.nodeTime.position = cc.v2(25, 43);
@@ -91,9 +91,9 @@ cc.Class({
 			}else{
 				this.list.active = cc.RedT.setting.popupMini.open = true
 				if (this.nodeTime.active) {
-					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(-155.7, -5.6)))
+					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(-155.7, 43)))
 				}else {
-					this.nodeTime.position = cc.v2(-155.7, -5.6);
+					this.nodeTime.position = cc.v2(-155.7, 43);
 				}
 				this.list.runAction(cc.sequence(cc.spawn(cc.scaleTo(0.3, 1).easing(cc.easeBackOut(3.0)), cc.rotateTo(0.3, 720)), cc.callFunc(function(){
 					this.toggleRuning = false
