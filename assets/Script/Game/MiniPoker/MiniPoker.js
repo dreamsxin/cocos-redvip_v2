@@ -56,10 +56,12 @@ cc.Class({
 		this.RedT = obj;
 		this.Top    = obj.Dialog.MiniPoker_Top;
 		this.LichSu = obj.Dialog.MiniPoker_LichSu;
-		cc.RedT.setting.minipoker = cc.RedT.setting.minipoker || {};
+		cc.RedT.setting.minipoker = cc.RedT.setting.minipoker || {scale:1};
+
+		this.node.runScale = false;
 
 		this.card.data.getComponent('Card')
-		.config()
+		.config();
 
 		var check = localStorage.getItem('minipoker');
 		if (check == "true") {
@@ -91,9 +93,9 @@ cc.Class({
 		this.data     = null;
 		this.ttOffset = null;
 
-		Promise.all(this.reels.map(function(reel){
+		this.reels.forEach(function(reel){
 			reel.init(self);
-		}))
+		});
 	},
 	onEnable: function() {
 		this.onGetHu();
@@ -137,32 +139,32 @@ cc.Class({
 		localStorage.setItem('minipoker', false);
 	},
 	random: function(newG = false){
-		Promise.all(this.reels.map(function(reel) {
-			reel.random(newG)
-		}))
+		this.reels.forEach(function(reel) {
+			reel.random(newG);
+		});
 	},
 	autoSpin: function(){
 		this.random();
-		Promise.all(this.reels.map(function(reel, index) {
-			reel.spin(index)
-		}))
+		this.reels.forEach(function(reel, index) {
+			reel.spin(index);
+		});
 	},
 	onSpin: function(){
 		this.buttonSpin.pauseSystemEvents();
 		this.buttonCoint.pauseSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 	    	bet.pauseSystemEvents();
-	    }))
+	    });
 	},
 	offSpin: function(){
 		this.isSpin = false;
 		this.buttonStop.active = this.isSpin ? (this.isAuto ? true : false) : false;
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
-			var oT = bet.children[0].active;
+		this.bet.children.forEach(function(bet){
+			let oT = bet.children[0].active;
 			if(!oT) bet.resumeSystemEvents();
-    	}))
+    	});
 	},
 	spin: function(event){
 		if (!this.isSpin) {
@@ -259,7 +261,9 @@ cc.Class({
 		this.notice.addChild(notice)
 	},
 	setTop:function(){
+		cc.RedT.setting.minipoker.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	hieuUng: function(){
     	if (!!this.winC && this.winC > 0) {
@@ -367,9 +371,9 @@ cc.Class({
 	},
 	onCloseGame: function(){
     	this.isSpin = false;
-    	Promise.all(this.reels.map(function(reel) {
+    	this.reels.forEach(function(reel) {
 			reel.stop();
-		}));
+		});
 		this.offSpin();
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
     },

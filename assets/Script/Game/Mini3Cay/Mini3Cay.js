@@ -39,7 +39,7 @@ cc.Class({
     	this.RedT = obj;
     	this.LichSu = obj.Dialog.Mini3Cay_history;
     	this.Top    = obj.Dialog.Mini3Cay_top;
-    	cc.RedT.setting.mini3cay = cc.RedT.setting.mini3cay || {};
+    	cc.RedT.setting.mini3cay = cc.RedT.setting.mini3cay || {scale:1};
 
     	var check = localStorage.getItem('mini3cay');
 		if (check == "true") {
@@ -65,9 +65,9 @@ cc.Class({
     onLoad () {
 		this.ttOffset = null;
 		var self = this;
-		Promise.all(this.reels.map(function(reel){
+		this.reels.forEach(function(reel){
 			reel.init(self);
-		}))
+		});
 	},
 	onEnable: function() {
 		this.onGetHu();
@@ -111,7 +111,9 @@ cc.Class({
 		localStorage.setItem('mini3cay', false);
 	},
 	setTop:function(){
+		cc.RedT.setting.mini3cay.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	changerCoint: function(){
 		this.red            = cc.RedT.setting.mini3cay.red = !this.red;
@@ -121,7 +123,7 @@ cc.Class({
 	},
 	intChangerBet: function(){
 		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
+		this.bet.children.forEach(function(obj){
 			if (obj.name == cc.RedT.setting.mini3cay.bet) {
 				self.cuoc = obj.name;
 				obj.children[0].active = true;
@@ -130,12 +132,12 @@ cc.Class({
 				obj.children[0].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		});
 	},
 	changerBet: function(event, bet){
 		this.cuoc = cc.RedT.setting.mini3cay.bet = bet;
 		var target = event.target;
-		Promise.all(this.bet.children.map(function(obj){
+		this.bet.children.forEach(function(obj){
 			if (obj == target) {
 				obj.children[0].active = true;
 				obj.pauseSystemEvents();
@@ -143,7 +145,7 @@ cc.Class({
 				obj.children[0].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		});
 		this.onGetHu();
 	},
 	playClick: function(){
@@ -175,31 +177,31 @@ cc.Class({
 		cc.RedT.send({g:{mini3cay:{spin:{cuoc:this.cuoc, red: this.red}}}});
 	},
     random: function(newG = false){
-		Promise.all(this.reels.map(function(reel) {
+		this.reels.forEach(function(reel) {
 			reel.random(newG);
-		}))
+		});
 	},
 	autoSpin: function(){
 		this.random();
-		Promise.all(this.reels.map(function(reel, index) {
+		this.reels.forEach(function(reel, index) {
 			reel.spin(index);
-		}))
+		});
 	},
 	onSpin: function(){
 		this.buttonSpin.pauseSystemEvents();
 		this.buttonCoint.pauseSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 	    	bet.pauseSystemEvents();
-	    }))
+	    });
 	},
 	offSpin: function(){
 		this.isSpin = this.buttonStop.active = false;
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 			if(!bet.children[0].active)
 				bet.resumeSystemEvents();
-    	}))
+    	});
 	},
     addNotice:function(text){
 		var notice = cc.instantiate(this.prefabNotice)
@@ -209,9 +211,9 @@ cc.Class({
 	},
     onCloseGame: function(){
     	this.isSpin = false;
-    	Promise.all(this.reels.map(function(reel) {
+    	this.reels.forEach(function(reel) {
 			reel.stop();
-		}));
+		});
 		this.offSpin();
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
     },
@@ -227,9 +229,9 @@ cc.Class({
 				}else{
 					this.win = 0;
 				}
-				Promise.all(data.card.map(function(card, index){
+				data.card.forEach(function(card, index){
 					self.reels[index].card[0].spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
-				}));
+				});
 				this.autoSpin();
 			}else{
 				this.offSpin();

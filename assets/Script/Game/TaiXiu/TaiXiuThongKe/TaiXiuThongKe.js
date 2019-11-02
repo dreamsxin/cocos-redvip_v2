@@ -3,106 +3,31 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		background: {
-			default: null,
-			type:    cc.Node
-		},
-		header: {
-			default: null,
-			type:    cc.Node
-		},
-		body: {
-			default: null,
-			type:    cc.Node
-		},
-		nodeTaiXiu: {
-			default: null,
-			type:    cc.Node
-		},
-		nodeChanLe: {
-			default: null,
-			type:    cc.Node
-		},
-		KetQuaLeft: {
-			default: null,
-			type:    cc.Label
-		},
-		KetQuaRight: {
-			default: null,
-			type:    cc.Label
-		},
-		KetQuaDot: {
-			default: null,
-			type:    cc.Node
-		},
-		DiemSoCel: {
-			default: null,
-			type:    cc.Node
-		},
-		DiemSoLeft: {
-			default: null,
-			type:    cc.Label
-		},
-		DiemSoRight: {
-			default: null,
-			type:    cc.Label
-		},
-		node1: {
-			default: null,
-			type:    cc.Node
-		},
-		node2: {
-			default: null,
-			type:    cc.Node
-		},
-		dice1_line: {
-			default: null,
-			type:    cc.Graphics
-		},
-		dice2_line: {
-			default: null,
-			type:    cc.Graphics
-		},
-		dice3_line: {
-			default: null,
-			type:    cc.Graphics
-		},
-		tong_line: {
-			default: null,
-			type:    cc.Graphics
-		},
-		dice1_dot: {
-			default: null,
-			type:    cc.Node
-		},
-		dice2_dot: {
-			default: null,
-			type:    cc.Node
-		},
-		dice3_dot: {
-			default: null,
-			type:    cc.Node
-		},
-		tong_dot: {
-			default: null,
-			type:    cc.Node
-		},
-		line_dotT: {
-			default: null,
-			type:    cc.Node
-		},
-		line_dot1: {
-			default: null,
-			type:    cc.Node
-		},
-		line_dot2: {
-			default: null,
-			type:    cc.Node
-		},
-		line_dot3: {
-			default: null,
-			type:    cc.Node
-		},
+		background: cc.Node,
+		header: cc.Node,
+		body: cc.Node,
+		nodeTaiXiu: cc.Node,
+		nodeChanLe: cc.Node,
+		KetQuaLeft: cc.Label,
+		KetQuaRight: cc.Label,
+		KetQuaDot: cc.Node,
+		DiemSoCel: cc.Node,
+		DiemSoLeft: cc.Label,
+		DiemSoRight: cc.Label,
+		node1: cc.Node,
+		node2: cc.Node,
+		dice1_line: cc.Graphics,
+		dice2_line: cc.Graphics,
+		dice3_line: cc.Graphics,
+		tong_line: cc.Graphics,
+		dice1_dot: cc.Node,
+		dice2_dot: cc.Node,
+		dice3_dot: cc.Node,
+		tong_dot:  cc.Node,
+		line_dotT: cc.Node,
+		line_dot1: cc.Node,
+		line_dot2: cc.Node,
+		line_dot3: cc.Node,
 	},
 	init(obj){
 		this.RedT  = obj;
@@ -116,72 +41,49 @@ cc.Class({
 		}
 
 		//KetQuaDot
-		Promise.all(this.KetQuaDot.children.map(function(obj){
+		this.KetQuaDot = this.KetQuaDot.children.map(function(obj){
 			return obj.getComponent(cc.Sprite);
-		}))
-		.then(result => {
-			this.KetQuaDot = result;
 		});
 
 		//DiemSoCel
-		Promise.all(this.DiemSoCel.children.map(function(cel){
-			cel.RedT = Promise.all(cel.children.map(function(obj){
-				obj.text = obj.children[0].getComponent(cc.Label);
+		this.DiemSoCel = this.DiemSoCel.children.map(function(cel){
+			cel.RedT = cel.children.map(function(obj){
+				obj = obj.getComponent(cc.Sprite);
+				obj.text = obj.node.children[0].getComponent(cc.Label);
 				return obj;
-			}));
-			cel.RedT.then(function(value){
-				cel.RedT = value;
-			})
+			});
 			return cel;
-		}))
-		.then(result => {
-			this.DiemSoCel = result;
 		});
 
 		//dice1_dot
-		Promise.all(this.dice1_dot.children.map(function(dot){
+		this.dice1_dots = this.dice1_dot.children.map(function(dot){
 			dot.text = dot.children[0].getComponent(cc.Label);
 			return dot;
-		}))
-		.then(result => {
-			this.dice1_dots = result;
 		});
 
 		//dice2_dot
-		Promise.all(this.dice2_dot.children.map(function(dot){
+		this.dice2_dots = this.dice2_dot.children.map(function(dot){
 			dot.text = dot.children[0].getComponent(cc.Label);
 			return dot;
-		}))
-		.then(result => {
-			this.dice2_dots = result;
 		});
 
 		//dice3_dot
-		Promise.all(this.dice3_dot.children.map(function(dot){
+		this.dice3_dots = this.dice3_dot.children.map(function(dot){
 			dot.text = dot.children[0].getComponent(cc.Label);
 			return dot;
-		}))
-		.then(result => {
-			this.dice3_dots = result;
 		});
 
 		//tong_dot
-		Promise.all(this.tong_dot.children.map(function(dot){
-			dot.text = dot.children[0].getComponent(cc.Label);
+		this.tong_dots = this.tong_dot.children.map(function(dot){
+			dot = dot.getComponent(cc.Sprite);
+			dot.text = dot.node.children[0].getComponent(cc.Label);
 			return dot;
-		}))
-		.then(result => {
-			this.tong_dots = result;
 		});
 	},
 	onLoad () {
 		this.ttOffset = null;
-
-		Promise.all(this.header.children.map(function(obj) {
+		this.header = this.header.children.map(function(obj) {
 			return obj.getComponent('itemContentMenu');
-		}))
-		.then(result => {
-			this.header = result;
 		});
 	},
 	onEnable: function () {
@@ -217,20 +119,20 @@ cc.Class({
 		this.RedT.setTop();
 	},
 	onSelectHeader: function(event, name) {
-		Promise.all(this.header.map(function(header) {
+		this.header.forEach(function(header) {
 			if (header.node.name == name) {
 				header.select();
 			}else{
 				header.unselect();
 			}
-		}));
-		Promise.all(this.body.children.map(function(body) {
+		});
+		this.body.children.forEach(function(body) {
 			if (body.name == name) {
 				body.active = true;
 			}else{
 				body.active = false;
 			}
-		}));
+		});
 	},
 	onToggleClick: function() {
 		cc.RedT.audio.playClick();
@@ -254,15 +156,16 @@ cc.Class({
 		line.stroke();
 	},
 	draw_Tong: function(obj, data) {
-		obj.clear()
-		for (var n = 0, o = data.length; n < o; n++){
-			var temp = data[n],
+		obj.clear();
+		for (let n = 0, o = data.length; n < o; n++){
+			let temp = data[n],
 				line = this.tong_dots[n];
 			0 === n ? obj.moveTo(temp.x, temp.y) : (obj.lineTo(temp.x, temp.y));
 			line.text.string = temp.tong;
 			line.text.node.color = this.RedT.TX_Main.taixiu ? (temp.tong > 10 ? cc.Color.WHITE : cc.Color.BLACK) : (temp.tong%2 ? cc.Color.WHITE : cc.Color.BLACK);
-			line.position = cc.v2(line.position.x, temp.y);
-			line.color    = this.RedT.TX_Main.taixiu ? (temp.tong > 10 ? cc.Color.BLACK : cc.Color.WHITE) : (temp.tong%2 ? cc.Color.BLACK : cc.Color.YELLOW);
+			line.node.position = cc.v2(line.node.position.x, temp.y);
+			line.node.color    = this.RedT.TX_Main.taixiu ? (temp.tong > 10 ? cc.color().fromHEX('#B3A1A1') : cc.Color.WHITE) : (temp.tong%2 ? cc.Color.BLACK : cc.Color.YELLOW);
+			line.spriteFrame = temp.tong > 10 ? this.RedT.TX_Main.dot_black : this.RedT.TX_Main.dot_white;
 		}
 		obj.stroke();
 	},
@@ -270,7 +173,7 @@ cc.Class({
 		this.dice1_dots[index].active = bool;
 		this.dice2_dots[index].active = bool;
 		this.dice3_dots[index].active = bool;
-		this.tong_dots[index].active  = bool;
+		this.tong_dots[index].node.active  = bool;
 	},
 	showLineTong: function() {
 		cc.RedT.audio.playClick();

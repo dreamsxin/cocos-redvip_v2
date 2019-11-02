@@ -262,7 +262,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 535.2036995387831
+      "z": 525.6774200971543
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -70311,7 +70311,7 @@
         "__id__": 1571
       }
     ],
-    "_active": false,
+    "_active": true,
     "_level": 6,
     "_components": [],
     "_prefab": null,
@@ -70845,7 +70845,7 @@
         "__id__": 1613
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 6,
     "_components": [],
     "_prefab": null,

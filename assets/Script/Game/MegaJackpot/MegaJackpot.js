@@ -30,7 +30,7 @@ cc.Class({
 	},
 	init: function(obj){
 		this.RedT = obj;
-		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {users:{100:0, 1000:0, 10000:0}};
+		cc.RedT.setting.MegaJackpot = cc.RedT.setting.MegaJackpot || {scale:1, users:{100:0, 1000:0, 10000:0}};
 		this.game = 100;
 		this.bgAnim = {100:"thanhdong", 1000:"bachkim", 10000:"hoangkim"};
 
@@ -81,7 +81,9 @@ cc.Class({
 		cc.RedT.setting.MegaJackpot.position = this.node.position;
 	},
 	setTop:function(){
+		cc.RedT.setting.MegaJackpot.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	changerGame:function(e, game){
 		cc.RedT.setting.MegaJackpot.game = this.game = game;

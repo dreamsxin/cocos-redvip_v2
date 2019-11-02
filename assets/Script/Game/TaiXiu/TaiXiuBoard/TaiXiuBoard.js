@@ -52,6 +52,6 @@ cc.Class({
 	},
 	onCloseClick: function(){
 		this.node.active = false;
-		this.RedT.input.string = this.RedT.RedT.board ? '' : 'Nhập tiền cược...';
+		this.RedT.input.string = this.RedT.RedT.board ? '' : 'Đặt cược...';
 	},
 });

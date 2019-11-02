@@ -9,20 +9,14 @@ cc.Class({
 	extends: cc.Component,
 	properties: {
 		background: cc.Node,
-		bg_Dice:   cc.Node,
+		bg_Dice:   cc.Animation,
 		bg_efDice: cc.Node,
 		inputL: cc.Node,
 		inputR: cc.Node,
 		inputLTxt: cc.Label,
 		inputRTxt: cc.Label,
-		inputLeft: {
-			default: null,
-			type:    cc.EditBox
-		},
-		inputRight: {
-			default: null,
-			type:    cc.EditBox
-		},
+		inputLeft: cc.EditBox,
+		inputRight: cc.EditBox,
 		totalLeft: cc.Label,
 		totalRight: cc.Label,
 		myLeft: cc.Label,
@@ -52,10 +46,7 @@ cc.Class({
 		cointXU: cc.Node,
 		dotLogs: cc.Node,
 		gameCover: cc.Label,
-		diceAnimation: {
-			default: null,
-			type:    cc.Animation
-		},
+		diceAnimation: cc.Animation,
 		efTai: TaiXiu_efScale,
 		efXiu: TaiXiu_efScale,
 		efChan: TaiXiu_efScale,
@@ -64,32 +55,14 @@ cc.Class({
 			default: [],
 			type:    cc.SpriteFrame
 		},
-		spriteNan: {
-			default: null,
-			type:    cc.Sprite
-		},
-		dot_black: {
-			default: null,
-			type:    cc.SpriteFrame
-		},
-		dot_white: {
-			default: null,
-			type:    cc.SpriteFrame
-		},
-		dot_yellow: {
-			default: null,
-			type:    cc.SpriteFrame
-		},
+		spriteNan: cc.Sprite,
+		dot_black: cc.SpriteFrame,
+		dot_white: cc.SpriteFrame,
+		dot_yellow: cc.SpriteFrame,
 		notice: cc.Node,
 		mini_warning: cc.Prefab,
-		fontCong: {
-			default: null,
-			type:    cc.BitmapFont
-		},
-		fontTru: {
-			default: null,
-			type:    cc.BitmapFont
-		},
+		fontCong: cc.BitmapFont,
+		fontTru: cc.BitmapFont,
 		WIN_HT: cc.Label,
 		WIN_DN: cc.Label,
 		LOST_HT: cc.Label,
@@ -448,6 +421,10 @@ cc.Class({
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.timeInterval = setInterval(function() {
 			if (cc.RedT.setting.taixiu.time_remain > 61) {
+				if (this.bg_Dice._animator.isPlaying) {
+					this.bg_Dice.stop();
+				}
+				this.bg_efDice.active = false;
 				var time = helper.numberPad(cc.RedT.setting.taixiu.time_remain-62, 2);
 				this.timePopup.node.active && (this.timePopup.string = time) && (this.timePopup.node.color = cc.color(255, 0, 0, 255));
 				this.timeWait.string = '00:' + helper.numberPad(time, 2);
@@ -459,6 +436,22 @@ cc.Class({
 					this.isNan && (this.diaNan.active = false);
 				}
 			}else{
+				if (!this.bg_Dice._animator.isPlaying) {
+					let state = this.bg_Dice.getAnimationState(this.bg_Dice._defaultClip.name);
+					state.speed = 1;
+					this.bg_Dice._animator.playState(state);
+				}
+				if (this.bg_Dice._animator.isPlaying) {
+					if (cc.RedT.setting.taixiu.time_remain < 7) {
+						this.bg_Dice._animator._anims.array[0].speed = 10;
+					}else if (cc.RedT.setting.taixiu.time_remain < 23) {
+						this.bg_Dice._animator._anims.array[0].speed = 6;
+					}else if (cc.RedT.setting.taixiu.time_remain < 33) {
+						this.bg_Dice._animator._anims.array[0].speed = 3;
+					}
+				}
+
+				this.bg_efDice.active = true;
 				if (!!this.dice[0].node.active) {
 					this.setDice(false, false);
 					this.reset();
@@ -681,12 +674,13 @@ cc.Class({
 								var type = self.taixiu ? (data_Cel > 10 ? true : false) : (data_Cel%2 ? false : true);
 								c_tai = type  ? c_tai+1 : c_tai;
 								c_xiu = !type ? c_xiu+1 : c_xiu;
-								current.active = true;
-								current.color = self.taixiu ? (type ? cc.Color.BLACK : cc.Color.WHITE) : (type ? cc.Color.YELLOW : cc.Color.BLACK)
+								current.node.active = true;
+								current.node.color = self.taixiu ? (type ? cc.color().fromHEX('#B3A1A1') : cc.Color.WHITE) : (type ? cc.Color.YELLOW : cc.Color.BLACK)
 								current.text.string = data_Cel;
 								current.text.node.color = self.taixiu ? (type ? cc.Color.WHITE : cc.Color.BLACK) : (type ? cc.Color.BLACK : cc.Color.WHITE)
+								current.spriteFrame = type ? self.dot_black : self.dot_white;
 							}else{
-								current.active = false;
+								current.node.active = false;
 							}
 							return void 0;
 						}))

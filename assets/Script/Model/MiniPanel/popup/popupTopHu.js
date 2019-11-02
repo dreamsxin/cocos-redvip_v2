@@ -53,14 +53,12 @@ cc.Class({
 		this.ttOffset     = null;
 		this.ttOffset2    = null;
 		this.toggleRuning = false;
-		Promise.all(this.content.children.map(function(obj){
+		this.content.children.forEach(function(obj){
 			obj.hu  = obj.children[3].getComponent(cc.Label);
 			obj.xHu = obj.children[0].getComponent(cc.Sprite);
-		}));
-		Promise.all(this.header.children.map(function(obj){
+		});
+		this.header = this.header.children.map(function(obj){
 			return obj.children[0].getComponent(cc.Label);
-		})).then(result => {
-			this.header = result;
 		});
 	},
 	onEnable: function () {
@@ -110,13 +108,13 @@ cc.Class({
 	},
 	onChangerBet: function(e, value){
 		this.bet = value;
-		Promise.all(this.header.map(function(obj){
+		this.header.forEach(function(obj){
 			if (e.target !== obj.node.parent) {
 				obj.font = cc.RedT.MiniPanel.TaiXiu.TX_Main.fontTru;
 			}else{
 				obj.font = cc.RedT.MiniPanel.TaiXiu.TX_Main.fontCong;
 			}
-		}));
+		});
 		this.onChangerData();
 	},
 	onData: function(data){
@@ -143,13 +141,13 @@ cc.Class({
 				}
 				return T[0];
 			})).then(result => {
-				var TT = result.sort(function(a, b){
+				let TT = result.sort(function(a, b){
 					return b.bet - a.bet;
 				});
-				Promise.all(TT.map(function(obj, index){
-					var temp = dataName[obj.name];
+				TT.forEach(function(obj, index){
+					let temp = dataName[obj.name];
 						temp.stopAllActions();
-					var y = -(75*(index+1)-37.5);
+					let y = -(75*(index+1)-37.5);
 						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
 					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
 						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 4900, true);
@@ -160,7 +158,7 @@ cc.Class({
 					}else{
 						temp.xHu.node.active = false;
 					}
-				}));
+				});
 			});
 		}
 	},

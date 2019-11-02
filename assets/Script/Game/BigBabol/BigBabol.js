@@ -63,7 +63,7 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
-		cc.RedT.setting.big_babol = cc.RedT.setting.big_babol || {};
+		cc.RedT.setting.big_babol = cc.RedT.setting.big_babol || {scale:1};
 
 		var check = localStorage.getItem('big_babol');
 		if (check == "true") {
@@ -118,7 +118,9 @@ cc.Class({
 		cc.RedT.setting.big_babol.position = this.node.position;
 	},
 	setTop:function(){
+		cc.RedT.setting.big_babol.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	openGame: function () {
 		cc.RedT.audio.playClick();

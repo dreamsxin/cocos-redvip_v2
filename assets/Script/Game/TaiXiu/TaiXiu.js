@@ -10,7 +10,9 @@ cc.Class({
 		board:      true,
 	},
 	init(obj){
-		cc.RedT.setting.taixiu = cc.RedT.setting.taixiu || {getLogs: false};
+		this.RedT = obj;
+		this.node.runScale = false;
+		cc.RedT.setting.taixiu = cc.RedT.setting.taixiu || {scale:1, getLogs: false};
 		this.TX_LichSu      = obj.Dialog.TaiXiuLichSu;
 		this.TX_Top         = obj.Dialog.TaiXiuTop;
 		this.TX_LichSuPhien = obj.Dialog.TaiXiuLichSuPhien;
@@ -32,7 +34,9 @@ cc.Class({
 		cc.RedT.send({taixiu: !cc.RedT.setting.taixiu.getLogs ? {view: bool, getLogs:true} : {view: bool}});
 	},
 	setTop: function(){
+		cc.RedT.setting.taixiu.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	openGame: function (e, taixiu = '1') {
 		cc.RedT.audio.playClick();

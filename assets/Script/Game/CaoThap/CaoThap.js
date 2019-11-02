@@ -43,7 +43,7 @@ cc.Class({
 		this.LichSu = obj.Dialog.CaoThap_history;
 		this.Top    = obj.Dialog.CaoThap_top;
 
-		cc.RedT.setting.caothap = cc.RedT.setting.caothap || {bet: "1000", logs: []};
+		cc.RedT.setting.caothap = cc.RedT.setting.caothap || {scale:1, bet: "1000", logs: []};
 
 		var check = localStorage.getItem('caothap');
 		if (check == "true") {
@@ -116,7 +116,9 @@ cc.Class({
 		localStorage.setItem('caothap', false);
 	},
 	setTop:function(){
+		cc.RedT.setting.caothap.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	changerCoint: function(){
 		if (this.isPlay) {

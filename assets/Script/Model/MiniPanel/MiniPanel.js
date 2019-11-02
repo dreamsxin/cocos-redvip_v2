@@ -16,10 +16,7 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		minigame: {
-			default: null,
-			type: cc.Node
-		},
+		minigame:    cc.Node,
 		Dialog:      Dialog,
 		TaiXiu:      TaiXiu,
 		MiniPoker:   MiniPoker,
@@ -59,7 +56,6 @@ cc.Class({
 		this.BaCay.init(this);
 		this.CaoThap.init(this);
 		this.AngryBirds.init(this);
-
 		this.MegaJackpot.init(this);
 
 		this.TopHu.init(this);
@@ -125,5 +121,24 @@ cc.Class({
 	},
 	playUnClick: function(){
 		cc.RedT.audio.playUnClick();
+	},
+	setTop: function(obj){
+		if (obj.runScale === false) {
+			obj.stopAllActions();
+			obj.runScale = true;
+			let actionOn = cc.scaleTo(0.18, 1);
+			obj.runAction(cc.sequence(actionOn, cc.callFunc(function() {
+				this.runScale = false;
+			}, obj)));
+		}
+		this.minigame.children.forEach(function(game){
+			if (game.active && game !== obj) {
+				game.stopAllActions();
+				let actionUn = cc.scaleTo(0.18, 0.7);
+				game.runAction(cc.sequence(actionUn, cc.callFunc(function() {
+					this.runScale = false;
+				}, game)));
+			}
+		});
 	},
 });

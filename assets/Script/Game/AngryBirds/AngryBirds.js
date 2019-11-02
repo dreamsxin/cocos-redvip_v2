@@ -48,7 +48,7 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
-		cc.RedT.setting.angrybird = cc.RedT.setting.angrybird || {};
+		cc.RedT.setting.angrybird = cc.RedT.setting.angrybird || {scale:1};
 
 		var check = localStorage.getItem('angrybird');
 		if (check == "true") {
@@ -71,12 +71,12 @@ cc.Class({
 		var self = this;
 		this.ttOffset = null;
 
-		Promise.all(this.reelsL.map(function(reel) {
+		this.reelsL.forEach(function(reel) {
 			reel.init(self);
-		}));
-		Promise.all(this.reelsR.map(function(reelR) {
+		});
+		this.reelsR.forEach(function(reelR) {
 			reelR.init(self);
-		}));
+		});
 	},
 	onEnable: function() {
 		this.onGetHu();
@@ -105,7 +105,9 @@ cc.Class({
 		cc.RedT.setting.angrybird.position = this.node.position;
 	},
 	setTop:function(){
+		cc.RedT.setting.angrybird.scale = 1;
 		this.node.parent.insertChild(this.node);
+		this.RedT.setTop(this.node);
 	},
 	openGame: function () {
 		cc.RedT.audio.playClick();
