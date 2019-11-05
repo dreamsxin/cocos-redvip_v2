@@ -13,7 +13,7 @@ cc.Class({
             self.node.addChild(icon);
             icon = icon.getComponent('AngryBirds-item');
             icon.init(self.RedT);
-            if (index > 2 && index < 14) {
+            if (index > 2 && index < 17) {
                 icon.random();
             }
             return icon;
@@ -34,7 +34,7 @@ cc.Class({
     spin: function(index){
         this.node.stopAllActions();
         var self = this;
-        var d = cc.moveTo(1.1, cc.v2(this.node.x, -(this.node.height-225.84))).easing(cc.easeInOut(3));
+        var d = cc.moveTo(1.1, cc.v2(this.node.x, -(this.node.height-270))).easing(cc.easeInOut(3));
         var p = cc.callFunc(function() {
             this.copy();
         }, this);

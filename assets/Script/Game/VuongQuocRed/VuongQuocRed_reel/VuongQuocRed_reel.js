@@ -12,7 +12,7 @@ cc.Class({
 			icon = icon.getComponent('VuongQuocRed_items');
 			icon.init(self.RedT);
 			if (index > 2 && index < data.length-3) {
-				icon.stop();
+				//icon.stop();
 				icon.random();
 			}
 			return icon;
@@ -29,7 +29,7 @@ cc.Class({
 	spin: function(index){
 		this.node.stopAllActions();
 		var self = this;
-		var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-418))).easing(cc.easeInOut(3));
+		var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-472))).easing(cc.easeInOut(3));
 		var p2 = cc.callFunc(function() {
 			if (index === 0) {
 				this.RedT.copy();

@@ -39,39 +39,18 @@ cc.Class({
 		NoHu_Label:   cc.Label,
 		EF_Bonus:     cc.Animation,
 		EF_Free:      cc.Animation,
-		buttonCoint: cc.Node,
 		buttonLine:  cc.Node,
 		buttonSpin:  cc.Node,
 		buttonFree:  cc.Node,
 		freeLabel:   cc.Label,
 		buttonAuto:  cc.Node,
 		buttonStop:  cc.Node,
-		nodeChangerBetL:  cc.Node,
-		nodeChangerBetR:  cc.Node,
-		nodeRed: {
-			default: null,
-			type: cc.Node,
-		},
-		nodeXu: {
-			default: null,
-			type: cc.Node,
-		},
+		nodeChangerBet:  cc.Node,
 		bet: {
 			default: null,
 			type: cc.Label,
 		},
-		betL: {
-			default: null,
-			type: cc.Node,
-		},
-		betR: {
-			default: null,
-			type: cc.Node,
-		},
-		nodeNotice: {
-			default: null,
-			type: cc.Node,
-		},
+		nodeNotice: cc.Node,
 		prefabNotice: {
 			default: null,
 			type: cc.Prefab,
@@ -90,9 +69,6 @@ cc.Class({
 		vuathang:   cc.Label,
 		labelLine:  cc.Label,
 		bangThuong: cc.Node,
-		efline:     cc.Node,
-		onColor:  "",
-		offColor: "",
 		isAuto:     false,
 		isSpin:     false,
 		isFreeSpin: false,
@@ -196,13 +172,6 @@ cc.Class({
 		this.tong.string = helper.numberWithCommas(this.Line.data.length * helper.getOnlyNumberInString(this.bet.string));
 		this.onGetHu();
 	},
-	changerCoint: function(){
-		this.red            = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.userData(cc.RedT.user);
-		this.onGetHu();
-	},
 	onClickSpin: function(){
 		cc.RedT.IS_SOUND && this.audioClick.play();
 		this.onSpin();
@@ -237,6 +206,7 @@ cc.Class({
 		this.isAuto = !this.isAuto;
 		this.buttonAuto.color = this.isAuto ? cc.Color.WHITE : cc.color(200,200,200);
 		this.buttonStop.active = this.isSpin;
+		this.buttonAuto.active = !this.isSpin;
 	},
 	onStop: function(){
 		this.isAuto = this.buttonStop.active = false;
@@ -246,9 +216,7 @@ cc.Class({
 	setSpin: function(){
 		this.buttonLine.pauseSystemEvents();
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
-		this.nodeChangerBetL.pauseSystemEvents();
-		this.nodeChangerBetR.pauseSystemEvents();
+		this.nodeChangerBet.pauseSystemEvents();
 	},
 	resetSpin: function(){
 		if (this.isAuto) {
@@ -258,9 +226,7 @@ cc.Class({
 		this.buttonAuto.active = true;
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
-		this.nodeChangerBetL.resumeSystemEvents();
-		this.nodeChangerBetR.resumeSystemEvents();
+		this.nodeChangerBet.resumeSystemEvents();
 	},
 	runReels: function(){
 		Promise.all(this.reels.map(function(reel, index) {
@@ -286,9 +252,6 @@ cc.Class({
 	onLineWin: function(bool){
 		var self = this;
 		Promise.all(this.H_line_win.map(function(obj){
-			Promise.all(self.Line.lines[obj.line].map(function(icon, index){
-				self.efline.children[index].children[icon].active = bool;
-			}))
 			let TRed = self.Line.mainLine[obj.line-1];
 			if (bool) {
 				TRed.onhover();
@@ -326,9 +289,6 @@ cc.Class({
 	efOneLineWin: function(number, bool){
 		var self = this;
 		number = this.H_line_win[this.eflineN].line;
-		Promise.all(this.Line.lines[number].map(function(icon, index){
-			self.efline.children[index].children[icon].active = bool;
-		}))
 		let TRed = this.Line.mainLine[number-1];
 		if (bool) {
 			TRed.onhover();

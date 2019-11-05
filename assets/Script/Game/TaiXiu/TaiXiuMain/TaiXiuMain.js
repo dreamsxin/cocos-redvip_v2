@@ -421,7 +421,7 @@ cc.Class({
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
 		this.timeInterval = setInterval(function() {
 			if (cc.RedT.setting.taixiu.time_remain > 61) {
-				if (this.bg_Dice._animator.isPlaying) {
+				if (this.bg_Dice._animator !== null && this.bg_Dice._animator.isPlaying) {
 					this.bg_Dice.stop();
 				}
 				this.bg_efDice.active = false;
@@ -436,12 +436,12 @@ cc.Class({
 					this.isNan && (this.diaNan.active = false);
 				}
 			}else{
-				if (!this.bg_Dice._animator.isPlaying) {
+				if (this.bg_Dice._animator !== null && !this.bg_Dice._animator.isPlaying) {
 					let state = this.bg_Dice.getAnimationState(this.bg_Dice._defaultClip.name);
 					state.speed = 1;
 					this.bg_Dice._animator.playState(state);
 				}
-				if (this.bg_Dice._animator.isPlaying) {
+				if (this.bg_Dice._animator !== null && this.bg_Dice._animator.isPlaying) {
 					if (cc.RedT.setting.taixiu.time_remain < 7) {
 						this.bg_Dice._animator._anims.array[0].speed = 10;
 					}else if (cc.RedT.setting.taixiu.time_remain < 23) {

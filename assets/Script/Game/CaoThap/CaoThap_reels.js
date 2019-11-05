@@ -7,8 +7,8 @@ cc.Class({
 		var self  = this;
 		Promise.all([0,0,0,0,0,0,0,0,0,0,0,0,0].map(function(obj, index){
 			var ooT = cc.instantiate(self.RedT.cardf);
-			ooT.width  = 113;
-			ooT.height = 161;
+			ooT.width  = 99.44;
+			ooT.height = 141.68;
 			self.node.addChild(ooT);
 			return ooT.getComponent(cc.Sprite);
 		}))
@@ -18,8 +18,7 @@ cc.Class({
 		});
 	},
 	random: function(newG = false){
-		var self = this;
-		Promise.all(this.card.map(function(obj, index){
+		this.card.forEach(function(obj, index){
 			if (newG) {
 				if (index == 12) {
 					obj.spriteFrame = cc.RedT.util.card.cardB1;
@@ -29,12 +28,12 @@ cc.Class({
 			}else if (index !== 0 && index !== 12){
 				obj.spriteFrame = cc.RedT.util.card.random();
 			}
-		}))
+		});
 	},
 	spin: function(){
 		this.node.stopAllActions();
 		var self = this;
-		var d = cc.moveTo(1, cc.v2(0, -(this.node.height-161))).easing(cc.easeInOut(3));
+		var d = cc.moveTo(1, cc.v2(0, -(this.node.height-141.68))).easing(cc.easeInOut(3));
 		var p = cc.callFunc(function() {
 			this.card[12].spriteFrame = this.card[0].spriteFrame;
 			this.node.y = 0;

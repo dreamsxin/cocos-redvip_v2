@@ -8,8 +8,10 @@ cc.Class({
 		this.card = [];
 		var self  = this;
 		Promise.all([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].map(function(obj, index){
-			var ooT = cc.instantiate(self.RedT.cardf)
-			self.node.addChild(ooT)
+			var ooT = cc.instantiate(self.RedT.cardf);
+			ooT.width  = 95;
+			ooT.height = 138;
+			self.node.addChild(ooT);
 			ooT = ooT.getComponent(cc.Sprite);
 			return ooT
 		}))
@@ -32,7 +34,7 @@ cc.Class({
 		this.node.stopAllActions();
 		var self = this;
 		var i = index;
-		var d = cc.moveTo(this.RedT.speed(), cc.v2(this.node.x, -(this.node.height-93.3))).easing(cc.easeInOut(3));
+		var d = cc.moveTo(this.RedT.speed(), cc.v2(this.node.x, -(this.node.height-138))).easing(cc.easeInOut(3));
 		var p = cc.callFunc(function() {
 			this.card[25].spriteFrame = this.card[0].spriteFrame;
 			this.node.y = 0;

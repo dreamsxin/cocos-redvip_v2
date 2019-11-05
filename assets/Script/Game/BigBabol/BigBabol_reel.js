@@ -28,7 +28,7 @@ cc.Class({
 	spin: function(index){
 		this.node.stopAllActions();
 		var self = this;
-		var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-260))).easing(cc.easeInOut(2));
+		var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-380))).easing(cc.easeInOut(2));
 		var p = cc.callFunc(function() {
 			//this.RedT.copy();
 			this.node.y = 0;

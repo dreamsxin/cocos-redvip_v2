@@ -44,7 +44,6 @@ cc.Class({
         }));
     },
     onData: function(data) {
-        console.log(data);
         if (!this.isLoaded){
             this.isLoaded = true;
             this.onDaiLy(data);

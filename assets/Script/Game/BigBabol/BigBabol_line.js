@@ -10,6 +10,10 @@ cc.Class({
 	init(obj){
 		this.RedT = obj;
 		this.mainLineInit(void 0 !== cc.RedT.setting.big_babol.line);
+
+		this.nodeLine.children.forEach(function(line){
+			line.isSelect = true;
+		});
 	},
 	onEnable: function() {
 		this.background.on(cc.Node.EventType.MOUSE_ENTER,  this.RedT.setTop, this.RedT);
@@ -26,23 +30,20 @@ cc.Class({
 	},
 	select: function(e) {
 		var node = e.target;
-		if (node.children[1].active) {
-			node.children[1].active = false;
-			node.children[0].active = true;
+		node.isSelect = !node.isSelect;
+		if (node.isSelect) {
+			node.children[0].color = cc.Color.WHITE;
 		}else{
-			node.children[1].active = true;
-			node.children[0].active = false;
+			node.children[0].color = cc.color(155,155,155);
 		}
 		this.check();
 	},
 	check: function() {
 		var self = this;
 		Promise.all(this.nodeLine.children.map(function(line, index){
-			if (line.children[1].active){
-				self.mainLine[index].onSet();
+			if (line.isSelect){
 				return index+1;
 			}else{
-				self.mainLine[index].offSet();
 				return void 0;
 			}
 		}))
@@ -52,7 +53,7 @@ cc.Class({
 			}))
 			.then(data => {
 				cc.RedT.setting.big_babol.line = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 			})
 		})
 	},
@@ -61,13 +62,11 @@ cc.Class({
 		Promise.all(this.nodeLine.children.map(function(line, index){
 			var i = index+1;
 			if (i%2) {
-				line.children[0].active = true;
-				line.children[1].active = false;
-				self.mainLine[index].offSet();
+				line.isSelect = false;
+				line.children[0].color = cc.color(155,155,155);
 			}else{
-				line.children[0].active = false;
-				line.children[1].active = true;
-				self.mainLine[index].onSet();
+				line.isSelect = true;
+				line.children[0].color = cc.Color.WHITE;
 				return i;
 			}
 			return void 0;
@@ -78,7 +77,7 @@ cc.Class({
 			}))
 			.then(data => {
 				cc.RedT.setting.big_babol.line = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 			})
 		})
 	},
@@ -87,14 +86,12 @@ cc.Class({
 		Promise.all(this.nodeLine.children.map(function(line, index){
 			var i = index+1;
 			if (i%2) {
-				line.children[0].active = false;
-				line.children[1].active = true;
-				self.mainLine[index].onSet();
+				line.isSelect = true;
+				line.children[0].color = cc.Color.WHITE;
 				return i;
 			}else{
-				line.children[0].active = true;
-				line.children[1].active = false;
-				self.mainLine[index].offSet();
+				line.isSelect = false;
+				line.children[0].color = cc.color(155,155,155);
 			}
 			return void 0;
 		}))
@@ -104,31 +101,31 @@ cc.Class({
 			}))
 			.then(data => {
 				cc.RedT.setting.big_babol.line = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 			})
 		})
 	},
 	selectAll: function(e, select) {
 		var self = this;
 		Promise.all(this.nodeLine.children.map(function(line, index){
-			var check = select == "1";
-			line.children[0].active = !check;
-			line.children[1].active = check;
+			var check = select === "1";
+			if (check) {
+				line.isSelect = true;
+				line.children[0].color = cc.Color.WHITE;
+			}else{
+				line.isSelect = false;
+				line.children[0].color = cc.color(155,155,155);
+			}
 			return check ? index+1 : void 0;
 		}))
 		.then(result => {
 			Promise.all(result.filter(function(data, index){
 				var check = void 0 !== data;
-				if (check) {
-					self.mainLine[index].onSet();
-				}else{
-					self.mainLine[index].offSet();
-				}
 				return check;
 			}))
 			.then(data => {
 				cc.RedT.setting.big_babol.line = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 			})
 		});
 	},
@@ -143,21 +140,19 @@ cc.Class({
 		.then(result => {
 			this.mainLine = result;
 			if (reInit) {
-				this.RedT.labelLine.string = cc.RedT.setting.big_babol.line.length;
-				Promise.all(this.nodeLine.children.map(function(line, index){
+				this.RedT.labelLine.string = cc.RedT.setting.big_babol.line.length + ' dòng';
+				this.nodeLine.children.forEach(function(line, index){
 					var check = cc.RedT.setting.big_babol.line.filter(function(a){
 						return a == line.name;
 					});
 					if (check.length) {
-						line.children[0].active = false;
-						line.children[1].active = true;
-						self.mainLine[index].onSet();
+						line.isSelect = true;
+						line.children[0].color = cc.Color.WHITE;
 					}else{
-						line.children[0].active = true;
-						line.children[1].active = false;
-						self.mainLine[index].offSet();
+						line.isSelect = false;
+						line.children[0].color = cc.color(155,155,155);
 					}
-				}));
+				});
 			}else{
 				this.selectAll(null, "1");
 			}

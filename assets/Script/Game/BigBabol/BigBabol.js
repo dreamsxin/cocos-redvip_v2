@@ -18,44 +18,20 @@ cc.Class({
 			default: [],
 			type: cc.SpriteFrame,
 		},
-		iconPrefab: {
-			default: null,
-			type: cc.Prefab,
-		},
+		iconPrefab:  cc.Prefab,
 		buttonLine:  cc.Node,
 		buttonSpin:  cc.Node,
 		buttonAuto:  cc.Node,
 		buttonStop:  cc.Node,
 		buttonCoint: cc.Node,
-		nodeRed: {
-			default: null,
-			type: cc.Node,
-		},
-		nodeXu: {
-			default: null,
-			type: cc.Node,
-		},
-		font: {
-			default: null,
-			type:    cc.BitmapFont
-		},
-		bet: {
-			default: null,
-			type: cc.Node,
-		},
-		notice: {
-			default: null,
-			type: cc.Node,
-		},
-		prefabNotice: {
-			default: null,
-			type: cc.Prefab,
-		},
+		nodeRed: cc.Node,
+		nodeXu: cc.Node,
+		bet: cc.Node,
+		notice: cc.Node,
+		prefabNotice: cc.Prefab,
 		phien: cc.Label,
 		hu:    cc.Label,
 		cuoc:     "",
-		onColor:  "",
-		offColor: "",
 		isAuto:  false,
 		isSpeed: false,
 		isSpin:  false,
@@ -63,7 +39,7 @@ cc.Class({
 	},
 	init(obj){
 		this.RedT = obj;
-		cc.RedT.setting.big_babol = cc.RedT.setting.big_babol || {scale:1};
+		cc.RedT.setting.big_babol = cc.RedT.setting.big_babol || {scale:1, bet: this.cuoc};
 
 		var check = localStorage.getItem('big_babol');
 		if (check == "true") {
@@ -83,13 +59,12 @@ cc.Class({
 		}
 	},
 	onLoad () {
-		var self = this;
 		this.ttOffset = null;
 		this.line.init(this);
 
-		Promise.all(this.reels.map(function(reel) {
-			reel.init(self);
-		}))
+		this.reels.forEach(function(reel) {
+			reel.init(this);
+		}.bind(this));
 	},
 	onEnable: function() {
 		this.onGetHu();
@@ -138,29 +113,28 @@ cc.Class({
 		localStorage.setItem('big_babol', false);
 	},
 	autoSpin: function(){
-		Promise.all(this.reels.map(function(reel, index) {
+		this.reels.forEach(function(reel, index) {
 			reel.spin(index);
-		}));
+		});
 	},
 	onSpin: function(){
 		this.buttonLine.pauseSystemEvents();
 		this.buttonSpin.pauseSystemEvents();
 		this.buttonCoint.pauseSystemEvents();
 		this.line.node.active = false;
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 			bet.pauseSystemEvents();
-		}))
+		});
 	},
 	offSpin: function(){
 		this.isSpin = this.buttonStop.active = this.isAuto = false;
 		this.buttonAuto.color  = cc.color(155,155,155);
-		this.buttonAuto.active = true;
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 			if(!bet.children[0].active) bet.resumeSystemEvents();
-		}))
+		});
 	},
 	onClickSpin: function(){
 		if (cc.RedT.setting.big_babol.line.length < 1) {
@@ -177,7 +151,6 @@ cc.Class({
 		this.isAuto            = cc.RedT.setting.big_babol.isAuto = !this.isAuto;
 		this.buttonAuto.color  = this.isAuto ? cc.Color.WHITE : cc.color(155,155,155);
 		this.buttonStop.active = this.isSpin ? (this.isAuto ? true : false) : false;
-		this.buttonAuto.active = !this.buttonStop.active;
 	},
 	onClickStop: function(){
 		this.onClickAuto();
@@ -190,30 +163,33 @@ cc.Class({
 		this.onGetHu();
 	},
 	intChangerBet: function(){
-		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj.name == cc.RedT.setting.big_babol.bet) {
-				self.cuoc = obj.name;
-				obj.children[0].active = true;
+		this.bet.children.forEach(function(obj){
+			if (obj.name === cc.RedT.setting.big_babol.bet) {
+				this.cuoc = obj.name;
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		}.bind(this));
 	},
-	changerBet: function(event, bet){
-		this.cuoc = cc.RedT.setting.big_babol.bet = bet;
-		var target = event.target;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj == target) {
-				obj.children[0].active = true;
+	changerBet: function(event){
+		let name = event.target.name;
+		this.cuoc = cc.RedT.setting.big_babol.bet = name;
+		this.bet.children.forEach(function(obj){
+			if (obj.name === name) {
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		});
 		this.onGetHu();
 	},
 	onGetInfo: function(){
@@ -224,9 +200,9 @@ cc.Class({
 	},
 	onCloseGame: function(){
 		this.isSpin = false;
-		Promise.all(this.reels.map(function(reel) {
+		this.reels.forEach(function(reel) {
 			reel.stop();
-		}));
+		});
 		this.offSpin();
 	},
 	addNotice:function(text){
@@ -244,12 +220,11 @@ cc.Class({
 				this.nohu     = data.nohu;
 				this.isBigWin = data.isBigWin;
 				this.buttonStop.active = this.isAuto ? true : false;
-				this.buttonAuto.active = !this.buttonStop.active;
-				Promise.all(data.cel.map(function(cel, cel_index){
-					Promise.all(cel.map(function(icon, index){
+				data.cel.forEach(function(cel, cel_index){
+					cel.forEach(function(icon, index){
 						self.reels[cel_index].icons[index].setIcon(icon, true);
-					}));
-				}));
+					});
+				});
 				this.autoSpin();
 			}else{
 				this.offSpin();
@@ -274,7 +249,7 @@ cc.Class({
 		}
 	},
 	copy: function(){
-		Promise.all(this.reels.map(function(reel){
+		this.reels.forEach(function(reel){
 			if (void 0 !== reel.icons &&
 				void 0 !== reel.icons[25] &&
 				void 0 !== reel.icons[25].setIcon)
@@ -284,7 +259,7 @@ cc.Class({
 				reel.icons[23].setIcon(reel.icons[0].data);
 			}
 			//reel.node.y = 0;
-		}));
+		});
 	},
 	hieuUng: function(){
 		if (this.nohu) {
@@ -293,11 +268,9 @@ cc.Class({
 			if (this.isAuto == true) {
 				this.onClickStop();
 			}
-
 			var nohu = cc.instantiate(this.RedT.PrefabNoHu);
 			nohu = nohu.getComponent(cc.Animation);
 			var text = nohu.node.children[6].getComponent(cc.Label);
-
 			var Play = function(){
 				var huong = cc.callFunc(function(){
 					cc.RedT.audio.playEf('winHu');
@@ -305,7 +278,6 @@ cc.Class({
 				}, this);
 				nohu.node.runAction(cc.sequence(cc.delayTime(0.25), huong));
 			};
-
 			var Finish = function(){
 				nohu.node.destroy();
 				this.win = 0;
@@ -320,25 +292,20 @@ cc.Class({
 			this.isBigWin = false;
 			var BigWin = cc.instantiate(this.RedT.prefabBigWin);
 			BigWin     = BigWin.getComponent(cc.Animation);
-
 			var BigWinFinish = function(){
 				BigWin.node.destroy();
 				if (this.isAuto) {
 					this.onGetSpin();
-		    	}else{
-		    		this.offSpin();
-		    	}
+				}else{
+					this.offSpin();
+				}
 			}
-
 			BigWin.on('finished', BigWinFinish, this);
 			BigWin.node.bet = this.win;
 			BigWin.node.red = this.red;
-			BigWin.node.position = cc.v2(0,140);
-
+			BigWin.node.position = cc.v2(0,75);
 			this.notice.addChild(BigWin.node);
-
 			this.win = 0;
-
 			if (!this.isAuto) {
 				this.offSpin();
 			}
@@ -350,7 +317,7 @@ cc.Class({
 			node.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
 			node.lineHeight = 130;
 			node.fontSize   = 25;
-			node.node.position = cc.v2(-6,140);
+			node.node.position = cc.v2(0,40);
 			node.node.runAction(cc.sequence(cc.delayTime(1.5), cc.callFunc(function() {
 				node.node.destroy();
 				this.hieuUng();
@@ -361,39 +328,38 @@ cc.Class({
 			this.onLineWin();
 		}else{
 			if (this.isAuto) {
-    			this.timeOut = setTimeout(function(){
+				this.timeOut = setTimeout(function(){
 					this.onGetSpin();
-				}
-				.bind(this), 300);
-    		}else{
-    			this.offSpin();
-    		}
+				}.bind(this), 300);
+			}else{
+				this.offSpin();
+			}
 		}
 	},
 	onLineWin: function(){
 		var self = this;
-		Promise.all(this.line_win.map(function(obj){
+		this.line_win.forEach(function(obj){
 			let TRed = self.line.mainLine[obj.line-1];
 			TRed.onhover();
 			TRed.node.pauseSystemEvents();
-		}))
+		});
 	},
 	offLineWin: function(){
 		var self = this;
-		Promise.all(this.line_win.map(function(obj){
+		this.line_win.forEach(function(obj){
 			let TRed = self.line.mainLine[obj.line-1];
 			TRed.offhover();
 			TRed.node.resumeSystemEvents();
-		}))
+		});
 	},
 	random: function(){
-		Promise.all(this.reels.map(function(reel){
-			Promise.all(reel.icons.map(function(icon, index){
+		this.reels.forEach(function(reel){
+			reel.icons.forEach(function(icon, index){
 				if (index > 2 && index < 23) {
 					icon.random();
 				}
-			}));
-		}));
+			});
+		});
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {

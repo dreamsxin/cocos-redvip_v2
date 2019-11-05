@@ -1,38 +1,20 @@
 
-var TaiXiu     = require('TaiXiu'),
-	MiniPoker  = require('MiniPoker'),
-	BigBabol   = require('BigBabol'),
-	BauCua     = require('BauCua'),
-	BaCay      = require('Mini3Cay'),
-	CaoThap    = require('CaoThap'),
-	AngryBirds = require('AngryBirds'),
-	TopHu      = require('popupTopHu'),
-	Dialog     = require('MiniDialog');
-
-var MegaJackpot = require('MegaJackpot');
-
-
 cc.Class({
 	extends: cc.Component,
 
 	properties: {
 		minigame:    cc.Node,
-		Dialog:      Dialog,
-		TaiXiu:      TaiXiu,
-		MiniPoker:   MiniPoker,
-		BigBabol:    BigBabol,
-		BauCua:      BauCua,
-		BaCay:       BaCay,
-		CaoThap:     CaoThap,
-		AngryBirds:  AngryBirds,
-		MegaJackpot: MegaJackpot,
+		Dialog:      cc.Node,
+		TaiXiu:      cc.Node,
+		MiniPoker:   cc.Node,
+		BigBabol:    cc.Node,
+		BauCua:      cc.Node,
+		BaCay:       cc.Node,
+		CaoThap:     cc.Node,
+		AngryBirds:  cc.Node,
+		MegaJackpot: cc.Node,
 
-		TopHu:       TopHu,
-
-		bgLight:     cc.Node,
-		spriteLight: cc.Sprite,
-		onLight:     cc.SpriteFrame,
-		offLight:    cc.SpriteFrame,
+		TopHu:       cc.Node,
 
 		nodeEfect:   cc.Node,
 		// Prefab
@@ -48,6 +30,20 @@ cc.Class({
 		this.node._onPreDestroy = function(){
 			self.onDestroy();
 		}
+
+		this.TaiXiu     = this.TaiXiu.getComponent('TaiXiu');
+		this.MiniPoker  = this.MiniPoker.getComponent('MiniPoker');
+		this.BigBabol   = this.BigBabol.getComponent('BigBabol');
+		this.BauCua     = this.BauCua.getComponent('BauCua');
+		this.BaCay      = this.BaCay.getComponent('Mini3Cay');
+		this.CaoThap    = this.CaoThap.getComponent('CaoThap');
+		this.AngryBirds = this.AngryBirds.getComponent('AngryBirds');
+
+		this.TopHu  = this.TopHu.getComponent('popupTopHu');
+		this.Dialog = this.Dialog.getComponent('MiniDialog');
+
+		this.MegaJackpot = this.MegaJackpot.getComponent('MegaJackpot');
+
 		this.Dialog.init(this);
 		this.TaiXiu.init(this);
 		this.MiniPoker.init(this);
@@ -62,19 +58,6 @@ cc.Class({
 
 		if (cc.RedT.IS_LOGIN){
 			this.signIn();
-		}
-		if (cc.RedT.setting.light != this.light) {
-			this.LightChanger();
-		}
-	},
-	LightChanger: function(){
-		this.light = cc.RedT.setting.light = !this.light;
-		if (this.light) {
-			this.bgLight.active = false;
-			this.spriteLight.spriteFrame = this.offLight;
-		}else{
-			this.bgLight.active = true;
-			this.spriteLight.spriteFrame = this.onLight;
 		}
 	},
 	signIn:function(){
@@ -126,7 +109,7 @@ cc.Class({
 		if (obj.runScale === false) {
 			obj.stopAllActions();
 			obj.runScale = true;
-			let actionOn = cc.scaleTo(0.18, 1);
+			let actionOn = cc.scaleTo(0.1, 1);
 			obj.runAction(cc.sequence(actionOn, cc.callFunc(function() {
 				this.runScale = false;
 			}, obj)));
@@ -134,7 +117,7 @@ cc.Class({
 		this.minigame.children.forEach(function(game){
 			if (game.active && game !== obj) {
 				game.stopAllActions();
-				let actionUn = cc.scaleTo(0.18, 0.7);
+				let actionUn = cc.scaleTo(0.1, 0.7);
 				game.runAction(cc.sequence(actionUn, cc.callFunc(function() {
 					this.runScale = false;
 				}, game)));

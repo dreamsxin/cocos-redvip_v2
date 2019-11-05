@@ -17,22 +17,20 @@ cc.Class({
 	},
 	onLoad () {
 		this.page = cc.instantiate(this.page);
-		this.page.y = -300.91;
+		this.page.y = -238;
 		this.node.addChild(this.page);
 		this.page = this.page.getComponent('Pagination');
 
-		Promise.all(this.quay.children.map(function(obj){
+		this.quay = this.quay.children.map(function(obj){
 			return obj.getComponent('MegaJ_history_item');
-		}))
-		.then(result => {
-			this.quay = result;
 		});
 
-		Promise.all(this.nhanve.children.map(function(obj){
+		this.nhanve = this.nhanve.children.map(function(obj){
 			return obj.getComponent('MegaJ_top_item');
-		}))
-		.then(result => {
-			this.nhanve = result;
+		});
+
+		this.header = this.header.children.map(function(obj){
+			return obj.getComponent('itemContentMenu');
 		});
 
 		this.page.init(this);
@@ -40,15 +38,11 @@ cc.Class({
 	headSelect: function(event) {
 		this.select = event.target.name;
 
-		this.header.children.forEach(function(head){
-			if (head.name === this.select) {
-				head.children[0].active = false;
-				head.children[1].active = true;
-				head.pauseSystemEvents();
+		this.header.forEach(function(head){
+			if (head.node.name === this.select) {
+				head.select();
 			}else{
-				head.children[0].active = true;
-				head.children[1].active = false;
-				head.resumeSystemEvents();
+				head.unselect();
 			}
 		}.bind(this));
 
@@ -73,7 +67,6 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		console.log(data);
 		if (!!data.quay) {
 			this.quayData(data.quay);
 		}
@@ -113,9 +106,9 @@ cc.Class({
         		obj.status.string = dataT.status ? 'Đã nhận': 'Chưa nhận';
         		let temp = obj.status.node;
                 if (dataT.status) {
-                    temp.color = temp.color.fromHEX('#47FF00');
+                    temp.color = temp.color.fromHEX('#248A0A');
                 }else{
-                    temp.color = temp.color.fromHEX('#FF9900');
+                    temp.color = temp.color.fromHEX('#BB0B0B');
                 }
         	}else{
         		obj.node.active = false;
@@ -125,22 +118,22 @@ cc.Class({
 	nameGame: function(data){
 		switch(data) {
 		  	case 100:
-		  		return 'Angrybird';
+		  		return 'Thiên Thú';
 		    	break;
 		  	case 101:
-		  		return 'BigBabol';
+		  		return 'Thỉnh Kinh';
 		    	break;
 		  	case 102:
 		  		return 'Candy';
 		    	break;
 		  	case 103:
-		  		return 'Long Lân';
+		  		return 'Đập Hũ';
 		    	break;
 		  	case 104:
 		  		return 'Mini 3Cây';
 		    	break;
 		  	case 105:
-		  		return 'Vương Quốc Red';
+		  		return 'Ngộ Không';
 		    	break;
 		  	case 106:
 		  		return 'Mini Poker';

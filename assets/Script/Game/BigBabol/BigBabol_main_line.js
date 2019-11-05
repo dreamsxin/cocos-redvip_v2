@@ -15,18 +15,9 @@ cc.Class({
 		this.node.off(cc.Node.EventType.MOUSE_LEAVE, this.offhover, this);
 	},
 	onhover: function(){
-		this.defColor = this.node.color;
-		this.node.children[1].active = true;
-		this.node.color = this.node.color.fromHEX(this.RedT.onColor);
+		this.node.children[0].active = true;
 	},
 	offhover: function(){
-		this.node.color = this.defColor;
-		this.node.children[1].active = false;
-	},
-	onSet:function(){
-		this.node.color = this.node.color.fromHEX(this.RedT.onColor);
-	},
-	offSet:function(){
-		this.node.color = this.node.color.fromHEX(this.RedT.offColor);
+		this.node.children[0].active = false;
 	},
 });

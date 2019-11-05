@@ -9,7 +9,7 @@ cc.Class({
 		this.RedT = obj;
 	},
 	random: function(data = false){
-		var icon = ~~(Math.random()*6);
+		var icon = (Math.random()*6)>>0;
 		this.setIcon(icon);
 		if (data) {
 			this.data = icon;

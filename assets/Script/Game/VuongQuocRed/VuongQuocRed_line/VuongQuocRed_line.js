@@ -5,41 +5,15 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
-		nodeEfLine: cc.Node,
 		nodeLine:   cc.Node,
 		mainLine:   cc.Node,
 	},
 	init: function(obj){
-		this.lines = {
-			'1':  [1,1,1,1,1],
-			'2':  [0,0,0,0,0],
-			'3':  [2,2,2,2,2],
-			'4':  [1,1,0,1,1],
-			'5':  [1,1,2,1,1],
-			'6':  [0,0,1,0,0],
-			'7':  [2,2,1,2,2],
-			'8':  [0,2,0,2,0],
-			'9':  [2,0,2,0,2],
-			'10': [1,0,2,0,1],
-			'11': [2,1,0,1,2],
-			'12': [0,1,2,1,0],
-			'13': [1,2,1,0,1],
-			'14': [1,0,1,2,1],
-			'15': [2,1,1,1,2],
-			'16': [0,1,1,1,0],
-			'17': [1,2,2,2,1],
-			'18': [1,0,0,0,1],
-			'19': [2,2,1,0,0],
-			'20': [0,0,1,2,2],
-		};
 		this.RedT = obj;
 		var self = this;;
-		Promise.all(this.mainLine.children.map(function(line){
+		this.mainLine = this.mainLine.children.map(function(line){
 			return line.getComponent('VQRed_main_line')
-					.init(self.RedT);
-		}))
-		.then(result => {
-			this.mainLine = result;
+				.init(self.RedT);
 		});
 		this.selectAll(null, "1");
 	},
@@ -77,7 +51,7 @@ cc.Class({
 			}))
 			.then(data => {
 				this.data = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 				this.RedT.tong.string = helper.numberWithCommas(data.length * helper.getOnlyNumberInString(this.RedT.bet.string));
 			})
 		})
@@ -102,7 +76,7 @@ cc.Class({
 			}))
 			.then(data => {
 				this.data = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 				this.RedT.tong.string = helper.numberWithCommas(data.length * helper.getOnlyNumberInString(this.RedT.bet.string));
 			})
 		})
@@ -127,7 +101,7 @@ cc.Class({
 			}))
 			.then(data => {
 				this.data = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 				this.RedT.tong.string = helper.numberWithCommas(data.length * helper.getOnlyNumberInString(this.RedT.bet.string));
 			})
 		})
@@ -146,7 +120,7 @@ cc.Class({
 			}))
 			.then(data => {
 				this.data = data;
-				this.RedT.labelLine.string = data.length;
+				this.RedT.labelLine.string = data.length + ' dòng';
 				this.RedT.tong.string = helper.numberWithCommas(data.length * helper.getOnlyNumberInString(this.RedT.bet.string));
 			})
 		});

@@ -3,18 +3,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        nodeUnSelect: {
-            default: null,
-            type:    cc.Node,
-        },
-        nodeSelect: {
-            default: null,
-            type:    cc.Node,
-        },
-        text: {
-            default: null,
-            type:    cc.Node,
-        },
+        nodeUnSelect: cc.Node,
+        nodeSelect: cc.Node,
+        text: cc.Node,
     },
     select: function() {
         this.nodeUnSelect.active = false;

@@ -13,16 +13,13 @@ cc.Class({
 			default: [],
 			type: cc.Sprite,
 		},
-
+		ADemo: cc.SpriteFrame,
 		buttonPlay:  cc.Node,
-		buttonCoint: cc.Node,
 		buttonAnNon: cc.Node,
 		buttonCao:   cc.Node,
 		buttonThap:  cc.Node,
 
 		bet:     cc.Node,
-		nodeRed: cc.Node,
-		nodeXu:  cc.Node,
 
 		notice:       cc.Node,
 		prefabNotice: cc.Prefab,
@@ -43,7 +40,7 @@ cc.Class({
 		this.LichSu = obj.Dialog.CaoThap_history;
 		this.Top    = obj.Dialog.CaoThap_top;
 
-		cc.RedT.setting.caothap = cc.RedT.setting.caothap || {scale:1, bet: "1000", logs: []};
+		cc.RedT.setting.caothap = cc.RedT.setting.caothap || {scale:1, cuoc: '1000', bet: "1000", logs: []};
 
 		var check = localStorage.getItem('caothap');
 		if (check == "true") {
@@ -54,9 +51,6 @@ cc.Class({
 		}
 		if (void 0 !== cc.RedT.setting.caothap.cuoc && cc.RedT.setting.caothap.cuoc != this.cuoc) {
 			this.intChangerBet();
-		}
-		if (void 0 !== cc.RedT.setting.caothap.red && this.red != cc.RedT.setting.caothap.red) {
-			this.changerCoint();
 		}
 	},
 	onLoad () {
@@ -120,46 +114,39 @@ cc.Class({
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop(this.node);
 	},
-	changerCoint: function(){
-		if (this.isPlay) {
-			this.buttonCoint.pauseSystemEvents();
-		}else{
-			this.red            = cc.RedT.setting.caothap.red = !this.red;
-			this.nodeRed.active = !this.nodeRed.active;
-			this.nodeXu.active  = !this.nodeXu.active;
-			this.onGetHu();
-		}
-	},
 	intChangerBet: function(){
-		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj.name == cc.RedT.setting.caothap.cuoc) {
-				self.cuoc = obj.name;
-				obj.children[0].active = true;
+		this.bet.children.forEach(function(obj){
+			if (obj.name === cc.RedT.setting.caothap.cuoc) {
+				this.cuoc = obj.name;
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		}.bind(this));
 	},
-	changerBet: function(event, bet){
+	changerBet: function(event){
 		if (this.isPlay) {
-			Promise.all(this.bet.children.map(function(bet){
+			this.bet.children.forEach(function(bet){
 				bet.pauseSystemEvents();
-			}));
+			});
 		}else{
-			var target = event.target;
-			this.cuoc  = cc.RedT.setting.caothap.cuoc = target.name;
-			Promise.all(this.bet.children.map(function(obj){
-				if (obj == target) {
-					obj.children[0].active = true;
+			var name  = event.target.name;
+			this.cuoc = cc.RedT.setting.caothap.cuoc = name;
+			this.bet.children.forEach(function(obj){
+				if (obj.name === name) {
+					obj.children[0].active = false;
+					obj.children[1].active = true;
 					obj.pauseSystemEvents();
 				}else{
-					obj.children[0].active = false;
+					obj.children[0].active = true;
+					obj.children[1].active = false;
 					obj.resumeSystemEvents();
 				}
-			}))
+			});
 			this.onGetHu();
 		}
 	},
@@ -175,19 +162,17 @@ cc.Class({
 	},
 	onPlay: function(){
 		this.buttonPlay.active = false;
-		this.buttonCoint.pauseSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 			bet.pauseSystemEvents();
-		}));
+		});
 	},
 	offPlay: function(){
 		this.isPlay            = cc.RedT.setting.caothap.isPlay = false;
 		this.buttonPlay.active = true;
-		this.buttonCoint.resumeSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
+		this.bet.children.forEach(function(bet){
 			if(!bet.children[0].active)
 				bet.resumeSystemEvents();
-		}));
+		});
 
 		this.buttonAnNon.color = cc.color(155,155,155);
 		this.buttonAnNon.pauseSystemEvents();
@@ -211,7 +196,6 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
 				cc.RedT.setting.caothap.time_remain = 120;
@@ -229,9 +213,15 @@ cc.Class({
 					this.nohu = data.nohu;
 				}
 
-				this.reels.card[0].spriteFrame = cc.RedT.util.card.getCard(data.card.card, data.card.type);
 				this.EF_Play();
 				this.playTime();
+				if (!!this.reels && !!this.reels.card && !!this.reels.card[0]) {
+					this.reels.card[0].spriteFrame = cc.RedT.util.card.getCard(data.card.card, data.card.type);
+				}else{
+					setTimeout(function(){
+						this.reels.card[0].spriteFrame = cc.RedT.util.card.getCard(data.card.card, data.card.type);
+					}.bind(this), 10);
+				}
 			}else{
 				this.offPlay();
 			}
@@ -293,9 +283,6 @@ cc.Class({
 	},
 	connect: function(data){
 		this.onPlay();
-		if (data.red != this.red) {
-			this.changerCoint();
-		}
 		if (this.cuoc != data.cuoc) {
 			this.cuoc = cc.RedT.setting.caothap.cuoc = data.cuoc;
 			this.intChangerBet();
@@ -312,14 +299,13 @@ cc.Class({
 		cc.RedT.setting.caothap.winUp   = data.winUp;
 		cc.RedT.setting.caothap.winDown = data.winDown;
 
-		Promise.all(this.listA.map(function(obj, index){
+		this.listA.forEach(function(obj, index){
 			if (void 0 !== cc.RedT.setting.caothap.a[index]) {
-				obj.node.active = true;
 				obj.spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.a[index].card, cc.RedT.setting.caothap.a[index].type);
 			}else{
-				obj.node.active = false;
+				obj.spriteFrame = this.ADemo;
 			}
-		}))
+		}.bind(this));
 
 		setTimeout(function(){
 			this.reels.card[this.reels.card.length-1].spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.card.card, cc.RedT.setting.caothap.card.type);
@@ -332,19 +318,17 @@ cc.Class({
 		this.clickInGame();
 	},
 	resumeGame: function(){
-		var self = this;
 		this.win.string     = helper.numberWithCommas(cc.RedT.setting.caothap.bet);
 		this.winUp.string   = cc.RedT.setting.caothap.winUp > 0 ? helper.numberWithCommas(cc.RedT.setting.caothap.winUp) : "";
 		this.winDown.string = cc.RedT.setting.caothap.winDown > 0 ? helper.numberWithCommas(cc.RedT.setting.caothap.winDown) : "";
 		this.clickInGame();
-		Promise.all(this.listA.map(function(obj, index){
+		this.listA.forEach(function(obj, index){
 			if (void 0 !== cc.RedT.setting.caothap.a[index]) {
-				obj.node.active = true;
 				obj.spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.a[index].card, cc.RedT.setting.caothap.a[index].type);
 			}else{
-				obj.node.active = false;
+				obj.spriteFrame = this.ADemo;
 			}
-		}));
+		}.bind(this));
 		if (cc.RedT.setting.caothap.win) {
 			if (!!this.nohu) {
 				// Nổ Hũ
@@ -378,8 +362,8 @@ cc.Class({
 	},
 	addMainLog: function(){
 		var ooT = cc.instantiate(this.cardf);
-		ooT.width  = 32.77;
-		ooT.height = 46.69;
+		ooT.width  = 36;
+		ooT.height = 51.359;
 		this.logs.addChild(ooT);
 		ooT = ooT.getComponent(cc.Sprite);
 		ooT.spriteFrame = cc.RedT.util.card.getCard(cc.RedT.setting.caothap.card.card, cc.RedT.setting.caothap.card.type);
@@ -388,8 +372,8 @@ cc.Class({
 		var self = this;
 		Promise.all(cc.RedT.setting.caothap.logs.map(function(card){
 			var ooT = cc.instantiate(self.cardf);
-			ooT.width  = 32.77;
-			ooT.height = 46.69;
+			ooT.width  = 36;
+			ooT.height = 51.359;
 			self.logs.addChild(ooT);
 			ooT = ooT.getComponent(cc.Sprite);
 			ooT.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);

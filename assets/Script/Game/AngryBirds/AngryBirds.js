@@ -33,11 +33,10 @@ cc.Class({
 		buttonSpin:  cc.Node,
 		buttonAuto:  cc.Node,
 		buttonStop:  cc.Node,
-		buttonCoint: cc.Node,
-		nodeRed: cc.Node,
-		nodeXu:  cc.Node,
 
-		bet:    cc.Node,
+		labelWin:    cc.Label,
+		labelBet:    cc.Label,
+
 		notice: cc.Node,
 		prefabNotice: cc.Prefab,
 		hu:      cc.Label,
@@ -45,6 +44,11 @@ cc.Class({
 		isAuto:  false,
 		isSpin:  false,
 		red:     true,
+		room:    0,
+		rooms: {
+			default: [],
+			type: cc.String,
+		},
 	},
 	init(obj){
 		this.RedT = obj;
@@ -59,9 +63,6 @@ cc.Class({
 		}
 		if (void 0 !== cc.RedT.setting.angrybird.bet && cc.RedT.setting.angrybird.bet != this.cuoc) {
 			this.intChangerBet();
-		}
-		if (void 0 !== cc.RedT.setting.angrybird.red && this.red != cc.RedT.setting.angrybird.red) {
-			this.changerCoint();
 		}
 		if (void 0 !== cc.RedT.setting.angrybird.isAuto && this.isAuto != cc.RedT.setting.angrybird.isAuto) {
 			//this.onClickAuto();
@@ -123,66 +124,56 @@ cc.Class({
 		this.node.active = !1;
 		localStorage.setItem('angrybird', false);
 	},
-	changerCoint: function(){
-		this.red            = cc.RedT.setting.angrybird.red = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.onGetHu();
-	},
 	intChangerBet: function(){
-		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj.name == cc.RedT.setting.angrybird.bet) {
-				self.cuoc = obj.name;
-				obj.children[0].active = true;
-				obj.pauseSystemEvents();
-			}else{
-				obj.children[0].active = false;
-				obj.resumeSystemEvents();
+		this.cuoc = cc.RedT.setting.angrybird.bet;
+		this.rooms.forEach(function(room, index){
+			if (room === this.cuoc) {
+				this.room = index;
+				this.labelBet.string = helper.numberWithCommas(this.rooms[this.room]);
 			}
-		}))
+		}.bind(this));
 	},
-	changerBet: function(event, bet){
-		this.cuoc = cc.RedT.setting.angrybird.bet = bet;
-		var target = event.target;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj == target) {
-				obj.children[0].active = true;
-				obj.pauseSystemEvents();
-			}else{
-				obj.children[0].active = false;
-				obj.resumeSystemEvents();
-			}
-		}))
-		this.onGetHu();
+	betPlus: function(){
+		this.room++;
+		let data = this.rooms[this.room];
+		if (void 0 !== data) {
+			this.cuoc = data;
+		}else{
+			this.room = 0;
+			this.cuoc = this.rooms[this.room];
+		}
+		this.labelBet.string = helper.numberWithCommas(this.rooms[this.room]);
+	},
+	betTru: function(){
+		this.room--;
+		let data = this.rooms[this.room];
+		if (void 0 !== data) {
+			this.cuoc = data;
+		}else{
+			this.room = this.rooms.length-1;
+			this.cuoc = this.rooms[this.room];
+		}
+		this.labelBet.string = helper.numberWithCommas(this.rooms[this.room]);
 	},
 	autoSpin: function(){
+		this.random();
 		var self = this;
-		Promise.all([0,1,2,3,4].map(function(i) {
+		[0,1,2,3,4].forEach(function(i) {
 			if (i < 3) {
 				self.reelsL[i].spin(i);
 			}else{
 				self.reelsR[i-3].spin(i);
 			}
-		}));
+		});
 	},
 	onSpin: function(){
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
-		Promise.all(this.bet.children.map(function(bet){
-			bet.pauseSystemEvents();
-		}));
 	},
 	offSpin: function(){
 		this.isSpin = this.buttonStop.active = this.isAuto = false;
 		this.buttonAuto.color  = cc.color(155,155,155);
 		this.buttonAuto.active = this.buttonSpin.active = true;
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
-
-		Promise.all(this.bet.children.map(function(bet){
-			if(!bet.children[0].active) bet.resumeSystemEvents();
-		}));
 	},
 	onClickSpin: function(){
 		if (!this.isSpin) {
@@ -210,12 +201,12 @@ cc.Class({
 	},
 	onCloseGame: function(){
 		this.isSpin = false;
-		Promise.all(this.reelsL.map(function(reel) {
+		this.reelsL.forEach(function(reel) {
 			reel.stop();
-		}));
-		Promise.all(this.reelsR.map(function(reel) {
+		});
+		this.reelsR.forEach(function(reel) {
 			reel.stop();
-		}));
+		});
 		this.offSpin();
 	},
 	addNotice:function(text){
@@ -235,11 +226,11 @@ cc.Class({
 				this.buttonStop.active = this.isAuto ? true : false;
 				this.buttonAuto.active = this.buttonSpin.active = !this.buttonStop.active;
 
-				Promise.all(data.celR.map(function(cel, cel_index){
-					Promise.all(cel.map(function(icon, index){
+				data.celR.forEach(function(cel, cel_index){
+					cel.forEach(function(icon, index){
 						self.reelsR[cel_index].icons[index].setIcon(icon, true);
-					}));
-				}));
+					});
+				});
 
 				Promise.all(data.cel.map(function(cel, cel_index){
 					return Promise.all(cel.map(function(icon, index){
@@ -272,45 +263,45 @@ cc.Class({
 		}
 	},
 	copy: function(){
-		Promise.all(this.reelsL.map(function(reel){
+		this.reelsL.forEach(function(reel){
 			if (void 0 !== reel.icons &&
-				void 0 !== reel.icons[16] &&
-				void 0 !== reel.icons[16].setIcon)
+				void 0 !== reel.icons[19] &&
+				void 0 !== reel.icons[19].setIcon)
 			{
-				reel.icons[16].setIcon(reel.icons[2].data);
-				reel.icons[15].setIcon(reel.icons[1].data);
-				reel.icons[14].setIcon(reel.icons[0].data);
+				reel.icons[19].setIcon(reel.icons[2].data);
+				reel.icons[18].setIcon(reel.icons[1].data);
+				reel.icons[17].setIcon(reel.icons[0].data);
 			}
 			//reel.node.y = 0;
-		}));
+		});
 
-		Promise.all(this.reelsR.map(function(reel){
+		this.reelsR.forEach(function(reel){
 			if (void 0 !== reel.icons &&
-				void 0 !== reel.icons[16] &&
-				void 0 !== reel.icons[16].setIcon)
+				void 0 !== reel.icons[22] &&
+				void 0 !== reel.icons[22].setIcon)
 			{
-				reel.icons[16].setIcon(reel.icons[2].data);
-				reel.icons[15].setIcon(reel.icons[1].data);
-				reel.icons[14].setIcon(reel.icons[0].data);
+				reel.icons[22].setIcon(reel.icons[2].data);
+				reel.icons[21].setIcon(reel.icons[1].data);
+				reel.icons[20].setIcon(reel.icons[0].data);
 			}
 			//reel.node.y = 0;
-		}));
+		});
 	},
 	random: function(){
-		Promise.all(this.reelsL.map(function(reel){
-			Promise.all(reel.icons.map(function(icon, index){
-				if (index > 2 && index < 14) {
+		this.reelsL.forEach(function(reel){
+			reel.icons.forEach(function(icon, index){
+				if (index > 2 && index < 17) {
 					icon.random();
 				}
-			}));
-		}));
-		Promise.all(this.reelsR.map(function(reel){
-			Promise.all(reel.icons.map(function(icon, index){
-				if (index > 2 && index < 14) {
+			});
+		});
+		this.reelsR.forEach(function(reel){
+			reel.icons.forEach(function(icon, index){
+				if (index > 2 && index < 20) {
 					icon.random();
 				}
-			}));
-		}));
+			});
+		});
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
@@ -348,6 +339,7 @@ cc.Class({
 
 			var Finish = function(){
 				nohu.node.destroy();
+				this.labelWin.string = helper.numberWithCommas(this.win);
 				this.win = 0;
 				this.hieuUng();
 			};
@@ -362,6 +354,7 @@ cc.Class({
 			BigWin     = BigWin.getComponent(cc.Animation);
 
 			var BigWinFinish = function(){
+				this.labelWin.string = helper.numberWithCommas(BigWin.node.bet);
 				BigWin.node.destroy();
 				if (this.isAuto) {
 					this.onGetSpin();
@@ -387,17 +380,19 @@ cc.Class({
 			node.addComponent(cc.Label);
 			node = node.getComponent(cc.Label);
 			helper.numberTo(node, 0, this.win, 600, true);
+			node.win = this.win;
 			node.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
 			node.lineHeight = 130;
 			node.fontSize   = 25;
 			node.node.position = cc.v2(0, 98);
 			node.node.runAction(cc.sequence(cc.delayTime(1.5), cc.callFunc(function() {
+				this.labelWin.string = helper.numberWithCommas(node.win);
 				node.node.destroy();
 				this.hieuUng();
 				this.offLineWin();
 			}, this)));
-			this.notice.addChild(node.node);
 			this.win = 0;
+			this.notice.addChild(node.node);
 			this.onLineWin();
 		}else{
 			if (this.isAuto) {
@@ -412,13 +407,13 @@ cc.Class({
 	},
 	onLineWin: function(){
 		var self = this;
-		Promise.all(this.line_win.map(function(obj){
+		this.line_win.forEach(function(obj){
 			self.line.children[obj.line-1].active = true;
-		}))
+		});
 	},
 	offLineWin: function(){
-		Promise.all(this.line.children.map(function(obj){
+		this.line.children.forEach(function(obj){
 			obj.active = false;
-		}))
+		});
 	},
 });

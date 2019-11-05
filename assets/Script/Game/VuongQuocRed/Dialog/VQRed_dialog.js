@@ -73,8 +73,6 @@ cc.Class({
      * Function Show Dialog
     */
     showHistory: function(){
-        this.objShow.active = false;
-        this.history.node.previous = this.objShow;
         this.node.active = this.history.node.active = true;
         this.objShow     = this.history.node;
     },

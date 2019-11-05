@@ -6,8 +6,6 @@ cc.Class({
     properties: {
         page:     cc.Prefab,
         content:  cc.Node,
-        cointRed: cc.Node,
-        cointXu:  cc.Node,
         red:      true,
     },
     init(obj){
@@ -15,37 +13,28 @@ cc.Class({
     },
     onLoad () {
         this.page = cc.instantiate(this.page);
-        this.page.y = -307;
+        this.page.y = -272;
         this.node.addChild(this.page);
         this.page = this.page.getComponent('Pagination');
-        Promise.all(this.content.children.map(function(obj){
+        this.content = this.content.children.map(function(obj){
             return obj.getComponent('CaoThap_history_item');
-        }))
-        .then(result => {
-            this.content = result;
-        })
+        });
         this.page.init(this);
     },
     onEnable: function() {
         this.get_data();
     },
     get_data: function(page = 1){
-        cc.RedT.send({g:{caothap:{history:{red: this.red, page: page}}}});
-    },
-    changerCoint: function(){
-        this.red             = !this.red;
-        this.cointRed.active = !this.cointRed.active;
-        this.cointXu.active  = !this.cointXu.active;
-        this.get_data();
+        cc.RedT.send({g:{caothap:{history:{red:this.red, page:page}}}});
     },
     onData: function(data){
         var self = this;
         this.page.onSet(data.page, data.kmess, data.total);
-        Promise.all(this.content.map(function(obj, i){
+        this.content.forEach(function(obj, i){
             var dataT = data.data[i];
             if (void 0 !== dataT) {
                 obj.node.active  = true;
-
+                obj.bg.active    = i%2;
                 obj.time.string  = helper.getStringDateByTime(dataT.time);
                 obj.phien.string = dataT.id;
                 obj.buoc.string  = dataT.buoc;
@@ -57,7 +46,7 @@ cc.Class({
                     if (dataT.chon == 2) {
                         obj.select.scaleY  = -1; // Chọn Up
                     }else{
-                        obj.select .scaleY = 1;  // Chọn Down
+                        obj.select.scaleY = 1;  // Chọn Down
                     }
                 }else{
                     obj.select.active = false;
@@ -71,6 +60,6 @@ cc.Class({
             }else{
                 obj.node.active = false;
             }
-        }))
+        });
     },
 });

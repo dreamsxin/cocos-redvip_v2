@@ -11,39 +11,16 @@ cc.Class({
 		buttonAuto:     cc.Node,
 		buttonSpeed:    cc.Node,
 		buttonStop:     cc.Node,
-		buttonAutoDot:  cc.Node,
-		buttonSpeedDot: cc.Node,
 		reels: {
 			default: [],
 			type: MiniPoker_reel,
 		},
-		buttonCoint: cc.Node,
-		nodeRed: {
-			default: null,
-			type: cc.Node,
-		},
-		font: {
-			default: null,
-			type:    cc.BitmapFont
-		},
-		nodeXu: {
-			default: null,
-			type: cc.Node,
-		},
-		bet: {
-			default: null,
-			type: cc.Node,
-		},
-		notice: {
-			default: null,
-			type: cc.Node,
-		},
+		font: cc.BitmapFont,
+		bet: cc.Node,
+		notice: cc.Node,
 		card:  cc.Prefab,
 		cardf: cc.Prefab,
-		prefabNotice: {
-			default: null,
-			type: cc.Prefab,
-		},
+		prefabNotice: cc.Prefab,
 		phien: cc.Label,
 		hu:    cc.Label,
 		cuoc:  "",
@@ -56,7 +33,7 @@ cc.Class({
 		this.RedT = obj;
 		this.Top    = obj.Dialog.MiniPoker_Top;
 		this.LichSu = obj.Dialog.MiniPoker_LichSu;
-		cc.RedT.setting.minipoker = cc.RedT.setting.minipoker || {scale:1};
+		cc.RedT.setting.minipoker = cc.RedT.setting.minipoker || {scale:1, bet: this.cuoc};
 
 		this.node.runScale = false;
 
@@ -77,9 +54,6 @@ cc.Class({
 
 		if (void 0 !== cc.RedT.setting.minipoker.bet && cc.RedT.setting.minipoker.bet != this.cuoc) {
 			this.intChangerBet();
-		}
-		if (void 0 !== cc.RedT.setting.minipoker.red && this.red != cc.RedT.setting.minipoker.red) {
-			this.changerCoint();
 		}
 		if (void 0 !== cc.RedT.setting.minipoker.isSpeed && this.isSpeed != cc.RedT.setting.minipoker.isSpeed) {
 			this.onClickSpeed();
@@ -151,7 +125,6 @@ cc.Class({
 	},
 	onSpin: function(){
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
 		this.bet.children.forEach(function(bet){
 	    	bet.pauseSystemEvents();
 	    });
@@ -160,7 +133,6 @@ cc.Class({
 		this.isSpin = false;
 		this.buttonStop.active = this.isSpin ? (this.isAuto ? true : false) : false;
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
 		this.bet.children.forEach(function(bet){
 			let oT = bet.children[0].active;
 			if(!oT) bet.resumeSystemEvents();
@@ -175,50 +147,44 @@ cc.Class({
 	},
 	onClickSpeed: function(){
 		this.isSpeed               = cc.RedT.setting.minipoker.isSpeed = !this.isSpeed;
-		this.buttonSpeedDot.active = !this.buttonSpeedDot.active;
-		this.buttonSpeed.color     = this.isSpeed ? cc.Color.WHITE : cc.color(206,206,206);
+		this.buttonSpeed.color     = this.isSpeed ? cc.Color.WHITE : cc.color(136,136,136);
 	},
 	onClickAuto: function(){
 		this.isAuto               = cc.RedT.setting.minipoker.isAuto = !this.isAuto;
-		this.buttonAutoDot.active = !this.buttonAutoDot.active;
-		this.buttonAuto.color     = this.isAuto ? cc.Color.WHITE : cc.color(206,206,206);
+		this.buttonAuto.color     = this.isAuto ? cc.Color.WHITE : cc.color(136,136,136);
 		this.buttonStop.active    = this.isSpin ? (this.isAuto ? true : false) : false;
 	},
 	onClickStop: function(){
         this.onClickAuto();
         this.buttonStop.active = false;
     },
-	changerCoint: function(){
-		this.red            = cc.RedT.setting.minipoker.red = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.onGetHu();
-	},
 	intChangerBet: function(){
-		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj.name == cc.RedT.setting.minipoker.bet) {
-				self.cuoc = obj.name;
-				obj.children[0].active = true;
+		this.bet.children.forEach(function(obj){
+			if (obj.name === cc.RedT.setting.minipoker.bet) {
+				this.cuoc = obj.name;
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		}.bind(this));
 	},
 	changerBet: function(event, bet){
-		this.cuoc = cc.RedT.setting.minipoker.bet = bet;
-		var target = event.target;
-		Promise.all(this.bet.children.map(function(obj){
-			if (obj == target) {
-				obj.children[0].active = true;
+		this.cuoc = cc.RedT.setting.minipoker.bet = event.target.name;
+		this.bet.children.forEach(function(obj){
+			if (obj.name === this.cuoc) {
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		}.bind(this));
 		this.onGetHu();
 	},
 	speed: function(){
@@ -233,9 +199,9 @@ cc.Class({
 				this.winT  = data.text;
 				this.winC  = data.code;
 				this.winTg = void 0 !== data.thuong ? data.thuong : 0;
-				Promise.all(data.card.map(function(card, index){
+				data.card.forEach(function(card, index){
 					self.reels[index].card[0].spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
-				}));
+				});
 				this.autoSpin();
 			}else{
 				this.offSpin();
