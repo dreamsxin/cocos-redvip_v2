@@ -6,8 +6,6 @@ cc.Class({
     properties: {
         item:     cc.Prefab,
         content:  cc.Node,
-        cointRed: cc.Node,
-        cointXu:  cc.Node,
         red:      true,
     },
     onEnable: function() {
@@ -15,12 +13,6 @@ cc.Class({
     },
     get_data: function(page = 1){
         cc.RedT.send({g:{longlan:{top: this.red}}});
-    },
-    changerCoint: function(){
-        this.red             = !this.red;
-        this.cointRed.active = !this.cointRed.active;
-        this.cointXu.active  = !this.cointXu.active;
-        this.get_data();
     },
     onData: function(data){
         this.content.removeAllChildren();

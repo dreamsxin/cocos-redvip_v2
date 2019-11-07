@@ -7,8 +7,6 @@ cc.Class({
     properties: {
         page:     cc.Prefab,
         content:  cc.Node,
-        cointRed: cc.Node,
-        cointXu:  cc.Node,
         red:      true,
     },
     onLoad () {
@@ -28,13 +26,7 @@ cc.Class({
         this.get_data();
     },
     get_data: function(page = 1){
-        cc.RedT.send({g:{longlan:{log:{red: this.red, page: page}}}});
-    },
-    changerCoint: function(){
-        this.red             = !this.red;
-        this.cointRed.active = !this.cointRed.active;
-        this.cointXu.active  = !this.cointXu.active;
-        this.get_data();
+        cc.RedT.send({g:{longlan:{log:{red:this.red, page:page}}}});
     },
     onData: function(data){
         var self = this;
