@@ -15,6 +15,7 @@ cc.Class({
         cc.RedT.send({g:{angrybird:{top:this.red}}});
     },
     onData: function(data){
+        console.log(data);
         this.content.removeAllChildren();
         data.forEach(function(obj, index){
             let item = cc.instantiate(this.item);
@@ -23,7 +24,7 @@ cc.Class({
             item.phien.string = obj.name;
             item.cuoc.string  = helper.numberWithCommas(obj.bet);
             item.line.string  = helper.numberWithCommas(obj.win);
-            item.win.string   = obj.a ? "NỔ HŨ" : "THẮNG LỚN";
+            item.win.string   = obj.type === 2 ? "NỔ HŨ" : "THẮNG LỚN";
             item.node.children[0].active = (index&1);
             this.content.addChild(item.node);
         }.bind(this));

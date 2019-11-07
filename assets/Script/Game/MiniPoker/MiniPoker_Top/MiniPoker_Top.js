@@ -23,7 +23,7 @@ cc.Class({
             item.phien.string = obj.name;
             item.cuoc.string  = helper.numberWithCommas(obj.bet);
             item.line.string  = helper.numberWithCommas(obj.win);
-            item.win.string   = obj.type == 9 ? "NỔ HŨ" : "THẮNG LỚN";
+            item.win.string   = obj.type === 2 ? "NỔ HŨ" : "THẮNG LỚN";
             item.node.children[0].active    = !(index&1);
             this.content.addChild(item.node);
         }.bind(this));

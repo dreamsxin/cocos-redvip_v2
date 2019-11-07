@@ -32,7 +32,7 @@ cc.Class({
             itemComponent.phien.string = obj.name;
             itemComponent.cuoc.string  = helper.numberWithCommas(obj.bet);
             itemComponent.line.string  = helper.numberWithCommas(obj.win);
-            itemComponent.win.string   = obj.type == 2 ? "Nổ Hũ" : "Thắng lớn";
+            itemComponent.win.string   = obj.type === 2 ? 'Nổ Hũ' : 'Thắng lớn';
             item.children[0].active    = !(index&1);
             self.content.addChild(item);
         }))

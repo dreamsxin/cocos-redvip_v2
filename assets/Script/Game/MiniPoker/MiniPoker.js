@@ -233,7 +233,7 @@ cc.Class({
 	},
 	hieuUng: function(){
     	if (!!this.winC && this.winC > 0) {
-    		if (this.winC == 9) {
+    		if (this.winC === 2) {
     			// Nổ Hũ
     			if (this.isAuto == true) {
     				this.onClickStop();
@@ -259,7 +259,7 @@ cc.Class({
 				nohu.on('play',     Play,   this);
     			nohu.on('finished', Finish, this);
     			nohu.play();
-    		}else if (this.winC == 8 || this.winC == 7) {
+    		}else if (this.winC === 1) {
     			// Thắng lớn
 				var BigWin = cc.instantiate(this.RedT.prefabBigWin);
 				BigWin     = BigWin.getComponent(cc.Animation);
@@ -306,7 +306,7 @@ cc.Class({
 					this.node.destroy()
 				}, thuong)));
 			}
-    		this.winC   = 0;
+    		this.winC = 0;
     	}else{
     		if (this.isAuto) {
     			this.timeOut = setTimeout(function(){

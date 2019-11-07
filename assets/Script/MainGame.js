@@ -74,20 +74,19 @@ cc.Class({
 			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
 		}else{
 			this.dialog.settings.setMusic();
+			setTimeout(function(){
+				let checkT = localStorage.getItem('TH'); // UID
+				let checkH = localStorage.getItem('HT'); // token
+				if (!!checkT && !!checkH) {
+					this.autoAuth({authentication:{id:checkT, token:checkH}});
+				}
+			}.bind(this), 300);
 		}
 		var check = localStorage.getItem('SOUND_BACKGROUND');
 		if(check == null || cc.RedT.isSoundBackground()){
 			cc.RedT.setSoundBackground(true);
 			this.playMusic();
 		}
-
-		setTimeout(function(){
-			let checkT = localStorage.getItem('TH'); // UID
-			let checkH = localStorage.getItem('HT'); // token
-			if (!!checkT && !!checkH) {
-				this.autoAuth({authentication:{id:checkT, token:checkH}});
-			}
-		}.bind(this), 300);
 	},
 	autoAuth: function(obj) {
 		this.loading.active = true;
@@ -295,13 +294,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconVQRed.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 4900, true);
+					helper.numberTo(this.iconVQRed.hu100, helper.getOnlyNumberInString(this.iconVQRed.hu100.string), h100[0].bet, 2200, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu1k, helper.getOnlyNumberInString(this.iconVQRed.hu1k.string), h1k[0].bet, 4900, true);
+					helper.numberTo(this.iconVQRed.hu1k, helper.getOnlyNumberInString(this.iconVQRed.hu1k.string), h1k[0].bet, 2200, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 4900, true);
+					helper.numberTo(this.iconVQRed.hu10k, helper.getOnlyNumberInString(this.iconVQRed.hu10k.string), h10k[0].bet, 2200, true);
 				}
 			});
 
@@ -319,13 +318,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconCandy.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu100, helper.getOnlyNumberInString(this.iconCandy.hu100.string), h100[0].bet, 4900, true);
+					helper.numberTo(this.iconCandy.hu100, helper.getOnlyNumberInString(this.iconCandy.hu100.string), h100[0].bet, 2200, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu1k, helper.getOnlyNumberInString(this.iconCandy.hu1k.string), h1k[0].bet, 4900, true);
+					helper.numberTo(this.iconCandy.hu1k, helper.getOnlyNumberInString(this.iconCandy.hu1k.string), h1k[0].bet, 2200, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 4900, true);
+					helper.numberTo(this.iconCandy.hu10k, helper.getOnlyNumberInString(this.iconCandy.hu10k.string), h10k[0].bet, 2200, true);
 				}
 			});
 
@@ -343,13 +342,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconLongLan.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu100, helper.getOnlyNumberInString(this.iconLongLan.hu100.string), h100[0].bet, 4900, true);
+					helper.numberTo(this.iconLongLan.hu100, helper.getOnlyNumberInString(this.iconLongLan.hu100.string), h100[0].bet, 2200, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu1k, helper.getOnlyNumberInString(this.iconLongLan.hu1k.string), h1k[0].bet, 4900, true);
+					helper.numberTo(this.iconLongLan.hu1k, helper.getOnlyNumberInString(this.iconLongLan.hu1k.string), h1k[0].bet, 2200, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 4900, true);
+					helper.numberTo(this.iconLongLan.hu10k, helper.getOnlyNumberInString(this.iconLongLan.hu10k.string), h10k[0].bet, 2200, true);
 				}
 			});
 
@@ -367,13 +366,13 @@ cc.Class({
 				let r10k = helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string);
 
 				if (r100-h100[0].bet != 0) {
-					helper.numberTo(this.iconMegaJ.hu100, helper.getOnlyNumberInString(this.iconMegaJ.hu100.string), h100[0].bet, 4900, true);
+					helper.numberTo(this.iconMegaJ.hu100, helper.getOnlyNumberInString(this.iconMegaJ.hu100.string), h100[0].bet, 2200, true);
 				}
 				if (r1k-h1k[0].bet != 0) {
-					helper.numberTo(this.iconMegaJ.hu1k, helper.getOnlyNumberInString(this.iconMegaJ.hu1k.string), h1k[0].bet, 4900, true);
+					helper.numberTo(this.iconMegaJ.hu1k, helper.getOnlyNumberInString(this.iconMegaJ.hu1k.string), h1k[0].bet, 2200, true);
 				}
 				if (r10k-h10k[0].bet != 0) {
-					helper.numberTo(this.iconMegaJ.hu10k, helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string), h10k[0].bet, 4900, true);
+					helper.numberTo(this.iconMegaJ.hu10k, helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string), h10k[0].bet, 2200, true);
 				}
 			});
 		}
