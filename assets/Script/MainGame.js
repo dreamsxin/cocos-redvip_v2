@@ -80,9 +80,30 @@ cc.Class({
 			cc.RedT.setSoundBackground(true);
 			this.playMusic();
 		}
+
+		setTimeout(function(){
+			let checkT = localStorage.getItem('TH'); // UID
+			let checkH = localStorage.getItem('HT'); // token
+			if (!!checkT && !!checkH) {
+				this.autoAuth({authentication:{id:checkT, token:checkH}});
+			}
+		}.bind(this), 300);
+	},
+	autoAuth: function(obj) {
+		this.loading.active = true;
+		if (cc.RedT._socket == null || cc.RedT._socket.readyState != 1) {
+			setTimeout(function(){
+				cc.RedT.send(obj);
+			}, 300);
+		}else{
+			cc.RedT.send(obj)
+		}
+	},
+	resetAuth: function() {
+		localStorage.removeItem('TH');
+		localStorage.removeItem('HT');
 	},
 	auth: function(obj) {
-		var self = this;
 		this.loading.active = true;
 		//cc.RedT.reconnect();
 		if (cc.RedT._socket == null || cc.RedT._socket.readyState != 1) {
@@ -95,6 +116,7 @@ cc.Class({
 	},
 	unAuthorized: function(data){
 		this.loading.active = false;
+		cc.RedT.inGame.resetAuth();
 		if (void 0 !== data["message"]) {
 			this.notice.show({title: 'ĐĂNG KÝ', text: 'Có lỗi sảy ra, xin vui lòng thử lại...'});
 		} else {
