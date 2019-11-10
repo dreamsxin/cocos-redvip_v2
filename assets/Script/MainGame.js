@@ -87,6 +87,13 @@ cc.Class({
 			cc.RedT.setSoundBackground(true);
 			this.playMusic();
 		}
+
+		if (cc.sys.isBrowser) {
+			history.pushState(null, null, location.href);
+		    window.onpopstate = function () {
+		        history.go(1);
+		    };
+		}
 	},
 	autoAuth: function(obj) {
 		this.loading.active = true;
