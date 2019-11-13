@@ -72,6 +72,9 @@ cc.Class({
             }
     	}));
     },
+    onWait: function(){
+    	cc.RedT.inGame.notice.show({title:'BẢO TRÌ', text:'Game đang bảo trì...'});
+    },
     openMiniGame: function(e, name){
         cc.RedT.MiniPanel[name].openGame();
     },

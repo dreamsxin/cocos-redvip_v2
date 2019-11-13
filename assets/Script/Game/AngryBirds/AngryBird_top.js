@@ -15,7 +15,6 @@ cc.Class({
         cc.RedT.send({g:{angrybird:{top:this.red}}});
     },
     onData: function(data){
-        console.log(data);
         this.content.removeAllChildren();
         data.forEach(function(obj, index){
             let item = cc.instantiate(this.item);

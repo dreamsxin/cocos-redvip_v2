@@ -128,7 +128,6 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		//console.log(data);
 		if (!!data.status) {
 			this.updateStatus(data.status);
 		}
@@ -152,7 +151,6 @@ cc.Class({
 		this.luot.string = data[this.game] + ' Lượt';
 	},
 	updateStatus: function(data){
-		//console.log(data);
 		if (data.status === true) {
 			this.isSpin = true;
 			this.oldData = data;

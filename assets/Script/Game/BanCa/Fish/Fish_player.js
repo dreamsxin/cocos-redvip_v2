@@ -1,41 +1,108 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 cc.Class({
-    extends: cc.Component,
+	extends: cc.Component,
 
-    properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
-    },
+	properties: {
+		nick:           cc.Label,
+		balans:         cc.Label,
+		bet:            cc.Label,
+		iconCoint:      cc.Sprite,
+		typeBet:        0,
+		nodeChangerbet: cc.Node,
+		canhs: {
+			default: [],
+			type: dragonBones.ArmatureDisplay,
+		},
+		canh: dragonBones.ArmatureDisplay,
 
-    // LIFE-CYCLE CALLBACKS:
+		sungs: {
+			default: [],
+			type: dragonBones.ArmatureDisplay,
+		},
+		sung: dragonBones.ArmatureDisplay,
+	},
+	init: function(obj) {
+		this.RedT = obj;
+	},
+	onData: function(data){
+	},
+	onInfo: function(data){
+		this.nick.string   = data.name;
+		this.balans.string = data.balans;
+		this.bet.string    = this.RedT['typeBet'+this.RedT.regGame][data.typeBet];
+		this.typeBet       = data.typeBet;
+		this.onTypeBet(data.typeBet);
+	},
+	onTypeBet: function(type){
+		this.canhs.forEach(function(canh, index){
+			if (type === index) {
+				canh.node.active = true;
+			}else{
+				canh.node.active = false;
+			}
+		});
+		this.sungs.forEach(function(sung, index){
+			if (type === index) {
+				sung.node.active = true;
+			}else{
+				sung.node.active = false;
+			}
+		});
+		this.canh = this.canhs[type];
+		this.sung = this.sungs[type];
+		this.sung.node.insertChild(this.bet.node);
+		console.log(this.sung);
 
-    // onLoad () {},
+		let funcCanhEvent1 = function(){
+			this.canh.playAnimation(this.RedT.anim_canh[1], 0);
+			this.canh.off(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent1, this);
+		};
+		this.canh.on(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent1, this);
+		this.canh.playAnimation(this.RedT.anim_canh[0], 1);
 
-    start () {
+		let funcSungEvent1 = function(){
+			this.sung.off(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent1, this);
+		};
+		this.sung.on(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent1, this);
+		this.sung.playAnimation(this.RedT.anim_sung[1], 1);
+	},
+	onChangerTypeBet: function(type){
+		let self = this;
+		let funcCanhEvent1 = function(){
+			this.canh.playAnimation(this.RedT.anim_canh[1], 0);
+			this.canh.off(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent1, this);
+		};
 
-    },
+		let funcCanhEvent2 = function(){
+			this.off(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent2, this);
 
-    // update (dt) {},
+			self.canh.node.active = true;
+			self.canh.on(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent1, self);
+			self.canh.playAnimation(self.RedT.anim_canh[0], 1);
+		};
+		this.canh.on(dragonBones.EventObject.LOOP_COMPLETE, funcCanhEvent2, this.canh);
+		this.canh.playAnimation(this.RedT.anim_canh[2], 1);
+
+		this.canh = this.canhs[type];
+
+		let funcSungEvent1 = function(){
+			this.sung.off(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent1, this);
+		};
+
+		let funcSungEvent2 = function(){
+			this.off(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent2, this);
+
+			self.sung.node.active = true;
+			self.sung.on(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent1, self);
+			self.sung.playAnimation(self.RedT.anim_sung[1], 1);
+		};
+		this.sung.on(dragonBones.EventObject.LOOP_COMPLETE, funcSungEvent2, this.sung);
+		this.sung.playAnimation(this.RedT.anim_sung[2], 1);
+
+		this.sung = this.sungs[type];
+		this.sung.node.insertChild(this.bet.node);
+
+		this.bet.string = this.RedT['typeBet'+this.RedT.regGame][type];
+		this.typeBet    = type;
+	},
 });
