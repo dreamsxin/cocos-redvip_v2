@@ -4,13 +4,15 @@ var path   = require('path');
 var crypto = require('crypto');
 
 var manifest = {
-	packageUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/',
-	remoteManifestUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/project.manifest',
-	remoteVersionUrl: 'http://redvip.club/redvip-update/redvip-remote-asset/version.manifest',
+	packageUrl: 'http://hunet.club/redvip-update/redvip-remote-asset/',
+	remoteManifestUrl: 'http://hunet.club/redvip-update/redvip-remote-asset/project.manifest',
+	remoteVersionUrl: 'http://hunet.club/redvip-update/redvip-remote-asset/version.manifest',
 	version: '1.17.2.0',
 	assets: {},
 	searchPaths: []
 };
+
+// node version_generator.js -v 1.17.2.30 -u http://hunet.club/redvip-update/redvip-remote-asset/ -s redvip-remote-asset/ -d assets/
 
 var dest = './redvip-remote-asset/';
 var src  = './jsb/';
