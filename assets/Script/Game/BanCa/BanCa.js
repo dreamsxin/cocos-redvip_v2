@@ -123,8 +123,13 @@ cc.Class({
 		this.nodeGame.active = true;
 	},
 	dataIngame: function(data) {
+		let obj = this.players[data.ghe-1];
+		obj.iconCoint.spriteFrame = this.cointOther;
+		obj.node.active = true;
+		obj.onInfo(data.data);
 	},
 	dataOutGame: function(data) {
+		this.players[data-1].node.active = false;
 	},
 	backGame: function(){
 		this.loading.active = true;

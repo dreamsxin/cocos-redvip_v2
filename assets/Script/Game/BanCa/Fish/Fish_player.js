@@ -1,4 +1,6 @@
 
+var helper = require('Helper');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -20,6 +22,9 @@ cc.Class({
 			type: dragonBones.ArmatureDisplay,
 		},
 		sung: dragonBones.ArmatureDisplay,
+
+		nodeCanh:  cc.Node,
+		nodeSung:  cc.Node,
 		isFire: false,
 	},
 	init: function(obj) {
@@ -29,7 +34,7 @@ cc.Class({
 	},
 	onInfo: function(data){
 		this.nick.string   = data.name;
-		this.balans.string = data.balans;
+		this.balans.string = helper.numberWithCommas(data.balans);
 		this.bet.string    = this.RedT['typeBet'+this.RedT.regGame][data.typeBet];
 		this.typeBet       = data.typeBet;
 		this.onTypeBet(data.typeBet);
@@ -122,5 +127,8 @@ cc.Class({
 				this.onFire();
 			}.bind(this), this.RedT.Game.bulletSpeed);
 		}
+	},
+	otherFire: function(point){
+		//
 	},
 });

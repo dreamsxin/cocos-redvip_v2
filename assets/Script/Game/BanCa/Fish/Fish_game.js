@@ -10,15 +10,14 @@ cc.Class({
 		nodeTouch: cc.Node,
 		nodeMenu:  cc.Node,
 
-		tesst: cc.Node,
-
 		PointFire: dragonBones.ArmatureDisplay,
 		isAuto: false,
 		isFire: false,
 		setPoint: false,
 
 		bulletVelocity: 2000,
-		bulletSpeed: 100,
+		bulletSpeed:    100,
+		red:            0,
 
 		bullet: {
 			default: [],
@@ -31,10 +30,10 @@ cc.Class({
 		this.sungFix  = 1;
 	},
 	onEnable: function() {
-		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,   this.eventStart, this);
-		this.nodeTouch.on(cc.Node.EventType.TOUCH_MOVE,    this.eventMove,  this);
-		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,     this.eventEnd,   this);
-		this.nodeTouch.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
+		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
+		this.nodeTouch.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
+		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
+		this.nodeTouch.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 	},
 	onDisable: function() {
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -47,6 +46,8 @@ cc.Class({
 			obj.iconCoint.spriteFrame = this.RedT.cointOther;
 			obj.nodeChangerbet.active = false;
 			obj.isMe = false;
+			obj.nodeSung.angle = 0;
+			obj.nodeCanh.angle = 0;
 		}.bind(this));
 
 		this.nodeFish.removeAllChildren();
@@ -80,8 +81,8 @@ cc.Class({
 		if(position1_1 < -90){
 			position1_1 = -90;
 		}
-		this.player.sung.node.angle = position1_1;
-		this.player.canh.node.angle = this.player.sung.node.angle;
+		this.player.nodeSung.angle = position1_1;
+		this.player.nodeCanh.angle = this.player.nodeSung.angle;
 	},
 	menuToggle: function() {
 		this.nodeMenu.active = !this.nodeMenu.active;

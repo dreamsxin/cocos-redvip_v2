@@ -9,6 +9,7 @@ cc.Class({
 		isMe:     false,
 		bullet:   0,
 		id:       0,
+		anim:     dragonBones.ArmatureDisplay,
 	},
 	init: function(obj, target){
 		this.RedT = obj;
@@ -35,14 +36,12 @@ cc.Class({
 	},
 
 	onBeginContact: function (contact, selfCollider, otherCollider) {
+		//this.node.destroy();
+		//this.anim.playAnimation(this.anim.getAnimationNames()[0], 1);
     },
 	onEndContact: function () {
 		let vecNew = this.body.linearVelocity;
 		vecNew = cc.misc.radiansToDegrees(Math.atan2(vecNew.x, vecNew.y));
 		this.icon.angle = -vecNew;
 	},
-    //onPreSolve: function (contact, selfCollider, otherCollider) {
-    //},
-    //onPostSolve: function (contact, selfCollider, otherCollider) {
-    //}
 });
