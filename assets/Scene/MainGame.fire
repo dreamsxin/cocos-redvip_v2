@@ -175731,8 +175731,8 @@
     },
     "component": "",
     "_componentId": "1763c2/MDpCQ4oC+FaHXfWh",
-    "handler": "onWait",
-    "customEventData": ""
+    "handler": "openGame",
+    "customEventData": "BanCa"
   },
   {
     "__type__": "cc.Widget",

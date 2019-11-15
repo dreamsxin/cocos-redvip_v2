@@ -55,6 +55,17 @@ cc.Class({
 			obj.init(this);
 		}.bind(this));
 		this.Game.init(this);
+
+
+		this.PhysicsManager   = cc.director.getPhysicsManager();
+		this.CollisionManager = cc.director.getCollisionManager();
+
+        this.PhysicsManager.enabled = true;
+
+        this.CollisionManager.enabled = true;
+        this.CollisionManager.enabledDebugDraw = true;
+
+		this.PhysicsManager.gravity = cc.v2();
 	},
 	onRegGame: function(event){
 		this.regGame = event.target.name;
@@ -95,8 +106,9 @@ cc.Class({
 					this.Game.player = obj;
 					obj.iconCoint.spriteFrame = this.cointMe;
 					obj.nodeChangerbet.active = true;
+					obj.isMe = true;
 				}
-				obj.node.active   = true;
+				obj.node.active = true;
 				obj.onInfo(dataT.data);
 			}
 		}.bind(this));

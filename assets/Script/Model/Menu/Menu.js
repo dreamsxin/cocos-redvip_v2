@@ -73,7 +73,12 @@ cc.Class({
     	}));
     },
     onWait: function(){
-    	cc.RedT.inGame.notice.show({title:'BẢO TRÌ', text:'Game đang bảo trì...'});
+        cc.RedT.audio.playClick();
+        if (cc.RedT.IS_LOGIN){
+    	   cc.RedT.inGame.notice.show({title:'BẢO TRÌ', text:'Game đang bảo trì...'});
+        }else{
+            cc.RedT.inGame.dialog.showSignIn();
+        }
     },
     openMiniGame: function(e, name){
         cc.RedT.MiniPanel[name].openGame();

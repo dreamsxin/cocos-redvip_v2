@@ -20,6 +20,7 @@ cc.Class({
 			type: dragonBones.ArmatureDisplay,
 		},
 		sung: dragonBones.ArmatureDisplay,
+		isFire: false,
 	},
 	init: function(obj) {
 		this.RedT = obj;
@@ -51,7 +52,6 @@ cc.Class({
 		this.canh = this.canhs[type];
 		this.sung = this.sungs[type];
 		this.sung.node.insertChild(this.bet.node);
-		console.log(this.sung);
 
 		let funcCanhEvent1 = function(){
 			this.canh.playAnimation(this.RedT.anim_canh[1], 0);
@@ -104,5 +104,23 @@ cc.Class({
 
 		this.bet.string = this.RedT['typeBet'+this.RedT.regGame][type];
 		this.typeBet    = type;
+	},
+	onFire: function(point = null){
+		if ((this.RedT.Game.isAuto || this.RedT.Game.isFire) && !this.isFire) {
+			this.isFire = true;
+			let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
+			bullet = bullet.getComponent('Fish_bullet');
+			if (!!point) {
+				bullet.init(this, point);
+			}else{
+				bullet.init(this, this.RedT.Game.PointFire.node.position);
+			}
+			this.RedT.Game.nodeDan.addChild(bullet.node);
+			this.sung.playAnimation('fire', 1);
+			setTimeout(function(){
+				this.isFire = false;
+				this.onFire();
+			}.bind(this), this.RedT.Game.bulletSpeed);
+		}
 	},
 });

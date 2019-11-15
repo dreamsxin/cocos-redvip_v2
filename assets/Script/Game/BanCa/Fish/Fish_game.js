@@ -9,7 +9,21 @@ cc.Class({
 		nodeDan:   cc.Node,
 		nodeTouch: cc.Node,
 		nodeMenu:  cc.Node,
+
+		tesst: cc.Node,
+
 		PointFire: dragonBones.ArmatureDisplay,
+		isAuto: false,
+		isFire: false,
+		setPoint: false,
+
+		bulletVelocity: 2000,
+		bulletSpeed: 100,
+
+		bullet: {
+			default: [],
+			type: cc.Prefab,
+		},
 	},
 	init: function(obj){
 		this.RedT     = obj;
@@ -32,20 +46,29 @@ cc.Class({
 		this.RedT.players.forEach(function(obj){
 			obj.iconCoint.spriteFrame = this.RedT.cointOther;
 			obj.nodeChangerbet.active = false;
+			obj.isMe = false;
 		}.bind(this));
+
+		this.nodeFish.removeAllChildren();
+		this.nodeDan.removeAllChildren();
+		this.setPoint = false;
 	},
 	eventStart: function(e){
+		this.isFire = true;
 		this.angleSung(e.touch.getLocation(), true);
+		this.setPoint = true;
 	},
 	eventMove: function(e){
 		this.angleSung(e.touch.getLocation());
 	},
 	eventEnd: function(){
+		this.isFire = false;
 	},
 	angleSung: function(ponit, ef = false){
 		this.PointFire.node.position = this.node.convertToNodeSpaceAR(ponit);
 		if (ef) {
 			this.PointFire.playAnimation('newAnimation', 1);
+			this.player.onFire(this.PointFire.node.position);
 		}
 		let positionUser = this.PointFire.node.parent.convertToWorldSpaceAR(this.PointFire.node.position);
 		let position1_1 = this.player.node.convertToNodeSpaceAR(positionUser);
