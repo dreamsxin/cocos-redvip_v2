@@ -26,6 +26,8 @@ cc.Class({
 		nodeCanh:  cc.Node,
 		nodeSung:  cc.Node,
 		isFire: false,
+		sungFix: 2,
+		map: 0,
 	},
 	init: function(obj) {
 		this.RedT = obj;
@@ -115,11 +117,19 @@ cc.Class({
 			this.isFire = true;
 			let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
 			bullet = bullet.getComponent('Fish_bullet');
+			let position = null;
 			if (!!point) {
-				bullet.init(this, point);
+				position = point;
 			}else{
-				bullet.init(this, this.RedT.Game.PointFire.node.position);
+				position = this.RedT.Game.shubiao.node.position;
 			}
+			let ID = this.RedT.Game.bulletID++;
+			cc.RedT.send({g:{fish:{bullet:{id:ID, x:position.x, y:position.y}}}});
+			bullet.id = ID;
+			bullet.isMe = true;
+			bullet.bullet = this.typeBet;
+			bullet.init(this, position);
+
 			this.RedT.Game.nodeDan.addChild(bullet.node);
 			this.sung.playAnimation('fire', 1);
 			setTimeout(function(){
@@ -128,7 +138,27 @@ cc.Class({
 			}.bind(this), this.RedT.Game.bulletSpeed);
 		}
 	},
-	otherFire: function(point){
-		//
+	otherBullet: function(data){
+		this.balans.string = helper.numberWithCommas(data.money);
+		let position = cc.v2(data.x, data.y);
+		let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
+		bullet = bullet.getComponent('Fish_bullet');
+		bullet.init(this, position);
+		bullet.bullet = this.typeBet;
+
+		let positionUser = this.RedT.Game.node.convertToWorldSpaceAR(position);
+		let position1_1 = this.node.convertToNodeSpaceAR(positionUser);
+		position1_1 = cc.misc.radiansToDegrees(Math.atan2(position1_1.x*this.RedT.Game.sungFixD[this.sungFix].x, position1_1.y*this.RedT.Game.sungFixD[this.sungFix].y));
+		if(position1_1 > 90){
+			position1_1 = 90;
+		}
+		if(position1_1 < -90){
+			position1_1 = -90;
+		}
+		this.nodeSung.angle = position1_1;
+		this.nodeCanh.angle = this.nodeSung.angle;
+
+		this.RedT.Game.nodeDan.addChild(bullet.node);
+		this.sung.playAnimation('fire', 1);
 	},
 });

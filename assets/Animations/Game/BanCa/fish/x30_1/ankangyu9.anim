@@ -1,0 +1,58 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "ankangyu9",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 20,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -774,
+            254
+          ],
+          "motionPath": [
+            [
+              -2,
+              -159,
+              -400,
+              -159,
+              387,
+              -159
+            ]
+          ]
+        },
+        {
+          "frame": 20,
+          "value": [
+            758,
+            225
+          ],
+          "motionPath": []
+        }
+      ],
+      "scaleX": [
+        {
+          "frame": 0,
+          "value": -1
+        }
+      ],
+      "angle": [
+        {
+          "frame": 0,
+          "value": -45
+        },
+        {
+          "frame": 20,
+          "value": 45
+        }
+      ]
+    }
+  },
+  "events": []
+}

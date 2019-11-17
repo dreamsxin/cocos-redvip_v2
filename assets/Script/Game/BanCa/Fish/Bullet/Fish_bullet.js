@@ -36,8 +36,13 @@ cc.Class({
 	},
 
 	onBeginContact: function (contact, selfCollider, otherCollider) {
-		//this.node.destroy();
-		//this.anim.playAnimation(this.anim.getAnimationNames()[0], 1);
+		if (otherCollider.node.group !== 'fish_box') {
+			let ef_bullet = cc.instantiate(this.RedT.RedT.Game.ef_bullet[this.bullet]);
+			ef_bullet.x = this.node.x;
+			ef_bullet.y = this.node.y;
+			this.RedT.RedT.Game.nodeDan.addChild(ef_bullet);
+			this.node.destroy();
+		}
     },
 	onEndContact: function () {
 		let vecNew = this.body.linearVelocity;

@@ -1,6 +1,8 @@
 
 let helper = require('Helper');
 
+let shubiao = require('Fish_shubiao');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -10,24 +12,38 @@ cc.Class({
 		nodeTouch: cc.Node,
 		nodeMenu:  cc.Node,
 
-		PointFire: dragonBones.ArmatureDisplay,
+		spriteAuto: cc.Sprite,
+		spriteLock: cc.Sprite,
+		nodeAuto:   cc.Node,
+		nodeLock:   cc.Node,
+
+		shubiao: shubiao,
 		isAuto: false,
 		isFire: false,
+		isLock: false,
 		setPoint: false,
 
 		bulletVelocity: 2000,
 		bulletSpeed:    100,
 		red:            0,
+		bulletID:       0,
 
 		bullet: {
 			default: [],
 			type: cc.Prefab,
 		},
+		ef_bullet: {
+			default: [],
+			type: cc.Prefab,
+		},
 	},
 	init: function(obj){
-		this.RedT     = obj;
-		this.sungFixD = {1:{x:-1,y:1}, 2:{x:1,y:-1}};
-		this.sungFix  = 1;
+		this.RedT      = obj;
+		this.sungFixD  = {1:{x:-1,y:1}, 2:{x:1,y:-1}};
+		this.sungFix   = 1;
+		this.meBulllet = {};
+		this.fishLock  = null;
+		this.shubiao.init(this);
 	},
 	onEnable: function() {
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -53,11 +69,20 @@ cc.Class({
 		this.nodeFish.removeAllChildren();
 		this.nodeDan.removeAllChildren();
 		this.setPoint = false;
+		this.bulletID = 0;
+		this.meBulllet = {};
+
+		this.isAuto = false;
+		this.isFire = false;
+		this.isLock = false;
 	},
 	eventStart: function(e){
 		this.isFire = true;
 		this.angleSung(e.touch.getLocation(), true);
 		this.setPoint = true;
+		if (this.isLock) {
+			this.shubiao.onLock();
+		}
 	},
 	eventMove: function(e){
 		this.angleSung(e.touch.getLocation());
@@ -66,15 +91,14 @@ cc.Class({
 		this.isFire = false;
 	},
 	angleSung: function(ponit, ef = false){
-		this.PointFire.node.position = this.node.convertToNodeSpaceAR(ponit);
+		this.shubiao.node.position = this.node.convertToNodeSpaceAR(ponit);
 		if (ef) {
-			this.PointFire.playAnimation('newAnimation', 1);
-			this.player.onFire(this.PointFire.node.position);
+			this.shubiao.dragonBones.playAnimation('newAnimation', 1);
+			this.player.onFire(this.shubiao.node.position);
 		}
-		let positionUser = this.PointFire.node.parent.convertToWorldSpaceAR(this.PointFire.node.position);
+		let positionUser = this.shubiao.node.parent.convertToWorldSpaceAR(this.shubiao.node.position);
 		let position1_1 = this.player.node.convertToNodeSpaceAR(positionUser);
 		position1_1 = cc.misc.radiansToDegrees(Math.atan2(position1_1.x*this.sungFixD[this.sungFix].x, position1_1.y*this.sungFixD[this.sungFix].y));
-
 		if(position1_1 > 90){
 			position1_1 = 90;
 		}
@@ -98,6 +122,7 @@ cc.Class({
 			this.player.typeBet = 0;
 		}
 		this.player.onChangerTypeBet(this.player.typeBet);
+		this.sendChangerTypeBet(this.player.typeBet);
 	},
 	betMinus: function(){
 		this.player.typeBet--;
@@ -105,5 +130,26 @@ cc.Class({
 			this.player.typeBet = 5;
 		}
 		this.player.onChangerTypeBet(this.player.typeBet);
+		this.sendChangerTypeBet(this.player.typeBet);
+	},
+	sendChangerTypeBet:function(bet){
+		cc.RedT.send({g:{fish:{typeBet:bet}}});
+	},
+	onClickAuto: function(){
+		this.isAuto = !this.isAuto;
+		this.isLock = false;
+		this.spriteAuto.enable = !this.isAuto;
+		this.nodeAuto.active   = this.isAuto;
+		this.spriteLock.enable = true;
+		this.nodeLock.active   = false;
+		this.setPoint && this.player.onFire();
+	},
+	onClickLock: function(){
+		this.isLock = !this.isLock;
+		this.isAuto = false;
+		this.spriteLock.enable = !this.isLock;
+		this.nodeLock.active   = this.isLock;
+		this.spriteAuto.enable = true;
+		this.nodeAuto.active   = false;
 	},
 });

@@ -56,16 +56,14 @@ cc.Class({
 		}.bind(this));
 		this.Game.init(this);
 
-
-		this.PhysicsManager   = cc.director.getPhysicsManager();
-		this.CollisionManager = cc.director.getCollisionManager();
-
-        this.PhysicsManager.enabled = true;
-
-        this.CollisionManager.enabled = true;
-        this.CollisionManager.enabledDebugDraw = true;
-
+		this.PhysicsManager = cc.director.getPhysicsManager();
+		this.PhysicsManager.enabled = true;
 		this.PhysicsManager.gravity = cc.v2();
+
+		this.CollisionManager = cc.director.getCollisionManager();
+		this.CollisionManager.enabled = true;
+		//this.CollisionManager.enabledDebugDraw = true;
+		//this.CollisionManager.enabledDrawBoundingBox = true;
 	},
 	onRegGame: function(event){
 		this.regGame = event.target.name;
@@ -88,13 +86,37 @@ cc.Class({
 		if (void 0 !== data.outgame){
 			this.dataOutGame(data.outgame);
 		}
-
+		if (void 0 !== data.other){
+			this.dataOther(data.other);
+		}
+		if (void 0 !== data.me){
+			this.dataMe(data.me);
+		}
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
 		}
 	},
 	fishData: function(data) {
 		console.log(data);
+	},
+	dataOther: function(data) {
+		if (!!data.updateType) {
+			this.updateType(data.updateType);
+		}
+		if (!!data.bulllet) {
+			this.otherBullet(data.bulllet);
+		}
+	},
+	otherBullet: function(data){
+		this.players[data.map-1].otherBullet(data);
+	},
+	dataMe: function(data) {
+		if (!!data.money) {
+			this.Game.player.balans.string = helper.numberWithCommas(data.money);
+		}
+	},
+	updateType: function(data){
+		this.players[data.map-1].onChangerTypeBet(data.type);
 	},
 	dataInfoGhe: function(data) {
 		this.players.forEach(function(obj, index){
@@ -107,6 +129,11 @@ cc.Class({
 					obj.iconCoint.spriteFrame = this.cointMe;
 					obj.nodeChangerbet.active = true;
 					obj.isMe = true;
+				}
+				if (dataT.ghe === 1 || dataT.ghe === 2) {
+					obj.sungFix = 1;
+				}else{
+					obj.sungFix = 2;
 				}
 				obj.node.active = true;
 				obj.onInfo(dataT.data);
