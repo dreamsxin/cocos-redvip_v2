@@ -73,6 +73,9 @@ cc.Class({
 		if (void 0 !== data.fish){
 			this.fishData(data.fish);
 		}
+		if (void 0 !== data.fishs){
+			this.fishsData(data.fishs);
+		}
 		if (void 0 !== data.meMap){
 			this.MeMap = data.meMap;
 			this.dataMeMap(data.meMap);
@@ -97,6 +100,9 @@ cc.Class({
 		}
 	},
 	fishData: function(data) {
+		console.log(data);
+	},
+	fishsData: function(data) {
 		console.log(data);
 	},
 	dataOther: function(data) {

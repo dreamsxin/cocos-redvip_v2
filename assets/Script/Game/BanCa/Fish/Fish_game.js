@@ -36,6 +36,10 @@ cc.Class({
 			default: [],
 			type: cc.Prefab,
 		},
+		x2: {
+			default: [],
+			type: cc.Prefab,
+		},
 	},
 	init: function(obj){
 		this.RedT      = obj;

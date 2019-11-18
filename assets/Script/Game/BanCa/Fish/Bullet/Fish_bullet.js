@@ -7,6 +7,7 @@ cc.Class({
 		collider: cc.PhysicsCircleCollider,
 		icon:     cc.Node,
 		isMe:     false,
+		isLock:   false,
 		bullet:   0,
 		id:       0,
 		anim:     dragonBones.ArmatureDisplay,
@@ -42,11 +43,21 @@ cc.Class({
 			ef_bullet.y = this.node.y;
 			this.RedT.RedT.Game.nodeDan.addChild(ef_bullet);
 			this.node.destroy();
+			if (this.isMe) {
+				//
+			}
 		}
     },
 	onEndContact: function () {
 		let vecNew = this.body.linearVelocity;
 		vecNew = cc.misc.radiansToDegrees(Math.atan2(vecNew.x, vecNew.y));
 		this.icon.angle = -vecNew;
+	},
+	updateGroup: function() {
+		let group = 'dan';
+		if (this.isLock) {
+			group += this.RedT.map;
+		}
+		this.node.group = group;
 	},
 });

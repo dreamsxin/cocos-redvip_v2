@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "anim1_fish2",
+  "_name": "one2",
   "_objFlags": 0,
   "_native": "",
   "_duration": 12.75,
@@ -13,8 +13,8 @@
         {
           "frame": 0,
           "value": [
-            -910,
-            -160
+            -765,
+            -99
           ],
           "motionPath": [
             [
@@ -30,8 +30,8 @@
         {
           "frame": 12.75,
           "value": [
-            744,
-            -142
+            658,
+            -432
           ],
           "motionPath": []
         }
@@ -45,15 +45,19 @@
       "angle": [
         {
           "frame": 0,
-          "value": 19
-        },
-        {
-          "frame": 4.516666666666667,
           "value": 10
         },
         {
+          "frame": 5.783333333333333,
+          "value": 10
+        },
+        {
+          "frame": 9.9,
+          "value": -33
+        },
+        {
           "frame": 12.75,
-          "value": -12
+          "value": -52
         }
       ]
     }

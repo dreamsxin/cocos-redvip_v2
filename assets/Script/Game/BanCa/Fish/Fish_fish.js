@@ -7,19 +7,20 @@ cc.Class({
 		shadow:   dragonBones.ArmatureDisplay,
 		body:     cc.RigidBody,
 		collider: cc.PhysicsPolygonCollider,
-		anim:     cc.Animation,
-
-		player1: false,
-		player2: false,
-		player3: false,
-		player4: false,
-
+		anim:     cc.AnimationState,
 	},
-	init: function(){
+	init: function(id){
+		this.id = id;
+		this.player1 = false;
+		this.player2 = false;
+		this.player3 = false;
+		this.player4 = false;
 		this.bullet1 = {};
 		this.bullet2 = {};
 		this.bullet3 = {};
 		this.bullet4 = {};
+
+		// 
 	},
 	updateGroup: function() {
 		let group = 'fish';
