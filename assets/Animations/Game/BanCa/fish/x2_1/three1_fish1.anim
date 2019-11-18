@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "anim1",
+  "_name": "three1_fish1",
   "_objFlags": 0,
   "_native": "",
   "_duration": 11.866666666666667,
@@ -21,8 +21,8 @@
         {
           "frame": 11.866666666666667,
           "value": [
-            738.585,
-            -47.996,
+            749.843,
+            -49.66,
             0
           ]
         }
