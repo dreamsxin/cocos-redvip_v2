@@ -265,7 +265,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 357.6684917629732
+      "z": 357.6820234099073
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -175731,7 +175731,7 @@
     },
     "component": "",
     "_componentId": "1763c2/MDpCQ4oC+FaHXfWh",
-    "handler": "openGame",
+    "handler": "onWait",
     "customEventData": "BanCa"
   },
   {
@@ -180621,8 +180621,8 @@
     "audioBG": {
       "__id__": 4
     },
-    "url": "http://hunet.club",
-    "fileAPK": "HuNet.apk",
+    "url": "http://pro68.club",
+    "fileAPK": "Pro68.apk",
     "_id": "3dJtOBZWRJEpX5keq/vbQg"
   }
 ]

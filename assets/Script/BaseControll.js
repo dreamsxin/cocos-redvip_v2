@@ -62,7 +62,7 @@ module.exports = {
 	reconnect: function(){
 		this.connect('127.0.0.1', '/websocket');
 		//this.connect('redvip.club', '/websocket');
-		//this.connect('hunet.club', '/websocket');
+		//this.connect('pro68.club', '/websocket');
 	},
 	init: function(){
 		this.initPrototype();
