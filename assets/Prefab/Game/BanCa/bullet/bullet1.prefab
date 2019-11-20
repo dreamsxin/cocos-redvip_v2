@@ -19,86 +19,26 @@
     "_children": [
       {
         "__id__": 2
-      },
-      {
-        "__id__": 5
       }
     ],
     "_active": true,
     "_level": 1,
     "_components": [
       {
+        "__id__": 5
+      },
+      {
+        "__id__": 6
+      },
+      {
+        "__id__": 7
+      },
+      {
         "__id__": 8
-      },
-      {
-        "__id__": 9
-      },
-      {
-        "__id__": 10
       }
     ],
     "_prefab": {
-      "__id__": 11
-    },
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_position": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_scale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_eulerAngles": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": false,
-    "groupIndex": 1,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "kyby_zidan1-hit_ske",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 1
-    },
-    "_children": [],
-    "_active": true,
-    "_level": 2,
-    "_components": [
-      {
-        "__id__": 3
-      }
-    ],
-    "_prefab": {
-      "__id__": 4
+      "__id__": 9
     },
     "_opacity": 255,
     "_color": {
@@ -143,57 +83,6 @@
     "_id": ""
   },
   {
-    "__type__": "dragonBones.ArmatureDisplay",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
-      }
-    ],
-    "_armatureName": "kyby_zidan1-hit",
-    "_animationName": "",
-    "_preCacheMode": 0,
-    "_cacheMode": 0,
-    "playTimes": -1,
-    "premultipliedAlpha": false,
-    "_armatureKey": "b4ede9c7-055c-4bf3-8040-cbfa8f1c21e8#3bb0c032-bf91-4929-9ba0-d2b685ef5fe5",
-    "_accTime": 0,
-    "_playCount": 0,
-    "_frameCache": null,
-    "_curFrame": null,
-    "_playing": false,
-    "_armatureCache": null,
-    "_N$dragonAsset": {
-      "__uuid__": "b4ede9c7-055c-4bf3-8040-cbfa8f1c21e8"
-    },
-    "_N$dragonAtlasAsset": {
-      "__uuid__": "3bb0c032-bf91-4929-9ba0-d2b685ef5fe5"
-    },
-    "_N$_defaultArmatureIndex": 0,
-    "_N$_animationIndex": 0,
-    "_N$_defaultCacheMode": 0,
-    "_N$timeScale": 1,
-    "_N$debugBones": false,
-    "_N$enableBatch": false,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "18dbbe8a-c0e0-4f6a-99a3-b3053380274e"
-    },
-    "fileId": "d4vbsSfspFNZge1qln1nKK",
-    "sync": false
-  },
-  {
     "__type__": "cc.Node",
     "_name": "bullet",
     "_objFlags": 0,
@@ -205,11 +94,11 @@
     "_level": 4,
     "_components": [
       {
-        "__id__": 6
+        "__id__": 3
       }
     ],
     "_prefab": {
-      "__id__": 7
+      "__id__": 4
     },
     "_opacity": 255,
     "_color": {
@@ -258,7 +147,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 5
+      "__id__": 2
     },
     "_enabled": true,
     "_materials": [
@@ -305,20 +194,18 @@
     },
     "_enabled": true,
     "body": {
-      "__id__": 9
+      "__id__": 6
     },
     "collider": {
-      "__id__": 10
+      "__id__": 7
     },
     "icon": {
-      "__id__": 5
+      "__id__": 2
     },
     "isMe": false,
+    "isLock": false,
     "bullet": 0,
     "id": 0,
-    "anim": {
-      "__id__": 3
-    },
     "_id": ""
   },
   {
@@ -360,6 +247,23 @@
     "_friction": 0,
     "_restitution": 1,
     "body": null,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_radius": 10,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CircleCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "tag": 0,
     "_offset": {
       "__type__": "cc.Vec2",
       "x": 0,

@@ -100,7 +100,12 @@ cc.Class({
 		}
 	},
 	fishData: function(data) {
-		console.log(data);
+		let fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
+		fish = fish.getComponent('Fish_fish');
+		fish.init(this.Game, data);
+		this.Game.fish[data.id] = fish;
+		this.Game.nodeFish.addChild(fish.node);
+		//console.log('fish', data);
 	},
 	fishsData: function(data) {
 		console.log(data);

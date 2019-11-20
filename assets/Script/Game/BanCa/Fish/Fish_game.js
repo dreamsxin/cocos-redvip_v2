@@ -1,6 +1,9 @@
 
 let helper = require('Helper');
 
+let BrowserUtil = require('BrowserUtil');
+
+
 let shubiao = require('Fish_shubiao');
 
 cc.Class({
@@ -36,7 +39,7 @@ cc.Class({
 			default: [],
 			type: cc.Prefab,
 		},
-		x2: {
+		fishPrefab: {
 			default: [],
 			type: cc.Prefab,
 		},
@@ -45,17 +48,19 @@ cc.Class({
 		this.RedT      = obj;
 		this.sungFixD  = {1:{x:-1,y:1}, 2:{x:1,y:-1}};
 		this.sungFix   = 1;
-		this.meBulllet = {};
-		this.fishLock  = null;
 		this.shubiao.init(this);
+		this.fish = {};
+		this.ponit = null;
 	},
 	onEnable: function() {
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
+		BrowserUtil.showCursorFish();
 	},
 	onDisable: function() {
+		BrowserUtil.showCursorAutoForce();
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
@@ -65,37 +70,44 @@ cc.Class({
 		this.RedT.players.forEach(function(obj){
 			obj.iconCoint.spriteFrame = this.RedT.cointOther;
 			obj.nodeChangerbet.active = false;
-			obj.isMe = false;
+			obj.isMe   = false;
+			obj.isFire = false;
+			obj.isLock = false;
 			obj.nodeSung.angle = 0;
 			obj.nodeCanh.angle = 0;
+			obj.bullet = {};
+			obj.fish = null;
 		}.bind(this));
 
+		this.fish = {};
 		this.nodeFish.removeAllChildren();
 		this.nodeDan.removeAllChildren();
 		this.setPoint = false;
 		this.bulletID = 0;
-		this.meBulllet = {};
 
 		this.isAuto = false;
 		this.isFire = false;
 		this.isLock = false;
+		this.reset();
 	},
 	eventStart: function(e){
-		this.isFire = true;
-		this.angleSung(e.touch.getLocation(), true);
-		this.setPoint = true;
-		if (this.isLock) {
-			this.shubiao.onLock();
+		if (!this.player.isLock) {
+			this.isFire = true;
 		}
+		this.setPoint = true;
+		this.ponit = this.shubiao.node.position = this.node.convertToNodeSpaceAR(e.touch.getLocation());
+		this.shubiao.fire(this.shubiao.node.position);
 	},
 	eventMove: function(e){
-		this.angleSung(e.touch.getLocation());
+		if (!this.player.isLock) {
+			this.ponit = this.shubiao.node.position = this.node.convertToNodeSpaceAR(e.touch.getLocation());
+			this.angleSung(this.shubiao.node.position);
+		}
 	},
 	eventEnd: function(){
 		this.isFire = false;
 	},
 	angleSung: function(ponit, ef = false){
-		this.shubiao.node.position = this.node.convertToNodeSpaceAR(ponit);
 		if (ef) {
 			this.shubiao.dragonBones.playAnimation('newAnimation', 1);
 			this.player.onFire(this.shubiao.node.position);
@@ -103,12 +115,6 @@ cc.Class({
 		let positionUser = this.shubiao.node.parent.convertToWorldSpaceAR(this.shubiao.node.position);
 		let position1_1 = this.player.node.convertToNodeSpaceAR(positionUser);
 		position1_1 = cc.misc.radiansToDegrees(Math.atan2(position1_1.x*this.sungFixD[this.sungFix].x, position1_1.y*this.sungFixD[this.sungFix].y));
-		if(position1_1 > 90){
-			position1_1 = 90;
-		}
-		if(position1_1 < -90){
-			position1_1 = -90;
-		}
 		this.player.nodeSung.angle = position1_1;
 		this.player.nodeCanh.angle = this.player.nodeSung.angle;
 	},
@@ -140,8 +146,12 @@ cc.Class({
 		cc.RedT.send({g:{fish:{typeBet:bet}}});
 	},
 	onClickAuto: function(){
+		if (this.isLock && !!this.player.fish) {
+			this.player.fish.unLock(this.player.map);
+		}
+		this.ponit && (this.shubiao.node.position = this.ponit);
 		this.isAuto = !this.isAuto;
-		this.isLock = false;
+		this.player.isLock = this.isLock = false;
 		this.spriteAuto.enable = !this.isAuto;
 		this.nodeAuto.active   = this.isAuto;
 		this.spriteLock.enable = true;
@@ -150,10 +160,16 @@ cc.Class({
 	},
 	onClickLock: function(){
 		this.isLock = !this.isLock;
-		this.isAuto = false;
+		this.isAuto = this.player.isLock = false;
 		this.spriteLock.enable = !this.isLock;
 		this.nodeLock.active   = this.isLock;
 		this.spriteAuto.enable = true;
 		this.nodeAuto.active   = false;
+	},
+	reset: function(){
+		this.spriteAuto.enable = true;
+		this.nodeAuto.active   = false;
+		this.spriteLock.enable = true;
+		this.nodeLock.active   = false;
 	},
 });

@@ -265,7 +265,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 357.6820234099073
+      "z": 357.6684917629732
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -175731,7 +175731,7 @@
     },
     "component": "",
     "_componentId": "1763c2/MDpCQ4oC+FaHXfWh",
-    "handler": "onWait",
+    "handler": "openGame",
     "customEventData": "BanCa"
   },
   {

@@ -9,8 +9,6 @@ cc.Class({
 		isMe:     false,
 		isLock:   false,
 		bullet:   0,
-		id:       0,
-		anim:     dragonBones.ArmatureDisplay,
 	},
 	init: function(obj, target){
 		this.RedT = obj;
@@ -34,10 +32,19 @@ cc.Class({
 		let position1_1  = this.RedT.node.convertToNodeSpaceAR(positionUser);
 		position1_1 = cc.misc.radiansToDegrees(Math.atan2(position1_1.x, position1_1.y));
 		this.icon.angle = -position1_1;
-	},
 
-	onBeginContact: function (contact, selfCollider, otherCollider) {
-		if (otherCollider.node.group !== 'fish_box') {
+		this.updateGroup();
+	},
+	onEndContact: function () {
+		let vecNew = this.body.linearVelocity;
+		vecNew = cc.misc.radiansToDegrees(Math.atan2(vecNew.x, vecNew.y));
+		this.icon.angle = -vecNew;
+	},
+	onCollisionEnter: function(other) {
+		if (other.node.group !== 'tuong') {
+			if (void 0 !== this.id) {
+				delete this.RedT.bullet[this.id];
+			}
 			let ef_bullet = cc.instantiate(this.RedT.RedT.Game.ef_bullet[this.bullet]);
 			ef_bullet.x = this.node.x;
 			ef_bullet.y = this.node.y;
@@ -48,16 +55,14 @@ cc.Class({
 			}
 		}
     },
-	onEndContact: function () {
-		let vecNew = this.body.linearVelocity;
-		vecNew = cc.misc.radiansToDegrees(Math.atan2(vecNew.x, vecNew.y));
-		this.icon.angle = -vecNew;
-	},
 	updateGroup: function() {
 		let group = 'dan';
-		if (this.isLock) {
-			group += this.RedT.map;
+		if(this.node) {
+			if (this.isLock){
+				group += this.RedT.map;
+			}
+			this.node.group = group;
+			//console.log(this.node.group);
 		}
-		this.node.group = group;
 	},
 });

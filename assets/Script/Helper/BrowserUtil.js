@@ -11,8 +11,10 @@ module.exports = {
 	showCursorAuto: function() {
 		this.isCursorAuto() || this.setCursor("auto")
 	},
-	showCursorShoot: function() {
-		cc.sys.isBrowser && (document.getElementById("GameDiv").style.cursor = "url('cursors/cursor-shot.png') 5 2, auto")
+	showCursorFish: function() {
+		// /assets/fish_game_arrow.png
+		// /app/editor/static/preview-templates/assets/fish_game_arrow.png
+		cc.sys.isBrowser && (cc.game.canvas.style.cursor = "url('/app/editor/static/preview-templates/assets/fish_game_arrow.png'), auto");
 	},
 	showCursorAutoForce: function() {
 		cc.sys.isBrowser && this.setCursor("auto")
@@ -21,13 +23,13 @@ module.exports = {
 		return !!cc.sys.isBrowser && "auto" === document.getElementById("GameDiv").style.cursor
 	},
 	setCursor: function(t) {
-		cc.sys.isBrowser && (document.body.style.cursor = t)
+		cc.sys.isBrowser && (cc.game.canvas.style.cursor = t)
 	},
 	showTooltip: function(t) {
 		cc.sys.isBrowser && (document.body.title = t)
 	},
 	focusGame: function() {
-		cc.sys.isBrowser && document.getElementsByTagName("canvas")[0].focus()
+		cc.sys.isBrowser && cc.game.canvas.focus()
 	},
 	getHTMLElementByEditBox: function(t) {
 		return t._impl._elem
