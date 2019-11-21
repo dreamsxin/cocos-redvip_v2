@@ -1,10 +1,7 @@
 
-let helper = require('Helper');
-
+let helper      = require('Helper');
 let BrowserUtil = require('BrowserUtil');
-
-
-let shubiao = require('Fish_shubiao');
+let shubiao     = require('Fish_shubiao');
 
 cc.Class({
 	extends: cc.Component,
@@ -147,6 +144,7 @@ cc.Class({
 	},
 	onClickAuto: function(){
 		if (this.isLock && !!this.player.fish) {
+			this.player.fish.suoMe.active = false;
 			this.player.fish.unLock(this.player.map);
 		}
 		this.ponit && (this.shubiao.node.position = this.ponit);
@@ -159,6 +157,10 @@ cc.Class({
 		this.setPoint && this.player.onFire();
 	},
 	onClickLock: function(){
+		if (!!this.player.fish) {
+			this.player.fish.suoMe.active = false;
+			this.player.fish.unLock(this.player.map);
+		}
 		this.isLock = !this.isLock;
 		this.isAuto = this.player.isLock = false;
 		this.spriteLock.enable = !this.isLock;

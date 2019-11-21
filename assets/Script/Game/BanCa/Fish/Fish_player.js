@@ -121,6 +121,7 @@ cc.Class({
 			let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
 			bullet = bullet.getComponent('Fish_bullet');
 			let position = null;
+			let lock     = false;
 			let ID = this.RedT.Game.bulletID++;
 
 			this.bullet[ID] = bullet;
@@ -128,16 +129,18 @@ cc.Class({
 				position = point;
 			}else{
 				if (this.isLock && !!this.fish) {
+					lock     = true;
 					position = this.fish.getPoint();
-					let goc = this.changerAngle(position);
+					this.changerAngle(position);
 					bullet.isLock = true;
 					this.fish['bullet'+this.map][ID] = bullet;
 					this.RedT.Game.ponit = position;
+					cc.RedT.send({g:{fish:{bullet:{id:ID, f:this.fish.id}}}});
 				}else{
 					position = this.RedT.Game.shubiao.node.position;
 				}
 			}
-			cc.RedT.send({g:{fish:{bullet:{id:ID, x:position.x, y:position.y}}}});
+			!lock && cc.RedT.send({g:{fish:{bullet:{id:ID, x:position.x, y:position.y}}}});
 			bullet.id = ID;
 			bullet.isMe = true;
 			bullet.bullet = this.typeBet;
@@ -153,9 +156,23 @@ cc.Class({
 	},
 	otherBullet: function(data){
 		this.balans.string = helper.numberWithCommas(data.money);
-		let position = cc.v2(data.x, data.y);
+		let position = null;
+		let ID = this.RedT.Game.bulletID++;
 		let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
 		bullet = bullet.getComponent('Fish_bullet');
+
+		if (void 0 !== data.f) {
+			let fish = this.RedT.Game.fish[data.f];
+			if (void 0 === fish) {
+				return void 0;
+			}
+			position = fish.getPoint();
+			bullet.isLock = true;
+			fish['bullet'+this.map][ID] = bullet;
+		}else{
+			position = cc.v2(data.x, data.y);
+		}
+
 		bullet.init(this, position);
 		bullet.bullet = this.typeBet;
 

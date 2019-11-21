@@ -62,8 +62,6 @@ cc.Class({
 
 		this.CollisionManager = cc.director.getCollisionManager();
 		this.CollisionManager.enabled = true;
-		//this.CollisionManager.enabledDebugDraw = true;
-		//this.CollisionManager.enabledDrawBoundingBox = true;
 	},
 	onRegGame: function(event){
 		this.regGame = event.target.name;
@@ -95,9 +93,28 @@ cc.Class({
 		if (void 0 !== data.me){
 			this.dataMe(data.me);
 		}
+
+		if (void 0 !== data.otherEat){
+			this.otherEat(data.otherEat);
+		}
+		if (void 0 !== data.meEat){
+			this.meEat(data.meEat);
+		}
+		
+		if (void 0 !== data.lock){
+			this.fishLock(data.lock);
+		}
+		if (void 0 !== data.unlock){
+			this.fishUnLock(data.unlock);
+		}
+
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
 		}
+	},
+	otherEat: function(data){
+	},
+	meEat: function(data){
 	},
 	fishData: function(data) {
 		let fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
@@ -165,6 +182,11 @@ cc.Class({
 		obj.iconCoint.spriteFrame = this.cointOther;
 		obj.node.active = true;
 		obj.onInfo(data.data);
+		if (data.ghe === 1 || data.ghe === 2) {
+			obj.sungFix = 1;
+		}else{
+			obj.sungFix = 2;
+		}
 	},
 	dataOutGame: function(data) {
 		this.players[data-1].node.active = false;
@@ -173,6 +195,21 @@ cc.Class({
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame');
+	},
+	fishLock: function(data){
+		let fish = this.Game.fish[data.f];
+		let player = this.players[data.map-1];
+		if (void 0 !== fish) {
+			fish['player'+data.map] = player;
+			player.fish = fish;
+			fish.updateGroup();
+		}
+	},
+	fishUnLock: function(data){
+		let player = this.players[data-1];
+		if (!!player.fish) {
+			player.fish.unLock(data);
+		}
 	},
 	signOut: function(){
 		cc.director.loadScene('MainGame', function(){

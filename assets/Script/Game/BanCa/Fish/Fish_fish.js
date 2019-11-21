@@ -8,10 +8,14 @@ cc.Class({
 		collider: cc.PolygonCollider,
 		anim:     cc.AnimationState,
 		head:     cc.Node,
+		end:      cc.Node,
+
+		suoMe:    cc.Node,
+		suoOther: cc.Node,
 	},
 	init: function(obj, data){
-		//console.log(this);
 		this.RedT      = obj;
+		this.id        = data.id;
 		this.node.id   = data.id;
 		this.node.fish = data.f;
 		this.player1 = false;
@@ -24,7 +28,7 @@ cc.Class({
 		this.bullet4 = {};
 
 		this.anim.on('finished', this.onFinish, this);
-
+		console.log(this.anim);
 		if (void 0 !== data.r) {
 			this.anim.play(this.anim.getClips()[data.r].name);
 		}
@@ -33,6 +37,73 @@ cc.Class({
 		}
 	},
 	onFinish: function(){
+		this.clear();
+		this.node.destroy();
+		delete this.RedT;
+	},
+	updateGroup: function() {
+		let group = 'fish';
+		if (!!this.player1) {
+			group += '1';
+		}
+		if (!!this.player2) {
+			group += '2';
+		}
+		if (!!this.player3) {
+			group += '3';
+		}
+		if (!!this.player4) {
+			group += '4';
+		}
+		if (this.node) {
+			this.node.group = group;
+		}
+		this.updateSuoOther();
+	},
+	unLock: function(map){
+		let player = this['player'+map];
+		if (!!player) {
+			player.isLock = false;
+			player.fish   = null;
+		}
+		Object.entries(this['bullet'+map]).forEach(function(bullet){
+			bullet[1].isLock = false;
+			bullet[1].updateGroup();
+			delete this['bullet'+map][bullet[0]];
+		}.bind(this));
+		this['player'+map] = false;
+		this.updateGroup();
+	},
+	updateSuoOther: function(){
+		let suoding = false;
+		if (!!this.player1 && this.player1 !== this.RedT.player) {
+			suoding = true;
+		}
+		if (!!this.player2 && this.player2 !== this.RedT.player) {
+			suoding = true;
+		}
+		if (!!this.player3 && this.player3 !== this.RedT.player) {
+			suoding = true;
+		}
+		if (!!this.player4 && this.player4 !== this.RedT.player) {
+			suoding = true;
+		}
+		this.suoOther.active = suoding;
+	},
+	getPoint: function(){
+		let width  = this.RedT.node.width/2;
+		let height = this.RedT.node.height/2;
+		let head = this.head.parent.convertToWorldSpaceAR(this.head.position);
+		let position = this.node.parent.convertToNodeSpaceAR(head);
+		return position;
+	},
+	PhaHuy: function(){
+		this.collider.enabled = false;
+		this.anim.stop();
+		this.clear();
+		//this.onFinish();
+	},
+	clear: function(){
 		delete this.RedT.fish[this.node.id];
 		if (!!this.player1) {
 			this.player1.isLock = false;
@@ -74,46 +145,5 @@ cc.Class({
 			bullet[1].updateGroup();
 			delete this.bullet4[bullet[0]];
 		}.bind(this));
-
-		this.node.destroy();
-	},
-	updateGroup: function() {
-		let group = 'fish';
-		if (!!this.player1) {
-			group += '1';
-		}
-		if (!!this.player2) {
-			group += '2';
-		}
-		if (!!this.player3) {
-			group += '3';
-		}
-		if (!!this.player4) {
-			group += '4';
-		}
-		if (this.node) {
-			this.node.group = group;
-		}
-	},
-	unLock: function(map){
-		let player = this['player'+map];
-		if (!!player) {
-			player.isLock = false;
-			player.fish   = null;
-		}
-		Object.entries(this['bullet'+map]).forEach(function(bullet){
-			bullet[1].isLock = false;
-			bullet[1].updateGroup();
-			delete this['bullet'+map][bullet[0]];
-		}.bind(this));
-		this['player'+map] = false;
-		this.updateGroup();
-	},
-	getPoint: function(){
-		let width  = this.RedT.node.width/2;
-		let height = this.RedT.node.height/2;
-		let head = this.head.parent.convertToWorldSpaceAR(this.head.position);
-		let position = this.node.parent.convertToNodeSpaceAR(head);
-		return position;
 	},
 });

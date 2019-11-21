@@ -35,11 +35,11 @@ cc.Class({
 
 		this.updateGroup();
 	},
-	onEndContact: function () {
+    onPostSolve: function () {
 		let vecNew = this.body.linearVelocity;
 		vecNew = cc.misc.radiansToDegrees(Math.atan2(vecNew.x, vecNew.y));
 		this.icon.angle = -vecNew;
-	},
+    },
 	onCollisionEnter: function(other) {
 		if (other.node.group !== 'tuong') {
 			if (void 0 !== this.id) {
@@ -51,7 +51,7 @@ cc.Class({
 			this.RedT.RedT.Game.nodeDan.addChild(ef_bullet);
 			this.node.destroy();
 			if (this.isMe) {
-				//
+				cc.RedT.send({g:{fish:{collision:{id:this.id, f:other.node.id}}}});
 			}
 		}
     },
