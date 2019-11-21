@@ -113,8 +113,47 @@ cc.Class({
 		}
 	},
 	otherEat: function(data){
+		let fish = this.Game.fish[data.id];
+		if (void 0 !== fish) {
+			fish.PhaHuy(data);
+			let player = this.players[data.map-1];
+			let efcoint = this.Game.efcoint[fish.node.fish];
+			let ef = Math.floor(Math.random()*(efcoint.max-efcoint.min+1))+efcoint.min;
+			for (let i = 0; i < ef; i++) {
+				var coint = cc.instantiate(this.Game.cointOther);
+				coint = coint.getComponent('fish_EFcoint');
+				coint.init(player, fish, efcoint);
+			}
+			var money = cc.instantiate(this.Game.labelOther);
+			money = money.getComponent(cc.Label);
+			money.string = helper.numberWithCommas(data.money);
+			money.node.position = fish.node.position;
+			this.Game.nodeLabel.addChild(money.node);
+			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
+				this.onDelete();
+			}, fish)));
+		}
 	},
 	meEat: function(data){
+		let fish = this.Game.fish[data.id];
+		if (void 0 !== fish) {
+			fish.PhaHuy(data);
+			let efcoint = this.Game.efcoint[fish.node.fish];
+			let ef = Math.floor(Math.random()*(efcoint.max-efcoint.min+1))+efcoint.min;
+			for (let i = 0; i < ef; i++) {
+				var coint = cc.instantiate(this.Game.cointMe);
+				coint = coint.getComponent('fish_EFcoint');
+				coint.init(this.Game.player, fish, efcoint);
+			}
+			var money = cc.instantiate(this.Game.labelMe);
+			money = money.getComponent(cc.Label);
+			money.string = helper.numberWithCommas(data.money);
+			money.node.position = fish.node.position;
+			this.Game.nodeLabel.addChild(money.node);
+			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
+				this.onDelete();
+			}, fish)));
+		}
 	},
 	fishData: function(data) {
 		let fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);

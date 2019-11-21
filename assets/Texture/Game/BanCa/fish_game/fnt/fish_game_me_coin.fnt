@@ -6,7 +6,7 @@ page id=0 file="fish_game_me_coin.png"
 chars count=13
 char id=57 x=27  y=1  width=24 height=29 xoffset=0 yoffset=0 xadvance=24 page=0 chnl=0 letter="9"
 char id=36 x=1   y=1  width=24 height=34 xoffset=0 yoffset=-3 xadvance=24 page=0 chnl=0 letter="$"
-char id=46 x=91  y=62 width=9  height=11 xoffset=0 yoffset=17 xadvance=9 page=0 chnl=0 letter="."
+char id=46 x=91  y=62 width=9  height=11 xoffset=0 yoffset=15 xadvance=9 page=0 chnl=0 letter="."
 char id=43 x=69  y=62 width=20 height=21 xoffset=0 yoffset=4 xadvance=20 page=0 chnl=0 letter="+"
 char id=48 x=79  y=1  width=23 height=29 xoffset=0 yoffset=0 xadvance=23 page=0 chnl=0 letter="0"
 char id=49 x=52  y=62 width=15 height=28 xoffset=0 yoffset=0 xadvance=15 page=0 chnl=0 letter="1"

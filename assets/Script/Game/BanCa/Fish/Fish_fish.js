@@ -28,7 +28,6 @@ cc.Class({
 		this.bullet4 = {};
 
 		this.anim.on('finished', this.onFinish, this);
-		console.log(this.anim);
 		if (void 0 !== data.r) {
 			this.anim.play(this.anim.getClips()[data.r].name);
 		}
@@ -38,6 +37,10 @@ cc.Class({
 	},
 	onFinish: function(){
 		this.clear();
+		this.node.destroy();
+		delete this.RedT;
+	},
+	onDelete: function(){
 		this.node.destroy();
 		delete this.RedT;
 	},
@@ -97,11 +100,16 @@ cc.Class({
 		let position = this.node.parent.convertToNodeSpaceAR(head);
 		return position;
 	},
-	PhaHuy: function(){
+	PhaHuy: function(data){
 		this.collider.enabled = false;
 		this.anim.stop();
 		this.clear();
-		//this.onFinish();
+
+		this.suoMe.active    = false;
+		this.suoOther.active = false;
+
+		this.fish.timeScale   = 2;
+		this.shadow.timeScale = 2;
 	},
 	clear: function(){
 		delete this.RedT.fish[this.node.id];

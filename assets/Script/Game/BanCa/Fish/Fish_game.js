@@ -12,21 +12,33 @@ cc.Class({
 		nodeTouch: cc.Node,
 		nodeMenu:  cc.Node,
 
+		nodeCoint: cc.Node,
+		nodeLabel: cc.Node,
+		nodeEF:    cc.Node,
+		nodeEVENT: cc.Node,
+
 		spriteAuto: cc.Sprite,
 		spriteLock: cc.Sprite,
 		nodeAuto:   cc.Node,
 		nodeLock:   cc.Node,
 
-		shubiao: shubiao,
-		isAuto: false,
-		isFire: false,
-		isLock: false,
+		shubiao:  shubiao,
+		isAuto:   false,
+		isFire:   false,
+		isLock:   false,
 		setPoint: false,
 
 		bulletVelocity: 2000,
 		bulletSpeed:    100,
 		red:            0,
 		bulletID:       0,
+
+
+		cointMe:    cc.Prefab,
+		cointOther: cc.Prefab,
+
+		labelMe:    cc.Prefab,
+		labelOther: cc.Prefab,
 
 		bullet: {
 			default: [],
@@ -48,6 +60,10 @@ cc.Class({
 		this.shubiao.init(this);
 		this.fish = {};
 		this.ponit = null;
+
+		this.efcoint = {
+			1:{'x':55, 'y':55, 'max':4, 'min':2},
+		};
 	},
 	onEnable: function() {
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
