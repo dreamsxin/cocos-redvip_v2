@@ -1,7 +1,10 @@
 
+var Fish_nap = require('Fish_nap');
+
 cc.Class({
     extends: cc.Component,
     properties: {
+        Fish_nap: Fish_nap,
     },
     init: function() {
         this.actionShow = cc.spawn(cc.scaleTo(0.5, 1).easing(cc.easeBackOut(2.5)), cc.fadeTo(0.5, 255));
@@ -65,4 +68,11 @@ cc.Class({
     /**
      * Function Show Dialog
     */
+    showNap: function(back = false){
+        this.node.active = this.Fish_nap.node.active = true;
+        this.objShow     = this.Fish_nap.node;
+        if (back === true) {
+            this.Fish_nap.outGame = true;
+        }
+    },
 });

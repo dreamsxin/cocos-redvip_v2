@@ -29,18 +29,18 @@ cc.Class({
 		isLock: false,
 		sungFix: 2,
 		map: 0,
+		money: 0,
 	},
 	init: function(obj) {
 		this.RedT = obj;
 		this.fish = null;
 		this.bullet = {};
 	},
-	onData: function(data){
-	},
 	onInfo: function(data){
 		this.nick.string   = data.name;
 		this.balans.string = helper.numberWithCommas(data.balans);
-		this.bet.string    = this.RedT['typeBet'+this.RedT.regGame][data.typeBet];
+		this.money         = data.balans;
+		this.bet.string    = helper.numberWithCommas(this.RedT['typeBet'+this.RedT.regGame][data.typeBet]);
 		this.typeBet       = data.typeBet;
 		this.onTypeBet(data.typeBet);
 	},
@@ -112,46 +112,57 @@ cc.Class({
 		this.sung = this.sungs[type];
 		this.sung.node.insertChild(this.bet.node);
 
-		this.bet.string = this.RedT['typeBet'+this.RedT.regGame][type];
+		this.bet.string = helper.numberWithCommas(this.RedT['typeBet'+this.RedT.regGame][type]);
 		this.typeBet    = type;
 	},
 	onFire: function(point = null){
-		if ((this.RedT.Game.isAuto || this.RedT.Game.isFire || this.isLock) && !this.isFire) {
-			this.isFire = true;
-			let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
-			bullet = bullet.getComponent('Fish_bullet');
-			let position = null;
-			let lock     = false;
-			let ID = this.RedT.Game.bulletID++;
-
-			this.bullet[ID] = bullet;
-			if (!!point && !this.isLock) {
-				position = point;
-			}else{
-				if (this.isLock && !!this.fish) {
-					lock     = true;
-					position = this.fish.getPoint();
-					this.changerAngle(position);
-					bullet.isLock = true;
-					this.fish['bullet'+this.map][ID] = bullet;
-					this.RedT.Game.ponit = position;
-					cc.RedT.send({g:{fish:{bullet:{id:ID, f:this.fish.id}}}});
-				}else{
-					position = this.RedT.Game.shubiao.node.position;
-				}
+		let checkBet = this.RedT['typeBet'+this.RedT.regGame][this.typeBet];
+		checkBet = this.money - checkBet;
+		if (checkBet < 0) {
+			this.RedT.dialog.showNap(true);
+			if (this.RedT.Game.isAuto) {
+				this.RedT.Game.onClickAuto();
 			}
-			!lock && cc.RedT.send({g:{fish:{bullet:{id:ID, x:position.x, y:position.y}}}});
-			bullet.id = ID;
-			bullet.isMe = true;
-			bullet.bullet = this.typeBet;
-			bullet.init(this, position);
+			this.RedT.Game.isFire = false;
+			this.isLock = false;
+		}else{
+			if ((this.RedT.Game.isAuto || this.RedT.Game.isFire || this.isLock) && !this.isFire) {
+				this.isFire = true;
+				let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
+				bullet = bullet.getComponent('Fish_bullet');
+				let position = null;
+				let lock     = false;
+				let ID = this.RedT.Game.bulletID++;
 
-			this.RedT.Game.nodeDan.addChild(bullet.node);
-			this.sung.playAnimation('fire', 1);
-			setTimeout(function(){
-				this.isFire = false;
-				this.onFire();
-			}.bind(this), this.RedT.Game.bulletSpeed);
+				this.bullet[ID] = bullet;
+				if (!!point && !this.isLock) {
+					position = point;
+				}else{
+					if (this.isLock && !!this.fish) {
+						lock     = true;
+						position = this.fish.getPoint();
+						this.changerAngle(position);
+						bullet.isLock = true;
+						this.fish['bullet'+this.map][ID] = bullet;
+						this.RedT.Game.ponit = position;
+						cc.RedT.send({g:{fish:{bullet:{id:ID, f:this.fish.id}}}});
+					}else{
+						position = this.RedT.Game.shubiao.node.position;
+					}
+				}
+				!lock && cc.RedT.send({g:{fish:{bullet:{id:ID, x:position.x, y:position.y}}}});
+				bullet.id = ID;
+				bullet.isMe = true;
+				bullet.bullet = this.typeBet;
+				bullet.init(this, position);
+
+				this.RedT.Game.nodeDan.addChild(bullet.node);
+				this.sung.playAnimation('fire', 1);
+				setTimeout(function(){
+					this.isFire = false;
+					this.onFire();
+				}.bind(this), this.RedT.Game.bulletSpeed);
+			}
 		}
 	},
 	otherBullet: function(data){

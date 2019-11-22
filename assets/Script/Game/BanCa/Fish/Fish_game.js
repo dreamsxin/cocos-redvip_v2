@@ -28,6 +28,8 @@ cc.Class({
 		isLock:   false,
 		setPoint: false,
 
+		autoNap: false,
+
 		bulletVelocity: 2000,
 		bulletSpeed:    100,
 		red:            0,
@@ -93,14 +95,21 @@ cc.Class({
 		}.bind(this));
 
 		this.fish = {};
+
 		this.nodeFish.removeAllChildren();
 		this.nodeDan.removeAllChildren();
+		this.nodeCoint.removeAllChildren();
+		this.nodeLabel.removeAllChildren();
+		this.nodeEF.removeAllChildren();
+		this.nodeEVENT.removeAllChildren();
+
 		this.setPoint = false;
 		this.bulletID = 0;
 
 		this.isAuto = false;
 		this.isFire = false;
 		this.isLock = false;
+		this.autoNap = false;
 		this.reset();
 	},
 	eventStart: function(e){

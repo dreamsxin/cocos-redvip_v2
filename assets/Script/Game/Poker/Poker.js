@@ -1,8 +1,7 @@
 
 var helper        = require('Helper'),
 	notice        = require('Notice'),
-	module_player = require('Poker_Player'),
-	dialog        = require('Poker_dialog');
+	module_player = require('Poker_Player');
 
 cc.Class({
 	extends: cc.Component,
@@ -17,7 +16,6 @@ cc.Class({
 		loading:   cc.Node,
 		redhat:    cc.Node,
 		notice:    notice,
-		dialog:    dialog,
 		player: {
 			default: [],
 			type: module_player,

@@ -16,6 +16,7 @@ cc.Class({
 		balans:   cc.Label,
 		loading:  cc.Node,
 		notice:   notice,
+		dialog:   dialog,
 		Game:     Game,
 		players: {
 			default: [],
@@ -62,10 +63,13 @@ cc.Class({
 
 		this.CollisionManager = cc.director.getCollisionManager();
 		this.CollisionManager.enabled = true;
+
+		this.dialog.init();
+		this.room = {1:100,2:1000, 3:10000};
 	},
 	onRegGame: function(event){
 		this.regGame = event.target.name;
-		cc.RedT.send({g:{fish:{reg:{room:event.target.name, balans:10000}}}});
+		this.dialog.showNap();
 	},
 	onData: function(data) {
 		if (void 0 !== data.fish){
@@ -129,6 +133,8 @@ cc.Class({
 			money.string = helper.numberWithCommas(data.money);
 			money.node.position = fish.node.position;
 			this.Game.nodeLabel.addChild(money.node);
+			// player.money = data.m;
+			player.balans.string = helper.numberWithCommas(data.m);
 			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
 				this.onDelete();
 			}, fish)));
@@ -150,6 +156,8 @@ cc.Class({
 			money.string = helper.numberWithCommas(data.money);
 			money.node.position = fish.node.position;
 			this.Game.nodeLabel.addChild(money.node);
+			this.Game.player.money = data.m;
+			this.Game.player.balans.string = helper.numberWithCommas(data.m);
 			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
 				this.onDelete();
 			}, fish)));
@@ -166,7 +174,14 @@ cc.Class({
 	fishsData: function(data) {
 		console.log(data);
 	},
+	otherBullet: function(data){
+		this.players[data.map-1].otherBullet(data);
+	},
 	dataOther: function(data) {
+		if (!!data.money) {
+			let player = this.players[data.map-1];
+			player.balans.string = helper.numberWithCommas(data.money);
+		}
 		if (!!data.updateType) {
 			this.updateType(data.updateType);
 		}
@@ -174,18 +189,22 @@ cc.Class({
 			this.otherBullet(data.bulllet);
 		}
 	},
-	otherBullet: function(data){
-		this.players[data.map-1].otherBullet(data);
-	},
 	dataMe: function(data) {
-		if (!!data.money) {
+		if (void 0 !== data.money) {
+			this.Game.player.money = data.money;
 			this.Game.player.balans.string = helper.numberWithCommas(data.money);
+		}
+		if (!!data.nap) {
+			this.loading.active = false;
+			this.dialog.onClickBack();
 		}
 	},
 	updateType: function(data){
 		this.players[data.map-1].onChangerTypeBet(data.type);
 	},
 	dataInfoGhe: function(data) {
+		this.loading.active = false;
+		this.dialog.onClickBack();
 		this.players.forEach(function(obj, index){
 			let dataT = data[index];
 			if (void 0 === dataT || dataT.data === null) {
