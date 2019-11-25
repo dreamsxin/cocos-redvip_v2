@@ -6,7 +6,7 @@ cc.Class({
 		fish:     dragonBones.ArmatureDisplay,
 		shadow:   dragonBones.ArmatureDisplay,
 		collider: cc.PolygonCollider,
-		anim:     cc.AnimationState,
+		anim:     cc.Animation,
 		head:     cc.Node,
 		end:      cc.Node,
 
@@ -26,19 +26,22 @@ cc.Class({
 		this.bullet2 = {};
 		this.bullet3 = {};
 		this.bullet4 = {};
-
-		this.anim.on('finished', this.onFinish, this);
-		if (void 0 !== data.r) {
-			this.anim.play(this.anim.getClips()[data.r].name);
-		}
-		if (void 0 !== data.a) {
-			this.anim.play(data.a);
+		if (!!this.anim) {
+			this.anim.on('finished', this.onFinish, this);
+			if (void 0 !== data.r) {
+				this.anim.play(this.anim.getClips()[data.r].name);
+			}
+			if (void 0 !== data.a) {
+				this.anim.play(data.a);
+			}
 		}
 	},
 	onFinish: function(){
-		this.clear();
-		this.node.destroy();
-		delete this.RedT;
+		if (this.node) {
+			this.clear();
+			this.node.destroy();
+			delete this.RedT;
+		}
 	},
 	onDelete: function(){
 		this.node.destroy();
@@ -94,10 +97,52 @@ cc.Class({
 		this.suoOther.active = suoding;
 	},
 	getPoint: function(){
-		let width  = this.RedT.node.width/2;
-		let height = this.RedT.node.height/2;
-		let head = this.head.parent.convertToWorldSpaceAR(this.head.position);
-		let position = this.node.parent.convertToNodeSpaceAR(head);
+		let width     = this.RedT.node.width/2 - 20;
+		let height    = this.RedT.node.height/2 - 20;
+
+		let headPoint    = this.head.parent.convertToWorldSpaceAR(this.head.position);
+		let position = this.RedT.node.parent.convertToNodeSpaceAR(headPoint);
+
+		let headX = Math.abs(position.x);
+		let headY = Math.abs(position.y);
+
+		if (width < headX || height < headY) {
+			if (this.end) {
+				let endPoint    = this.end.parent.convertToWorldSpaceAR(this.end.position);
+				let positionEnd = this.RedT.node.parent.convertToNodeSpaceAR(endPoint);
+				let endX = Math.abs(positionEnd.x);
+				let endY = Math.abs(positionEnd.y);
+
+				let check = this.node.scaleX*this.node.parent.scaleX;
+
+				if (width < headX){
+					headX = headX-(headX-width);
+					if (endX < headX) {
+						// huy ban
+						this.PhaHuy();
+						return positionEnd;
+					}
+					if (check === 1) {
+						position.x = position.x+(headX-width);
+					}else{
+						position.x = position.x-(headX-width);
+					}
+				}
+				if (height < headY){
+					headY = headY-(headY-height);
+					if (endY < headY) {
+						// huy ban
+						this.PhaHuy();
+						return positionEnd;
+					}
+					if (check === 1) {
+						position.y = position.y+(headY-height);
+					}else{
+						position.y = position.y-(headY-height);
+					}
+				}
+			}
+		}
 		return position;
 	},
 	PhaHuy: function(data){

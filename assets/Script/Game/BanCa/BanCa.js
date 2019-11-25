@@ -10,6 +10,14 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		audioClick: cc.AudioSource,
+		audioHall:  cc.AudioSource,
+		audioGame1: cc.AudioSource,
+		audioGame2: cc.AudioSource,
+		audioPhao:  cc.AudioSource,
+		audioFire:  cc.AudioSource,
+
+
 		nodeHome: cc.Node,
 		nodeGame: cc.Node,
 		nick:     cc.Label,
@@ -47,8 +55,13 @@ cc.Class({
 		cointOther: cc.SpriteFrame,
 	},
 	onLoad () {
+		this.volumeNhacNen = 0;
+		this.volumeHieuUng = 0;
+
+		this.NhacNen = this.audioHall;
+
 		cc.RedT.inGame = this;
-		cc.RedT.send({scene:"bc"});
+		cc.RedT.send({scene:'bc'});
 
 		this.nick.string   = cc.RedT.user.name;
 		this.balans.string = helper.numberWithCommas(cc.RedT.user.red);
@@ -68,6 +81,7 @@ cc.Class({
 		this.room = {1:100,2:1000, 3:10000};
 	},
 	onRegGame: function(event){
+		this.playClick();
 		this.regGame = event.target.name;
 		this.dialog.showNap();
 	},
@@ -114,6 +128,9 @@ cc.Class({
 
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
+		}
+		if (void 0 !== data.log){
+			this.dialog.Fish_history.onData(data.log);
 		}
 	},
 	otherEat: function(data){
@@ -163,16 +180,37 @@ cc.Class({
 			}, fish)));
 		}
 	},
-	fishData: function(data) {
-		let fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
+	fishData: function(data, fishs = null) {
+		var fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
 		fish = fish.getComponent('Fish_fish');
 		fish.init(this.Game, data);
 		this.Game.fish[data.id] = fish;
 		this.Game.nodeFish.addChild(fish.node);
-		//console.log('fish', data);
+		if (fishs) {
+			fish.node.runAction(cc.sequence(cc.delayTime(fishs.t), cc.callFunc(function(){
+				fishs.c++;
+				if (fishs.c < fishs.f.length) {
+					this.fishData(fishs.f[fishs.c], fishs);
+				}
+			}, this)));
+		}
 	},
 	fishsData: function(data) {
-		console.log(data);
+		if(!!data.t){
+			this.fishsComp(data);
+		} else if(!!data.fs){
+			data.fs.forEach(function(fish){
+				this.fishsComp(fish);
+			}.bind(this));
+		}else{
+			data.f.forEach(function(fish){
+				this.fishData(fish);
+			}.bind(this));
+		}
+	},
+	fishsComp: function(data) {
+		data.c = 0;
+		this.fishData(data.f[0], data);
 	},
 	otherBullet: function(data){
 		this.players[data.map-1].otherBullet(data);
@@ -196,7 +234,7 @@ cc.Class({
 		}
 		if (!!data.nap) {
 			this.loading.active = false;
-			this.dialog.onClickBack();
+			this.dialog.onBack();
 		}
 	},
 	updateType: function(data){
@@ -204,7 +242,7 @@ cc.Class({
 	},
 	dataInfoGhe: function(data) {
 		this.loading.active = false;
-		this.dialog.onClickBack();
+		this.dialog.onBack();
 		this.players.forEach(function(obj, index){
 			let dataT = data[index];
 			if (void 0 === dataT || dataT.data === null) {
@@ -225,6 +263,7 @@ cc.Class({
 				obj.onInfo(dataT.data);
 			}
 		}.bind(this));
+		this.volumeHieuUng !== 0 && this.Game.addAudioPhao();
 	},
 	dataMeMap: function(data) {
 		if (data === 1 || data === 2) {
@@ -250,6 +289,7 @@ cc.Class({
 		this.players[data-1].node.active = false;
 	},
 	backGame: function(){
+		this.playClick();
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame');
@@ -273,5 +313,8 @@ cc.Class({
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
+	},
+	playClick: function(){
+		this.volumeHieuUng !== 0 && this.audioClick.play();
 	},
 });

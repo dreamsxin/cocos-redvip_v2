@@ -16,6 +16,7 @@ cc.Class({
 		nodeLabel: cc.Node,
 		nodeEF:    cc.Node,
 		nodeEVENT: cc.Node,
+		nodeAudio: cc.Node,
 
 		spriteAuto: cc.Sprite,
 		spriteLock: cc.Sprite,
@@ -51,6 +52,10 @@ cc.Class({
 			type: cc.Prefab,
 		},
 		fishPrefab: {
+			default: [],
+			type: cc.Prefab,
+		},
+		gPrefab: {
 			default: [],
 			type: cc.Prefab,
 		},
@@ -102,6 +107,7 @@ cc.Class({
 		this.nodeLabel.removeAllChildren();
 		this.nodeEF.removeAllChildren();
 		this.nodeEVENT.removeAllChildren();
+		this.nodeAudio.removeAllChildren();
 
 		this.setPoint = false;
 		this.bulletID = 0;
@@ -155,6 +161,7 @@ cc.Class({
 		}
 		this.player.onChangerTypeBet(this.player.typeBet);
 		this.sendChangerTypeBet(this.player.typeBet);
+		this.RedT.volumeHieuUng !== 0 && this.addAudioPhao();
 	},
 	betMinus: function(){
 		this.player.typeBet--;
@@ -163,6 +170,14 @@ cc.Class({
 		}
 		this.player.onChangerTypeBet(this.player.typeBet);
 		this.sendChangerTypeBet(this.player.typeBet);
+		this.RedT.volumeHieuUng !== 0 && this.addAudioPhao();
+	},
+	addAudioPhao: function(){
+		let copy = cc.instantiate(this.RedT.audioPhao.node);
+		copy = copy.getComponent(cc.AudioSource);
+		copy.volume = this.RedT.volumeHieuUng;
+		this.nodeAuto.addChild(copy.node);
+		copy.play();
 	},
 	sendChangerTypeBet:function(bet){
 		cc.RedT.send({g:{fish:{typeBet:bet}}});

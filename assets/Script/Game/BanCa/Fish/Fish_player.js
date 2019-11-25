@@ -156,6 +156,13 @@ cc.Class({
 				bullet.bullet = this.typeBet;
 				bullet.init(this, position);
 
+				// Audio
+				let copy = cc.instantiate(this.RedT.audioFire.node);
+				copy = copy.getComponent(cc.AudioSource);
+				copy.volume = this.RedT.volumeHieuUng;
+				bullet.node.addChild(copy.node);
+				copy.play();
+
 				this.RedT.Game.nodeDan.addChild(bullet.node);
 				this.sung.playAnimation('fire', 1);
 				setTimeout(function(){
