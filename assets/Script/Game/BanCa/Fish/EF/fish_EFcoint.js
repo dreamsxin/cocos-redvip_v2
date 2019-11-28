@@ -8,8 +8,8 @@ cc.Class({
 	init: function(player, fish, data) {
 		this.coint.on(dragonBones.EventObject.LOOP_COMPLETE, this.COMPLETE, this);
 
-		this.node.x = fish.node.x + Math.floor(Math.random()*(data.x*2+1))-data.x;
-		this.node.y = fish.node.y + Math.floor(Math.random()*(data.y*2+1))-data.y;
+		this.node.x = fish.x + Math.floor(Math.random()*(data.x*2+1))-data.x;
+		this.node.y = fish.y + Math.floor(Math.random()*(data.y*2+1))-data.y;
 
 		player.RedT.Game.nodeCoint.addChild(this.node);
 		data = null;

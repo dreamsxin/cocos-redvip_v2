@@ -9,15 +9,16 @@ cc.Class({
 		anim:     cc.Animation,
 		head:     cc.Node,
 		end:      cc.Node,
-
 		suoMe:    cc.Node,
 		suoOther: cc.Node,
+		speed:    1,
 	},
 	init: function(obj, data){
-		this.RedT      = obj;
-		this.id        = data.id;
-		this.node.id   = data.id;
-		this.node.fish = data.f;
+		this.RedT        = obj;
+		this.id          = data.id;
+		this.node.id     = data.id;
+		this.node.fish   = data.f;
+		this.node.zIndex = data.f;
 		this.player1 = false;
 		this.player2 = false;
 		this.player3 = false;
@@ -29,10 +30,17 @@ cc.Class({
 		if (!!this.anim) {
 			this.anim.on('finished', this.onFinish, this);
 			if (void 0 !== data.r) {
-				this.anim.play(this.anim.getClips()[data.r].name);
+				let clip = this.anim.getClips()[data.r].name;
+				this.anim.play(clip);
+				this.animState = this.anim.getAnimationState(clip);
 			}
 			if (void 0 !== data.a) {
 				this.anim.play(data.a);
+				this.animState = this.anim.getAnimationState(data.a);
+			}
+			this.animState.speed = this.speed;
+			if (void 0 !== data.t) {
+				this.animState.time = data.t;
 			}
 		}
 	},
@@ -96,20 +104,25 @@ cc.Class({
 		}
 		this.suoOther.active = suoding;
 	},
+	getPosition: function(){
+		let point = this.node.parent.convertToWorldSpaceAR(this.node.position);
+		return this.RedT.node.convertToNodeSpaceAR(point);
+	},
 	getPoint: function(){
-		let width     = this.RedT.node.width/2 - 20;
-		let height    = this.RedT.node.height/2 - 20;
+		let width  = this.RedT.node.width/2;
+		let height = this.RedT.node.height/2;
 
-		let headPoint    = this.head.parent.convertToWorldSpaceAR(this.head.position);
-		let position = this.RedT.node.parent.convertToNodeSpaceAR(headPoint);
+		let headPoint = this.head.parent.convertToWorldSpaceAR(this.head.position);
+		let position  = this.RedT.node.convertToNodeSpaceAR(headPoint);
 
 		let headX = Math.abs(position.x);
 		let headY = Math.abs(position.y);
 
+		//console.log(width, headX);
 		if (width < headX || height < headY) {
 			if (this.end) {
 				let endPoint    = this.end.parent.convertToWorldSpaceAR(this.end.position);
-				let positionEnd = this.RedT.node.parent.convertToNodeSpaceAR(endPoint);
+				let positionEnd = this.RedT.node.convertToNodeSpaceAR(endPoint);
 				let endX = Math.abs(positionEnd.x);
 				let endY = Math.abs(positionEnd.y);
 
@@ -117,10 +130,8 @@ cc.Class({
 
 				if (width < headX){
 					headX = headX-(headX-width);
-					if (endX < headX) {
-						// huy ban
-						this.PhaHuy();
-						return positionEnd;
+					if (endX > headX) {
+						return {position:positionEnd, stop:true};
 					}
 					if (check === 1) {
 						position.x = position.x+(headX-width);
@@ -130,10 +141,8 @@ cc.Class({
 				}
 				if (height < headY){
 					headY = headY-(headY-height);
-					if (endY < headY) {
-						// huy ban
-						this.PhaHuy();
-						return positionEnd;
+					if (endY > headY) {
+						return {position:positionEnd, stop:true};
 					}
 					if (check === 1) {
 						position.y = position.y+(headY-height);
@@ -143,18 +152,18 @@ cc.Class({
 				}
 			}
 		}
-		return position;
+		return {position:position};
 	},
-	PhaHuy: function(data){
+	PhaHuy: function(ngam = true){
 		this.collider.enabled = false;
-		this.anim.stop();
+		!!this.anim && ngam === true && this.anim.stop();
 		this.clear();
 
 		this.suoMe.active    = false;
 		this.suoOther.active = false;
 
-		this.fish.timeScale   = 2;
-		this.shadow.timeScale = 2;
+		ngam === true && (this.fish.timeScale = this.fish.timeScale/0.4);
+		ngam === true && (this.shadow.timeScale = this.fish.timeScale/0.4);
 	},
 	clear: function(){
 		delete this.RedT.fish[this.node.id];

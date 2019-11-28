@@ -140,12 +140,16 @@ cc.Class({
 				}else{
 					if (this.isLock && !!this.fish) {
 						lock     = true;
-						position = this.fish.getPoint();
+						let getPoint = this.fish.getPoint();
+						position = getPoint.position;
 						this.changerAngle(position);
 						bullet.isLock = true;
 						this.fish['bullet'+this.map][ID] = bullet;
 						this.RedT.Game.ponit = position;
 						cc.RedT.send({g:{fish:{bullet:{id:ID, f:this.fish.id}}}});
+						if (getPoint.stop === true) {
+							this.fish.PhaHuy(false);
+						}
 					}else{
 						position = this.RedT.Game.shubiao.node.position;
 					}
@@ -160,7 +164,7 @@ cc.Class({
 				let copy = cc.instantiate(this.RedT.audioFire.node);
 				copy = copy.getComponent(cc.AudioSource);
 				copy.volume = this.RedT.volumeHieuUng;
-				bullet.node.addChild(copy.node);
+				this.RedT.Game.nodeAudio.addChild(copy.node);
 				copy.play();
 
 				this.RedT.Game.nodeDan.addChild(bullet.node);

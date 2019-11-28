@@ -17,6 +17,10 @@ cc.Class({
 		audioPhao:  cc.AudioSource,
 		audioFire:  cc.AudioSource,
 
+		audioJiaqian: cc.AudioSource,
+		audioReward1: cc.AudioSource,
+		audioReward2: cc.AudioSource,
+		audioReward3: cc.AudioSource,
 
 		nodeHome: cc.Node,
 		nodeGame: cc.Node,
@@ -54,7 +58,7 @@ cc.Class({
 		cointMe:    cc.SpriteFrame,
 		cointOther: cc.SpriteFrame,
 	},
-	onLoad () {
+	onLoad: function(){
 		this.volumeNhacNen = 0;
 		this.volumeHieuUng = 0;
 
@@ -92,6 +96,9 @@ cc.Class({
 		if (void 0 !== data.fishs){
 			this.fishsData(data.fishs);
 		}
+		if (void 0 !== data.scene){
+			this.scene(data.scene);
+		}
 		if (void 0 !== data.meMap){
 			this.MeMap = data.meMap;
 			this.dataMeMap(data.meMap);
@@ -111,21 +118,18 @@ cc.Class({
 		if (void 0 !== data.me){
 			this.dataMe(data.me);
 		}
-
 		if (void 0 !== data.otherEat){
 			this.otherEat(data.otherEat);
 		}
 		if (void 0 !== data.meEat){
 			this.meEat(data.meEat);
 		}
-		
 		if (void 0 !== data.lock){
 			this.fishLock(data.lock);
 		}
 		if (void 0 !== data.unlock){
 			this.fishUnLock(data.unlock);
 		}
-
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
 		}
@@ -136,57 +140,98 @@ cc.Class({
 	otherEat: function(data){
 		let fish = this.Game.fish[data.id];
 		if (void 0 !== fish) {
-			fish.PhaHuy(data);
+			let position = fish.node.position;
+			if (fish.inGroup) {
+				let scaleX = fish.node.parent.scaleX;
+				let angle  = fish.node.parent.angle;
+				position = fish.getPosition();
+				this.Game.nodeFish.insertChild(fish.node);
+				fish.node.position = position;
+				fish.node.scaleX   = scaleX;
+				fish.node.angle    = angle;
+			}
+			fish.PhaHuy();
 			let player = this.players[data.map-1];
 			let efcoint = this.Game.efcoint[fish.node.fish];
 			let ef = Math.floor(Math.random()*(efcoint.max-efcoint.min+1))+efcoint.min;
 			for (let i = 0; i < ef; i++) {
 				var coint = cc.instantiate(this.Game.cointOther);
 				coint = coint.getComponent('fish_EFcoint');
-				coint.init(player, fish, efcoint);
+				coint.init(player, position, efcoint);
 			}
 			var money = cc.instantiate(this.Game.labelOther);
 			money = money.getComponent(cc.Label);
 			money.string = helper.numberWithCommas(data.money);
-			money.node.position = fish.node.position;
+			money.node.position = position;
 			this.Game.nodeLabel.addChild(money.node);
-			// player.money = data.m;
 			player.balans.string = helper.numberWithCommas(data.m);
-			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
+			fish.node.runAction(cc.sequence(cc.delayTime(0.6), cc.spawn(cc.scaleTo(0.1, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.1, 50)), cc.callFunc(function(){
 				this.onDelete();
 			}, fish)));
+
+			// Audio
+			let copy = cc.instantiate(this.audioJiaqian.node);
+			copy = copy.getComponent(cc.AudioSource);
+			copy.volume = this.volumeHieuUng;
+			this.Game.nodeAudio.addChild(copy.node);
+			copy.play();
 		}
 	},
 	meEat: function(data){
 		let fish = this.Game.fish[data.id];
 		if (void 0 !== fish) {
-			fish.PhaHuy(data);
+			let fishF = fish.node.fish;
+			let position = fish.node.position;
+			if (fish.inGroup) {
+				let scaleX = fish.node.parent.scaleX;
+				let angle  = fish.node.parent.angle;
+				position = fish.getPosition();
+				this.Game.nodeFish.insertChild(fish.node);
+				fish.node.position = position;
+				fish.node.scaleX   = scaleX;
+				fish.node.angle    = angle;
+			}
+			fish.PhaHuy();
 			let efcoint = this.Game.efcoint[fish.node.fish];
 			let ef = Math.floor(Math.random()*(efcoint.max-efcoint.min+1))+efcoint.min;
 			for (let i = 0; i < ef; i++) {
 				var coint = cc.instantiate(this.Game.cointMe);
 				coint = coint.getComponent('fish_EFcoint');
-				coint.init(this.Game.player, fish, efcoint);
+				coint.init(this.Game.player, position, efcoint);
 			}
 			var money = cc.instantiate(this.Game.labelMe);
 			money = money.getComponent(cc.Label);
 			money.string = helper.numberWithCommas(data.money);
-			money.node.position = fish.node.position;
+			money.node.position = position;
 			this.Game.nodeLabel.addChild(money.node);
 			this.Game.player.money = data.m;
 			this.Game.player.balans.string = helper.numberWithCommas(data.m);
 			fish.node.runAction(cc.sequence(cc.delayTime(0.7), cc.spawn(cc.scaleTo(0.2, fish.node.scaleX*0.3, 0.3), cc.fadeTo(0.2, 50)), cc.callFunc(function(){
 				this.onDelete();
 			}, fish)));
+
+			// Audio
+			let copy = cc.instantiate(this['audioReward'+this.Game.efcoint[fishF].ef].node);
+			copy = copy.getComponent(cc.AudioSource);
+			copy.volume = this.volumeHieuUng;
+			this.Game.nodeAudio.addChild(copy.node);
+			copy.play();
 		}
 	},
 	fishData: function(data, fishs = null) {
-		var fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
-		fish = fish.getComponent('Fish_fish');
-		fish.init(this.Game, data);
-		this.Game.fish[data.id] = fish;
-		this.Game.nodeFish.addChild(fish.node);
-		if (fishs) {
+		if (void 0 !== data.g) {
+			var fish = cc.instantiate(this.Game['x'+data.g]);
+			fish = fish.getComponent('Fish_fish_group');
+			fish.init(this.Game, data);
+			this.Game.nodeFish.addChild(fish.node);
+		}else{
+			var fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
+			fish = fish.getComponent('Fish_fish');
+			fish.init(this.Game, data);
+			this.Game.fish[data.id] = fish;
+			this.Game.nodeFish.addChild(fish.node);
+		}
+		if (fishs && fishs.t !== void 0) {
 			fish.node.runAction(cc.sequence(cc.delayTime(fishs.t), cc.callFunc(function(){
 				fishs.c++;
 				if (fishs.c < fishs.f.length) {
@@ -196,11 +241,15 @@ cc.Class({
 		}
 	},
 	fishsData: function(data) {
-		if(!!data.t){
+		if(data.t !== void 0){
 			this.fishsComp(data);
 		} else if(!!data.fs){
 			data.fs.forEach(function(fish){
-				this.fishsComp(fish);
+				if(fish.t !== void 0){
+					this.fishsComp(fish);
+				}else{
+					this.fishData(fish);
+				}
 			}.bind(this));
 		}else{
 			data.f.forEach(function(fish){
@@ -284,6 +333,35 @@ cc.Class({
 		}else{
 			obj.sungFix = 2;
 		}
+
+		let fishs = this.Game.nodeFish.children.map(function(fish){
+			let h = {};
+			if (fish.g !== void 0) {
+				fish = fish.getComponent('Fish_fish_group');
+				h.g = fish.g;
+				h.a = fish.animState.name;
+				h.t = fish.animState.time;
+				h.f = fish.fish.map(function(obj){
+					if (!!obj.node) {
+						return {id:obj.node.id, f:obj.node.fish};
+					}
+					return false;
+				});
+			}else{
+				fish = fish.getComponent('Fish_fish');
+				h.id = fish.id;
+				h.a  = fish.animState.name;
+				h.t  = fish.animState.time;
+				h.f  = fish.node.fish;
+			}
+			return h;
+		});
+
+		let bullets = this.Game.nodeDan.children.map(function(bulllet){
+			bulllet = bulllet.getComponent('Fish_bullet');
+			return {a:bulllet.node.angle, x:bulllet.node.x, y:bulllet.node.y, type:bulllet.node.name, vx:bulllet.body.linearVelocity.x, vy:bulllet.body.linearVelocity.y};
+		});
+		cc.RedT.send({g:{fish:{getScene:{f:fishs, b:bullets, g:data.ghe}}}});
 	},
 	dataOutGame: function(data) {
 		this.players[data-1].node.active = false;
@@ -316,5 +394,34 @@ cc.Class({
 	},
 	playClick: function(){
 		this.volumeHieuUng !== 0 && this.audioClick.play();
+	},
+	scene: function(data){
+		data.f.forEach(function(fish){
+			this.fishData(fish);
+		}.bind(this));
+		data.b.forEach(function(bulllet){
+			!!bulllet && this.sceneBullet(bulllet);
+		}.bind(this));
+	},
+	sceneBullet: function(data){
+		let a    = data.a>>0;
+		let x    = data.x>>0;
+		let y    = data.x>>0;
+		let type = data.type>>0;
+		let vx   = data.vx>>0;
+		let vy   = data.vy>>0;
+
+		let bullet = this.Game.bullet[type-1];
+		if (void 0 !== bullet) {
+			bullet = cc.instantiate(bullet);
+			bullet = bullet.getComponent('Fish_bullet');
+			bullet.node.x = x;
+			bullet.node.y = y;
+			bullet.node.angle = a;
+			bullet.bullet = type-1;
+	        bullet.body.linearVelocity = cc.v2(vx, vy);
+	        bullet.RedT = this.Game.player;
+			this.Game.nodeDan.addChild(bullet.node);
+		}
 	},
 });

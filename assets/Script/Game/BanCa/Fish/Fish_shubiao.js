@@ -24,8 +24,8 @@ cc.Class({
 			this.RedT.player.fish = fish;
 			this.RedT.player.isLock = true;
 			this.RedT.player.fish.updateGroup();
-			this.RedT.player.onFire();
 			this.RedT.player.fish.suoMe.active = true;
+			this.RedT.player.onFire();
 			cc.RedT.send({g:{fish:{lock:fish.id}}});
 		}else{
 			if (this.RedT.player.fish) {

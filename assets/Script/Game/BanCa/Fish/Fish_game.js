@@ -36,7 +36,6 @@ cc.Class({
 		red:            0,
 		bulletID:       0,
 
-
 		cointMe:    cc.Prefab,
 		cointOther: cc.Prefab,
 
@@ -55,10 +54,7 @@ cc.Class({
 			default: [],
 			type: cc.Prefab,
 		},
-		gPrefab: {
-			default: [],
-			type: cc.Prefab,
-		},
+		x2_2g6: cc.Prefab,
 	},
 	init: function(obj){
 		this.RedT      = obj;
@@ -69,7 +65,34 @@ cc.Class({
 		this.ponit = null;
 
 		this.efcoint = {
-			1:{'x':55, 'y':55, 'max':4, 'min':2},
+			1: {'x':55,  'y':55,  'max':4,  'min':2, 'ef':1},
+			2: {'x':55,  'y':55,  'max':4,  'min':2, 'ef':1},
+			3: {'x':80,  'y':80,  'max':4,  'min':2, 'ef':1},
+			4: {'x':80,  'y':80,  'max':5,  'min':3, 'ef':1},
+			5: {'x':80,  'y':80,  'max':5,  'min':3, 'ef':1},
+			6: {'x':80,  'y':80,  'max':5,  'min':3, 'ef':1},
+			7: {'x':80,  'y':80,  'max':6,  'min':3, 'ef':1},
+			8: {'x':80,  'y':80,  'max':6,  'min':3, 'ef':1},
+			9: {'x':80,  'y':80,  'max':6,  'min':3, 'ef':1},
+			10:{'x':100, 'y':80,  'max':6,  'min':3, 'ef':1},
+			11:{'x':100, 'y':80,  'max':6,  'min':3, 'ef':2},
+			12:{'x':100, 'y':80,  'max':7,  'min':3, 'ef':2},
+			13:{'x':100, 'y':80,  'max':7,  'min':3, 'ef':2},
+			14:{'x':100, 'y':80,  'max':7,  'min':4, 'ef':2},
+			15:{'x':100, 'y':80,  'max':8,  'min':4, 'ef':2},
+			16:{'x':100, 'y':80,  'max':8,  'min':4, 'ef':2},
+			17:{'x':100, 'y':80,  'max':8,  'min':4, 'ef':2},
+			18:{'x':100, 'y':80,  'max':8,  'min':4, 'ef':2},
+			19:{'x':100, 'y':80,  'max':8,  'min':4, 'ef':2},
+			20:{'x':100, 'y':80,  'max':9,  'min':5, 'ef':3},
+			21:{'x':100, 'y':80,  'max':9,  'min':5, 'ef':3},
+			22:{'x':150, 'y':80,  'max':9,  'min':5, 'ef':3},
+			23:{'x':150, 'y':130, 'max':9,  'min':6, 'ef':3},
+			24:{'x':150, 'y':130, 'max':10, 'min':6, 'ef':3},
+			25:{'x':150, 'y':130, 'max':10, 'min':6, 'ef':3},
+			26:{'x':150, 'y':130, 'max':12, 'min':6, 'ef':3},
+			27:{'x':200, 'y':130, 'max':12, 'min':7, 'ef':3},
+			28:{'x':250, 'y':150, 'max':15, 'min':8, 'ef':3},
 		};
 	},
 	onEnable: function() {
@@ -78,8 +101,16 @@ cc.Class({
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		BrowserUtil.showCursorFish();
+		this.RedT.NhacNen.stop();
+		this.RedT.NhacNen = this.RedT.audioGame1;
+		this.RedT.NhacNen.volume = this.RedT.volumeNhacNen;
+		this.RedT.volumeNhacNen !== 0 && this.RedT.NhacNen.play();
 	},
 	onDisable: function() {
+		this.RedT.NhacNen.stop();
+		this.RedT.NhacNen = this.RedT.audioHall;
+		this.RedT.NhacNen.volume = this.RedT.volumeNhacNen;
+		this.RedT.volumeNhacNen !== 0 && this.RedT.NhacNen.play();
 		BrowserUtil.showCursorAutoForce();
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
