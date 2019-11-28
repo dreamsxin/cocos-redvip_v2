@@ -14,7 +14,7 @@ module.exports = {
 	showCursorFish: function() {
 		// /assets/fish_game_arrow.png
 		// /app/editor/static/preview-templates/assets/fish_game_arrow.png
-		cc.sys.isBrowser && (cc.game.canvas.style.cursor = "url('/app/editor/static/preview-templates/assets/fish_game_arrow.png'), auto");
+		cc.sys.isBrowser && (cc.game.canvas.style.cursor = "url('/assets/fish_game_arrow.png'), auto");
 	},
 	showCursorAutoForce: function() {
 		cc.sys.isBrowser && this.setCursor("auto")
