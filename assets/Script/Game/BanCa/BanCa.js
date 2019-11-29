@@ -175,12 +175,12 @@ cc.Class({
 			copy.volume = this.volumeHieuUng;
 			this.Game.nodeAudio.addChild(copy.node);
 			copy.play();
+			this.EFBom(efcoint.ef, position);
 		}
 	},
 	meEat: function(data){
 		let fish = this.Game.fish[data.id];
 		if (void 0 !== fish) {
-			let fishF = fish.node.fish;
 			let position = fish.node.position;
 			if (fish.inGroup) {
 				let scaleX = fish.node.parent.scaleX;
@@ -211,11 +211,12 @@ cc.Class({
 			}, fish)));
 
 			// Audio
-			let copy = cc.instantiate(this['audioReward'+this.Game.efcoint[fishF].ef].node);
+			let copy = cc.instantiate(this.audioReward1.ef.node);
 			copy = copy.getComponent(cc.AudioSource);
 			copy.volume = this.volumeHieuUng;
 			this.Game.nodeAudio.addChild(copy.node);
 			copy.play();
+			this.EFBom(efcoint.ef, position);
 		}
 	},
 	fishData: function(data, fishs = null) {
@@ -260,6 +261,27 @@ cc.Class({
 	fishsComp: function(data) {
 		data.c = 0;
 		this.fishData(data.f[0], data);
+	},
+	EFBom: function(ef, position){
+		if (ef === 2) {
+			let Audio2 = cc.instantiate(this.audioReward2.node);
+			Audio2 = Audio2.getComponent(cc.AudioSource);
+			Audio2.volume = this.volumeHieuUng;
+			this.Game.nodeAudio.addChild(Audio2.node);
+			Audio2.play();
+			let EF2 = cc.instantiate(this.Game.ef_bom);
+			EF2.position = position;
+			this.Game.nodeEF.addChild(EF2);
+		}else if (ef === 3) {
+			let Audio3 = cc.instantiate(this.audioReward3.node);
+			Audio3 = Audio3.getComponent(cc.AudioSource);
+			Audio3.volume = this.volumeHieuUng;
+			this.Game.nodeAudio.addChild(Audio3.node);
+			Audio3.play();
+			let EF3 = cc.instantiate(this.Game.ef_gold_bom);
+			EF2.position = position;
+			this.Game.nodeEF.addChild(EF3);
+		}
 	},
 	otherBullet: function(data){
 		this.players[data.map-1].otherBullet(data);
@@ -322,6 +344,8 @@ cc.Class({
 		}
 		this.nodeHome.active = false;
 		this.nodeGame.active = true;
+		this.nodeGame.y = 0;
+		this.nodeGame.x = 0;
 	},
 	dataIngame: function(data) {
 		let obj = this.players[data.ghe-1];
@@ -419,8 +443,8 @@ cc.Class({
 			bullet.node.y = y;
 			bullet.node.angle = a;
 			bullet.bullet = type-1;
-	        bullet.body.linearVelocity = cc.v2(vx, vy);
-	        bullet.RedT = this.Game.player;
+			bullet.body.linearVelocity = cc.v2(vx, vy);
+			bullet.RedT = this.Game.player;
 			this.Game.nodeDan.addChild(bullet.node);
 		}
 	},

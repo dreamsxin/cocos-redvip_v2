@@ -129,8 +129,8 @@ cc.Class({
 				let check = this.node.scaleX*this.node.parent.scaleX;
 
 				if (width < headX){
-					headX = headX-(headX-width);
-					if (endX > headX) {
+					let headXcheck = headX-(headX-width);
+					if (endX > headXcheck) {
 						return {position:positionEnd, stop:true};
 					}
 					if (check === 1) {
@@ -140,8 +140,8 @@ cc.Class({
 					}
 				}
 				if (height < headY){
-					headY = headY-(headY-height);
-					if (endY > headY) {
+					let headYcheck = headY-(headY-height);
+					if (endY > headYcheck) {
 						return {position:positionEnd, stop:true};
 					}
 					if (check === 1) {

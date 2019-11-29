@@ -188,9 +188,13 @@ cc.Class({
 			if (void 0 === fish) {
 				return void 0;
 			}
-			position = fish.getPoint();
+			let getPoint = fish.getPoint();
+			position = getPoint.position;
 			bullet.isLock = true;
 			fish['bullet'+this.map][ID] = bullet;
+			if (getPoint.stop === true) {
+				fish.PhaHuy(false);
+			}
 		}else{
 			position = cc.v2(data.x, data.y);
 		}
@@ -202,6 +206,7 @@ cc.Class({
 
 		this.RedT.Game.nodeDan.addChild(bullet.node);
 		this.sung.playAnimation('fire', 1);
+		console.log(bullet);
 	},
 	changerAngle: function(angle){
 		let positionUser = this.RedT.Game.node.convertToWorldSpaceAR(angle);

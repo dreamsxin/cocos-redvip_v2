@@ -50,6 +50,8 @@ cc.Class({
 			default: [],
 			type: cc.Prefab,
 		},
+		ef_bom:      cc.Prefab,
+		ef_gold_bom: cc.Prefab,
 		fishPrefab: {
 			default: [],
 			type: cc.Prefab,
@@ -96,6 +98,8 @@ cc.Class({
 		};
 	},
 	onEnable: function() {
+		this.node.y = 0;
+		this.node.x = 0;
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);

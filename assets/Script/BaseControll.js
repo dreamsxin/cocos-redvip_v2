@@ -55,7 +55,7 @@ module.exports = {
 	_onSocketData: function(message) {
 		var data = message.data;
 		data = cc.RedT._decodeMessage(data);
-		cc.RedT.inGame.onData(data);
+		cc.RedT.inGame && cc.RedT.inGame.onData(data);
 	},
 	_onSocketError: function(message) {
 	},
@@ -65,6 +65,27 @@ module.exports = {
 		this.connect('pro68.club', '/websocket');
 	},
 	init: function(){
+		cc.view.setResizeCallback(function(){
+			if (cc.RedT.inGame && cc.RedT.inGame.nodeGame) {
+				cc.RedT.inGame.nodeGame.x = 0;
+				cc.RedT.inGame.nodeGame.y = 0;
+			}
+		});
+		cc.game.on(cc.game.EVENT_HIDE, function(){
+			if (this.IS_LOGIN){
+				this.timeHide = new Date().getTime();
+			}
+		}, this);
+		cc.game.on(cc.game.EVENT_SHOW, function(){
+			if (this.IS_LOGIN){
+				let check = new Date().getTime();
+				check = check-this.timeHide;
+				if (check > 7000) {
+					this._socket.close();
+					//cc.game.restart();
+				}
+			}
+		}, this);
 		this.initPrototype();
 	},
 	initPrototype: function() {
