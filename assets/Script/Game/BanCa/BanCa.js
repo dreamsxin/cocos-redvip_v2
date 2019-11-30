@@ -211,7 +211,7 @@ cc.Class({
 			}, fish)));
 
 			// Audio
-			let copy = cc.instantiate(this.audioReward1.ef.node);
+			let copy = cc.instantiate(this.audioReward1.node);
 			copy = copy.getComponent(cc.AudioSource);
 			copy.volume = this.volumeHieuUng;
 			this.Game.nodeAudio.addChild(copy.node);

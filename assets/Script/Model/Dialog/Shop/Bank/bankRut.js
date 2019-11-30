@@ -9,14 +9,13 @@ cc.Class({
         editBank:   cc.EditBox,
         editNumber: cc.EditBox,
         editName:   cc.EditBox,
-        editBranch: cc.EditBox,
         editRut:    cc.EditBox,
         editOTP:    cc.EditBox,
         typeOTP: '',
     },
     init(){
         var self = this;
-        this.editboxs = [this.editBank, this.editNumber, this.editName, this.editBranch, this.editRut, this.editOTP];
+        this.editboxs = [this.editBank, this.editNumber, this.editName, this.editRut, this.editOTP];
         this.keyHandle = function(t) {
             return t.keyCode === cc.macro.KEY.tab ? (self.isTop() && self.changeNextFocusEditBox(),
                 t.preventDefault && t.preventDefault(),
@@ -67,7 +66,7 @@ cc.Class({
         return !cc.RedT.inGame.notice.node.active && !cc.RedT.inGame.loading.active;
     },
     clean: function(){
-        this.editBank.string = this.editNumber.string = this.editName.string = this.editBranch.string = this.editRut.string = this.editOTP.string = '';
+        this.editBank.string = this.editNumber.string = this.editName.string = this.editRut.string = this.editOTP.string = '';
     },
     onClickOTP: function(){
         cc.RedT.send({otp:{type:this.typeOTP}});
@@ -84,7 +83,6 @@ cc.Class({
         if(helper.isEmpty(this.editBank.string) ||
             helper.isEmpty(this.editNumber.string) ||
             helper.isEmpty(this.editName.string) ||
-            helper.isEmpty(this.editBranch.string) ||
             helper.isEmpty(this.editRut.string) ||
             helper.isEmpty(this.editOTP.string))
         {
@@ -99,9 +97,9 @@ cc.Class({
                 bank:this.editBank.string,
                 number:this.editNumber.string,
                 name:this.editName.string,
-                branch:this.editBranch.string,
                 rut:helper.getOnlyNumberInString(this.editRut.string),
                 otp:this.editOTP.string}}}});
+                //branch:this.editBranch.string,
         }
     },
 });
