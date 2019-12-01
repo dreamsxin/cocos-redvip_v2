@@ -61,7 +61,7 @@ cc.Class({
 		this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
 		if (cc.RedT.IS_LOGIN){
-			cc.RedT.send({scene:"home"});
+			cc.RedT.send({scene:'home'});
 			this.header.reset();
 			this.header.userName.string = cc.RedT.user.name;
 			this.dialog.profile.CaNhan.username.string = cc.RedT.user.name;
@@ -126,7 +126,7 @@ cc.Class({
 	unAuthorized: function(data){
 		this.loading.active = false;
 		cc.RedT.inGame.resetAuth();
-		if (void 0 !== data["message"]) {
+		if (void 0 !== data['message']) {
 			this.notice.show({title: 'ĐĂNG KÝ', text: 'Có lỗi sảy ra, xin vui lòng thử lại...'});
 		} else {
 			this.notice.show(data);
@@ -142,8 +142,8 @@ cc.Class({
 	},
 	onData: function(data){
 		//console.log(data);
-		if (void 0 !== data["unauth"]){
-			this.unAuthorized(data["unauth"]);
+		if (void 0 !== data['unauth']){
+			this.unAuthorized(data['unauth']);
 		}
 		if (void 0 !== data.Authorized){
 			this.Authorized(data.Authorized);
@@ -195,23 +195,27 @@ cc.Class({
 	},
 	captcha: function(data){
 		switch(data.name){
-			case "signUp":
+			case 'signUp':
 				this.dialog.signUp.initCaptcha(data.data);
 				break;
 
-			case "giftcode":
+			case 'signIn':
+				this.dialog.signIn.initCaptcha(data.data);
+				break;
+
+			case 'giftcode':
 				this.dialog.GiftCode.initCaptcha(data.data);
 				break;
 
-			case "forgotpass":
+			case 'forgotpass':
 				this.dialog.ForGotPass.initCaptcha(data.data);
 				break;
 
-			case "chargeCard":
+			case 'chargeCard':
 				this.dialog.shop.NapRed.initCaptcha(data.data);
 				break;
 
-			case "withdrawXu":
+			case 'withdrawXu':
 				this.dialog.shop.TieuRed.MuaXu.initCaptcha(data.data);
 				break;
 		}
@@ -417,18 +421,18 @@ cc.Class({
 			var self = this;
 			self.loading.active = true;
 			!isInitFB && FB && FB.init({
-				appId: "1979927462336372",
+				appId: '1979927462336372',
 				autoLogAppEvents: !0,
 				xfbml: !0,
 				cookie: !0,
-				version: "v3.1"
+				version: 'v3.1'
 			}),
 			FB.getLoginStatus(function(t) {
-				if ("connected" === t.status) {
+				if ('connected' === t.status) {
 					var e = t.authResponse.userID
 					  , i = s.LOGIN_FACEBOOK_TYPE
 					  , o = t.authResponse.accessToken;
-					self.loginSocial(e, "", i, o)
+					self.loginSocial(e, ', i, o)
 				} else
 					self.setAutoLogin(!1),
 				self.loading.active = false;
@@ -440,11 +444,11 @@ cc.Class({
 			var self = this;
 			self.loading.active = true;
 			FB && (FB.init({
-				appId: "308158023154919",
+				appId: '308158023154919',
 				autoLogAppEvents: !0,
 				xfbml: !0,
 				cookie: !0,
-				version: "v3.1"
+				version: 'v3.1'
 			}),
 			FB.login(function(t) {
 				console.log(t)
@@ -453,7 +457,7 @@ cc.Class({
 					var uid   = t.authResponse.userID
 					  , type  = s.LOGIN_FACEBOOK_TYPE
 					  , token = t.authResponse.accessToken;
-					self.loginSocial(uid, "", type, token)
+					self.loginSocial(uid, ', type, token)
 				} else
 					self.setAutoLogin(!1),
 			}))

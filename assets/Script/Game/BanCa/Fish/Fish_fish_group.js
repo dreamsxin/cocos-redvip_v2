@@ -10,7 +10,6 @@ cc.Class({
 			default: [],
 			type: fish,
 		},
-		// speed: 1,
 	},
 	init: function(RedT, data){
 		this.g           = data.g;
@@ -32,15 +31,17 @@ cc.Class({
 			this.animState.time = data.t;
 		}
 
-		this.fish.forEach(function(obj, i){
+		this.fish = this.node.children.map(function(obj, i){
+			obj = obj.getComponent(fish);
 			let check = data.f[i];
-			if (check !== void 0 && check.id !== void 0) {
+			if (!!check && check.id !== void 0) {
 				RedT.fish[check.id] = obj;
 				obj.init(RedT, check);
 				obj.inGroup = true;
 			}else{
 				obj.node.active = false;
 			}
+			return obj;
 		});
 	},
 	onFinish: function(){

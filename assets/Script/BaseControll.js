@@ -60,9 +60,8 @@ module.exports = {
 	_onSocketError: function(message) {
 	},
 	reconnect: function(){
-		//this.connect('127.0.0.1', '/websocket');
-		//this.connect('redvip.club', '/websocket');
-		this.connect('pro68.club', '/websocket');
+		this.connect('127.0.0.1', '/client');
+		//this.connect('pro68.club', '/client');
 	},
 	init: function(){
 		cc.view.setResizeCallback(function(){

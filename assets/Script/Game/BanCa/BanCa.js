@@ -96,6 +96,9 @@ cc.Class({
 		if (void 0 !== data.fishs){
 			this.fishsData(data.fishs);
 		}
+		if (void 0 !== data.round){
+			this.round();
+		}
 		if (void 0 !== data.scene){
 			this.scene(data.scene);
 		}
@@ -136,6 +139,17 @@ cc.Class({
 		if (void 0 !== data.log){
 			this.dialog.Fish_history.onData(data.log);
 		}
+	},
+	round: function(){
+		this.fish = {};
+		this.Game.nodeFish.destroyAllChildren();
+		let hailang = cc.instantiate(this.Game.ef_hailang);
+		hailang = hailang.getComponent(dragonBones.ArmatureDisplay);
+		this.Game.nodeFish.addChild(hailang.node);
+		hailang.playAnimation('hailang', 1);
+		hailang.on(dragonBones.EventObject.COMPLETE, function(){
+			this.node.destroy();
+		}, hailang);
 	},
 	otherEat: function(data){
 		let fish = this.Game.fish[data.id];
@@ -220,25 +234,27 @@ cc.Class({
 		}
 	},
 	fishData: function(data, fishs = null) {
-		if (void 0 !== data.g) {
-			var fish = cc.instantiate(this.Game['x'+data.g]);
-			fish = fish.getComponent('Fish_fish_group');
-			fish.init(this.Game, data);
-			this.Game.nodeFish.addChild(fish.node);
-		}else{
-			var fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
-			fish = fish.getComponent('Fish_fish');
-			fish.init(this.Game, data);
-			this.Game.fish[data.id] = fish;
-			this.Game.nodeFish.addChild(fish.node);
-		}
-		if (fishs && fishs.t !== void 0) {
-			fish.node.runAction(cc.sequence(cc.delayTime(fishs.t), cc.callFunc(function(){
-				fishs.c++;
-				if (fishs.c < fishs.f.length) {
-					this.fishData(fishs.f[fishs.c], fishs);
-				}
-			}, this)));
+		if (data) {
+			if (void 0 !== data.g) {
+				var fish = cc.instantiate(this.Game['x'+data.g]);
+				fish = fish.getComponent('Fish_fish_group');
+				fish.init(this.Game, data);
+				this.Game.nodeFish.addChild(fish.node);
+			}else{
+				var fish = cc.instantiate(this.Game.fishPrefab[data.f-1]);
+				fish = fish.getComponent('Fish_fish');
+				fish.init(this.Game, data);
+				this.Game.fish[data.id] = fish;
+				this.Game.nodeFish.addChild(fish.node);
+			}
+			if (fishs && fishs.t !== void 0) {
+				fish.node.runAction(cc.sequence(cc.delayTime(fishs.t), cc.callFunc(function(){
+					fishs.c++;
+					if (fishs.c < fishs.f.length) {
+						this.fishData(fishs.f[fishs.c], fishs);
+					}
+				}, this)));
+			}
 		}
 	},
 	fishsData: function(data) {
@@ -272,6 +288,10 @@ cc.Class({
 			let EF2 = cc.instantiate(this.Game.ef_bom);
 			EF2.position = position;
 			this.Game.nodeEF.addChild(EF2);
+			if (cc.sys.platform === 'android') {
+				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rung', 'play', '(I)V', 200);
+			}
+			this.Game.boxAnim.play('Rung2');
 		}else if (ef === 3) {
 			let Audio3 = cc.instantiate(this.audioReward3.node);
 			Audio3 = Audio3.getComponent(cc.AudioSource);
@@ -279,8 +299,12 @@ cc.Class({
 			this.Game.nodeAudio.addChild(Audio3.node);
 			Audio3.play();
 			let EF3 = cc.instantiate(this.Game.ef_gold_bom);
-			EF2.position = position;
+			EF3.position = position;
 			this.Game.nodeEF.addChild(EF3);
+			if (cc.sys.platform === 'android') {
+				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rung', 'play', '(I)V', 500);
+			}
+			this.Game.boxAnim.play('Rung1');
 		}
 	},
 	otherBullet: function(data){
@@ -362,6 +386,9 @@ cc.Class({
 			let h = {};
 			if (fish.g !== void 0) {
 				fish = fish.getComponent('Fish_fish_group');
+				if (!fish || !fish.animState || !fish.fish) {
+					return void 0;
+				}
 				h.g = fish.g;
 				h.a = fish.animState.name;
 				h.t = fish.animState.time;
@@ -369,10 +396,13 @@ cc.Class({
 					if (!!obj.node) {
 						return {id:obj.node.id, f:obj.node.fish};
 					}
-					return false;
+					return void 0;
 				});
 			}else{
 				fish = fish.getComponent('Fish_fish');
+				if (!fish || !fish.animState || !fish.node) {
+					return void 0;
+				}
 				h.id = fish.id;
 				h.a  = fish.animState.name;
 				h.t  = fish.animState.time;
@@ -383,6 +413,9 @@ cc.Class({
 
 		let bullets = this.Game.nodeDan.children.map(function(bulllet){
 			bulllet = bulllet.getComponent('Fish_bullet');
+			if(!bulllet){
+				return void 0;
+			}
 			return {a:bulllet.node.angle, x:bulllet.node.x, y:bulllet.node.y, type:bulllet.node.name, vx:bulllet.body.linearVelocity.x, vy:bulllet.body.linearVelocity.y};
 		});
 		cc.RedT.send({g:{fish:{getScene:{f:fishs, b:bullets, g:data.ghe}}}});

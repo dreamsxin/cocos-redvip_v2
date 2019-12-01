@@ -12,8 +12,10 @@ cc.Class({
 		suoMe:    cc.Node,
 		suoOther: cc.Node,
 		speed:    1,
+		define:   false,
 	},
 	init: function(obj, data){
+		this.define      = true;
 		this.RedT        = obj;
 		this.id          = data.id;
 		this.node.id     = data.id;
@@ -48,12 +50,10 @@ cc.Class({
 		if (this.node) {
 			this.clear();
 			this.node.destroy();
-			delete this.RedT;
 		}
 	},
 	onDelete: function(){
 		this.node.destroy();
-		delete this.RedT;
 	},
 	updateGroup: function() {
 		let group = 'fish';
@@ -109,8 +109,8 @@ cc.Class({
 		return this.RedT.node.convertToNodeSpaceAR(point);
 	},
 	getPoint: function(){
-		let width  = this.RedT.node.width/2;
-		let height = this.RedT.node.height/2;
+		let width  = (this.RedT.node.width/2)-15;
+		let height = (this.RedT.node.height/2)-15;
 
 		let headPoint = this.head.parent.convertToWorldSpaceAR(this.head.position);
 		let position  = this.RedT.node.convertToNodeSpaceAR(headPoint);
@@ -166,46 +166,54 @@ cc.Class({
 		ngam === true && (this.shadow.timeScale = this.fish.timeScale/0.4);
 	},
 	clear: function(){
-		delete this.RedT.fish[this.node.id];
-		if (!!this.player1) {
-			this.player1.isLock = false;
-			this.player1.fish   = null;
-			delete this.player1;
+		if (this.define) {
+			if (this.RedT !== void 0) {
+				delete this.RedT.fish[this.node.id];
+			}
+			if (!!this.player1) {
+				this.player1.isLock = false;
+				this.player1.fish   = null;
+				delete this.player1;
+			}
+			Object.entries(this.bullet1).forEach(function(bullet){
+				bullet[1].isLock = false;
+				bullet[1].updateGroup();
+				delete this.bullet1[bullet[0]];
+			}.bind(this));
+			if (!!this.player2) {
+				this.player2.isLock = false;
+				this.player2.fish   = null;
+				delete this.player2;
+			}
+			Object.entries(this.bullet2).forEach(function(bullet){
+				bullet[1].isLock = false;
+				bullet[1].updateGroup();
+				delete this.bullet2[bullet[0]];
+			}.bind(this));
+			if (!!this.player3) {
+				this.player3.isLock = false;
+				this.player3.fish   = null;
+				delete this.player3;
+			}
+			Object.entries(this.bullet3).forEach(function(bullet){
+				bullet[1].isLock = false;
+				bullet[1].updateGroup();
+				delete this.bullet3[bullet[0]];
+			}.bind(this));
+			if (!!this.player4) {
+				this.player4.isLock = false;
+				this.player4.fish   = null;
+				delete this.player4;
+			}
+			Object.entries(this.bullet4).forEach(function(bullet){
+				bullet[1].isLock = false;
+				bullet[1].updateGroup();
+				delete this.bullet4[bullet[0]];
+			}.bind(this));
 		}
-		Object.entries(this.bullet1).forEach(function(bullet){
-			bullet[1].isLock = false;
-			bullet[1].updateGroup();
-			delete this.bullet1[bullet[0]];
-		}.bind(this));
-		if (!!this.player2) {
-			this.player2.isLock = false;
-			this.player2.fish   = null;
-			delete this.player2;
-		}
-		Object.entries(this.bullet2).forEach(function(bullet){
-			bullet[1].isLock = false;
-			bullet[1].updateGroup();
-			delete this.bullet2[bullet[0]];
-		}.bind(this));
-		if (!!this.player3) {
-			this.player3.isLock = false;
-			this.player3.fish   = null;
-			delete this.player3;
-		}
-		Object.entries(this.bullet3).forEach(function(bullet){
-			bullet[1].isLock = false;
-			bullet[1].updateGroup();
-			delete this.bullet3[bullet[0]];
-		}.bind(this));
-		if (!!this.player4) {
-			this.player4.isLock = false;
-			this.player4.fish   = null;
-			delete this.player4;
-		}
-		Object.entries(this.bullet4).forEach(function(bullet){
-			bullet[1].isLock = false;
-			bullet[1].updateGroup();
-			delete this.bullet4[bullet[0]];
-		}.bind(this));
+	},
+	onDestroy:function(){
+		this.onFinish();
+		delete this.RedT;
 	},
 });

@@ -11,6 +11,7 @@ cc.Class({
 		nodeDan:   cc.Node,
 		nodeTouch: cc.Node,
 		nodeMenu:  cc.Node,
+		boxAnim:   cc.Animation,
 
 		nodeCoint: cc.Node,
 		nodeLabel: cc.Node,
@@ -52,11 +53,18 @@ cc.Class({
 		},
 		ef_bom:      cc.Prefab,
 		ef_gold_bom: cc.Prefab,
+		ef_hailang:  cc.Prefab,
 		fishPrefab: {
 			default: [],
 			type: cc.Prefab,
 		},
 		x2_2g6: cc.Prefab,
+		xr1:    cc.Prefab,
+		xr2:    cc.Prefab,
+		xr3:    cc.Prefab,
+		xr4:    cc.Prefab,
+		xr5:    cc.Prefab,
+		xr6:    cc.Prefab,
 	},
 	init: function(obj){
 		this.RedT      = obj;
@@ -136,13 +144,13 @@ cc.Class({
 
 		this.fish = {};
 
-		this.nodeFish.removeAllChildren();
-		this.nodeDan.removeAllChildren();
-		this.nodeCoint.removeAllChildren();
-		this.nodeLabel.removeAllChildren();
-		this.nodeEF.removeAllChildren();
-		this.nodeEVENT.removeAllChildren();
-		this.nodeAudio.removeAllChildren();
+		this.nodeFish.destroyAllChildren();
+		this.nodeDan.destroyAllChildren();
+		this.nodeCoint.destroyAllChildren();
+		this.nodeLabel.destroyAllChildren();
+		this.nodeEF.destroyAllChildren();
+		this.nodeEVENT.destroyAllChildren();
+		this.nodeAudio.destroyAllChildren();
 
 		this.setPoint = false;
 		this.bulletID = 0;

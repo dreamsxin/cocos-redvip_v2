@@ -117,7 +117,7 @@ cc.Class({
 	},
 	onFire: function(point = null){
 		let checkBet = this.RedT['typeBet'+this.RedT.regGame][this.typeBet];
-		checkBet = this.money - checkBet;
+		checkBet = this.money-checkBet;
 		if (checkBet < 0) {
 			this.RedT.dialog.showNap(true);
 			if (this.RedT.Game.isAuto) {
@@ -126,6 +126,8 @@ cc.Class({
 			this.RedT.Game.isFire = false;
 			this.isLock = false;
 		}else{
+			this.money = checkBet;
+			this.balans.string = helper.numberWithCommas(checkBet);
 			if ((this.RedT.Game.isAuto || this.RedT.Game.isFire || this.isLock) && !this.isFire) {
 				this.isFire = true;
 				let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
@@ -139,7 +141,7 @@ cc.Class({
 					position = point;
 				}else{
 					if (this.isLock && !!this.fish) {
-						lock     = true;
+						lock = true;
 						let getPoint = this.fish.getPoint();
 						position = getPoint.position;
 						this.changerAngle(position);
@@ -206,7 +208,6 @@ cc.Class({
 
 		this.RedT.Game.nodeDan.addChild(bullet.node);
 		this.sung.playAnimation('fire', 1);
-		console.log(bullet);
 	},
 	changerAngle: function(angle){
 		let positionUser = this.RedT.Game.node.convertToWorldSpaceAR(angle);
