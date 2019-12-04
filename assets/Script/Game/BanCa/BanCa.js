@@ -288,9 +288,11 @@ cc.Class({
 			let EF2 = cc.instantiate(this.Game.ef_bom);
 			EF2.position = position;
 			this.Game.nodeEF.addChild(EF2);
+			/**
 			if (cc.sys.platform === 'android') {
-				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rung', 'play', '(I)V', 200);
+				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rumble', 'once', '(I)V', 200);
 			}
+			*/
 			this.Game.boxAnim.play('Rung2');
 		}else if (ef === 3) {
 			let Audio3 = cc.instantiate(this.audioReward3.node);
@@ -301,9 +303,11 @@ cc.Class({
 			let EF3 = cc.instantiate(this.Game.ef_gold_bom);
 			EF3.position = position;
 			this.Game.nodeEF.addChild(EF3);
+			/**
 			if (cc.sys.platform === 'android') {
-				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rung', 'play', '(I)V', 500);
+				jsb.reflection.callStaticMethod('org/cocos2dx/javascript/Rumble', 'once', '(I)V', 500);
 			}
+			*/
 			this.Game.boxAnim.play('Rung1');
 		}
 	},

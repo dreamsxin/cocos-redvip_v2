@@ -16,20 +16,22 @@ cc.Class({
 		eventTaiXiu:    eventTaiXiu,
 	},
 	selectEvent: function(event) {
-		Promise.all(this.menu.children.map(function(menu){
-			if (menu.name == event.target.name) {
-				menu.children[0].active = true;
-			}else{
+		this.menu.children.forEach(function(menu){
+			if (menu.name === event.target.name) {
 				menu.children[0].active = false;
+				menu.children[1].active = true;
+			}else{
+				menu.children[0].active = true;
+				menu.children[1].active = false;
 			}
-		}));
-		Promise.all(this.content.children.map(function(content){
-			if (content.name == event.target.name) {
+		});
+		this.content.children.forEach(function(content){
+			if (content.name === event.target.name) {
 				content.active = true;
 			}else{
 				content.active = false;
 			}
-		}));
+		});
 	},
 	onData: function(data){
 		if (!!data.taixiu) {

@@ -14,7 +14,9 @@ cc.Class({
 	init: function(RedT, data){
 		this.g           = data.g;
 		this.node.g      = data.g;
-		this.node.zIndex = data.g;
+		if (data.z !== void 0) {
+			this.node.zIndex = data.z;
+		}
 
 		this.anim.on('finished', this.onFinish, this);
 		if (void 0 !== data.r) {

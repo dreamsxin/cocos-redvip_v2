@@ -35,13 +35,9 @@ cc.Class({
         logTom:     cc.Label,
         titleTime:  cc.Label,
         labelTime:  cc.Label,
-        labelHu:    cc.Label,
 
         Animation:  cc.Animation,
-
 		bet:     cc.Node,
-        nodeRed: cc.Node,
-		nodeXu:  cc.Node,
 		logs:    cc.Node,
 		prefabLogs: cc.Prefab,
 
@@ -72,9 +68,6 @@ cc.Class({
 		if (cc.RedT.IS_LOGIN) {
 			this.logLVHandling(cc.RedT.setting.baucua.logLV);
 			this.DataHandling(cc.RedT.setting.baucua.data);
-			if (this.red != cc.RedT.setting.baucua.red) {
-				this.changerCoint();
-			}
 			if (void 0 !== cc.RedT.setting.baucua.logLV) {
 				this.logLVHandling(cc.RedT.setting.baucua.logLV);
 			}
@@ -140,41 +133,35 @@ cc.Class({
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop(this.node);
 	},
-	changerCoint: function(){
-		this.red            = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		cc.RedT.setting.baucua.regOpen && this.DataHandling(cc.RedT.setting.baucua.data);
-		cc.RedT.setting.baucua.red = this.red;
-		//this.onGetHu();
-	},
 	intChangerBet: function(){
-		var self = this;
-		Promise.all(this.bet.children.map(function(obj){
+		this.bet.children.forEach(function(obj){
 			if (obj.name == cc.RedT.setting.baucua.bet) {
-				self.cuoc = obj.name;
-				obj.children[0].active = true;
+				this.cuoc = obj.name;
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		}.bind(this));
 	},
 	changerBet: function(event, bet){
 		this.cuoc = bet;
 		var target = event.target;
-		Promise.all(this.bet.children.map(function(obj){
+		this.bet.children.forEach(function(obj){
 			if (obj == target) {
-				obj.children[0].active = true;
+				obj.children[0].active = false;
+				obj.children[1].active = true;
 				obj.pauseSystemEvents();
 			}else{
-				obj.children[0].active = false;
+				obj.children[0].active = true;
+				obj.children[1].active = false;
 				obj.resumeSystemEvents();
 			}
-		}))
+		});
 		cc.RedT.setting.baucua.bet = target.name;
-		//this.onGetHu();
 	},
 	AnimationFinish: function(){
 		this.addLogs();
@@ -210,27 +197,25 @@ cc.Class({
 		this.notice.addChild(notice);
 	},
 	setDice: function(dices){
-		var self = this;
-		Promise.all(dices.map(function(dice, index){
-			self.dices[index].spriteFrame = self.iconLV[dice];
-		}))
+		dices.forEach(function(dice, index){
+			this.dices[index].spriteFrame = this.iconLV[dice];
+		}.bind(this));
 	},
 	addLogs: function(){
-		var self = this;
 		this.logs.removeAllChildren();
-		Promise.all(cc.RedT.setting.baucua.logs.map(function(log, index){
-			var node = cc.instantiate(self.prefabLogs)
+		cc.RedT.setting.baucua.logs.forEach(function(log, index){
+			var node = cc.instantiate(this.prefabLogs)
 			var nodeComponent = node.getComponent('BauCua_logMini');
-			Promise.all(nodeComponent.icon.map(function(sp, i){
-				sp.spriteFrame = self.iconMini[log[i]];
-			}))
+			nodeComponent.icon.map(function(sp, i){
+				sp.spriteFrame = this.iconMini[log[i]];
+			}.bind(this));
 			if(index == 0){
 				node.children[0].children[0].active = true;
 				node.children[1].children[0].active = true;
 				node.children[2].children[0].active = true;
 			}
-			self.logs.addChild(node);
-		}))
+			this.logs.addChild(node);
+		}.bind(this));
 	},
 	onData: function(data){
 		if (void 0 !== data.data) {
@@ -414,9 +399,9 @@ cc.Class({
 		}
 	},
 	unSelect: function(){
-		Promise.all(this.linhVat.map(function(linhVat){
+		this.linhVat.forEach(function(linhVat){
 			linhVat.unSelect();
-		}))
+		});
 	},
 	resetData: function(){
 		var data = Object.keys(cc.RedT.setting.baucua.data);
