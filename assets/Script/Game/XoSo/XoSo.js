@@ -56,6 +56,9 @@ cc.Class({
 		if (void 0 !== data.notice){
 			this.notice.show(data.notice);
 		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
 	},
 	XoSo: function(data){
 		if (void 0 !== data.notice) {

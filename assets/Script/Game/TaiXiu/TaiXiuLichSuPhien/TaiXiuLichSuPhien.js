@@ -41,14 +41,6 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		nodeChan: {
-			default: null,
-			type: cc.Node
-		},
-		nodeLe: {
-			default: null,
-			type: cc.Node
-		},
 		scrollViewLeft: {
 			default: null,
 			type: cc.ScrollView
@@ -65,40 +57,9 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		labelGame: {
-			default: null,
-			type: cc.Label
-		},
-		nodeRED: {
-			default: null,
-			type: cc.Node
-		},
-		nodeXU: {
-			default: null,
-			type: cc.Node
-		},
 	},
 	init(obj){
 		this.RedT = obj;
-	},
-	onChangerGame: function(){
-		this.labelGame.string = this.RedT.TX_Main.taixiu ? "Chẵn Lẻ" : "Tài Xỉu";
-		this.nodeTai.active   = this.RedT.TX_Main.taixiu;
-		this.nodeXiu.active   = this.RedT.TX_Main.taixiu;
-		this.nodeChan.active  = !this.RedT.TX_Main.taixiu;
-		this.nodeLe.active    = !this.RedT.TX_Main.taixiu;
-	},
-	onChangerCoint: function(){
-		this.nodeRED.active = !this.nodeRED.active;
-		this.nodeXU.active  = !this.nodeXU.active;
-	},
-	onChangerGameClick: function(){
-		this.RedT.TX_Main.onChangerGame();
-		this.getPhien(this.isPhien);
-	},
-	onChangerCointClick: function(){
-		this.RedT.TX_Main.onChangerRED();
-		this.getPhien(this.isPhien);
 	},
 	onGetPhienClick: function(event){
 		this.getPhien(event.target.phien);
@@ -139,22 +100,15 @@ cc.Class({
 			this.nodeNext.active = true;
 		}
 
-		Promise.all(this.dice.map(function(dice, index){
+		this.dice.forEach(function(dice, index){
 			var point = data.dice[index];
 			dice.spriteFrame = self.RedT.TX_Main.diceSF[point-1];
-		}));
-		if (this.RedT.TX_Main.taixiu) {
-			this.nodeTai.color = total > 10 ? cc.Color.WHITE : this.nodeTai.color.fromHEX('#ACACAC');
-			this.nodeXiu.color = total > 10 ? this.nodeTai.color.fromHEX('#ACACAC') : cc.Color.WHITE;
-			this.nodeTai.opacity = total > 10 ? 255 : 100;
-			this.nodeXiu.opacity = total > 10 ? 100 : 255;
-		}else{
-			this.nodeChan.color = total%2 ? this.nodeChan.color.fromHEX('#ACACAC') : cc.Color.WHITE;
-			this.nodeLe.color = total%2 ? cc.Color.WHITE : this.nodeChan.color.fromHEX('#ACACAC');
-			this.nodeChan.opacity = total%2 ? 100 : 255;
-			this.nodeLe.opacity = total%2 ? 255 : 100;
-		}
-		Promise.all(data.dataL.map(function(obj){
+		});
+
+		this.nodeTai.active = total > 10 ? true : false;
+		this.nodeXiu.active = total > 10 ? false : true;
+
+		data.dataL.forEach(function(obj){
 			var item = cc.instantiate(self.itemPrefab)
 			var itemComponent = item.getComponent('TaiXiuLichSuPhien_item')
 			itemComponent.time.string = helper.getStringHourByTime(obj.time)
@@ -162,8 +116,8 @@ cc.Class({
 			itemComponent.cuoc.string   = helper.numberWithCommas(obj.bet)
 			itemComponent.tralai.string = helper.numberWithCommas(obj.tralai)
 			self.scrollViewLeft.content.addChild(item)
-		}))
-		Promise.all(data.dataR.map(function(obj){
+		});
+		data.dataR.forEach(function(obj){
 			var item = cc.instantiate(self.itemPrefab)
 			var itemComponent = item.getComponent('TaiXiuLichSuPhien_item')
 			itemComponent.time.string = helper.getStringHourByTime(obj.time)
@@ -171,7 +125,7 @@ cc.Class({
 			itemComponent.cuoc.string   = helper.numberWithCommas(obj.bet)
 			itemComponent.tralai.string = helper.numberWithCommas(obj.tralai)
 			self.scrollViewRight.content.addChild(item)
-		}))
+		});
 	},
 	setNew: function(){
 		this.scrollViewLeft.content.destroyAllChildren();

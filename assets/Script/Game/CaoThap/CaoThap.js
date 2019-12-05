@@ -170,8 +170,9 @@ cc.Class({
 		this.isPlay            = cc.RedT.setting.caothap.isPlay = false;
 		this.buttonPlay.active = true;
 		this.bet.children.forEach(function(bet){
-			if(!bet.children[0].active)
+			if(bet.children[0].active){
 				bet.resumeSystemEvents();
+			}
 		});
 
 		this.buttonAnNon.color = cc.color(155,155,155);

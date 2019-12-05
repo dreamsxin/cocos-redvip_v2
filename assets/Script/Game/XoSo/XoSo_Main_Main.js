@@ -1,5 +1,5 @@
 
-var numberPad = require('Helper').numberPad;
+let numberPad = require('Helper').numberPad;
 
 cc.Class({
 	extends: cc.Component,
@@ -10,24 +10,23 @@ cc.Class({
 
 	update (dt) {
 		// Đích đến
-		var countDownDate = new Date();
+		let countDownDate = new Date();
 			countDownDate.setHours(18, 0, 0, 0, 0);
 		countDownDate = countDownDate.getTime();
 		// Lấy thời gian hiện tại
-		var now = new Date().getTime();
+		let now = new Date().getTime();
 	 
 		// Lấy số thời gian chênh lệch
-		var distance = countDownDate - now;
-	 
-		// Tính toán số ngày, giờ, phút, giây từ thời gian chênh lệch
-		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		let distance = countDownDate - now;
 	 
 		// HIển thị chuỗi thời gian trong thẻ p
 		if (distance < 0) {
 			this.time_mb.string = '';
 		}else{
+			// Tính toán số ngày, giờ, phút, giây từ thời gian chênh lệch
+			let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 			this.time_mb.string = numberPad(hours, 2) + ':' + numberPad(minutes, 2) + ':' + numberPad(seconds, 2);
 		}
 	},

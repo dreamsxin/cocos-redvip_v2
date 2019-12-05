@@ -8,19 +8,16 @@ cc.Class({
 	},
 
 	init() {
-		Promise.all(this.node.children.map(function(obj){
+		this.TheCao = this.node.children.map(function(obj){
 			return obj.getComponent('TheCao_item');
-		}))
-		.then(resulf => {
-			this.TheCao = resulf;
 		});
 	},
 	onEnable: function () {
-        this.node.runAction(cc.RedT.inGame.dialog.actionShow);
-    },
-    onDisable: function () {
-        cc.RedT.inGame.dialog.resetSizeDialog(this.node);
-    },
+		this.node.runAction(cc.RedT.inGame.dialog.actionShow);
+	},
+	onDisable: function () {
+		cc.RedT.inGame.dialog.resetSizeDialog(this.node);
+	},
 	onData: function(data){
 		this.setData(data);
 		cc.RedT.inGame.loading.active = false;
@@ -36,9 +33,9 @@ cc.Class({
 		cc.RedT.send({user:{history:{the_cao: id}}});
 	},
 	setData: function(data){
-		Promise.all(this.TheCao.map(function(TheCao, index){
+		this.TheCao.forEach(function(TheCao, index){
 			var info = data[index];
-			if (void 0 !== info) {
+			if (void 0 !== info){
 				TheCao.node.active = true;
 				TheCao.NhaMang.string = info.nhaMang;
 				TheCao.MenhGia.string = Helper.numberWithCommas(info.menhGia);
@@ -48,6 +45,6 @@ cc.Class({
 			}else{
 				TheCao.node.active = false;
 			}
-		}))
+		});
 	},
 });

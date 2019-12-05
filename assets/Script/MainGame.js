@@ -186,6 +186,9 @@ cc.Class({
 		if (void 0 !== data.event) {
 			this.dialog && this.dialog.DEvent.onData(data.event);
 		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
 		if (!!data.toGame) {
 			this.MenuRoom.onData(data.toGame);
 		}

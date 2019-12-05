@@ -21,6 +21,8 @@ var MegaJ_history     = require('MegaJ_history');
 var MegaJ_top         = require('MegaJ_top');
 var TaiXiuTop         = require('TaiXiuTop');
 
+var VipPoint          = require('dialog_VipPoint');
+
 cc.Class({
 	extends: cc.Component,
 
@@ -45,6 +47,7 @@ cc.Class({
 		MegaJ_top:         MegaJ_top,
 
 		HuongDan:          HuongDan,
+		VipPoint:          VipPoint,
 	},
 
 	init: function(obj) {
@@ -173,10 +176,13 @@ cc.Class({
 		this.node.active = this.MegaJ_top.node.active = true;
 		this.objShow     = this.MegaJ_top.node;
 	},
-
 	showHuongDan: function(e, name){
 		this.node.active = this.HuongDan.node.active = true;
 		this.objShow     = this.HuongDan.node;
 		this.HuongDan.select(name);
+	},
+	showVipPoint: function(e){
+		this.node.active = this.VipPoint.node.active = true;
+		this.objShow     = this.VipPoint.node;
 	},
 });

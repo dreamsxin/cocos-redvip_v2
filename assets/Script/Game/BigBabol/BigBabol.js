@@ -133,7 +133,7 @@ cc.Class({
 		this.buttonSpin.resumeSystemEvents();
 		this.buttonCoint.resumeSystemEvents();
 		this.bet.children.forEach(function(bet){
-			if(!bet.children[0].active) bet.resumeSystemEvents();
+			if(bet.children[0].active) bet.resumeSystemEvents();
 		});
 	},
 	onClickSpin: function(){
