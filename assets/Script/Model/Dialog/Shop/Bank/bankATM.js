@@ -12,7 +12,9 @@ cc.Class({
 		moreBank:       cc.Node,
 		contentATMBank: cc.Node,
 		inputTien:      cc.EditBox,
-		loadList: false,
+		editOTP:        cc.EditBox,
+		loadList:       false,
+		typeOTP:        '',
 	},
 	onEnable: function () {
 		this.loadList === false && this.getList();
@@ -52,14 +54,23 @@ cc.Class({
 		value = helper.numberWithCommas(helper.getOnlyNumberInString(value));
 		this.inputTien.string = value == 0 ? '' : value;
 	},
+	changerTypeOTP: function(e){
+		this.typeOTP = e.node.name;
+	},
+	onClickOTP: function(){
+		cc.RedT.send({otp:{type:this.typeOTP}});
+	},
 	onClickTiep: function(){
 		let amount = helper.getOnlyNumberInString(this.inputTien.string)>>0;
 		if (amount < 50000) {
 			cc.RedT.inGame.notice.show({title:'LỖI', text:'Nạp tối thiểu 50.000'});
 		}else if (this.ATMID.length === 0) {
 			cc.RedT.inGame.notice.show({title:'LỖI', text:'Vui lòng chọn thẻ ATM thuộc Ngân Hàng bạn muốn nạp.'});
+		}else if(this.editOTP.string.length < 4){
+			cc.RedT.inGame.notice.show({title:'LỖI', text:'Mã OTP không hợp lệ.'});
 		}else{
-			cc.RedT.send({'shop':{'bank':{'atm':{'select':{'id':this.ATMID, 'amount':amount}}}}});
+			cc.RedT.inGame.bgLoading.onData({active:true, text:'Đang gửi yêu cầu...'});
+			cc.RedT.send({'shop':{'bank':{'atm':{'select':{'id':this.ATMID, 'name':this.labelATMBank.string, 'amount':amount, 'otp':this.editOTP.string}}}}});
 		}
 	},
 });

@@ -233,7 +233,7 @@
     "_mute": false,
     "_loop": false,
     "playOnLoad": false,
-    "preload": false,
+    "preload": true,
     "_id": "63sJjCXmBHP76jR32mLUFC"
   },
   {
@@ -309,7 +309,7 @@
     "_mute": false,
     "_loop": true,
     "playOnLoad": false,
-    "preload": false,
+    "preload": true,
     "_id": "49G3ZWHNdGkZ4alQ4qO0DT"
   },
   {
@@ -350,7 +350,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 525.7190612109135
+      "z": 259.8076211353316
     },
     "_scale": {
       "__type__": "cc.Vec3",

@@ -195,6 +195,9 @@ cc.Class({
 		if (!!data.message) {
 			this.dialog.iMessage.onData(data.message);
 		}
+		if (!!data.url) {
+			cc.sys.openURL(data.url);
+		}
 	},
 	captcha: function(data){
 		switch(data.name){
