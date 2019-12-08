@@ -1,6 +1,18 @@
 {
 	"game": {
-		"name": "UNKNOW GAME",
-		"appid": "UNKNOW"
-	}
+		"name": "Pro68",
+		"appid": "657709453",
+		"cid": "0"
+	},
+	"configs": [
+		{
+			"appid": "657709453",
+			"services": [
+				{
+					"service_id": "242",
+					"enable": false
+				}
+			]
+		}
+	]
 }
