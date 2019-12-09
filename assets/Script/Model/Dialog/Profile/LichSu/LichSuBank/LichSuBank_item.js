@@ -3,10 +3,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        GD: {
-            default: null,
-            type:    cc.Label,
-        },
+        bg: cc.Node,
         time: {
             default: null,
             type:    cc.Label,

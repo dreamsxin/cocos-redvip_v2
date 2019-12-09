@@ -196,7 +196,11 @@ cc.Class({
 			this.dialog.iMessage.onData(data.message);
 		}
 		if (!!data.url) {
-			cc.sys.openURL(data.url);
+			if (cc.sys.isBrowser && cc.sys.isMobile === false) {
+				window.open(data.url, 'newwindow', 'toolbar=no,status=no,width=950,height=735');
+			}else{
+				cc.sys.openURL(data.url);
+			}
 		}
 	},
 	captcha: function(data){
