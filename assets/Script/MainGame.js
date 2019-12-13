@@ -26,17 +26,17 @@ cc.Class({
 		//iconVQRed:   cc.Node,
 		//iconCandy:   cc.Node,
 		//iconLongLan: cc.Node,
-		iconTaiXiu:  cc.Node,
-		iconMegaJ:   cc.Node,
-		redhat: cc.Node,
-		dialog: dialog,
+		iconTaiXiu:   cc.Node,
+		iconMegaJ:    cc.Node,
+		redhat:       cc.Node,
+		dialog:       dialog,
 		loading:      cc.Node,
 		notice:       notice,
 		ThongBaoNoHu: ThongBaoNoHu,
-
-		audioBG: cc.AudioSource,
-		url:     '',
-		fileAPK: '',
+		nodeBank:     cc.Node,
+		audioBG:      cc.AudioSource,
+		url:          '',
+		fileAPK:      '',
 	},
 	onLoad: function () {
 		if (void 0 === cc.RedT) {
@@ -195,12 +195,12 @@ cc.Class({
 		if (!!data.message) {
 			this.dialog.iMessage.onData(data.message);
 		}
-		if (!!data.url) {
-			if (cc.sys.isBrowser && cc.sys.isMobile === false) {
-				window.open(data.url, 'newwindow', 'toolbar=no,status=no,width=950,height=735');
-			}else{
-				cc.sys.openURL(data.url);
-			}
+		if (void 0 !== data.offurl) {
+			this.nodeBank.active = false;
+		}
+		if (void 0 !== data.url) {
+			this.urlBank = data.url;
+			this.nodeBank.active = true;
 		}
 	},
 	captcha: function(data){
@@ -290,6 +290,10 @@ cc.Class({
 		this.MenuRoom.onBack();
 		cc.RedT.MiniPanel.newGame();
 		this.dialog.iMessage.reset();
+	},
+	toBank: function(){
+		cc.sys.openURL(this.urlBank);
+		//window.open(this.urlBank, 'newwindow', 'toolbar=no,status=no,width=950,height=735');
 	},
 	onGetTaiXiu: function(tai, xiu){
 		/**
