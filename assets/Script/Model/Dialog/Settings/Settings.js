@@ -37,9 +37,9 @@ cc.Class({
 	OnChangerNhacNen: function() {
 		cc.RedT.setSoundBackground(this.NhacNen.isChecked);
 		if (this.NhacNen.isChecked) {
-			cc.RedT.inGame.playMusic();
+			cc.RedT.audio.bg.play();
 		}else{
-			cc.RedT.inGame.pauseMusic();
+			cc.RedT.audio.bg.stop();
 		}
 	},
 	OnChangerNhacGame: function() {

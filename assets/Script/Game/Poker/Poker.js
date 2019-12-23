@@ -31,6 +31,9 @@ cc.Class({
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
+		cc.RedT.audio.bg.pause();
+		//cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
+
 		//this.dialog.init();
 
 		cc.RedT.send({scene:"poker", g:{poker:{ingame:true}}});

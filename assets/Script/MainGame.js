@@ -34,7 +34,6 @@ cc.Class({
 		notice:       notice,
 		ThongBaoNoHu: ThongBaoNoHu,
 		nodeBank:     cc.Node,
-		audioBG:      cc.AudioSource,
 		url:          '',
 		fileAPK:      '',
 	},
@@ -43,6 +42,10 @@ cc.Class({
 			cc.RedT = baseControll;
 			cc.RedT.init();
 			cc.RedT.audio = this.PrefabT[0].data.getComponent('MainAudio');
+			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
+		}else{
+			cc.RedT.audio.bg.pause();
+			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
 		}
 		cc.RedT.reconnect();
 
@@ -77,7 +80,7 @@ cc.Class({
 		var check = localStorage.getItem('SOUND_BACKGROUND');
 		if(check == null || cc.RedT.isSoundBackground()){
 			cc.RedT.setSoundBackground(true);
-			this.playMusic();
+			cc.RedT.audio.bg.play();
 		}
 
 		if (cc.sys.isBrowser) {
@@ -399,12 +402,6 @@ cc.Class({
 			}
 		}
 		*/
-	},
-	playMusic: function() {
-		this.audioBG.play();
-	},
-	pauseMusic: function() {
-		this.audioBG.pause();
 	},
 	resumeMusic: function() {
 		//cc.audioEngine.resumeMusic();

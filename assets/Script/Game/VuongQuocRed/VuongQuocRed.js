@@ -10,9 +10,7 @@ cc.Class({
 	extends: cc.Component,
 	properties: {
 		gameBonus: gameBonus,
-		audioBG:      cc.AudioSource,
-		audioClick:   cc.AudioSource,
-
+		audioClick: cc.AudioSource,
 		redhat: {
 			default: null,
 			type: cc.Node
@@ -77,9 +75,12 @@ cc.Class({
 	},
 	onLoad () {
 		cc.RedT.inGame = this;
-		var MiniPanel = cc.instantiate(this.MiniPanel);
+		let MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
+
+		cc.RedT.audio.bg.pause();
+		cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
 
 		this.BigWin.on('finished', this.BigWinFinish, this);
 		this.BigWin.on('play',     this.BigWinPlay,   this);
@@ -89,21 +90,21 @@ cc.Class({
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
 		this.EF_Free.on('finished',  this.EF_FreeFinish,  this);
 
-		var self = this;
+		let self = this;
 		this.gameBonus.init(this);
 		this.Line.init(this);
 		this.dialog.init();
 
-		Promise.all(this.reels.map(function(reel) {
+		this.reels.forEach(function(reel) {
 			reel.init(self);
-		}));
+		});
 		cc.RedT.send({scene:"vq_red"});
 		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);
 		this.speed = 400;
 
 		if(cc.RedT.isSoundBackground()){
 			cc.RedT.setSoundBackground(true);
-			this.playMusic();
+			cc.RedT.audio.bg.play();
 		}
 	},
 	BigWinPlay: function(){
@@ -448,10 +449,4 @@ cc.Class({
 		cc.RedT.audio.playClick();
 		this.bangThuong.active = !this.bangThuong.active;
 	},
-	playMusic: function() {
-        this.audioBG.play();
-    },
-    pauseMusic: function() {
-        this.audioBG.pause();
-    },
 });

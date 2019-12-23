@@ -10,7 +10,7 @@ cc.Class({
 	},
 	init: function() {
 		if (cc.RedT.isSoundBackground()) {
-			cc.RedT.inGame.NhacNen.play();
+			cc.RedT.audio.bg.play();
 			this.setNhacNen(294);
 		}else{
 			this.setNhacNen(0);
@@ -60,17 +60,17 @@ cc.Class({
 		this.maskNhacNen.width = point;
 		this.touchNhacNen.x = point;
 		let volume = point/294;
-		cc.RedT.inGame.audioHall.volume = volume;
-		cc.RedT.inGame.audioGame1.volume = volume;
-		cc.RedT.inGame.audioGame2.volume = volume;
+		cc.RedT.audio.fishHall.volume = volume;
+		cc.RedT.audio.fishBG1.volume = volume;
+		cc.RedT.audio.fishBG2.volume = volume;
 		cc.RedT.inGame.volumeNhacNen = volume;
 		if (volume === 0) {
-			cc.RedT.inGame.NhacNen.stop();
+			cc.RedT.audio.bg.stop();
 			cc.RedT.setSoundBackground(false);
 		}else{
-			cc.RedT.inGame.NhacNen.resume();
+			cc.RedT.audio.bg.resume();
 			cc.RedT.setSoundBackground(true);
-			if (cc.RedT.inGame.NhacNen.isPlaying === false) cc.RedT.inGame.NhacNen.play();
+			if (cc.RedT.audio.bg.isPlaying === false) cc.RedT.audio.bg.play();
 		}
 	},
 

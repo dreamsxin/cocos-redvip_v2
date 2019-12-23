@@ -4,7 +4,6 @@ cc.Class({
 
     properties: {
     	menu: cc.Node,
-    	head: cc.Node,
     	rooms: {
     		default: [],
     		type: cc.Sprite,
@@ -21,39 +20,25 @@ cc.Class({
         red: true,
     },
     onBack: function(){
-    	this.menu.active = true;
-    	this.node.active = false;
+    	this.node.stopAllActions();
+    	let x = -(cc.RedT.inGame.node.width+cc.RedT.inGame.node.width/2);
+		this.node.runAction(cc.sequence(cc.moveTo(0.3, cc.v2(x, 0)), cc.callFunc(function(){
+    		this.node.x = -x;
+    		this.node.active = false;
+		}, this)));
     },
-    selectCoint: function(event, select) {
-		if (select == "red") {
-    		this.red = true;
-    		this.changerRoom(true);
-		}else{
-			this.red = false;
-    		this.changerRoom(false);
-		}
-		Promise.all(this.head.children.map(function(head){
-			if (head.name == select) {
-				head.children[0].active = true;
-				head.children[1].color  = cc.Color.BLACK;
-			}else{
-				head.children[0].active = false;
-				head.children[1].color  = cc.Color.WHITE;
-			}
-		}));
-	},
 	openGame: function(game){
 		this.game = game;
+		this.node.stopAllActions();
 		this.title.string = game.title;
-		this.selectCoint(null, "red");
-		this.menu.active = false;
     	this.node.active = true;
+		this.node.runAction(cc.moveTo(0.3, cc.v2(0, 0)));
 	},
 	changerRoom: function(red){
 		var self = this;
 		if (this.game.table2) {
 			if (red) {
-				Promise.all(this.rooms.map(function(room, index){
+				this.rooms.forEach(function(room, index){
 					if (index < 4) {
 						room.spriteFrame = self.table2[3];
 					}else if (index < 8) {
@@ -61,9 +46,9 @@ cc.Class({
 					}else{
 						room.spriteFrame = self.table2[5];
 					}
-				}));
+				});
 			}else{
-				Promise.all(this.rooms.map(function(room, index){
+				this.rooms.forEach(function(room, index){
 					if (index < 4) {
 						room.spriteFrame = self.table2[0];
 					}else if (index < 8) {
@@ -71,11 +56,11 @@ cc.Class({
 					}else{
 						room.spriteFrame = self.table2[2];
 					}
-				}));
+				});
 			}
 		}else{
 			if (red) {
-				Promise.all(this.rooms.map(function(room, index){
+				this.rooms.forEach(function(room, index){
 					if (index < 4) {
 						room.spriteFrame = self.table1[3];
 					}else if (index < 8) {
@@ -83,9 +68,9 @@ cc.Class({
 					}else{
 						room.spriteFrame = self.table1[5];
 					}
-				}));
+				});
 			}else{
-				Promise.all(this.rooms.map(function(room, index){
+				this.rooms.forEach(function(room, index){
 					if (index < 4) {
 						room.spriteFrame = self.table1[0];
 					}else if (index < 8) {
@@ -93,7 +78,7 @@ cc.Class({
 					}else{
 						room.spriteFrame = self.table1[2];
 					}
-				}));
+				});
 			}
 		}
 	},

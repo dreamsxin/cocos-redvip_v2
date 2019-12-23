@@ -11,7 +11,6 @@ cc.Class({
 
 	properties: {
 		audioClick: cc.AudioSource,
-		audioHall:  cc.AudioSource,
 		audioGame1: cc.AudioSource,
 		audioGame2: cc.AudioSource,
 		audioPhao:  cc.AudioSource,
@@ -62,7 +61,8 @@ cc.Class({
 		this.volumeNhacNen = 0;
 		this.volumeHieuUng = 0;
 
-		this.NhacNen = this.audioHall;
+		cc.RedT.audio.bg.pause();
+		cc.RedT.audio.bg = cc.RedT.audio.fishHall;
 
 		cc.RedT.inGame = this;
 		cc.RedT.send({scene:'bc'});

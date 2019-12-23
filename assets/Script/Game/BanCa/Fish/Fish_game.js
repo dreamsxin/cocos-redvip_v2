@@ -113,16 +113,16 @@ cc.Class({
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.nodeTouch.on(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		BrowserUtil.showCursorFish();
-		this.RedT.NhacNen.stop();
-		this.RedT.NhacNen = this.RedT.audioGame1;
-		this.RedT.NhacNen.volume = this.RedT.volumeNhacNen;
-		this.RedT.volumeNhacNen !== 0 && this.RedT.NhacNen.play();
+		cc.RedT.audio.bg.stop();
+		cc.RedT.audio.bg = cc.RedT.audio.fishBG1;
+		cc.RedT.audio.bg.volume = this.RedT.volumeNhacNen;
+		this.RedT.volumeNhacNen !== 0 && cc.RedT.audio.bg.play();
 	},
 	onDisable: function() {
-		this.RedT.NhacNen.stop();
-		this.RedT.NhacNen = this.RedT.audioHall;
-		this.RedT.NhacNen.volume = this.RedT.volumeNhacNen;
-		this.RedT.volumeNhacNen !== 0 && this.RedT.NhacNen.play();
+		cc.RedT.audio.bg.stop();
+		cc.RedT.audio.bg = cc.RedT.audio.fishHall;
+		cc.RedT.audio.bg.volume = this.RedT.volumeNhacNen;
+		this.RedT.volumeNhacNen !== 0 && cc.RedT.audio.bg.play();
 		BrowserUtil.showCursorAutoForce();
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
 		this.nodeTouch.off(cc.Node.EventType.TOUCH_MOVE,   this.eventMove,  this);

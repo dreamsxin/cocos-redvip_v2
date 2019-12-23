@@ -76,8 +76,8 @@ cc.Class({
 	toggle: function(){
 		cc.RedT.audio.playClick();
 		if (!this.toggleRuning){
-			this.toggleRuning = true
-			this.list.stopAllActions()
+			this.toggleRuning = true;
+			this.list.stopAllActions();
 			if (this.list.active) {
 				cc.RedT.setting.popupMini.open = false;
 				if (this.nodeTime.active) {
@@ -87,17 +87,17 @@ cc.Class({
 				}
 				this.list.runAction(cc.sequence(cc.spawn(cc.scaleTo(0.3, 0.2).easing(cc.easeBackIn(3.0)), cc.rotateTo(0.3, -720)), cc.callFunc(function(){
 					this.toggleRuning = this.list.active = false
-				}, this)))
+				}, this)));
 			}else{
-				this.list.active = cc.RedT.setting.popupMini.open = true
+				this.list.active = cc.RedT.setting.popupMini.open = true;
 				if (this.nodeTime.active) {
-					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(-155.7, 43)))
+					this.nodeTime.runAction(cc.moveTo(0.3, cc.v2(-155.7, 43)));
 				}else {
 					this.nodeTime.position = cc.v2(-155.7, 43);
 				}
 				this.list.runAction(cc.sequence(cc.spawn(cc.scaleTo(0.3, 1).easing(cc.easeBackOut(3.0)), cc.rotateTo(0.3, 720)), cc.callFunc(function(){
-					this.toggleRuning = false
-				}, this)))
+					this.toggleRuning = false;
+				}, this)));
 			}
 		}
 	},

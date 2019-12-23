@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "7f81dc4b-f788-430b-86bf-29e1629fc9a5",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "gswzp_hall_coin_fb4ff908f03643fa7f05205733d15536": {
+      "ver": "1.0.4",
+      "uuid": "abd2ab09-9417-4e09-9f8f-3e35f4b4ab39",
+      "rawTextureUuid": "7f81dc4b-f788-430b-86bf-29e1629fc9a5",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 166,
+      "height": 30,
+      "rawWidth": 166,
+      "rawHeight": 30,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

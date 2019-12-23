@@ -12,8 +12,6 @@ cc.Class({
 	properties: {
 		gameBonus: gameBonus,
 
-		audioBG:  cc.AudioSource,
-
 		audioClickSpin: {
 			default: null,
 			type: cc.AudioClip
@@ -108,6 +106,9 @@ cc.Class({
 		var self = this;
 		this.Line.init(this);
 
+		cc.RedT.audio.bg.pause();
+		cc.RedT.audio.bg = cc.RedT.audio.bgSlot2;
+
 		this.BigWin.on('finished',  this.BigWinFinish, this);
 		this.BigWin.on('play',      this.BigWinPlay,   this);
 		this.EF_Free.on('finished', this.EF_FreeFinish,  this);
@@ -128,7 +129,7 @@ cc.Class({
 		this.speed = 400;
 
 		if(cc.RedT.isSoundBackground()){
-			this.playMusic();
+			cc.RedT.audio.bg.play();
             this.audioIcon.spriteFrame = this.audioIcons[1];
     	}else{
 			this.audioIcon.spriteFrame = this.audioIcons[0];
@@ -485,22 +486,16 @@ cc.Class({
 			});
 		}
 	},
-	playMusic: function() {
-        this.audioBG.play();
-    },
-    pauseMusic: function() {
-        this.audioBG.pause();
-    },
     onSetAudio: function(){
     	if(cc.RedT.isSoundBackground()){
         	cc.RedT.setSoundBackground(false);
-            this.pauseMusic();
+            cc.RedT.audio.bg.pause();
             cc.RedT.IS_SOUND = false;
             cc.RedT.setSoundGame(false);
 			this.audioIcon.spriteFrame = this.audioIcons[0];
     	}else{
     		cc.RedT.setSoundBackground(true);
-            this.playMusic();
+            cc.RedT.audio.bg.play();
             cc.RedT.IS_SOUND = true;
             cc.RedT.setSoundGame(true);
             this.audioIcon.spriteFrame = this.audioIcons[1];

@@ -38,6 +38,32 @@ cc.Class({
             default: null,
             type: cc.AudioClip
         },
+
+        mainBackground:   {
+            default: null,
+            type: cc.AudioSource
+        },
+        fishHall:   {
+            default: null,
+            type: cc.AudioSource
+        },
+        fishBG1:   {
+            default: null,
+            type: cc.AudioSource
+        },
+        fishBG2:   {
+            default: null,
+            type: cc.AudioSource
+        },
+
+        bgSlot1:   {
+            default: null,
+            type: cc.AudioSource
+        },
+        bgSlot2:   {
+            default: null,
+            type: cc.AudioSource
+        },
     },
     _playSFX: function(clip) {
         if (cc.RedT.IS_SOUND){
