@@ -11,6 +11,13 @@ cc.Class({
 		card:     cc.Node,
 		Progress: cc.ProgressBar,
 		Avatar:   cc.Sprite,
+		item:     {
+			default: [],
+			type: cc.Sprite,
+		},
+	},
+	init: function(){
+		// 	
 	},
 	setInfo: function(data){
 		if (!!data) {

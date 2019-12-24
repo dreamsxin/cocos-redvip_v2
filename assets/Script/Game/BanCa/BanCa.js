@@ -11,8 +11,6 @@ cc.Class({
 
 	properties: {
 		audioClick: cc.AudioSource,
-		audioGame1: cc.AudioSource,
-		audioGame2: cc.AudioSource,
 		audioPhao:  cc.AudioSource,
 		audioFire:  cc.AudioSource,
 

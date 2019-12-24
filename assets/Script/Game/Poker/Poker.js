@@ -27,7 +27,7 @@ cc.Class({
 
 	onLoad () {
 		cc.RedT.inGame = this;
-		var MiniPanel = cc.instantiate(this.MiniPanel);
+		let MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
@@ -36,7 +36,7 @@ cc.Class({
 
 		//this.dialog.init();
 
-		cc.RedT.send({scene:"poker", g:{poker:{ingame:true}}});
+		cc.RedT.send({scene:'poker', g:{poker:{ingame:true}}});
 
 		/**
 		if(cc.RedT.isSoundBackground()){
@@ -78,10 +78,9 @@ cc.Class({
 		}
 	},
 	gameStart: function(data){
-		var self = this;
-		Promise.all(data.map(function(player){
-			self.player[player.ghe].setInfo(player.data);
-		}))
+		data.forEach(function(player){
+			this.player[player.ghe].setInfo(player.data);
+		}.bind(this));
 	},
 	game: function(data){
 		if (!!data.start) {
@@ -89,24 +88,27 @@ cc.Class({
 		}
 	},
 	infoGhe: function(info){
-		var self = this;
-		var player = {};
-		var newGhe = [];
+		let self = this;
+		let player = {};
+		let newGhe = [];
 		if (this.meMap != 1) {
-			var map = this.meMap-1;
+			let map = this.meMap-1;
 			newGhe = [...info.slice(map), ...info.slice(0, map)];
 		}else{
 			newGhe = info;
 		}
 		Promise.all(newGhe.map(function(obj, index){
-			var item = self.player[index];
+			let item = self.player[index];
 			player[obj.ghe] = item;
 			item.setInfo(obj.data);
 			return void 0;
 		}))
 		.then(result => {
 			this.player = player;
-		})
+			self   = null;
+			player = null;
+			newGhe = null;
+		});
 	},
 	infoRoom: function(data){
 		this.labelRoom.string = data.id;
