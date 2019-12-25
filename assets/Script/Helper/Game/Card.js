@@ -66,40 +66,21 @@ cc.Class({
         red: false,
     },
     init: function() {
-    	var self = this;
-    	this.card = [[],[],[],[],[],[],[],[],[],[],[],[],[]];
-    	Promise.all(this.card.map(function(arr, index){
-    		if (index === 0) {
-    			return self.card1
-    		}else if (index === 1) {
-    			return self.card2
-    		}else if (index === 2) {
-    			return self.card3
-    		}else if (index === 3) {
-    			return self.card4
-    		}else if (index === 4) {
-    			return self.card5
-    		}else if (index === 5) {
-    			return self.card6
-    		}else if (index === 6) {
-    			return self.card7
-    		}else if (index === 7) {
-    			return self.card8
-    		}else if (index === 8) {
-    			return self.card9
-    		}else if (index === 9) {
-    			return self.card10
-    		}else if (index === 10) {
-    			return self.card11
-    		}else if (index === 11) {
-    			return self.card12
-    		}else if (index === 12) {
-    			return self.card13
-    		}
-    	}))
-    	.then(result => {
-    		this.card = result
-    	})
+    	this.card = [
+            this.card1,
+            this.card2,
+            this.card3,
+            this.card4,
+            this.card5,
+            this.card6,
+            this.card7,
+            this.card8,
+            this.card9,
+            this.card10,
+            this.card11,
+            this.card12,
+            this.card13
+        ];
     },
     config: function(){
         if (void 0 === cc.RedT.util.card) {

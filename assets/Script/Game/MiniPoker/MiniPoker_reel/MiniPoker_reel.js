@@ -22,13 +22,13 @@ cc.Class({
 	},
 	random: function(newG = false){
 		var self = this;
-		Promise.all(this.card.map(function(obj, index){
+		this.card.forEach(function(obj, index){
 			if (newG) {
 				obj.spriteFrame = cc.RedT.util.card.random();
 			}else if (index !== 0 && index !== 25){
 				obj.spriteFrame = cc.RedT.util.card.random();
 			}
-		}))
+		});
 	},
 	spin: function(index){
 		this.node.stopAllActions();

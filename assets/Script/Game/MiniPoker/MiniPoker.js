@@ -134,8 +134,9 @@ cc.Class({
 		this.buttonStop.active = this.isSpin ? (this.isAuto ? true : false) : false;
 		this.buttonSpin.resumeSystemEvents();
 		this.bet.children.forEach(function(bet){
-			let oT = bet.children[0].active;
-			if(!oT) bet.resumeSystemEvents();
+			if(bet.children[0].active){
+				bet.resumeSystemEvents();
+			}
     	});
 	},
 	spin: function(event){
@@ -194,11 +195,11 @@ cc.Class({
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
+				console.log(data);
 				this.buttonStop.active = this.isAuto ? true : false;
 				this.win   = data.win;
 				this.winT  = data.text;
 				this.winC  = data.code;
-				this.winTg = void 0 !== data.thuong ? data.thuong : 0;
 				data.card.forEach(function(card, index){
 					self.reels[index].card[0].spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
 				});
@@ -232,7 +233,7 @@ cc.Class({
 		this.RedT.setTop(this.node);
 	},
 	hieuUng: function(){
-    	if (!!this.winC && this.winC > 0) {
+    	if (this.win > 0) {
     		if (this.winC === 2) {
     			// Nổ Hũ
     			if (this.isAuto == true) {
@@ -291,28 +292,14 @@ cc.Class({
 					this.hieuUng();
 				}, this)));
     			this.addNotice(this.winT);
+    			this.win = 0;
     		}
-    		if (this.winTg > 0) {
-				var thuong = new cc.Node;
-				thuong.addComponent(cc.Label);
-				thuong = thuong.getComponent(cc.Label);
-				thuong.string = helper.numberWithCommas(this.winTg);
-				thuong.font = cc.RedT.util.fontCong;
-				thuong.lineHeight = 130;
-				thuong.fontSize   = 23;
-				thuong.node.position = cc.v2(0,-28);
-				this.notice.addChild(thuong.node);
-				thuong.node.runAction(cc.sequence(cc.moveTo(this.isSpeed ? 2 : 3.5, cc.v2(0, 112)), cc.callFunc(function(){
-					this.node.destroy()
-				}, thuong)));
-			}
     		this.winC = 0;
     	}else{
     		if (this.isAuto) {
     			this.timeOut = setTimeout(function(){
 					this.onGetSpin();
-				}
-				.bind(this), this.isSpeed ? 250 : 1000);
+				}.bind(this), this.isSpeed ? 250 : 1000);
     		}else{
     			this.offSpin();
     		}

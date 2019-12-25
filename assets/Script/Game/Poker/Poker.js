@@ -8,10 +8,7 @@ cc.Class({
 
 	properties: {
 		nodeNotice: cc.Node,
-		prefabNotice: {
-			default: null,
-			type: cc.Prefab,
-		},
+		prefabNotice: cc.Prefab,
 		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		redhat:    cc.Node,
@@ -21,8 +18,14 @@ cc.Class({
 			type: module_player,
 		},
 		labelRoom: cc.Label,
-		labelBet:  cc.Label,
 		roomCard:  cc.Node,
+
+		botton:   cc.Node,
+		btm_bo:   cc.Node,
+		btm_xem:  cc.Node,
+		btm_theo: cc.Node,
+		btm_to:   cc.Node,
+		btm_all:  cc.Node,
 	},
 
 	onLoad () {
@@ -30,6 +33,8 @@ cc.Class({
 		let MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
+
+		this.d = null;
 
 		cc.RedT.audio.bg.pause();
 		//cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
@@ -86,6 +91,59 @@ cc.Class({
 		if (!!data.start) {
 			this.gameStart(data.start);
 		}
+		if (!!data.chia_bai) {
+			this.ChiaBai(data.chia_bai);
+		}
+		if (!!data.turn) {
+			this.LuotChoi(data.turn);
+		}
+		if (!!data.player) {
+			//trạng thái người chơi
+		}
+		if (!!data.card) {
+			// thẻ bài trên bàn
+			//this.mainCard(data.turn);
+		}
+	},
+	LuotChoi:   function(data){
+		let player = this.player[data.ghe];
+		player.startProgress(data.progress);
+		if (data.select !== void 0) {
+			this.botton.active = true;
+			if (data.select.xem) {
+				this.btm_xem.active = true;
+			}else{
+				this.btm_xem.active = false;
+			}
+			if (data.select.theo) {
+				this.btm_theo.active = true;
+			}else{
+				this.btm_theo.active = false;
+			}
+			if (data.select.to) {
+				this.btm_to.active = true;
+			}else{
+				this.btm_to.active = false;
+			}
+			if (data.select.all) {
+				this.btm_all.active = true;
+			}else{
+				this.btm_all.active = false;
+			}
+		}else{
+			this.botton.active = false;
+		}
+	},
+	infoPlayer: function(data){
+
+	},
+	mainCard:   function(data){
+
+	},
+	ChiaBai:    function(data){
+		data.forEach(function(bai){
+			this.player[bai.id].ChiaBai(bai);
+		}.bind(this));
 	},
 	infoGhe: function(info){
 		let self = this;
@@ -97,23 +155,27 @@ cc.Class({
 		}else{
 			newGhe = info;
 		}
-		Promise.all(newGhe.map(function(obj, index){
+		newGhe.forEach(function(obj, index){
 			let item = self.player[index];
 			player[obj.ghe] = item;
 			item.setInfo(obj.data);
 			return void 0;
-		}))
-		.then(result => {
-			this.player = player;
-			self   = null;
-			player = null;
-			newGhe = null;
 		});
+		this.player = player;
+		self   = null;
+		player = null;
+		newGhe = null;
 	},
 	infoRoom: function(data){
-		this.labelRoom.string = data.id;
-		this.labelBet.string  = helper.numberWithCommas(data.game) + (data.red ? ' RED' : ' XU');
-
+		if (data.game !== void 0) {
+			this.labelRoom.string = helper.numberWithCommas(data.game);
+		}
+		if (data.d !== void 0) {
+			if (this.d) {
+				this.player[this.d].d.active = false;
+			}
+			this.player[data.d].d.active = true;
+		}
 	},
 	ingame: function(data){
 		this.player[data.ghe].setInfo(data.data);
@@ -131,5 +193,8 @@ cc.Class({
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
+	},
+	onSelect: function(event, select){
+		cc.RedT.send({g:{poker:{select:select}}});
 	},
 });
