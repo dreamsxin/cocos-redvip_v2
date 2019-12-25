@@ -26,6 +26,8 @@ cc.Class({
 		btm_theo: cc.Node,
 		btm_to:   cc.Node,
 		btm_all:  cc.Node,
+
+		nodeTo:   cc.Node,
 	},
 
 	onLoad () {
@@ -132,6 +134,7 @@ cc.Class({
 			}
 		}else{
 			this.botton.active = false;
+			this.nodeTo.active = false;
 		}
 	},
 	infoPlayer: function(data){
@@ -196,5 +199,8 @@ cc.Class({
 	},
 	onSelect: function(event, select){
 		cc.RedT.send({g:{poker:{select:select}}});
+	},
+	toggleTo: function(){
+		this.nodeTo.active = !this.nodeTo.active;
 	},
 });
