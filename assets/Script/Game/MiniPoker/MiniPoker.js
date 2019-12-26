@@ -222,10 +222,10 @@ cc.Class({
 		}
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice)
-		var noticeComponent = notice.getComponent('mini_warning')
-		noticeComponent.text.string = text
-		this.notice.addChild(notice)
+		var notice = cc.instantiate(this.prefabNotice);
+		var noticeComponent = notice.getComponent('mini_warning');
+		noticeComponent.text.string = text;
+		this.notice.addChild(notice);
 	},
 	setTop:function(){
 		cc.RedT.setting.minipoker.scale = 1;

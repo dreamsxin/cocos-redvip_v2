@@ -17,8 +17,9 @@ cc.Class({
 			default: [],
 			type: module_player,
 		},
-		labelRoom: cc.Label,
-		roomCard:  cc.Node,
+		labelRoom:  cc.Label,
+		roomCard:   cc.Node,
+		prefabCard: cc.Node,
 
 		botton:   cc.Node,
 		btm_bo:   cc.Node,
@@ -120,7 +121,7 @@ cc.Class({
 		}
 		if (!!data.card) {
 			// thẻ bài trên bàn
-			//this.mainCard(data.turn);
+			this.mainCard(data.card);
 		}
 	},
 	LuotChoi:   function(data){
@@ -163,7 +164,12 @@ cc.Class({
 
 	},
 	mainCard:   function(data){
-
+		data.forEach(function(card){
+			let node = cc.instantiate(this.prefabCard);
+			let component = node.children[0].getComponent(cc.Sprite);
+			component.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+			this.roomCard.addChild(node);
+		}.bind(this));
 	},
 	ChiaBai:    function(data){
 		data.forEach(function(bai){

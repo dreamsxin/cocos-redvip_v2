@@ -177,7 +177,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 525.6774200971543
+      "z": 535.2036995387831
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -426,7 +426,7 @@
         "__id__": 10
       }
     ],
-    "_active": false,
+    "_active": true,
     "_level": 2,
     "_components": [],
     "_prefab": {
@@ -549,9 +549,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "9e14c0b7-80e7-4d4f-bca0-f4e3662a810f"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -563,9 +561,7 @@
     "_fillStart": 0,
     "_fillRange": 0,
     "_isTrimmedMode": true,
-    "_atlas": {
-      "__uuid__": "74953bae-338a-4ab9-aa09-335e4c941b3d"
-    },
+    "_atlas": null,
     "_id": "f51MFkpIBCbK/fHwFaDWBB"
   },
   {
@@ -13652,6 +13648,9 @@
     },
     "roomCard": {
       "__id__": 14
+    },
+    "prefabCard": {
+      "__id__": 9
     },
     "botton": {
       "__id__": 164
