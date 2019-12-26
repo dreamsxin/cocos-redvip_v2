@@ -18,6 +18,7 @@ cc.Class({
 			type: module_player,
 		},
 		labelRoom:  cc.Label,
+		mainBet:    cc.Label,
 		roomCard:   cc.Node,
 		prefabCard: cc.Node,
 
@@ -155,6 +156,14 @@ cc.Class({
 			}else{
 				this.btm_all.active = false;
 			}
+/**
+			let mainBet = Helper.getOnlyNumberInString(this.mainBet.string);
+			let bet     = Helper.getOnlyNumberInString(player.bet.string);
+			let balans  = Helper.getOnlyNumberInString(player.balans.string);
+			if (mainBet>bet < balans) {
+				this.btm_to.active = false;
+			}
+			*/
 		}else{
 			this.botton.active = false;
 			this.nodeTo.active = false;
@@ -200,6 +209,9 @@ cc.Class({
 	infoRoom: function(data){
 		if (data.game !== void 0) {
 			this.labelRoom.string = helper.numberWithCommas(data.game);
+		}
+		if (data.bet !== void 0) {
+			this.mainBet.string = helper.numberWithCommas(data.bet);
 		}
 	},
 	ingame: function(data){

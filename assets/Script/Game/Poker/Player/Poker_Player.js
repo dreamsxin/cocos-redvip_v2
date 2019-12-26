@@ -36,7 +36,9 @@ cc.Class({
 	setInfo: function(data){
 		if (!!data) {
 			this.node.active = true;
-			!!data.balans && (this.balans.string = helper.numberWithCommas(data.balans));
+			if (data.balans !== void 0) {
+				this.balans.string = helper.numberWithCommas(data.balans);
+			}
 			!!data.name && (this.nickname.string = data.name);
 			if (!!data.progress) {
 				this.startProgress(data.progress);

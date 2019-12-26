@@ -12,10 +12,20 @@ cc.Class({
         labelMax: cc.Label,
     },
     onEnable: function() {
-        let bet     = Helper.getOnlyNumberInString(cc.RedT.inGame.labelRoom.string);
+        let player  = cc.RedT.inGame.player[cc.RedT.inGame.meMap];
+        let mainBet = Helper.getOnlyNumberInString(cc.RedT.inGame.mainBet.string);
+        let PBet    = Helper.getOnlyNumberInString(player.bet.string);
+        let PBalans = Helper.getOnlyNumberInString(player.balans.string);
+        let debit   = mainBet-PBet;
+        this.betMax = PBalans-debit;
+        if (this.betMax < 1) {
+            this.node.active = false;
+            cc.RedT.inGame.btm_to.active = false;
+            return void 0;
+        }
 
+        let bet     = Helper.getOnlyNumberInString(cc.RedT.inGame.labelRoom.string);
         this.betMin = bet*0.5;
-        this.betMax = Helper.getOnlyNumberInString(cc.RedT.inGame.player[cc.RedT.inGame.meMap].balans.string);
         this.h      = this.betMin < 100 ? 50 : (this.betMin < 1000 ? 500 : (this.betMin < 10000 ? 1000 : (this.betMin < 100000 ? 10000 : 1000000)));
 
         this.labelMin.string = this.labelBet.string = Helper.numberWithCommas(this.betMin);

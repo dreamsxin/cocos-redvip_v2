@@ -5856,7 +5856,7 @@
       "__id__": 113
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 4,
     "_components": [
       {
@@ -6901,7 +6901,7 @@
       "__id__": 137
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 4,
     "_components": [
       {
@@ -13645,6 +13645,9 @@
     ],
     "labelRoom": {
       "__id__": 244
+    },
+    "mainBet": {
+      "__id__": 162
     },
     "roomCard": {
       "__id__": 14
