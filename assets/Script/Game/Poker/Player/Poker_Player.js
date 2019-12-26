@@ -41,12 +41,15 @@ cc.Class({
 			if (!!data.progress) {
 				this.startProgress(data.progress);
 			}
-			if (data.d !== void 0) {
-				if (data.d === true){
-					this.d.active = true;
-				}else{
-					this.d.active = false;
+			if (data.d === true){
+				this.d.active = true;
+				if (cc.RedT.inGame.game_d) {
+					cc.RedT.inGame.game_d.d.active = false;
 				}
+				cc.RedT.inGame.game_d = this;
+			}
+			if (data.bet !== void 0) {
+				this.bet.string = helper.numberWithCommas(data.bet);
 			}
 		}else{
 			this.node.active = false;
@@ -55,13 +58,15 @@ cc.Class({
 	startProgress: function(time) {
 		this.Progress.progress = 0;
 		this.progressTime = time;
+		this.isUpdate = true;
 	},
 	update: function(t){
-		if (!!this.progressTime) {
+		if (this.isUpdate === true) {
 			this.Progress.progress = this.Progress.progress+(t/this.progressTime);
 			if (this.Progress.progress >= 1) {
 				this.Progress.progress = 0;
 				this.progressTime = 0;
+				this.isUpdate = true;
 			}
 		}
 	},

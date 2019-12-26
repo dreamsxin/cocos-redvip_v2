@@ -36,7 +36,9 @@ cc.Class({
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
-		this.d = null;
+		this.game_player = null;
+		this.game_d      = null;
+
 
 		cc.RedT.audio.bg.pause();
 		//cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
@@ -89,6 +91,9 @@ cc.Class({
 			this.player[player.ghe].setInfo(player.data);
 		}.bind(this));
 	},
+	gamePlayer: function(data){
+		let player = this.player[data.ghe].setInfo(data.data);
+	},
 	game: function(data){
 		if (!!data.start) {
 			this.gameStart(data.start);
@@ -100,7 +105,18 @@ cc.Class({
 			this.LuotChoi(data.turn);
 		}
 		if (!!data.player) {
-			//trạng thái người chơi
+			this.gamePlayer(data.player);
+		}
+		if (!!data.offD) {
+		}
+		if (data.offSelect !== void 0) {
+			if (!!this.game_player) {
+				this.game_player.isUpdate = false;
+				this.game_player.progressTime = 0;
+				this.game_player.Progress.progress = 0;
+			}
+			this.botton.active = false;
+			this.nodeTo.active = false;
 		}
 		if (!!data.card) {
 			// thẻ bài trên bàn
@@ -109,6 +125,12 @@ cc.Class({
 	},
 	LuotChoi:   function(data){
 		let player = this.player[data.ghe];
+		if (!!this.game_player) {
+			this.game_player.isUpdate = false;
+			this.game_player.progressTime = 0;
+			this.game_player.Progress.progress = 0;
+		}
+		this.game_player = player;
 		player.startProgress(data.progress);
 		if (data.select !== void 0) {
 			this.botton.active = true;
@@ -172,12 +194,6 @@ cc.Class({
 	infoRoom: function(data){
 		if (data.game !== void 0) {
 			this.labelRoom.string = helper.numberWithCommas(data.game);
-		}
-		if (data.d !== void 0) {
-			if (this.d) {
-				this.player[this.d].d.active = false;
-			}
-			this.player[data.d].d.active = true;
 		}
 	},
 	ingame: function(data){
