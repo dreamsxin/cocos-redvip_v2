@@ -96,6 +96,11 @@ cc.Class({
 	gamePlayer: function(data){
 		let player = this.player[data.ghe].setInfo(data.data);
 	},
+	gameInfo: function(data){
+		data.forEach(function(player){
+			let obj = this.player[player.ghe].setInfo(player.data);
+		}.bind(this));
+	},
 	game: function(data){
 		if (!!data.start) {
 			this.gameStart(data.start);
@@ -105,6 +110,9 @@ cc.Class({
 		}
 		if (!!data.turn) {
 			this.LuotChoi(data.turn);
+		}
+		if (!!data.info) {
+			this.gameInfo(data.info);
 		}
 		if (!!data.player) {
 			this.gamePlayer(data.player);

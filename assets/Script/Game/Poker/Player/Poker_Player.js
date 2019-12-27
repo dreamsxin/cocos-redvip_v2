@@ -53,12 +53,21 @@ cc.Class({
 			if (data.bet !== void 0) {
 				this.bet.string = helper.numberWithCommas(data.bet);
 			}
+
+			if (data.card !== void 0) {
+				this.ChiaBai(data.card);
+			}
 		}else{
 			this.node.active = false;
 		}
 	},
 	startProgress: function(time) {
 		this.Progress.progress = 0;
+		this.progressTime = time;
+		this.isUpdate = true;
+	},
+	setProgress: function(time, progress) {
+		this.Progress.progress = progress;
 		this.progressTime = time;
 		this.isUpdate = true;
 	},
