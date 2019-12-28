@@ -101,9 +101,15 @@ cc.Class({
 			let obj = this.player[player.ghe].setInfo(player.data);
 		}.bind(this));
 	},
+	gameStop: function(){
+		//
+	},
 	game: function(data){
 		if (!!data.start) {
 			this.gameStart(data.start);
+		}
+		if (!!data.stop) {
+			this.gameStop();
 		}
 		if (!!data.chia_bai) {
 			this.ChiaBai(data.chia_bai);
@@ -164,14 +170,6 @@ cc.Class({
 			}else{
 				this.btm_all.active = false;
 			}
-/**
-			let mainBet = Helper.getOnlyNumberInString(this.mainBet.string);
-			let bet     = Helper.getOnlyNumberInString(player.bet.string);
-			let balans  = Helper.getOnlyNumberInString(player.balans.string);
-			if (mainBet>bet < balans) {
-				this.btm_to.active = false;
-			}
-			*/
 		}else{
 			this.botton.active = false;
 			this.nodeTo.active = false;
