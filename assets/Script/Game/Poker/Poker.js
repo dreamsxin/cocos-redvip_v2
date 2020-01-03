@@ -12,6 +12,7 @@ cc.Class({
 		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		redhat:    cc.Node,
+		bo_bai:    cc.Node,
 		notice:    notice,
 		player: {
 			default: [],
@@ -30,9 +31,18 @@ cc.Class({
 		btm_all:  cc.Node,
 
 		nodeTo:   cc.Node,
-	},
 
-	onLoad () {
+		spriteAll:  cc.SpriteFrame,
+		spriteHuy:  cc.SpriteFrame,
+		spriteTheo: cc.SpriteFrame,
+		spriteXem:  cc.SpriteFrame,
+		spriteCuoc: cc.SpriteFrame,
+		spriteWin:  cc.SpriteFrame,
+		spriteMeWin:cc.SpriteFrame,
+		spriteLost: cc.SpriteFrame,
+		spriteHoa:  cc.SpriteFrame,
+	},
+	onLoad(){
 		cc.RedT.inGame = this;
 		let MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
@@ -41,12 +51,13 @@ cc.Class({
 		this.game_player = null;
 		this.game_d      = null;
 
-
 		cc.RedT.audio.bg.pause();
 		//cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
 
 		//this.dialog.init();
-
+		this.player.forEach(function(player){
+			player.init();
+		});
 		cc.RedT.send({scene:'poker', g:{poker:{ingame:true}}});
 
 		/**
@@ -56,7 +67,6 @@ cc.Class({
 		*/
 	},
 	onData: function(data) {
-		console.log(data);
 		if (!!data.meMap) {
 			this.meMap = data.meMap;
 		}
@@ -85,6 +95,7 @@ cc.Class({
 			this.outgame(data.outgame);
 		}
 		if (!!data.game) {  // có người ra khỏi phòng
+			console.log(data.game);
 			this.game(data.game);
 		}
 	},
@@ -94,15 +105,55 @@ cc.Class({
 		}.bind(this));
 	},
 	gamePlayer: function(data){
-		let player = this.player[data.ghe].setInfo(data.data);
+		let player = this.player[data.ghe];
+		if (data.data !== void 0) {
+			player.setInfo(data.data);
+		}
+		if (data.info !== void 0) {
+			player.infoGame(data.info);
+		}
+	},
+	resetGame: function(){
+		this.mainBet.string = '';
+		this.roomCard.destroyAllChildren();
+		this.nodeNotice.destroyAllChildren();
+		Object.values(this.player).forEach(function(player){
+			player.resetGame();
+		});
+	},
+	resetStatus: function(cp = false){
+		Object.values(this.player).forEach(function(player){
+			player.resetStatus(cp);
+		});
 	},
 	gameInfo: function(data){
 		data.forEach(function(player){
-			let obj = this.player[player.ghe].setInfo(player.data);
+			let obj = this.player[player.ghe];
+			if (player.data !== void 0) {
+				obj.setInfo(player.data);
+			}
+			if (player.info !== void 0) {
+				obj.infoGame(player.info);
+			}
 		}.bind(this));
 	},
 	gameStop: function(){
-		//
+		this.offSelect();
+	},
+	gameFinish: function(){
+		this.offSelect();
+	},
+	offSelect: function(){
+		if (!!this.game_player) {
+			this.game_player.isUpdate = false;
+			this.game_player.progressTime = 0;
+			this.game_player.Progress.progress = 0;
+		}
+		this.botton.active = false;
+		this.nodeTo.active = false;
+		Object.values(this.player).forEach(function(player){
+			player.resetStatus();
+		});
 	},
 	game: function(data){
 		if (!!data.start) {
@@ -110,6 +161,9 @@ cc.Class({
 		}
 		if (!!data.stop) {
 			this.gameStop();
+		}
+		if (!!data.finish) {
+			this.gameFinish();
 		}
 		if (!!data.chia_bai) {
 			this.ChiaBai(data.chia_bai);
@@ -126,20 +180,14 @@ cc.Class({
 		if (!!data.offD) {
 		}
 		if (data.offSelect !== void 0) {
-			if (!!this.game_player) {
-				this.game_player.isUpdate = false;
-				this.game_player.progressTime = 0;
-				this.game_player.Progress.progress = 0;
-			}
-			this.botton.active = false;
-			this.nodeTo.active = false;
+			this.offSelect();
 		}
 		if (!!data.card) {
 			// thẻ bài trên bàn
 			this.mainCard(data.card);
 		}
 	},
-	LuotChoi:   function(data){
+	LuotChoi: function(data){
 		let player = this.player[data.ghe];
 		if (!!this.game_player) {
 			this.game_player.isUpdate = false;
@@ -178,18 +226,44 @@ cc.Class({
 	infoPlayer: function(data){
 
 	},
-	mainCard:   function(data){
+	mainCard: function(data){
+		let time = 0.1;
+		let position = this.bo_bai.parent.convertToWorldSpaceAR(this.bo_bai.position);
 		data.forEach(function(card){
 			let node = cc.instantiate(this.prefabCard);
-			let component = node.children[0].getComponent(cc.Sprite);
-			component.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
 			this.roomCard.addChild(node);
+			let component = node.children[0].getComponent(cc.Sprite);
+			node = null;
+			component.node.runAction(
+				cc.sequence(
+					cc.delayTime(time),
+					cc.callFunc(function(){
+						component.node.position = component.node.parent.convertToNodeSpaceAR(position);
+						component.node.scaleX = this.bo_bai.width/component.node.width;
+						component.node.scaleY = this.bo_bai.height/component.node.height;
+						component.spriteFrame = cc.RedT.util.card.cardB1;
+					}, this),
+					cc.spawn(cc.moveTo(0.1, cc.v2(0,0)), cc.scaleTo(0.1, 1)),
+					cc.delayTime(0.1),
+					cc.scaleTo(0.1, 0, 1),
+					cc.callFunc(function(){
+						component.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+						component = null;
+					}, this),
+					cc.scaleTo(0.1, 1, 1)
+				)
+			);
+			time += 0.1;
 		}.bind(this));
 	},
-	ChiaBai:    function(data){
-		data.forEach(function(bai){
-			this.player[bai.id].ChiaBai(bai);
-		}.bind(this));
+	ChiaBai: function(data){
+		let time = 0;
+		for (let card = 0; card < 2; card++) {
+			data.forEach(function(bai){
+				this.player[bai.id].ChiaBai(bai, card, time);
+				time += 0.05;
+			}.bind(this));
+		}
 	},
 	infoGhe: function(info){
 		let self = this;
