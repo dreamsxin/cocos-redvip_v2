@@ -3,7 +3,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-    	menu: cc.Node,
     	rooms: {
     		default: [],
     		type: cc.Sprite,
@@ -90,7 +89,6 @@ cc.Class({
 		}
 	},
 	onData: function(game){
-    	// To Game
     	cc.director.loadScene(game);
     },
 });

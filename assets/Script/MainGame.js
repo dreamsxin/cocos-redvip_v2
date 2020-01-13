@@ -33,7 +33,6 @@ cc.Class({
 		loading:      cc.Node,
 		notice:       notice,
 		ThongBaoNoHu: ThongBaoNoHu,
-		nodeBank:     cc.Node,
 		url:          '',
 		fileAPK:      '',
 	},
@@ -198,13 +197,6 @@ cc.Class({
 		if (!!data.message) {
 			this.dialog.iMessage.onData(data.message);
 		}
-		if (void 0 !== data.offurl) {
-			this.nodeBank.active = false;
-		}
-		if (void 0 !== data.url) {
-			this.urlBank = data.url;
-			this.nodeBank.active = true;
-		}
 	},
 	captcha: function(data){
 		switch(data.name){
@@ -294,10 +286,10 @@ cc.Class({
 		cc.RedT.MiniPanel.newGame();
 		this.dialog.iMessage.reset();
 	},
-	toBank: function(){
-		cc.sys.openURL(this.urlBank);
+	//toBank: function(){
+	//	cc.sys.openURL(this.urlBank);
 		//window.open(this.urlBank, 'newwindow', 'toolbar=no,status=no,width=950,height=735');
-	},
+	//},
 	onGetTaiXiu: function(tai, xiu){
 		/**
 		var sTai = helper.getOnlyNumberInString(this.iconTaiXiu.tai.string);

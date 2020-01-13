@@ -8,12 +8,10 @@ cc.Class({
     	adsContent:  cc.PageView,
     	adsTimeNext: 0,
     },
+    /**
     onLoad() {
-        Promise.all(this.games.children.map(function(obj){
+        this.games = this.games.children.map(function(obj){
             return obj.getComponent('iconGame');
-        }))
-        .then(result => {
-            this.games = result;
         });
         this.setTimeAds();
         this.node._onPreDestroy = function(){
@@ -55,7 +53,7 @@ cc.Class({
 		.bind(this), this.adsTimeNext*1000);
     },
     onHeadSelect: function(e) {
-    	Promise.all(this.header.children.map(function(obj){
+    	this.header.children.forEach(function(obj){
     		if (obj == e.target) {
     			obj.children[0].active = false;
     			obj.pauseSystemEvents();
@@ -63,15 +61,16 @@ cc.Class({
     			obj.children[0].active = true;
     			obj.resumeSystemEvents();
     		}
-    	}));
-    	Promise.all(this.games.map(function(game){
+    	});
+    	this.games.forEach(function(game){
             if (e.target.name == 'all' || game[e.target.name]) {
                 game.node.active = true;
             }else{
                 game.node.active = false;
             }
-    	}));
+    	});
     },
+    */
     onWait: function(){
         cc.RedT.audio.playClick();
         if (cc.RedT.IS_LOGIN){
@@ -104,7 +103,7 @@ cc.Class({
             cc.RedT.inGame.dialog.showSignIn();
         }
     },
-    openTXCL: function(e, taixiu){ // Open Tài Xỉu | Chẵn Lẻ
+    openTXCL: function(e, taixiu){
         cc.RedT.MiniPanel.TaiXiu.openGame(null, taixiu);
     },
 });
