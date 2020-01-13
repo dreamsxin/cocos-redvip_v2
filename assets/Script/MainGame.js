@@ -26,7 +26,7 @@ cc.Class({
 		//iconVQRed:   cc.Node,
 		//iconCandy:   cc.Node,
 		//iconLongLan: cc.Node,
-		iconTaiXiu:   cc.Node,
+		//iconTaiXiu:   cc.Node,
 		iconMegaJ:    cc.Node,
 		redhat:       cc.Node,
 		dialog:       dialog,
@@ -60,7 +60,7 @@ cc.Class({
 		//this.iconVQRed   = this.iconVQRed.getComponent('iconGameHu');
 		//this.iconLongLan = this.iconLongLan.getComponent('iconGameHu');
 		this.iconMegaJ   = this.iconMegaJ.getComponent('iconGameHu');
-		this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
+		//this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
 		if (cc.RedT.IS_LOGIN){
 			cc.RedT.send({scene:'home'});

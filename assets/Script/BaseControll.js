@@ -162,6 +162,25 @@ module.exports = {
 		if (void 0 !== data.vipNext){
 			this.user.vipNext = data.vipNext;
 		}
-
 	},
+	CopyToClipboard: function(text){
+		if (cc.sys.isBrowser) {
+			let el = document.createElement('input');
+			el.value = text;
+			document.body.appendChild(el);
+			el.select();
+			el.setSelectionRange(0, 99999);
+			document.execCommand('copy');
+			el.remove();
+		}else{
+			jsb.reflection.callStaticMethod('org/cocos2dx/javascript/AppActivity', 'CopyToClipboard', '(Ljava/lang/String;)V', text);
+		}
+		/**
+			ios:
+			char *p = (char*) content.data();
+			NSString *nsMessage= [[NSString alloc] initWithCString:p encoding:NSUTF8StringEncoding];
+			UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+			pasteboard.string = nsMessage;
+		*/
+	}
 }
