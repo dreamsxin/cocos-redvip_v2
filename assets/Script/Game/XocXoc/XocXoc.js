@@ -204,10 +204,17 @@ cc.Class({
 		cc.RedT.send({g:{xocxoc:{outgame:true}}});
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
+		void 0 !== this.regTimeOut1 && clearTimeout(this.regTimeOut1);
+		void 0 !== this.regTimeOut2 && clearTimeout(this.regTimeOut2);
+		void 0 !== this.regTimeOut3 && clearTimeout(this.regTimeOut3);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
 		clearInterval(this.timeInterval);
+		clearTimeout(this.regTimeOut1);
+		clearTimeout(this.regTimeOut2);
+		clearTimeout(this.regTimeOut3);
+		clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
@@ -389,26 +396,26 @@ cc.Class({
 			node1 = this.box_chan.children[1];
 			audioLost += this.box_le.children[1].children.length;
 			centerMid = this.box_le.children[1].convertToNodeSpaceAR(position);
-			Promise.all(this.box_le.children[1].children.map(function(chip){
+			this.box_le.children[1].children.forEach(function(chip){
 				chip.runAction(
 					cc.spawn(
 						cc.scaleTo(0.4, 0.5),
 						cc.moveTo(0.4, centerMid)
 					),
 				);
-			}));
+			});
 		}else{
 			node1 = this.box_le.children[1];
 			audioLost += this.box_chan.children[1].children.length;
 			centerMid = this.box_chan.children[1].convertToNodeSpaceAR(position);
-			Promise.all(this.box_chan.children[1].children.map(function(chip){
+			this.box_chan.children[1].children.forEach(function(chip){
 				chip.runAction(
 					cc.spawn(
 						cc.scaleTo(0.4, 0.5),
 						cc.moveTo(0.4, centerMid)
 					),
 				);
-			}));
+			});
 		}
 
 		let red3   = this.box_red3.children[1].convertToNodeSpaceAR(position);
@@ -420,166 +427,165 @@ cc.Class({
 			case 0:
 				node2 = this.box_white4.children[1];
 				audioLost += this.box_red3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white3.children[1].children.length;
-				Promise.all(this.box_red3.children[1].children.map(function(chip){
+				this.box_red3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red3)
 						),
 					);
-				}));
-				Promise.all(this.box_red4.children[1].children.map(function(chip){
+				});
+				this.box_red4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red4)
 						),
 					);
-				}));
-				Promise.all(this.box_white3.children[1].children.map(function(chip){
+				});
+				this.box_white3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white3)
 						),
 					);
-				}));
+				});
 			break;
 
 			case 1:
 				node2 = this.box_white3.children[1];
 				audioLost += this.box_red3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white4.children[1].children.length;
-				Promise.all(this.box_red3.children[1].children.map(function(chip){
+				this.box_red3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red3)
 						),
 					);
-				}));
-				Promise.all(this.box_red4.children[1].children.map(function(chip){
+				});
+				this.box_red4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red4)
 						),
 					);
-				}));
-				Promise.all(this.box_white4.children[1].children.map(function(chip){
+				});
+				this.box_white4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white4)
 						),
 					);
-				}));
+				});
 			break;
 
 			case 2:
 				audioLost += this.box_red3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white3.children[1].children.length+this.box_white4.children[1].children.length;
-				Promise.all(this.box_red3.children[1].children.map(function(chip){
+				this.box_red3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red3)
 						),
 					);
-				}));
-				Promise.all(this.box_red4.children[1].children.map(function(chip){
+				});
+				this.box_red4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red4)
 						),
 					);
-				}));
-				Promise.all(this.box_white3.children[1].children.map(function(chip){
+				});
+				this.box_white3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white4)
 						),
 					);
-				}));
-				Promise.all(this.box_white4.children[1].children.map(function(chip){
+				});
+				this.box_white4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white4)
 						),
 					);
-				}));
+				});
 			break;
 
 			case 3:
 				node2 = this.box_red3.children[1];
 				audioLost += this.box_white3.children[1].children.length+this.box_red4.children[1].children.length+this.box_white4.children[1].children.length;
-				Promise.all(this.box_white3.children[1].children.map(function(chip){
+				this.box_white3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white3)
 						),
 					);
-				}));
-				Promise.all(this.box_red4.children[1].children.map(function(chip){
+				});
+				this.box_red4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red4)
 						),
 					);
-				}));
-				Promise.all(this.box_white4.children[1].children.map(function(chip){
+				});
+				this.box_white4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white4)
 						),
 					);
-				}));
+				});
 			break;
 
 			case 4:
 				node2 = this.box_red4.children[1];
 				audioLost += this.box_white3.children[1].children.length+this.box_red3.children[1].children.length+this.box_white4.children[1].children.length;
-				Promise.all(this.box_white3.children[1].children.map(function(chip){
+				this.box_white3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white3)
 						),
 					);
-				}));
-				Promise.all(this.box_red3.children[1].children.map(function(chip){
+				});
+				this.box_red3.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, red3)
 						),
 					);
-				}));
-				Promise.all(this.box_white4.children[1].children.map(function(chip){
+				});
+				this.box_white4.children[1].children.forEach(function(chip){
 					chip.runAction(
 						cc.spawn(
 							cc.scaleTo(0.4, 0.5),
 							cc.moveTo(0.4, white4)
 						),
 					);
-				}));
+				});
 			break;
 		}
 		!!audioLost && this.audioMultiChip.play();
-		setTimeout(function(){
-			let self = this;
+		this.regTimeOut1 = setTimeout(function(){
 			audioWin += node1.children.length;
 			node1.children.forEach(function(chip){
 				let copy = cc.instantiate(chip);
 				copy.position = centerMid;
 				copy.scale    = 0.5;
 
-				let x = (Math.random()*(self.maxBox1_1.x+1))>>0;
-				let y = (Math.random()*(self.maxBox1_1.y+1))>>0;
+				let x = (Math.random()*(this.maxBox1_1.x+1))>>0;
+				let y = (Math.random()*(this.maxBox1_1.y+1))>>0;
 
 				node1.addChild(copy);
 				copy.runAction(
@@ -593,7 +599,7 @@ cc.Class({
 							cc.moveTo(0.1, cc.v2(x, y))
 						)
 					));
-			});
+			}.bind(this));
 
 			if (node2) {
 				audioWin += node2.children.length;
@@ -603,8 +609,8 @@ cc.Class({
 					copy.position = node2red;
 					copy.scale    = 0.5;
 
-					let x = (Math.random()*(self.maxBox1_3.x+1))>>0;
-					let y = (Math.random()*(self.maxBox1_3.y+1))>>0;
+					let x = (Math.random()*(this.maxBox1_3.x+1))>>0;
+					let y = (Math.random()*(this.maxBox1_3.y+1))>>0;
 
 					node2.addChild(copy);
 					copy.runAction(
@@ -618,18 +624,18 @@ cc.Class({
 								cc.moveTo(0.1, cc.v2(x, y))
 							)
 						));
-				});
+				}.bind(this));
 			}
 			if (!!audioWin) {
-				Promise.all([1,2,3,4,5].map(function(audio){
+				[1,2,3,4,5].forEach(function(audio){
 					if (audio !== 1) {
-						self['audioMultiChip'+audio].play();
+						this['audioMultiChip'+audio].play();
 					}else{
-						self.audioMultiChip.play();
+						this.audioMultiChip.play();
 					}
-				}));
+				}.bind(this));
 			}
-			setTimeout(function(){
+			this.regTimeOut2 = setTimeout(function(){
 				let positionUser = this.users_bg.parent.convertToWorldSpaceAR(this.users_bg.position);
 				let position1_1 = node1.convertToNodeSpaceAR(positionUser);
 
@@ -654,7 +660,6 @@ cc.Class({
 		}.bind(this), 1500);
 	},
 	setDot: function(data){
-		let self = this;
 		let Dot_x = (Math.random()*(this.maxDot.x+1))>>0;
 		let Dot_y = (Math.random()*(this.maxDot.y+1))>>0;
 		let DotCheck = Dot_y-Dot_x;
@@ -690,11 +695,11 @@ cc.Class({
 		this.dot.forEach(function(dot, index){
 			let check = data[index];
 			if (check) {
-				dot.spriteFrame = self.dot_red;
+				dot.spriteFrame = this.dot_red;
 			}else{
-				dot.spriteFrame = self.dot_white;
+				dot.spriteFrame = this.dot_white;
 			}
-		});
+		}.bind(this));
 	},
 	playTime: function(){
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
@@ -747,12 +752,12 @@ cc.Class({
 		}
 	},
 	resetData: function(){
-		this.box_chan.children[1].removeAllChildren();
-		this.box_le.children[1].removeAllChildren();
-		this.box_white4.children[1].removeAllChildren();
-		this.box_white3.children[1].removeAllChildren();
-		this.box_red3.children[1].removeAllChildren();
-		this.box_red4.children[1].removeAllChildren();
+		this.box_chan.children[1].destroyAllChildren();
+		this.box_le.children[1].destroyAllChildren();
+		this.box_white4.children[1].destroyAllChildren();
+		this.box_white3.children[1].destroyAllChildren();
+		this.box_red3.children[1].destroyAllChildren();
+		this.box_red4.children[1].destroyAllChildren();
 
 		this.box_chan.children[0].active   = false;
 		this.box_le.children[0].active     = false;
@@ -1208,7 +1213,7 @@ cc.Class({
 		}
 	},
 	status: function(data){
-		setTimeout(function() {
+		this.regTimeOut3 = setTimeout(function() {
 			var temp = new cc.Node;
 			temp.addComponent(cc.Label);
 			temp = temp.getComponent(cc.Label);
