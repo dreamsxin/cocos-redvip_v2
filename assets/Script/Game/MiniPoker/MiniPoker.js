@@ -1,6 +1,6 @@
 
-var helper         = require('Helper'),
-	MiniPoker_reel = require('MiniPoker_reel');
+var helper         = require('Helper');
+var MiniPoker_reel = require('MiniPoker_reel');
 
 cc.Class({
 	extends: cc.Component,
@@ -20,14 +20,12 @@ cc.Class({
 		notice: cc.Node,
 		card:  cc.Prefab,
 		cardf: cc.Prefab,
-		prefabNotice: cc.Prefab,
 		phien: cc.Label,
 		hu:    cc.Label,
 		cuoc:  "",
 		isAuto:  false,
 		isSpeed: false,
 		isSpin:  false,
-		red:     true,
 	},
 	init(obj){
 		this.RedT = obj;
@@ -195,7 +193,6 @@ cc.Class({
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				console.log(data);
 				this.buttonStop.active = this.isAuto ? true : false;
 				this.win   = data.win;
 				this.winT  = data.text;
@@ -222,8 +219,8 @@ cc.Class({
 		}
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice);
-		var noticeComponent = notice.getComponent('mini_warning');
+		let notice = cc.instantiate(this.RedT.prefabMiniNotice);
+		let noticeComponent = notice.getComponent('mini_warning');
 		noticeComponent.text.string = text;
 		this.notice.addChild(notice);
 	},
@@ -264,26 +261,21 @@ cc.Class({
     			// Thắng lớn
 				var BigWin = cc.instantiate(this.RedT.prefabBigWin);
 				BigWin     = BigWin.getComponent(cc.Animation);
-
 				var BigWinFinish = function(){
 					BigWin.node.destroy();
 					this.hieuUng();
 				}
-
 				BigWin.on('finished', BigWinFinish, this);
 				BigWin.node.bet = this.win;
-				BigWin.node.red = this.red;
 				BigWin.node.position = cc.v2(0, 80);
-
 				this.notice.addChild(BigWin.node);
-
 				this.win = 0;
     		}else{
     			var temp = new cc.Node;
 				temp.addComponent(cc.Label);
 				temp = temp.getComponent(cc.Label);
 				temp.string = '+'+ helper.numberWithCommas(this.win);
-				temp.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+				temp.font = cc.RedT.util.fontCong;
 				temp.lineHeight = 130;
 				temp.fontSize   = 20;
 				this.notice.addChild(temp.node);
@@ -307,20 +299,18 @@ cc.Class({
     },
 	onGetHu: function(){
 		if (this.node.active && void 0 !== cc.RedT.setting.topHu.data) {
-			var self = this;
-			Promise.all(cc.RedT.setting.topHu.data['mini_poker'].filter(function(temp){
-				return temp.type == self.cuoc && temp.red == self.red
-			}))
-			.then(result => {
-				var s = helper.getOnlyNumberInString(this.hu.string);
-				var bet = result[0].bet;
-				if (s-bet != 0) 
-					helper.numberTo(this.hu, s, bet, 2000, true);
-			});
+			let result = cc.RedT.setting.topHu.data['mini_poker'].filter(function(temp){
+				return temp.type == this.cuoc;
+			}.bind(this));
+			let s = helper.getOnlyNumberInString(this.hu.string);
+			let bet = result[0].bet;
+			if (s-bet != 0){
+				helper.numberTo(this.hu, s, bet, 2000, true);
+			}
 		}
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{mini_poker:{spin:{cuoc:this.cuoc, red: this.red}}}});
+		cc.RedT.send({g:{mini_poker:{spin:{cuoc:this.cuoc}}}});
 	},
 	onCloseGame: function(){
     	this.isSpin = false;

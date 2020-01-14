@@ -36,9 +36,7 @@ cc.Class({
 
 		labelWin:    cc.Label,
 		labelBet:    cc.Label,
-
-		notice: cc.Node,
-		prefabNotice: cc.Prefab,
+		notice:  cc.Node,
 		hu:      cc.Label,
 		cuoc:     "",
 		isAuto:  false,
@@ -65,7 +63,7 @@ cc.Class({
 			this.intChangerBet();
 		}
 		if (void 0 !== cc.RedT.setting.angrybird.isAuto && this.isAuto != cc.RedT.setting.angrybird.isAuto) {
-			//this.onClickAuto();
+			this.onClickAuto();
 		}
 	},
 	onLoad () {
@@ -194,10 +192,10 @@ cc.Class({
 		this.buttonStop.active = false;
 	},
 	onGetInfo: function(){
-		cc.RedT.send({g:{angrybird:{info:{cuoc:this.cuoc, red: this.red}}}});
+		cc.RedT.send({g:{angrybird:{info:{cuoc:this.cuoc}}}});
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{angrybird:{spin:{cuoc:this.cuoc, red: this.red}}}});
+		cc.RedT.send({g:{angrybird:{spin:{cuoc:this.cuoc}}}});
 	},
 	onCloseGame: function(){
 		this.isSpin = false;
@@ -210,7 +208,7 @@ cc.Class({
 		this.offSpin();
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice)
+		var notice = cc.instantiate(this.RedT.prefabMiniNotice)
 		var noticeComponent = notice.getComponent('mini_warning')
 		noticeComponent.text.string = text;
 		this.notice.addChild(notice);
@@ -219,7 +217,7 @@ cc.Class({
 		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				this.notice.removeAllChildren();
+				this.notice.destroyAllChildren();
 				this.win      = data.win;
 				this.nohu     = data.nohu;
 				this.isBigWin = data.isBigWin;
@@ -305,16 +303,14 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
-			var self = this;
-			Promise.all(cc.RedT.setting.topHu.data['arb'].filter(function(temp){
-				return temp.type == self.cuoc && temp.red == self.red;
-			}))
-			.then(result => {
-				var s = helper.getOnlyNumberInString(this.hu.string);
-				var bet = result[0].bet;
-				if (s-bet != 0) 
-					helper.numberTo(this.hu, s, bet, 1500, true);
-			});
+			let result = cc.RedT.setting.topHu.data['arb'].filter(function(temp){
+				return temp.type == this.cuoc;
+			}.bind(this));
+			let s = helper.getOnlyNumberInString(this.hu.string);
+			let bet = result[0].bet;
+			if (s-bet != 0){
+				helper.numberTo(this.hu, s, bet, 1500, true);
+			}
 		}
 	},
 	hieuUng: function(){
@@ -352,7 +348,6 @@ cc.Class({
 			this.isBigWin = false;
 			var BigWin = cc.instantiate(this.RedT.prefabBigWin);
 			BigWin     = BigWin.getComponent(cc.Animation);
-
 			var BigWinFinish = function(){
 				this.labelWin.string = helper.numberWithCommas(BigWin.node.bet);
 				BigWin.node.destroy();
@@ -362,16 +357,11 @@ cc.Class({
 		    		this.offSpin();
 		    	}
 			}
-
 			BigWin.on('finished', BigWinFinish, this);
 			BigWin.node.bet = this.win;
-			BigWin.node.red = this.red;
 			BigWin.node.position = cc.v2(0, 98);
-
 			this.notice.addChild(BigWin.node);
-
 			this.win = 0;
-
 			if (!this.isAuto) {
 				this.offSpin();
 			}

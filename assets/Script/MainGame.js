@@ -59,7 +59,7 @@ cc.Class({
 		//this.iconCandy   = this.iconCandy.getComponent('iconGameHu');
 		//this.iconVQRed   = this.iconVQRed.getComponent('iconGameHu');
 		//this.iconLongLan = this.iconLongLan.getComponent('iconGameHu');
-		this.iconMegaJ   = this.iconMegaJ.getComponent('iconGameHu');
+		this.iconMegaJ     = this.iconMegaJ.getComponent('iconGameHu');
 		//this.iconTaiXiu  = this.iconTaiXiu.getComponent('iconGameTaiXiu');
 
 		if (cc.RedT.IS_LOGIN){
@@ -116,7 +116,6 @@ cc.Class({
 	},
 	auth: function(obj) {
 		this.loading.active = true;
-		//cc.RedT.reconnect();
 		if (cc.RedT._socket == null || cc.RedT._socket.readyState != 1) {
 			setTimeout(function(){
 				cc.RedT.send(obj);
@@ -286,12 +285,18 @@ cc.Class({
 		cc.RedT.MiniPanel.newGame();
 		this.dialog.iMessage.reset();
 	},
+	noticeCopy: function(){
+		let notice = cc.instantiate(cc.RedT.MiniPanel.prefabMiniNotice);
+		let noticeComponent = notice.getComponent('mini_warning');
+		noticeComponent.text.string = 'Copy to clipboard';
+		this.node.addChild(notice);
+	},
 	//toBank: function(){
 	//	cc.sys.openURL(this.urlBank);
 		//window.open(this.urlBank, 'newwindow', 'toolbar=no,status=no,width=950,height=735');
 	//},
+	/**
 	onGetTaiXiu: function(tai, xiu){
-		/**
 		var sTai = helper.getOnlyNumberInString(this.iconTaiXiu.tai.string);
 		var sXiu = helper.getOnlyNumberInString(this.iconTaiXiu.xiu.string);
 		if (sTai-tai != 0) {
@@ -300,10 +305,8 @@ cc.Class({
 		if (sXiu-xiu != 0) {
 			helper.numberTo(this.iconTaiXiu.xiu, sXiu, xiu, 1000, true);
 		}
-		*/
 	},
 	onGetHu: function(){
-		/*
 		if (void 0 !== cc.RedT.setting.topHu.data) {
 			// Vương Quốc Red
 			var result = cc.RedT.setting.topHu.data['vq_red'].filter(function(temp){
@@ -393,11 +396,11 @@ cc.Class({
 				helper.numberTo(this.iconMegaJ.hu10k, helper.getOnlyNumberInString(this.iconMegaJ.hu10k.string), h10k[0].bet, 2200, true);
 			}
 		}
-		*/
 	},
 	resumeMusic: function() {
 		//cc.audioEngine.resumeMusic();
 	},
+	*/
 	audioClick: function(){
 		cc.RedT.audio.playClick();
 	},
@@ -418,7 +421,6 @@ cc.Class({
 	},
 
 /**
-
 	checkLoginFacebook: function() {
 		if (cc.sys.isBrowser && FB) {
 			var self = this;

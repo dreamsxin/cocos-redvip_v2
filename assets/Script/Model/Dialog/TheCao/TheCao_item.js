@@ -26,5 +26,6 @@ cc.Class({
 	},
 	CopyToClipboard: function(){
 		cc.RedT.CopyToClipboard(this.NhaMang.string+' - Mã thẻ: '+this.SoThe.string+' - Seri: '+this.Seri.string+'');
+		cc.RedT.inGame.noticeCopy();
 	},
 });

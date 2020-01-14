@@ -29,8 +29,6 @@ cc.Class({
 		nodeTimeWait: cc.Node,
 		timeCuoc: cc.Label,
 		timePopup: cc.Label,
-		nodeChanLe: cc.Node,
-		nodeTaiXiu: cc.Node,
 		nodeTimePopup: cc.Node,
 		labelPhien: cc.Label,
 		diaNan: cc.Node,
@@ -42,15 +40,10 @@ cc.Class({
 			default: [],
 			type:    cc.SpriteFrame
 		},
-		cointRED: cc.Node,
-		cointXU: cc.Node,
 		dotLogs: cc.Node,
-		gameCover: cc.Label,
 		diceAnimation: cc.Animation,
 		efTai: TaiXiu_efScale,
 		efXiu: TaiXiu_efScale,
-		efChan: TaiXiu_efScale,
-		efLe:  TaiXiu_efScale,
 		frameNan: {
 			default: [],
 			type:    cc.SpriteFrame
@@ -60,7 +53,6 @@ cc.Class({
 		dot_white: cc.SpriteFrame,
 		dot_yellow: cc.SpriteFrame,
 		notice: cc.Node,
-		mini_warning: cc.Prefab,
 		fontCong: cc.BitmapFont,
 		fontTru: cc.BitmapFont,
 		WIN_HT: cc.Label,
@@ -69,25 +61,15 @@ cc.Class({
 		LOST_DN: cc.Label,
 		TX_Chat: TX_Chat,
 		TX_Board: TX_Board,
-		red:    true,
 		taixiu: true,
 	},
 	init: function(obj) {
 		this.RedT = obj;
-		cc.RedT.setting.taixiu.data = cc.RedT.setting.taixiu.data || {taixiu:{}, chanle:{}, du_day:{}};
-
+		cc.RedT.setting.taixiu.data = cc.RedT.setting.taixiu.data || {taixiu:{},du_day:{}};
 		this.isNan = false;
-
 		if (void 0 === cc.RedT.util.fontCong) {
 			cc.RedT.util.fontCong = this.fontCong;
 			cc.RedT.util.fontTru  = this.fontTru;
-		}
-
-		if (void 0 === cc.RedT.setting.taixiu.red) {
-			cc.RedT.setting.taixiu.red    = this.red;
-		}
-		if (void 0 === cc.RedT.setting.taixiu.taixiu) {
-			cc.RedT.setting.taixiu.taixiu = this.taixiu;
 		}
 		if (void 0 === cc.RedT.setting.taixiu.getLogs) {
 			cc.RedT.setting.taixiu.getLogs = false;
@@ -114,19 +96,13 @@ cc.Class({
 				}else{
 					this.efXiu.play()
 				}
-				if (this.diemSo%2) {
-					this.efLe.play()
-				}else{
-					this.efChan.play()
-				}
 			}
 			this.diceAnimation.node.active = false;
 		}
-
+		if (void 0 !== cc.RedT.setting.taixiu.position) {
+			this.node.position = cc.RedT.setting.taixiu.position;
+		}
 		if (cc.RedT.setting.taixiu.getLogs) {
-			if (void 0 !== cc.RedT.setting.taixiu.position) {
-				this.node.position = cc.RedT.setting.taixiu.position;
-			}
 			if (void 0 !== cc.RedT.setting.taixiu.time_remain) {
 				cc.RedT.setting.taixiu.time_remain++;
 				this.nextRealTime();
@@ -135,14 +111,13 @@ cc.Class({
 		}
 	},
 	onLoad () {
-		var self      = this;
+		let self      = this;
 		this.ttOffset = null;
 		this.editboxs = [this.inputLeft, this.inputRight];
 		this.TX_Board.init(this);
 		this.TX_Chat.init(this);
 
-		this.diaNan.getComponent('TaiXiu_DiaNan')
-		.init(this);
+		this.diaNan.getComponent('TaiXiu_DiaNan').init(this);
 
 		this.keyHandle = function(t) {
 			return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
@@ -155,17 +130,17 @@ cc.Class({
 		this.diceAnimation.on('finished', this.onDiceAnimationFinish, this);
 
 		this.onCuocClick = function(){
-			var bet = helper.getOnlyNumberInString(self.input.string);
+			let bet = helper.getOnlyNumberInString(self.input.string);
 			bet = parseInt(bet);
 			self.input.string = '';
 			self.TX_Board.node.active = false;
 			if (isNaN(bet) || bet < 1000) {
-				var notice = cc.instantiate(self.mini_warning);
-				var noticeComponent = notice.getComponent('mini_warning');
-				noticeComponent.text.string = "Tiền cược phải lớn hơn 1.000 " + (self.red ? "Red" : "Xu");
+				let notice = cc.instantiate(self.mini_warning);
+				let noticeComponent = notice.getComponent('mini_warning');
+				noticeComponent.text.string = "Tiền cược phải lớn hơn 1.000 Red";
 				self.notice.addChild(notice);
 			}else{
-				cc.RedT.send({taixiu: {cuoc: {red: self.red, taixiu: self.taixiu, select: (self.inputOld == "left"), bet: bet}}});
+				cc.RedT.send({taixiu:{cuoc:{select:(self.inputOld == "left"), bet:bet}}});
 			}
 		}
 		if (this.RedT.board) {
@@ -231,63 +206,21 @@ cc.Class({
 	clean: function(){
 		this.inputLeft.string = this.inputRight.string = '';
 	},
-	initGame: function(taixiu){
-		if (taixiu != this.taixiu) {
-			this.onChangerGame();
-		}
-	},
-	onChangerGame: function(){
-		cc.RedT.setting.taixiu.taixiu = this.taixiu = !this.taixiu;
-		this.gameCover.string  = this.taixiu ? "Chẵn Lẻ" : "Tài Xỉu";
-		this.nodeTaiXiu.active = this.taixiu;
-		this.nodeChanLe.active = !this.taixiu;
-		if(cc.RedT.setting.taixiu.getLogs){
-			this.dataLogs();
-			this.RedT.TX_ThongKe.onChangerGame();
-			this.RedT.TX_LichSuPhien.onChangerGame();
-			this.taixiu && this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
-			!this.taixiu && this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
-			this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
-		}
-	},
 	onChangerNan: function(){
 		cc.RedT.setting.taixiu.isNan = this.isNan = !this.isNan;
 		this.spriteNan.spriteFrame   = this.isNan ? this.frameNan[1] : this.frameNan[0];
 	},
 	reLoadGame: function(){
-		setTimeout(function(){
-			if (cc.RedT.setting.taixiu.red != this.red) {
-				this.onChangerRED();
-			}
-			if (cc.RedT.setting.taixiu.taixiu != this.taixiu) {
-				this.onChangerGame();
-			}else{
-				this.dataLogs();
-			}
+		this.regTimeOut2 = setTimeout(function(){
+			this.dataLogs();
 			if (cc.RedT.setting.taixiu.isNan != this.isNan) {
 				this.onChangerNan();
 			}
-			//if (void 0 !== data.du_day) {
-				this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
-			//}
-			if (cc.RedT.setting.taixiu.taixiu) {
-				this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
-			}else{
-				this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
-			}
+			this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
+			this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
 		}
 		.bind(this), 50);
 		this.setPhien();
-	},
-	onChangerRED: function(){
-		cc.RedT.setting.taixiu.red = this.red = !this.red;
-		this.cointRED.active = !this.cointRED.active;
-		this.cointXU.active  = !this.cointXU.active;
-		this.totalLeft.node.color = this.totalRight.node.color = this.red ? this.totalRight.node.color.fromHEX('#FFEB0A') : this.totalRight.node.color.fromHEX('#FFFFFF');
-		this.RedT.TX_LichSuPhien.onChangerCoint();
-		this.taixiu && this.onDataTaiXiu(cc.RedT.setting.taixiu.data.taixiu);
-		!this.taixiu && this.onDataChanLe(cc.RedT.setting.taixiu.data.chanle);
-		this.onDuDay(cc.RedT.setting.taixiu.data.du_day);
 	},
 	eventStart: function(e){
 		this.setTop();
@@ -336,7 +269,7 @@ cc.Class({
 			this.RedT.TX_LichSuPhien.onData(data.get_phien);
 		}
 		if(void 0 !== data.err){
-			var notice = cc.instantiate(this.mini_warning)
+			var notice = cc.instantiate(this.RedT.RedT.prefabMiniNotice)
 			var noticeComponent = notice.getComponent('mini_warning')
 			noticeComponent.text.string = data.err;
 			this.notice.addChild(notice);
@@ -347,11 +280,7 @@ cc.Class({
 		}
 		if (void 0 !== data.taixiu) {
 			Object.assign(cc.RedT.setting.taixiu.data.taixiu, data.taixiu);
-			this.taixiu && this.onDataTaiXiu(data.taixiu);
-		}
-		if (void 0 !== data.chanle) {
-			Object.assign(cc.RedT.setting.taixiu.data.chanle, data.chanle);
-			!this.taixiu && this.onDataChanLe(data.chanle);
+			this.onDataTaiXiu(data.taixiu);
 		}
 		if(void 0 !== data.get_top){
 			this.RedT.TX_Top.onData(data.get_top);
@@ -414,8 +343,6 @@ cc.Class({
 	efStop: function(){
 		this.efTai.stop();
 		this.efXiu.stop();
-		this.efLe.stop();
-		this.efChan.stop();
 	},
 	playTime: function(){
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
@@ -501,69 +428,19 @@ cc.Class({
 			}
 		}
 	},
-	onDataChanLe: function(data){
-		if (this.red) {
-			void 0 !== data.red_chan        && (this.totalLeft.string   = helper.numberWithCommas(data.red_chan));
-			void 0 !== data.red_le          && (this.totalRight.string  = helper.numberWithCommas(data.red_le));
-			void 0 !== data.red_me_chan     && (this.myLeft.string      = helper.numberWithCommas(data.red_me_chan));
-			void 0 !== data.red_me_le       && (this.myRight.string     = helper.numberWithCommas(data.red_me_le));
-			void 0 !== data.red_player_chan && (this.playerLeft.string  = helper.numberWithCommas(data.red_player_chan));
-			void 0 !== data.red_player_le   && (this.playerRight.string = helper.numberWithCommas(data.red_player_le));
-		}else{
-			void 0 !== data.xu_chan        && (this.totalLeft.string   = helper.numberWithCommas(data.xu_chan));
-			void 0 !== data.xu_le          && (this.totalRight.string  = helper.numberWithCommas(data.xu_le));
-			void 0 !== data.xu_me_chan     && (this.myLeft.string      = helper.numberWithCommas(data.xu_me_chan));
-			void 0 !== data.xu_me_le       && (this.myRight.string     = helper.numberWithCommas(data.xu_me_le));
-			void 0 !== data.xu_player_chan && (this.playerLeft.string  = helper.numberWithCommas(data.xu_player_chan));
-			void 0 !== data.xu_player_le   && (this.playerRight.string = helper.numberWithCommas(data.xu_player_le));
-		}
-	},
 	onDataTaiXiu: function(data){
-		if(void 0 !== cc.RedT.inGame.onGetTaiXiu){
-			cc.RedT.inGame.onGetTaiXiu(data.red_tai, data.red_xiu);
-		}
-		if (this.red) {
-			void 0 !== data.red_tai        && (this.totalLeft.string   = helper.numberWithCommas(data.red_tai));
-			void 0 !== data.red_xiu        && (this.totalRight.string  = helper.numberWithCommas(data.red_xiu));
-			void 0 !== data.red_me_tai     && (this.myLeft.string      = helper.numberWithCommas(data.red_me_tai));
-			void 0 !== data.red_me_xiu     && (this.myRight.string     = helper.numberWithCommas(data.red_me_xiu));
-			void 0 !== data.red_player_tai && (this.playerLeft.string  = helper.numberWithCommas(data.red_player_tai));
-			void 0 !== data.red_player_xiu && (this.playerRight.string = helper.numberWithCommas(data.red_player_xiu));
-		}else{
-			void 0 !== data.xu_tai        && (this.totalLeft.string   = helper.numberWithCommas(data.xu_tai));
-			void 0 !== data.xu_xiu        && (this.totalRight.string  = helper.numberWithCommas(data.xu_xiu));
-			void 0 !== data.xu_me_tai     && (this.myLeft.string      = helper.numberWithCommas(data.xu_me_tai));
-			void 0 !== data.xu_me_xiu     && (this.myRight.string     = helper.numberWithCommas(data.xu_me_xiu));
-			void 0 !== data.xu_player_tai && (this.playerLeft.string  = helper.numberWithCommas(data.xu_player_tai));
-			void 0 !== data.xu_player_xiu && (this.playerRight.string = helper.numberWithCommas(data.xu_player_xiu));
-		}
+		void 0 !== data.red_tai        && (this.totalLeft.string   = helper.numberWithCommas(data.red_tai));
+		void 0 !== data.red_xiu        && (this.totalRight.string  = helper.numberWithCommas(data.red_xiu));
+		void 0 !== data.red_me_tai     && (this.myLeft.string      = helper.numberWithCommas(data.red_me_tai));
+		void 0 !== data.red_me_xiu     && (this.myRight.string     = helper.numberWithCommas(data.red_me_xiu));
+		void 0 !== data.red_player_tai && (this.playerLeft.string  = helper.numberWithCommas(data.red_player_tai));
+		void 0 !== data.red_player_xiu && (this.playerRight.string = helper.numberWithCommas(data.red_player_xiu));
 	},
 	onDuDay: function(data){
-		if (this.taixiu) {
-			if (this.red) {
-				this.WIN_HT.string  = data.tLineWinRedH;
-				this.WIN_DN.string  = data.tLineWinRed;
-				this.LOST_HT.string = data.tLineLostRedH;
-				this.LOST_DN.string = data.tLineLostRed;
-			}else{
-				this.WIN_HT.string  = data.tLineWinXuH;
-				this.WIN_DN.string  = data.tLineWinXu;
-				this.LOST_HT.string = data.tLineLostXuH;
-				this.LOST_DN.string = data.tLineLostXu;
-			}
-		}else{
-			if (this.red) {
-				this.WIN_HT.string  = data.cLineWinRedH;
-				this.WIN_DN.string  = data.cLineWinRed;
-				this.LOST_HT.string = data.cLineLostRedH;
-				this.LOST_DN.string = data.cLineLostRed;
-			}else{
-				this.WIN_HT.string  = data.cLineWinXuH;
-				this.WIN_DN.string  = data.cLineWinXu;
-				this.LOST_HT.string = data.cLineLostXuH;
-				this.LOST_DN.string = data.cLineLostXu;
-			}
-		}
+		this.WIN_HT.string  = data.tLineWinRedH;
+		this.WIN_DN.string  = data.tLineWinRed;
+		this.LOST_HT.string = data.tLineLostRedH;
+		this.LOST_DN.string = data.tLineLostRed;
 	},
 	dataLogs: function(){
 		if (!!cc.RedT.setting.taixiu.logs.length) {
@@ -576,7 +453,7 @@ cc.Class({
 					dot.node.active = true;
 					dot.node.phien = data.phien;
 					dot.mod.text.string = data.dice[0] + '-' + data.dice[1] + '-' + data.dice[2];
-					dot.spriteFrame = self.taixiu ? (point < 11 ? self.dot_white : self.dot_black) : (point%2 ? self.dot_black : self.dot_yellow);
+					dot.spriteFrame = point < 11 ? self.dot_white : self.dot_black;
 				}else{
 					dot.node.active = false;
 				}
@@ -626,8 +503,8 @@ cc.Class({
 				if (void 0 !== data) {
 					dot.node.active = true;
 					var point = data.dice[0] + data.dice[1] +data.dice[2];
-					dot.spriteFrame = self.taixiu ? (point < 11 ? self.dot_white : self.dot_black) : (point%2 ? self.dot_black : self.dot_yellow);
-					return self.taixiu ? (point > 10 ? 1 : 0) : (point%2 ? 0 : 1);
+					dot.spriteFrame = point < 11 ? self.dot_white : self.dot_black;
+					return (point > 10 ? 1 : 0);
 				}else{
 					dot.node.active = false;
 					return -1;
@@ -640,7 +517,7 @@ cc.Class({
 				newArr.reverse();
 				for (var newDS of newArr) {
 					var point = newDS.dice[0]+newDS.dice[1]+newDS.dice[2];
-					var type  = self.taixiu ? (point > 10 ? 1 : 0) : (point%2 ? 0 : 1);
+					var type  = point > 10 ? 1 : 0;
 					if (tmp_DS === -1) {
 						tmp_DS = type;
 					}
@@ -671,13 +548,13 @@ cc.Class({
 						return Promise.all(obj.RedT.map(function(current, index){
 							var data_Cel = data[index];
 							if (void 0 !== data_Cel) {
-								var type = self.taixiu ? (data_Cel > 10 ? true : false) : (data_Cel%2 ? false : true);
+								var type = data_Cel > 10 ? true : false;
 								c_tai = type  ? c_tai+1 : c_tai;
 								c_xiu = !type ? c_xiu+1 : c_xiu;
 								current.node.active = true;
-								current.node.color = self.taixiu ? (type ? cc.color().fromHEX('#B3A1A1') : cc.Color.WHITE) : (type ? cc.Color.YELLOW : cc.Color.BLACK)
+								current.node.color = type ? cc.color().fromHEX('#B3A1A1') : cc.Color.WHITE;
 								current.text.string = data_Cel;
-								current.text.node.color = self.taixiu ? (type ? cc.Color.WHITE : cc.Color.BLACK) : (type ? cc.Color.BLACK : cc.Color.WHITE)
+								current.text.node.color = type ? cc.Color.WHITE : cc.Color.BLACK;
 								current.spriteFrame = type ? self.dot_black : self.dot_white;
 							}else{
 								current.node.active = false;
@@ -698,15 +575,17 @@ cc.Class({
 	reset: function(){
 		this.setPhien();
 		this.isNan && this.dataLogs();
-		cc.RedT.setting.taixiu.data.chanle.red_chan = cc.RedT.setting.taixiu.data.chanle.red_le = cc.RedT.setting.taixiu.data.chanle.red_me_chan = cc.RedT.setting.taixiu.data.chanle.red_me_le = cc.RedT.setting.taixiu.data.chanle.red_player_chan = cc.RedT.setting.taixiu.data.chanle.red_player_le = cc.RedT.setting.taixiu.data.chanle.xu_chan = cc.RedT.setting.taixiu.data.chanle.xu_le = cc.RedT.setting.taixiu.data.chanle.xu_me_chan = cc.RedT.setting.taixiu.data.chanle.xu_me_le = cc.RedT.setting.taixiu.data.chanle.xu_player_chan = cc.RedT.setting.taixiu.data.chanle.xu_player_le = cc.RedT.setting.taixiu.data.taixiu.red_me_tai = cc.RedT.setting.taixiu.data.taixiu.red_me_xiu = cc.RedT.setting.taixiu.data.taixiu.red_player_tai = cc.RedT.setting.taixiu.data.taixiu.red_player_xiu = cc.RedT.setting.taixiu.data.taixiu.red_tai = cc.RedT.setting.taixiu.data.taixiu.red_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_me_tai = cc.RedT.setting.taixiu.data.taixiu.xu_me_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_player_tai = cc.RedT.setting.taixiu.data.taixiu.xu_player_xiu = cc.RedT.setting.taixiu.data.taixiu.xu_tai = cc.RedT.setting.taixiu.data.taixiu.xu_xiu = this.totalLeft.string = this.totalRight.string = this.myLeft.string = this.myRight.string = this.playerLeft.string = this.playerRight.string = 0;
+		cc.RedT.setting.taixiu.data.taixiu.red_me_tai = cc.RedT.setting.taixiu.data.taixiu.red_me_xiu = cc.RedT.setting.taixiu.data.taixiu.red_player_tai = cc.RedT.setting.taixiu.data.taixiu.red_player_xiu = cc.RedT.setting.taixiu.data.taixiu.red_tai = cc.RedT.setting.taixiu.data.taixiu.red_xiu = this.totalLeft.string = this.totalRight.string = this.myLeft.string = this.myRight.string = this.playerLeft.string = this.playerRight.string = 0;
 	},
 	setDefautl: function(){
 		cc.RedT.setting.taixiu.getLogs = this.nodeTimePopup.active = false;
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
+		clearTimeout(this.regTimeOut);
+		clearTimeout(this.regTimeOut2);
 		this.TX_Chat.reset();
 	},
 	status: function(data){
-		setTimeout(function() {
+		this.regTimeOut = setTimeout(function() {
 			if(!this.isNan){
 				var temp = new cc.Node;
 				temp.addComponent(cc.Label);

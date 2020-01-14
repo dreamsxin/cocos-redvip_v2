@@ -17,7 +17,7 @@ cc.Class({
         cc.RedT.send({g:{baucua:{tops:true}}});
     },
     onData: function(data){
-        this.content.removeAllChildren();
+        this.content.destroyAllChildren();
         data.forEach(function(obj, index){
             let item = cc.instantiate(this.item);
             item = item.getComponent('BauCua_top_item');

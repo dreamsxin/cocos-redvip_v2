@@ -13,11 +13,12 @@ cc.Class({
 	onLoad(){
 		this.page = cc.instantiate(this.page);
         this.page.y = -279;
+        this.page.active = false;
         this.node.addChild(this.page);
         this.page = this.page.getComponent('Pagination');
         this.page.init(this);
 
-		this.history = "LichSuNap";
+		this.history      = "LichSuNap";
 		this.lichSuNap    = this.lichSuNap.getComponent('LichSuNap');
 		this.lichSuRut    = this.lichSuRut.getComponent('LichSuRut');
 		this.lichSuChuyen = this.lichSuChuyen.getComponent('LichSuChuyen');

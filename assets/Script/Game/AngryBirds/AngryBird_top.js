@@ -15,7 +15,7 @@ cc.Class({
         cc.RedT.send({g:{angrybird:{top:this.red}}});
     },
     onData: function(data){
-        this.content.removeAllChildren();
+        this.content.destroyAllChildren();
         data.forEach(function(obj, index){
             let item = cc.instantiate(this.item);
             item = item.getComponent('VQRed_history_item');

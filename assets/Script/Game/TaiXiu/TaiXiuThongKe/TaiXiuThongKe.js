@@ -6,8 +6,6 @@ cc.Class({
 		background: cc.Node,
 		header: cc.Node,
 		body: cc.Node,
-		nodeTaiXiu: cc.Node,
-		nodeChanLe: cc.Node,
 		KetQuaLeft: cc.Label,
 		KetQuaRight: cc.Label,
 		KetQuaDot: cc.Node,
@@ -99,10 +97,6 @@ cc.Class({
 		this.background.off(cc.Node.EventType.TOUCH_END,    this.eventEnd,   this);
 		this.background.off(cc.Node.EventType.TOUCH_CANCEL, this.eventEnd,   this);
 		this.background.off(cc.Node.EventType.MOUSE_ENTER,  this.setTop,     this);
-	},
-	onChangerGame: function(){
-		this.nodeTaiXiu.active = !this.nodeTaiXiu.active;
-		this.nodeChanLe.active = !this.nodeChanLe.active;
 	},
 	eventStart: function(e){
 		this.setTop();

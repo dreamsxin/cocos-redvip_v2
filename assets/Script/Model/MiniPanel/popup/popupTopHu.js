@@ -13,14 +13,6 @@ cc.Class({
 			default: null,
 			type: cc.Node
 		},
-		nodeRed: {
-			default: null,
-			type: cc.Node
-		},
-		nodeXu: {
-			default: null,
-			type: cc.Node
-		},
 		header: {
 			default: null,
 			type: cc.Node
@@ -33,21 +25,10 @@ cc.Class({
 			default: [],
 			type: cc.SpriteFrame,
 		},
-		red: false,
 		bet: "",
 	},
 	init: function(obj){
 		this.RedT = obj;
-		cc.RedT.setting.topHu = cc.RedT.setting.topHu || {};
-		if (void 0 !== cc.RedT.setting.topHu.position) {
-			this.node.position = cc.RedT.setting.topHu.position;
-		}
-		if (void 0 !== cc.RedT.setting.topHu.open) {
-			this.body.active = cc.RedT.setting.topHu.open;
-		}
-		if (void 0 !== cc.RedT.setting.topHu.data) {
-			this.onData(cc.RedT.setting.topHu.data);
-		}		
 	},
 	onLoad () {
 		this.ttOffset     = null;
@@ -60,6 +41,17 @@ cc.Class({
 		this.header = this.header.children.map(function(obj){
 			return obj.children[0].getComponent(cc.Label);
 		});
+
+		cc.RedT.setting.topHu = cc.RedT.setting.topHu || {};
+		if (void 0 !== cc.RedT.setting.topHu.position) {
+			this.node.position = cc.RedT.setting.topHu.position;
+		}
+		if (void 0 !== cc.RedT.setting.topHu.open) {
+			this.body.active = cc.RedT.setting.topHu.open;
+		}
+		if (void 0 !== cc.RedT.setting.topHu.data) {
+			this.onData(cc.RedT.setting.topHu.data);
+		}
 	},
 	onEnable: function () {
 		this.panel.on(cc.Node.EventType.TOUCH_START,  this.eventStart, this);
@@ -100,12 +92,6 @@ cc.Class({
 		this.body.active = cc.RedT.setting.topHu.open = !this.body.active;
 		this.onChangerData();
 	},
-	onChangerCoint: function(){
-		this.red     = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.onChangerData();
-	},
 	onChangerBet: function(e, value){
 		this.bet = value;
 		this.header.forEach(function(obj){
@@ -126,13 +112,13 @@ cc.Class({
 	},
 	onChangerData: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data) {
-			var self = this;
-			var dataName = [];
-			Promise.all(this.content.children.map(function(obj){
-				var name = obj.name;
-				var T = cc.RedT.setting.topHu.data[name].filter(function(temp){
-					return temp.type == self.bet && temp.red == self.red
-				});
+			let self = this;
+			let dataName = [];
+			let result = this.content.children.map(function(obj){
+				let name = obj.name;
+				let T = cc.RedT.setting.topHu.data[name].filter(function(temp){
+					return temp.type == this.bet;
+				}.bind(this));
 				dataName[name] = obj;
 				if (!T.length) {
 					T[0] = {name: name, bet: 0};
@@ -140,26 +126,25 @@ cc.Class({
 					T[0].name = name;
 				}
 				return T[0];
-			})).then(result => {
-				let TT = result.sort(function(a, b){
-					return b.bet - a.bet;
-				});
-				TT.forEach(function(obj, index){
-					let temp = dataName[obj.name];
-						temp.stopAllActions();
-					let y = -(75*(index+1)-37.5);
-						temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
-					if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
-						helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 2200, true);
-					}
-					if (obj.balans > 0 && !!self.x[obj.x-2]) {
-						temp.xHu.node.active = true;
-						temp.xHu.spriteFrame = self.x[obj.x-2];
-					}else{
-						temp.xHu.node.active = false;
-					}
-				});
+			}.bind(this));
+			result = result.sort(function(a, b){
+				return b.bet - a.bet;
 			});
+			result.forEach(function(obj, index){
+				let temp = dataName[obj.name];
+					temp.stopAllActions();
+				let y = -(75*(index+1)-37.5);
+					temp.runAction(cc.moveTo(0.2, cc.v2(0, y)));
+				if (helper.getOnlyNumberInString(temp.hu.string) - obj.bet !== 0) {
+					helper.numberTo(temp.hu, helper.getOnlyNumberInString(temp.hu.string), obj.bet, 2000, true);
+				}
+				if (obj.balans > 0 && !!this.x[obj.x-2]) {
+					temp.xHu.node.active = true;
+					temp.xHu.spriteFrame = this.x[obj.x-2];
+				}else{
+					temp.xHu.node.active = false;
+				}
+			}.bind(this));
 		}
 	},
 	onChangerGame: function(){
@@ -169,9 +154,11 @@ cc.Class({
         this.RedT.CaoThap.onGetHu();
         this.RedT.AngryBirds.onGetHu();
         this.RedT.MegaJackpot.onGetHu();
+        /**
         if (void 0 !== cc.RedT.inGame.onGetHu) {
         	cc.RedT.inGame.onGetHu();
         }
+        */
 	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);

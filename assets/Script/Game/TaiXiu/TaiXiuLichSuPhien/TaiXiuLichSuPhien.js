@@ -67,7 +67,7 @@ cc.Class({
 	getPhien: function(phien = null){
 		if (!!phien){
 			cc.RedT.inGame.loading.active = true;
-			cc.RedT.send({taixiu:{get_phien: {red: this.RedT.TX_Main.red, taixiu: this.RedT.TX_Main.taixiu, phien: phien}}});
+			cc.RedT.send({taixiu:{get_phien:{phien:phien}}});
 		}
 	},
 	onNextClick: function(event){

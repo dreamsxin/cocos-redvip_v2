@@ -19,7 +19,7 @@ cc.Class({
 		this.TX_Main.init(this);
 		this.TX_ThongKe.init(this);
 
-		var check = localStorage.getItem('taixiu');
+		let check = localStorage.getItem('taixiu');
 		if (check == "true") {
 			this.node.active = true;
 		}
@@ -31,7 +31,7 @@ cc.Class({
 		this.regEvent(false);
 	},
 	regEvent: function(bool){
-		cc.RedT.send({taixiu: !cc.RedT.setting.taixiu.getLogs ? {view: bool, getLogs:true} : {view: bool}});
+		cc.RedT.send({taixiu: !cc.RedT.setting.taixiu.getLogs ? {view:bool, getLogs:true} : {view: bool}});
 	},
 	setTop: function(){
 		cc.RedT.setting.taixiu.scale = 1;
@@ -41,13 +41,12 @@ cc.Class({
 	openGame: function (e, taixiu = '1') {
 		cc.RedT.audio.playClick();
 		if (cc.RedT.IS_LOGIN){
-			this.TX_Main.initGame((taixiu === '1'));
 			this.node.active = !0;
 			localStorage.setItem('taixiu', true);
 			this.setTop();
-		}
-		else
+		}else{
 			cc.RedT.inGame.dialog.showSignIn();
+		}
 	},
 	closeGame: function () {
 		cc.RedT.audio.playUnClick();

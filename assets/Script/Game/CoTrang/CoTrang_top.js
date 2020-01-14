@@ -15,7 +15,7 @@ cc.Class({
         cc.RedT.send({g:{longlan:{top: this.red}}});
     },
     onData: function(data){
-        this.content.removeAllChildren();
+        this.content.destroyAllChildren();
         var self = this;
         Promise.all(data.map(function(obj, index){
             var item = cc.instantiate(self.item);

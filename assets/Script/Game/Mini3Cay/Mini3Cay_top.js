@@ -26,7 +26,7 @@ cc.Class({
 		this.get_data();
 	},
 	onData: function(data){
-		this.content.removeAllChildren();
+		this.content.destroyAllChildren();
 		var self = this;
 		Promise.all(data.map(function(obj, index){
 			var item = cc.instantiate(self.item);

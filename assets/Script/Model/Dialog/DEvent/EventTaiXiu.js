@@ -108,8 +108,8 @@ cc.Class({
 		}
 	},
 	topHQ: function(data){
-		this.contentHQLeft.removeAllChildren();
-		this.contentHQRight.removeAllChildren();
+		this.contentHQLeft.destroyAllChildren();
+		this.contentHQRight.destroyAllChildren();
 
 		data.win.reverse();
 		data.lost.reverse();

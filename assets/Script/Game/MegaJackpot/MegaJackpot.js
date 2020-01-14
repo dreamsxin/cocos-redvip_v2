@@ -20,7 +20,6 @@ cc.Class({
 		luot:        cc.Label,
 
 		notice:       cc.Node,
-		noticePrefab: cc.Prefab,
 
 		spinNode:     cc.Node,
 		spinSprite:   cc.Sprite,
@@ -211,8 +210,8 @@ cc.Class({
 		cc.RedT.send({g:{megaj:{update:true}}});
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.noticePrefab)
-		var noticeComponent = notice.getComponent('mini_warning')
+		var notice = cc.instantiate(this.RedT.prefabMiniNotice);
+		var noticeComponent = notice.getComponent('mini_warning');
 		noticeComponent.text.string = text;
 		this.notice.addChild(notice);
 	},

@@ -18,14 +18,9 @@ cc.Class({
 		buttonAnNon: cc.Node,
 		buttonCao:   cc.Node,
 		buttonThap:  cc.Node,
-
-		bet:     cc.Node,
-
-		notice:       cc.Node,
-		prefabNotice: cc.Prefab,
-
-		cardf:        cc.Prefab,
-
+		bet:         cc.Node,
+		notice:      cc.Node,
+		cardf:       cc.Prefab,
 		cuoc:    "",
 		hu:      cc.Label,
 		time:    cc.Label,
@@ -33,7 +28,6 @@ cc.Class({
 		winUp:   cc.Label,
 		winDown: cc.Label,
 		isPlay:  false,
-		red:     true,
 	},
 	init(obj){
 		this.RedT = obj;
@@ -151,7 +145,7 @@ cc.Class({
 		}
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice)
+		var notice = cc.instantiate(this.RedT.prefabMiniNotice)
 		var noticeComponent = notice.getComponent('mini_warning')
 		noticeComponent.text.string = text
 		this.notice.addChild(notice)
@@ -264,7 +258,7 @@ cc.Class({
 		.bind(this), 1000)
 	},
 	sendPlay: function(){
-		cc.RedT.send({g:{caothap:{play:{newGame:{cuoc:this.cuoc, red: this.red}}}}});
+		cc.RedT.send({g:{caothap:{play:{newGame:{cuoc:this.cuoc}}}}});
 	},
 	selectGame: function(e, select){
 		this.onS1();
@@ -386,7 +380,7 @@ cc.Class({
 			temp.addComponent(cc.Label);
 			temp = temp.getComponent(cc.Label);
 			temp.string = '+' + helper.numberWithCommas(data);
-			temp.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+			temp.font = cc.RedT.util.fontCong;
 			temp.lineHeight = 130;
 			temp.fontSize   = 20;
 			temp.node.position = cc.v2(0, 10);
@@ -426,7 +420,7 @@ cc.Class({
 		}
 	},
 	reSetPhien: function(){
-		this.logs.removeAllChildren();
+		this.logs.destroyAllChildren();
 		cc.RedT.setting.caothap.logs = [];
 	},
 	newGame: function(){
@@ -437,16 +431,14 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
-			var self = this;
-			Promise.all(cc.RedT.setting.topHu.data['caothap'].filter(function(temp){
-				return temp.type == self.cuoc && temp.red == self.red;
-			}))
-			.then(result => {
-				var s = helper.getOnlyNumberInString(this.hu.string);
-				var bet = result[0].bet;
-				if (s-bet != 0) 
-					helper.numberTo(this.hu, s, bet, 2000, true);
-			});
+			let result = cc.RedT.setting.topHu.data['caothap'].filter(function(temp){
+				return temp.type == this.cuoc;
+			}.bind(this));
+			let s = helper.getOnlyNumberInString(this.hu.string);
+			let bet = result[0].bet;
+			if (s-bet != 0){
+				helper.numberTo(this.hu, s, bet, 2000, true);
+			}
 		}
 	},
 });

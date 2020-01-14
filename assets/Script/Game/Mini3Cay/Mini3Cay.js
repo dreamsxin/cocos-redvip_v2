@@ -1,39 +1,32 @@
 
-var helper        = require('Helper'),
-	Mini3Cay_reel = require('Mini3Cay_reel');
+var helper        = require('Helper');
+var Mini3Cay_reel = require('Mini3Cay_reel');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
     	background:     cc.Node,
-
-		buttonCoint:    cc.Node,
     	buttonSpin:     cc.Node,
 		buttonAuto:     cc.Node,
 		buttonSpeed:    cc.Node,
 		buttonStop:     cc.Node,
 		buttonAutoDot:  cc.Node,
 		buttonSpeedDot: cc.Node,
-
 		reels: {
 			default: [],
 			type: Mini3Cay_reel,
 		},
 
     	bet:     cc.Node,
-        nodeRed: cc.Node,
-		nodeXu:  cc.Node,
 		notice:  cc.Node,
 		prefabNotice: cc.Prefab,
 		cardf:   cc.Prefab,
-
         cuoc:  "",
 		hu:      cc.Label,
 		isAuto:  false,
 		isSpeed: false,
 		isSpin:  false,
-		red:     true,
     },
     init(obj){
     	this.RedT = obj;
@@ -50,9 +43,6 @@ cc.Class({
 		}
 		if (void 0 !== cc.RedT.setting.mini3cay.bet && cc.RedT.setting.mini3cay.bet != this.cuoc) {
 			this.intChangerBet();
-		}
-		if (void 0 !== cc.RedT.setting.mini3cay.red && this.red != cc.RedT.setting.mini3cay.red) {
-			this.changerCoint();
 		}
 		if (void 0 !== cc.RedT.setting.mini3cay.isSpeed && this.isSpeed != cc.RedT.setting.mini3cay.isSpeed) {
 			this.onClickSpeed();
@@ -115,12 +105,6 @@ cc.Class({
 		this.node.parent.insertChild(this.node);
 		this.RedT.setTop(this.node);
 	},
-	changerCoint: function(){
-		this.red            = cc.RedT.setting.mini3cay.red = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.onGetHu();
-	},
 	intChangerBet: function(){
 		var self = this;
 		this.bet.children.forEach(function(obj){
@@ -174,7 +158,7 @@ cc.Class({
 		}
     },
     sendSpin: function(){
-		cc.RedT.send({g:{mini3cay:{spin:{cuoc:this.cuoc, red: this.red}}}});
+		cc.RedT.send({g:{mini3cay:{spin:{cuoc:this.cuoc}}}});
 	},
     random: function(newG = false){
 		this.reels.forEach(function(reel) {
@@ -189,7 +173,6 @@ cc.Class({
 	},
 	onSpin: function(){
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
 		this.bet.children.forEach(function(bet){
 	    	bet.pauseSystemEvents();
 	    });
@@ -197,7 +180,6 @@ cc.Class({
 	offSpin: function(){
 		this.isSpin = this.buttonStop.active = false;
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
 		this.bet.children.forEach(function(bet){
 			if(!bet.children[0].active)
 				bet.resumeSystemEvents();
@@ -281,19 +263,14 @@ cc.Class({
     			// Thắng lớn
 				var BigWin = cc.instantiate(this.RedT.prefabBigWin);
 				BigWin     = BigWin.getComponent(cc.Animation);
-
 				var BigWinFinish = function(){
 					BigWin.node.destroy();
 					this.hieuUng();
 				}
-
 				BigWin.on('finished', BigWinFinish, this);
 				BigWin.node.bet = this.win;
-				BigWin.node.red = this.red;
 				BigWin.node.position = cc.v2(0, 70);
-
 				this.notice.addChild(BigWin.node);
-
 				this.win = this.winC == 0;
     		}else{
     			var temp = new cc.Node;
@@ -325,16 +302,14 @@ cc.Class({
     },
     onGetHu: function(){
 		if (this.node.active && void 0 !== cc.RedT.setting.topHu.data) {
-			var self = this;
-			Promise.all(cc.RedT.setting.topHu.data['mini3cay'].filter(function(temp){
-				return temp.type == self.cuoc && temp.red == self.red
-			}))
-			.then(result => {
-				var s = helper.getOnlyNumberInString(this.hu.string);
-				var bet = result[0].bet;
-				if (s-bet != 0) 
-					helper.numberTo(this.hu, s, bet, 2000, true);
-			});
+			let result = cc.RedT.setting.topHu.data['mini3cay'].filter(function(temp){
+				return temp.type == this.cuoc;
+			}.bind(this));
+			let s = helper.getOnlyNumberInString(this.hu.string);
+			let bet = result[0].bet;
+			if (s-bet != 0){
+				helper.numberTo(this.hu, s, bet, 2000, true);
+			}
 		}
 	},
     speed: function(){

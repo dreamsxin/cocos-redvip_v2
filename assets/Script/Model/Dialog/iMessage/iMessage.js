@@ -35,7 +35,7 @@ cc.Class({
 		}
 	},
 	list: function(list){
-		this.content.removeAllChildren();
+		this.content.destroyAllChildren();
 		var self = this;
 		Promise.all(list.map(function(mail){
 			let item = cc.instantiate(self.item);
@@ -79,7 +79,7 @@ cc.Class({
 		cc.RedT.send({message:{view: this.message}});
 	},
 	reset: function(){
-		this.content.removeAllChildren();
+		this.content.destroyAllChildren();
 		this.text.string = this.news.string = "";
 		this.news.node.active = false;
 	},

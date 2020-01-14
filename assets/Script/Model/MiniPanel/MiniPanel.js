@@ -20,12 +20,9 @@ cc.Class({
 		// Prefab
 		PrefabNoHu:   cc.Prefab,
 		prefabBigWin: cc.Prefab,
-		light:      true,
+		prefabMiniNotice: cc.Prefab,
 	},
 	onLoad () {
-		if (void 0 === cc.RedT.setting.light) {
-			cc.RedT.setting.light = true;
-		}
 		var self = this;
 		this.node._onPreDestroy = function(){
 			self.onDestroy();
@@ -96,7 +93,11 @@ cc.Class({
 	},
 	onDestroy: function(){
 		clearInterval(this.TaiXiu.TX_Main.timeInterval);
+		clearTimeout(this.TaiXiu.regTimeOut);
+		clearTimeout(this.TaiXiu.regTimeOut2);
+
 		clearInterval(this.BauCua.timeInterval);
+		clearTimeout(this.BauCua.regTimeOut);
 		void 0 !== this.CaoThap.timeInterval && clearInterval(this.CaoThap.timeInterval);
 	},
 	playClick: function(){

@@ -183,4 +183,20 @@ cc.Class({
 			cc.RedT.send(data);
 		}
 	},
+	onCopyNumber: function(){
+		cc.RedT.CopyToClipboard(this.labelNumber.string);
+		cc.RedT.inGame.noticeCopy();
+	},
+	onCopyName: function(){
+		cc.RedT.CopyToClipboard(this.labelName.string);
+		cc.RedT.inGame.noticeCopy();
+	},
+	onCopyBranch: function(){
+		cc.RedT.CopyToClipboard(this.labelBranch.string);
+		cc.RedT.inGame.noticeCopy();
+	},
+	onCopyNoiDung: function(){
+		cc.RedT.CopyToClipboard('Pro68 ID- '+this.labelUID.string);
+		cc.RedT.inGame.noticeCopy();
+	},
 });

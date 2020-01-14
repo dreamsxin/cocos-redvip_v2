@@ -20,7 +20,7 @@ cc.Class({
 		this.node.position = cc.v2(this.RedT.node.width+200, 0);
 	},
 	reset: function(){
-		this.node.removeAllChildren();
+		this.node.destroyAllChildren();
 		this.node.active = false;
 	},
 	onData: function(data){

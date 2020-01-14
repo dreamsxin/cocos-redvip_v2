@@ -1,7 +1,7 @@
 
 var helper = require('Helper');
-var reel   = require('BigBabol_reel'),
-	line   = require('BigBabol_line');
+var reel   = require('BigBabol_reel');
+var	line   = require('BigBabol_line');
 
 cc.Class({
 	extends: cc.Component,
@@ -23,19 +23,14 @@ cc.Class({
 		buttonSpin:  cc.Node,
 		buttonAuto:  cc.Node,
 		buttonStop:  cc.Node,
-		buttonCoint: cc.Node,
-		nodeRed: cc.Node,
-		nodeXu: cc.Node,
 		bet: cc.Node,
 		notice: cc.Node,
-		prefabNotice: cc.Prefab,
 		phien: cc.Label,
 		hu:    cc.Label,
 		cuoc:     "",
 		isAuto:  false,
 		isSpeed: false,
 		isSpin:  false,
-		red:     true,
 	},
 	init(obj){
 		this.RedT = obj;
@@ -50,9 +45,6 @@ cc.Class({
 		}
 		if (void 0 !== cc.RedT.setting.big_babol.bet && cc.RedT.setting.big_babol.bet != this.cuoc) {
 			this.intChangerBet();
-		}
-		if (void 0 !== cc.RedT.setting.big_babol.red && this.red != cc.RedT.setting.big_babol.red) {
-			this.changerCoint();
 		}
 		if (void 0 !== cc.RedT.setting.big_babol.isAuto && this.isAuto != cc.RedT.setting.big_babol.isAuto) {
 			this.onClickAuto();
@@ -120,7 +112,6 @@ cc.Class({
 	onSpin: function(){
 		this.buttonLine.pauseSystemEvents();
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
 		this.line.node.active = false;
 		this.bet.children.forEach(function(bet){
 			bet.pauseSystemEvents();
@@ -131,7 +122,6 @@ cc.Class({
 		this.buttonAuto.color  = cc.color(155,155,155);
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
 		this.bet.children.forEach(function(bet){
 			if(bet.children[0].active) bet.resumeSystemEvents();
 		});
@@ -155,12 +145,6 @@ cc.Class({
 	onClickStop: function(){
 		this.onClickAuto();
 		this.buttonStop.active = false;
-	},
-	changerCoint: function(){
-		this.red            = cc.RedT.setting.big_babol.red = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.onGetHu();
 	},
 	intChangerBet: function(){
 		this.bet.children.forEach(function(obj){
@@ -193,10 +177,10 @@ cc.Class({
 		this.onGetHu();
 	},
 	onGetInfo: function(){
-		cc.RedT.send({g:{big_babol:{info:{cuoc:this.cuoc, red: this.red}}}});
+		cc.RedT.send({g:{big_babol:{info:{cuoc:this.cuoc}}}});
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{big_babol:{spin:{cuoc:this.cuoc, red: this.red, line: cc.RedT.setting.big_babol.line}}}});
+		cc.RedT.send({g:{big_babol:{spin:{cuoc:this.cuoc, line:cc.RedT.setting.big_babol.line}}}});
 	},
 	onCloseGame: function(){
 		this.isSpin = false;
@@ -206,25 +190,24 @@ cc.Class({
 		this.offSpin();
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice)
+		var notice = cc.instantiate(this.RedT.prefabMiniNotice)
 		var noticeComponent = notice.getComponent('mini_warning')
 		noticeComponent.text.string = text;
 		this.notice.addChild(notice);
 	},
 	onData:function(data){
-		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				this.notice.removeAllChildren();
+				this.notice.destroyAllChildren();
 				this.win      = data.win;
 				this.nohu     = data.nohu;
 				this.isBigWin = data.isBigWin;
 				this.buttonStop.active = this.isAuto ? true : false;
 				data.cel.forEach(function(cel, cel_index){
 					cel.forEach(function(icon, index){
-						self.reels[cel_index].icons[index].setIcon(icon, true);
-					});
-				});
+						this.reels[cel_index].icons[index].setIcon(icon, true);
+					}.bind(this));
+				}.bind(this));
 				this.autoSpin();
 			}else{
 				this.offSpin();
@@ -302,7 +285,6 @@ cc.Class({
 			}
 			BigWin.on('finished', BigWinFinish, this);
 			BigWin.node.bet = this.win;
-			BigWin.node.red = this.red;
 			BigWin.node.position = cc.v2(0,75);
 			this.notice.addChild(BigWin.node);
 			this.win = 0;
@@ -314,7 +296,7 @@ cc.Class({
 			node.addComponent(cc.Label);
 			node = node.getComponent(cc.Label);
 			helper.numberTo(node, 0, this.win, 600, true);
-			node.font = this.red ? cc.RedT.util.fontCong : cc.RedT.util.fontTru;
+			node.font = cc.RedT.util.fontCong;
 			node.lineHeight = 130;
 			node.fontSize   = 25;
 			node.node.position = cc.v2(0,40);
@@ -337,20 +319,18 @@ cc.Class({
 		}
 	},
 	onLineWin: function(){
-		var self = this;
 		this.line_win.forEach(function(obj){
-			let TRed = self.line.mainLine[obj.line-1];
+			let TRed = this.line.mainLine[obj.line-1];
 			TRed.onhover();
 			TRed.node.pauseSystemEvents();
-		});
+		}.bind(this));
 	},
 	offLineWin: function(){
-		var self = this;
 		this.line_win.forEach(function(obj){
-			let TRed = self.line.mainLine[obj.line-1];
+			let TRed = this.line.mainLine[obj.line-1];
 			TRed.offhover();
 			TRed.node.resumeSystemEvents();
-		});
+		}.bind(this));
 	},
 	random: function(){
 		this.reels.forEach(function(reel){
@@ -363,16 +343,14 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data && this.node.active) {
-			var self = this;
-			Promise.all(cc.RedT.setting.topHu.data['big_babol'].filter(function(temp){
-				return temp.type == self.cuoc && temp.red == self.red;
-			}))
-			.then(result => {
-				var s = helper.getOnlyNumberInString(this.hu.string);
-				var bet = result[0].bet;
-				if (s-bet != 0) 
-					helper.numberTo(this.hu, s, bet, 2000, true);
-			});
+			let result = cc.RedT.setting.topHu.data['big_babol'].filter(function(temp){
+				return temp.type == this.cuoc;
+			}.bind(this));
+			let s = helper.getOnlyNumberInString(this.hu.string);
+			let bet = result[0].bet;
+			if (s-bet != 0){
+				helper.numberTo(this.hu, s, bet, 2000, true);
+			}
 		}
 	},
 });

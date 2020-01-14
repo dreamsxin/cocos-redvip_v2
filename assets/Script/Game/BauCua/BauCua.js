@@ -42,16 +42,13 @@ cc.Class({
 		prefabLogs: cc.Prefab,
 
 		notice: cc.Node,
-		prefabNotice: cc.Prefab,
-
         cuoc:  "",
-		red:   true,
     },
     init(obj){
 		this.RedT = obj;
 		this.Top    = obj.Dialog.BauCua_top;
 		this.LichSu = obj.Dialog.BauCua_LichSu;
-		cc.RedT.setting.baucua = cc.RedT.setting.baucua || {scale:1, regOpen: false, data:{meXuBau: 0, meXuCa: 0, meXuCua: 0, meXuGa: 0, meXuHuou: 0, meXuTom: 0, meRedBau: 0, meRedCa: 0, meRedCua: 0, meRedGa: 0, meRedHuou: 0, meRedTom: 0, redBau: 0, redCa: 0, redCua: 0, redGa: 0, redHuou: 0, redTom: 0, xuBau: 0, xuCa: 0, xuCua: 0, xuGa: 0, xuHuou: 0, xuTom: 0}, logLV:{}, red: true, bet: "100"};
+		cc.RedT.setting.baucua = cc.RedT.setting.baucua || {scale:1, regOpen: false, data:{meRedBau: 0, meRedCa: 0, meRedCua: 0, meRedGa: 0, meRedHuou: 0, meRedTom: 0, redBau: 0, redCa: 0, redCua: 0, redGa: 0, redHuou: 0, redTom: 0}, logLV:{}, bet: "1000"};
 
 		var check = localStorage.getItem('bauCua');
 		if (check == "true") {
@@ -184,14 +181,14 @@ cc.Class({
 		this.logLVHandling(cc.RedT.setting.baucua.logLV);
 	},
 	datCuoc: function(e, linhVat){
-		if (this.cuoc < 100) {
+		if (this.cuoc < 1000) {
 			this.addNotice('Vui lòng chọn mức cược...');
 		}else{
-			cc.RedT.send({g:{baucua:{cuoc:{cuoc:this.cuoc, red: this.red, linhVat: linhVat}}}});
+			cc.RedT.send({g:{baucua:{cuoc:{cuoc:this.cuoc, linhVat:linhVat}}}});
 		}
 	},
 	addNotice:function(text){
-		var notice = cc.instantiate(this.prefabNotice)
+		var notice = cc.instantiate(this.RedT.prefabMiniNotice)
 		var noticeComponent = notice.getComponent('mini_warning')
 		noticeComponent.text.string = text;
 		this.notice.addChild(notice);
@@ -202,7 +199,7 @@ cc.Class({
 		}.bind(this));
 	},
 	addLogs: function(){
-		this.logs.removeAllChildren();
+		this.logs.destroyAllChildren();
 		cc.RedT.setting.baucua.logs.forEach(function(log, index){
 			var node = cc.instantiate(this.prefabLogs)
 			var nodeComponent = node.getComponent('BauCua_logMini');
@@ -318,84 +315,41 @@ cc.Class({
         this.logTom.string  = helper.numberWithCommas(data[5]);
 	},
 	DataHandling: function(data){
-		if (this.red) {
-			if (void 0 !== data.redHuou) {
-				this.linhVat[0].totallCuoc(data.redHuou);
-			}
-			if (void 0 !== data.redBau) {
-				this.linhVat[1].totallCuoc(data.redBau);
-			}
-			if (void 0 !== data.redGa) {
-				this.linhVat[2].totallCuoc(data.redGa);
-			}
-			if (void 0 !== data.redCa) {
-				this.linhVat[3].totallCuoc(data.redCa);
-			}
-			if (void 0 !== data.redCua) {
-				this.linhVat[4].totallCuoc(data.redCua);
-			}
-			if (void 0 !== data.redTom) {
-				this.linhVat[5].totallCuoc(data.redTom);
-			}
-
-
-			if (void 0 !== data.meRedHuou) {
-				this.linhVat[0].meCuoc(data.meRedHuou);
-			}
-			if (void 0 !== data.meRedBau) {
-				this.linhVat[1].meCuoc(data.meRedBau);
-			}
-			if (void 0 !== data.meRedGa) {
-				this.linhVat[2].meCuoc(data.meRedGa);
-			}
-			if (void 0 !== data.meRedCa) {
-				this.linhVat[3].meCuoc(data.meRedCa);
-			}
-			if (void 0 !== data.meRedCua) {
-				this.linhVat[4].meCuoc(data.meRedCua);
-			}
-			if (void 0 !== data.meRedTom) {
-				this.linhVat[5].meCuoc(data.meRedTom);
-			}
-		}else{
-			if (void 0 !== data.xuHuou) {
-				this.linhVat[0].totallCuoc(data.xuHuou);
-			}
-			if (void 0 !== data.xuBau) {
-				this.linhVat[1].totallCuoc(data.xuBau);
-			}
-			if (void 0 !== data.xuGa) {
-				this.linhVat[2].totallCuoc(data.xuGa);
-			}
-			if (void 0 !== data.xuCa) {
-				this.linhVat[3].totallCuoc(data.xuCa);
-			}
-			if (void 0 !== data.xuCua) {
-				this.linhVat[4].totallCuoc(data.xuCua);
-			}
-			if (void 0 !== data.xuTom) {
-				this.linhVat[5].totallCuoc(data.xuTom);
-			}
-
-
-			if (void 0 !== data.meXuHuou) {
-				this.linhVat[0].meCuoc(data.meXuHuou);
-			}
-			if (void 0 !== data.meXuBau) {
-				this.linhVat[1].meCuoc(data.meXuBau);
-			}
-			if (void 0 !== data.meXuGa) {
-				this.linhVat[2].meCuoc(data.meXuGa);
-			}
-			if (void 0 !== data.meXuCa) {
-				this.linhVat[3].meCuoc(data.meXuCa);
-			}
-			if (void 0 !== data.meXuCua) {
-				this.linhVat[4].meCuoc(data.meXuCua);
-			}
-			if (void 0 !== data.meXuTom) {
-				this.linhVat[5].meCuoc(data.meXuTom);
-			}
+		if (void 0 !== data.redHuou) {
+			this.linhVat[0].totallCuoc(data.redHuou);
+		}
+		if (void 0 !== data.redBau) {
+			this.linhVat[1].totallCuoc(data.redBau);
+		}
+		if (void 0 !== data.redGa) {
+			this.linhVat[2].totallCuoc(data.redGa);
+		}
+		if (void 0 !== data.redCa) {
+			this.linhVat[3].totallCuoc(data.redCa);
+		}
+		if (void 0 !== data.redCua) {
+			this.linhVat[4].totallCuoc(data.redCua);
+		}
+		if (void 0 !== data.redTom) {
+			this.linhVat[5].totallCuoc(data.redTom);
+		}
+		if (void 0 !== data.meRedHuou) {
+			this.linhVat[0].meCuoc(data.meRedHuou);
+		}
+		if (void 0 !== data.meRedBau) {
+			this.linhVat[1].meCuoc(data.meRedBau);
+		}
+		if (void 0 !== data.meRedGa) {
+			this.linhVat[2].meCuoc(data.meRedGa);
+		}
+		if (void 0 !== data.meRedCa) {
+			this.linhVat[3].meCuoc(data.meRedCa);
+		}
+		if (void 0 !== data.meRedCua) {
+			this.linhVat[4].meCuoc(data.meRedCua);
+		}
+		if (void 0 !== data.meRedTom) {
+			this.linhVat[5].meCuoc(data.meRedTom);
 		}
 	},
 	unSelect: function(){
@@ -404,23 +358,21 @@ cc.Class({
 		});
 	},
 	resetData: function(){
-		var data = Object.keys(cc.RedT.setting.baucua.data);
-		Promise.all(data.map(function(key){
-			return (cc.RedT.setting.baucua.data[key] = 0)
-		}))
-		.then(result => {
-			this.DataHandling(cc.RedT.setting.baucua.data);
+		let data = Object.keys(cc.RedT.setting.baucua.data);
+		data.forEach(function(key){
+			cc.RedT.setting.baucua.data[key] = 0;
 		});
-
+		this.DataHandling(cc.RedT.setting.baucua.data);
 		this.unSelect();
 	},
 	newGame: function(){
 		cc.RedT.setting.baucua.regOpen = false;
 		void 0 !== this.timeInterval && clearInterval(this.timeInterval);
+		clearTimeout(this.regTimeOut);
 		//this.resetData.resetData();
 	},
 	status: function(data){
-		setTimeout(function() {
+		this.regTimeOut = setTimeout(function() {
 			var temp = new cc.Node;
 			temp.addComponent(cc.Label);
 			temp = temp.getComponent(cc.Label);
