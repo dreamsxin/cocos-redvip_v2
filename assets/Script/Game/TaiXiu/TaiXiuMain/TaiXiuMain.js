@@ -120,9 +120,9 @@ cc.Class({
 		this.diaNan.getComponent('TaiXiu_DiaNan').init(this);
 
 		this.keyHandle = function(t) {
-			return t.keyCode === cc.macro.KEY.tab ? (self.changeNextFocusEditBox(),
+			return t.keyCode === cc.macro.KEY.tab ? (this.changeNextFocusEditBox(),
 				t.preventDefault && t.preventDefault(),
-				!1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), self.onCuocClick(),
+				!1) : t.keyCode === cc.macro.KEY.enter ? (BrowserUtil.focusGame(), this.onCuocClick(),
 				t.preventDefault && t.preventDefault(),
 				!1) : void 0
 		}
@@ -130,19 +130,23 @@ cc.Class({
 		this.diceAnimation.on('finished', this.onDiceAnimationFinish, this);
 
 		this.onCuocClick = function(){
-			let bet = helper.getOnlyNumberInString(self.input.string);
+			let bet = helper.getOnlyNumberInString(this.input.string);
 			bet = parseInt(bet);
-			self.input.string = '';
-			self.TX_Board.node.active = false;
-			if (isNaN(bet) || bet < 1000) {
-				let notice = cc.instantiate(self.mini_warning);
-				let noticeComponent = notice.getComponent('mini_warning');
-				noticeComponent.text.string = "Tiền cược phải lớn hơn 1.000 Red";
-				self.notice.addChild(notice);
+			if (this.RedT.board) {
+				this.input.string = '';
 			}else{
-				cc.RedT.send({taixiu:{cuoc:{select:(self.inputOld == "left"), bet:bet}}});
+				this.input.string = 'Đặt cược...';
 			}
-		}
+			this.TX_Board.node.active = false;
+			if (isNaN(bet) || bet < 1000) {
+				let notice = cc.instantiate(this.RedT.RedT.prefabMiniNotice);
+				let noticeComponent = notice.getComponent('mini_warning');
+				noticeComponent.text.string = 'Tiền cược phải lớn hơn 1.000 Red';
+				this.notice.addChild(notice);
+			}else{
+				cc.RedT.send({taixiu:{cuoc:{select:(this.inputOld == 'left'), bet:bet}}});
+			}
+		};
 		if (this.RedT.board) {
 			this.inputL.active = this.inputR.active = false;
 			this.inputLeft.node.active = this.inputRight.node.active = true;
@@ -181,16 +185,16 @@ cc.Class({
 	},
 	updateValue: function(e){
 		let value = helper.numberWithCommas(helper.getOnlyNumberInString(this.value));
-		this.value = value == "0" ? "" : value;
+		this.value = value == '0' ? '' : value;
 	},
 	addEvent: function() {
 		for (let t in this.editboxs) {
-			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).addEventListener("keydown", this.keyHandle, !1);
+			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).addEventListener('keydown', this.keyHandle.bind(this), !1);
 		}
 	},
 	removeEvent: function() {
 		for (let t in this.editboxs) {
-			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).removeEventListener("keydown", this.keyHandle, !1);
+			BrowserUtil.getHTMLElementByEditBox(this.editboxs[t]).removeEventListener('keydown', this.keyHandle.bind(this), !1);
 		}
 	},
 	changeNextFocusEditBox: function() {
@@ -251,11 +255,11 @@ cc.Class({
 	},
 	onChangerInput: function(){
 		var value = helper.numberWithCommas(helper.getOnlyNumberInString(this.input.string));
-		this.input.string = value == "0" ? "" : value;
+		this.input.string = value == '0' ? '' : value;
 	},
 	setPhien:function(){
 		var phien = cc.RedT.setting.taixiu.logs[0].phien+1;
-		this.labelPhien.string = "#" + phien;
+		this.labelPhien.string = '#' + phien;
 	},
 	setDice: function(bool = false, sprite = true){
 		var self = this;

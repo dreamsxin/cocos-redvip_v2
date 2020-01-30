@@ -35,7 +35,7 @@ cc.Class({
 		this.RedT.input.string = "";
 	},
 	onAllClick: function(){
-		this.RedT.input.string = helper.numberWithCommas(this.RedT.red ? cc.RedT.user.red : cc.RedT.user.xu);
+		this.RedT.input.string = helper.numberWithCommas(cc.RedT.user.red);
 	},
 	onChangerTypeClick: function(){
 		if (this.nodeChonTien.active) {
@@ -49,6 +49,7 @@ cc.Class({
 		}
 	},
 	onCuocClick: function(){
+		this.RedT.onCuocClick();
 	},
 	onCloseClick: function(){
 		this.node.active = false;
