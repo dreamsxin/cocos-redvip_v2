@@ -80,15 +80,12 @@ cc.Class({
 		prefabNotice: cc.Prefab,
 
 		bet:     cc.Node,
-		nodeRed: cc.Node,
-		nodeXu:  cc.Node,
 
 		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		notice:    notice,
 		dialog:    dialog,
 
-		red: true,
 	},
 	ctor: function(){
 		this.logs = [];
@@ -119,26 +116,10 @@ cc.Class({
 				'white3': 0,
 				'white4': 0,
 			},
-			'xu': {
-				'chan':   0,
-				'le':     0,
-				'red3':   0,
-				'red4':   0,
-				'white3': 0,
-				'white4': 0,
-			},
 		};
 
 		this.users = {
 			'red': {
-				'chan':   0,
-				'le':     0,
-				'red3':   0,
-				'red4':   0,
-				'white3': 0,
-				'white4': 0,
-			},
-			'xu': {
 				'chan':   0,
 				'le':     0,
 				'red3':   0,
@@ -220,11 +201,7 @@ cc.Class({
 		});
 	},
 	userData: function(data){
-		if (this.red) {
-			this.me_balans.string = helper.numberWithCommas(data.red);
-		}else{
-			this.me_balans.string = helper.numberWithCommas(data.xu);
-		}
+		this.me_balans.string = helper.numberWithCommas(data.red);
 	},
 	xocxoc: function(data){
 		//console.log(data);
@@ -735,21 +712,12 @@ cc.Class({
 		this.users_count.string = client;
 	},
 	updateData: function(data){
-		if (this.red) {
-			this.total_chan.string   = data.red.chan   > 0 ? helper.numberWithCommas(data.red.chan)   : '';
-			this.total_le.string     = data.red.le     > 0 ? helper.numberWithCommas(data.red.le)     : '';
-			this.total_red3.string   = data.red.red3   > 0 ? helper.numberWithCommas(data.red.red3)   : '';
-			this.total_red4.string   = data.red.red4   > 0 ? helper.numberWithCommas(data.red.red4)   : '';
-			this.total_white3.string = data.red.white3 > 0 ? helper.numberWithCommas(data.red.white3) : '';
-			this.total_white4.string = data.red.white4 > 0 ? helper.numberWithCommas(data.red.white4) : '';
-		}else{
-			this.total_chan.string   = data.xu.chan   > 0 ? helper.numberWithCommas(data.xu.chan)   : '';
-			this.total_le.string     = data.xu.le     > 0 ? helper.numberWithCommas(data.xu.le)     : '';
-			this.total_red3.string   = data.xu.red3   > 0 ? helper.numberWithCommas(data.xu.red3)   : '';
-			this.total_red4.string   = data.xu.red4   > 0 ? helper.numberWithCommas(data.xu.red4)   : '';
-			this.total_white3.string = data.xu.white3 > 0 ? helper.numberWithCommas(data.xu.white3) : '';
-			this.total_white4.string = data.xu.white4 > 0 ? helper.numberWithCommas(data.xu.white4) : '';
-		}
+		this.total_chan.string   = data.red.chan   > 0 ? helper.numberWithCommas(data.red.chan)   : '';
+		this.total_le.string     = data.red.le     > 0 ? helper.numberWithCommas(data.red.le)     : '';
+		this.total_red3.string   = data.red.red3   > 0 ? helper.numberWithCommas(data.red.red3)   : '';
+		this.total_red4.string   = data.red.red4   > 0 ? helper.numberWithCommas(data.red.red4)   : '';
+		this.total_white3.string = data.red.white3 > 0 ? helper.numberWithCommas(data.red.white3) : '';
+		this.total_white4.string = data.red.white4 > 0 ? helper.numberWithCommas(data.red.white4) : '';
 	},
 	resetData: function(){
 		this.box_chan.children[1].destroyAllChildren();
@@ -787,26 +755,12 @@ cc.Class({
 		this.users.red.white3 = 0;
 		this.users.red.white4 = 0;
 
-		this.users.xu.chan   = 0;
-		this.users.xu.le     = 0;
-		this.users.xu.red3   = 0;
-		this.users.xu.red4   = 0;
-		this.users.xu.white3 = 0;
-		this.users.xu.white4 = 0;
-
 		this.clients.red.chan   = 0;
 		this.clients.red.le     = 0;
 		this.clients.red.red3   = 0;
 		this.clients.red.red4   = 0;
 		this.clients.red.white3 = 0;
 		this.clients.red.white4 = 0;
-
-		this.clients.xu.chan   = 0;
-		this.clients.xu.le     = 0;
-		this.clients.xu.red3   = 0;
-		this.clients.xu.red4   = 0;
-		this.clients.xu.white3 = 0;
-		this.clients.xu.white4 = 0;
 	},
 	setLogs: function(){
 		let self = this;
@@ -914,14 +868,8 @@ cc.Class({
 			}
 		})
 	},
-	changerCoint: function(){
-		this.red            = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.updateMeCoint();
-	},
 	onCuoc: function(event, box){
-		cc.RedT.send({g:{xocxoc:{cuoc:{red:this.red, cuoc:this.cuoc, box:box}}}});
+		cc.RedT.send({g:{xocxoc:{cuoc:{cuoc:this.cuoc, box:box}}}});
 	},
 	addNotice:function(text){
 		var notice = cc.instantiate(this.prefabNotice)
@@ -1061,128 +1009,64 @@ cc.Class({
 			));
 	},
 	updateMe: function(data){
-		if (data.red) {
-			this.updateMeRed(data.red);
-		}
-		if (data.xu) {
-			this.updateMeXu(data.xu);
-		}
+		!!data.red && this.updateMeRed(data.red);
 	},
 	updateMeRed: function(data){
 		if (data.chan > 0) {
 			this.users.red.chan = data.chan;
-			this.red && (this.me_chan.string = helper.numberWithCommas(data.chan));
+			this.me_chan.string = helper.numberWithCommas(data.chan);
 		}
 		if (data.le > 0) {
 			this.users.red.le = data.le;
-			this.red && (this.me_le.string = helper.numberWithCommas(data.le));
+			this.me_le.string = helper.numberWithCommas(data.le);
 		}
 		if (data.red3 > 0) {
 			this.users.red.red3 = data.red3;
-			this.red && (this.me_red3.string = helper.numberWithCommas(data.red3));
+			this.me_red3.string = helper.numberWithCommas(data.red3);
 		}
 		if (data.red4 > 0) {
 			this.users.red.red4 = data.red4;
-			this.red && (this.me_red4.string = helper.numberWithCommas(data.red4));
+			this.me_red4.string = helper.numberWithCommas(data.red4);
 		}
 		if (data.white3 > 0) {
 			this.users.red.white3 = data.white3;
-			this.red && (this.me_white3.string = helper.numberWithCommas(data.white3));
+			this.me_white3.string = helper.numberWithCommas(data.white3);
 		}
 		if (data.white4 > 0) {
 			this.users.red.white4 = data.white4;
-			this.red && (this.me_white4.string = helper.numberWithCommas(data.white4));
+			this.me_white4.string = helper.numberWithCommas(data.white4);
 		}
 	},
-	updateMeXu: function(data){
-		if (data.chan > 0) {
-			this.users.xu.chan = data.chan;
-			!this.red && (this.me_chan.string = helper.numberWithCommas(data.chan));
-		}
-		if (data.le > 0) {
-			this.users.xu.le = data.le;
-			!this.red && (this.me_le.string = helper.numberWithCommas(data.le));
-		}
-		if (data.red3 > 0) {
-			this.users.xu.red3 = data.red3;
-			!this.red && (this.me_red3.string = helper.numberWithCommas(data.red3));
-		}
-		if (data.red4 > 0) {
-			this.users.xu.red4 = data.red4;
-			!this.red && (this.me_red4.string = helper.numberWithCommas(data.red4));
-		}
-		if (data.white3 > 0) {
-			this.users.xu.white3 = data.white3;
-			!this.red && (this.me_white3.string = helper.numberWithCommas(data.white3));
-		}
-		if (data.white4 > 0) {
-			this.users.xu.white4 = data.white4;
-			!this.red && (this.me_white4.string = helper.numberWithCommas(data.white4));
-		}
-	},
-
 	updateClient: function(data){
-		if (data.red) {
-			this.updateClientRed(data.red);
-		}
-		if (data.xu) {
-			this.updateClientXu(data.xu);
-		}
+		!!data.red && this.updateClientRed(data.red);
 	},
 	updateClientRed: function(data){
 		if (data.chan > 0) {
 			this.clients.red.chan = data.chan;
-			this.red && (this.total_chan.string = helper.numberWithCommas(data.chan));
+			this.total_chan.string = helper.numberWithCommas(data.chan);
 		}
 		if (data.le > 0) {
 			this.clients.red.le = data.le;
-			this.red && (this.total_le.string = helper.numberWithCommas(data.le));
+			this.total_le.string = helper.numberWithCommas(data.le);
 		}
 		if (data.red3 > 0) {
 			this.clients.red.red3 = data.red3;
-			this.red && (this.total_red3.string = helper.numberWithCommas(data.red3));
+			this.total_red3.string = helper.numberWithCommas(data.red3);
 		}
 		if (data.red4 > 0) {
 			this.clients.red.red4 = data.red4;
-			this.red && (this.total_red4.string = helper.numberWithCommas(data.red4));
+			this.total_red4.string = helper.numberWithCommas(data.red4);
 		}
 		if (data.white3 > 0) {
 			this.clients.red.white3 = data.white3;
-			this.red && (this.total_white3.string = helper.numberWithCommas(data.white3));
+			this.total_white3.string = helper.numberWithCommas(data.white3);
 		}
 		if (data.white4 > 0) {
 			this.clients.red.white4 = data.white4;
-			this.red && (this.total_white4.string = helper.numberWithCommas(data.white4));
-		}
-	},
-	updateClientXu: function(data){
-		if (data.chan > 0) {
-			this.clients.xu.chan = data.chan;
-			!this.red && (this.total_chan.string = helper.numberWithCommas(data.chan));
-		}
-		if (data.le > 0) {
-			this.clients.xu.le = data.le;
-			!this.red && (this.total_le.string = helper.numberWithCommas(data.le));
-		}
-		if (data.red3 > 0) {
-			this.clients.xu.red3 = data.red3;
-			!this.red && (this.total_red3.string = helper.numberWithCommas(data.red3));
-		}
-		if (data.red4 > 0) {
-			this.clients.xu.red4 = data.red4;
-			!this.red && (this.total_red4.string = helper.numberWithCommas(data.red4));
-		}
-		if (data.white3 > 0) {
-			this.clients.xu.white3 = data.white3;
-			!this.red && (this.total_white3.string = helper.numberWithCommas(data.white3));
-		}
-		if (data.white4 > 0) {
-			this.clients.xu.white4 = data.white4;
-			!this.red && (this.total_white4.string = helper.numberWithCommas(data.white4));
+			this.total_white4.string = helper.numberWithCommas(data.white4);
 		}
 	},
 	updateMeCoint: function(){
-		if (this.red) {
 			this.me_chan.string   = this.users.red.chan   > 0 ? helper.numberWithCommas(this.users.red.chan)   : '';
 			this.me_le.string     = this.users.red.le     > 0 ? helper.numberWithCommas(this.users.red.le)     : '';
 			this.me_red3.string   = this.users.red.red3   > 0 ? helper.numberWithCommas(this.users.red.red3)   : '';
@@ -1196,21 +1080,6 @@ cc.Class({
 			this.total_red4.string   = this.clients.red.red4   > 0 ? helper.numberWithCommas(this.clients.red.red4)   : '';
 			this.total_white3.string = this.clients.red.white3 > 0 ? helper.numberWithCommas(this.clients.red.white3) : '';
 			this.total_white4.string = this.clients.red.white4 > 0 ? helper.numberWithCommas(this.clients.red.white4) : '';
-		}else{
-			this.me_chan.string   = this.users.xu.chan   > 0 ? helper.numberWithCommas(this.users.xu.chan)   : '';
-			this.me_le.string     = this.users.xu.le     > 0 ? helper.numberWithCommas(this.users.xu.le)     : '';
-			this.me_red3.string   = this.users.xu.red3   > 0 ? helper.numberWithCommas(this.users.xu.red3)   : '';
-			this.me_red4.string   = this.users.xu.red4   > 0 ? helper.numberWithCommas(this.users.xu.red4)   : '';
-			this.me_white3.string = this.users.xu.white3 > 0 ? helper.numberWithCommas(this.users.xu.white3) : '';
-			this.me_white4.string = this.users.xu.white4 > 0 ? helper.numberWithCommas(this.users.xu.white4) : '';
-
-			this.total_chan.string   = this.clients.xu.chan   > 0 ? helper.numberWithCommas(this.clients.xu.chan)   : '';
-			this.total_le.string     = this.clients.xu.le     > 0 ? helper.numberWithCommas(this.clients.xu.le)     : '';
-			this.total_red3.string   = this.clients.xu.red3   > 0 ? helper.numberWithCommas(this.clients.xu.red3)   : '';
-			this.total_red4.string   = this.clients.xu.red4   > 0 ? helper.numberWithCommas(this.clients.xu.red4)   : '';
-			this.total_white3.string = this.clients.xu.white3 > 0 ? helper.numberWithCommas(this.clients.xu.white3) : '';
-			this.total_white4.string = this.clients.xu.white4 > 0 ? helper.numberWithCommas(this.clients.xu.white4) : '';
-		}
 	},
 	status: function(data){
 		this.regTimeOut3 = setTimeout(function() {
