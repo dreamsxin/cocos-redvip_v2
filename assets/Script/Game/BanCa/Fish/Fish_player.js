@@ -126,9 +126,9 @@ cc.Class({
 			this.RedT.Game.isFire = false;
 			this.isLock = false;
 		}else{
-			this.money = checkBet;
-			this.balans.string = helper.numberWithCommas(checkBet);
 			if ((this.RedT.Game.isAuto || this.RedT.Game.isFire || this.isLock) && !this.isFire) {
+				this.money = checkBet;
+				this.balans.string = helper.numberWithCommas(checkBet);
 				this.isFire = true;
 				let bullet = cc.instantiate(this.RedT.Game.bullet[this.typeBet]);
 				bullet = bullet.getComponent('Fish_bullet');
