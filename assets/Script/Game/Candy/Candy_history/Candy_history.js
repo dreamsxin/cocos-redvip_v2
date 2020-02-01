@@ -7,40 +7,27 @@ cc.Class({
     properties: {
         page:     cc.Prefab,
         content:  cc.Node,
-        cointRed: cc.Node,
-        cointXu:  cc.Node,
-        red:      true,
     },
     onLoad () {
-        var page = cc.instantiate(this.page);
+        let page = cc.instantiate(this.page);
         page.y = -278;
         this.node.addChild(page);
         this.page = page.getComponent('Pagination');
-        Promise.all(this.content.children.map(function(obj){
+        this.content = this.content.children.map(function(obj){
             return obj.getComponent('VQRed_history_item');
-        }))
-        .then(tab => {
-            this.content = tab;
-        })
+        });
         this.page.init(this);
     },
     onEnable: function() {
         this.get_data();
     },
     get_data: function(page = 1){
-        cc.RedT.send({g:{candy:{log:{red: this.red, page: page}}}});
-    },
-    changerCoint: function(){
-        this.red             = !this.red;
-        this.cointRed.active = !this.cointRed.active;
-        this.cointXu.active  = !this.cointXu.active;
-        this.get_data();
+        cc.RedT.send({g:{candy:{log:{page:page}}}});
     },
     onData: function(data){
-        var self = this;
         this.page.onSet(data.page, data.kmess, data.total);
-        Promise.all(this.content.map(function(obj, i){
-            var dataT = data.data[i];
+        this.content.forEach(function(obj, i){
+            let dataT = data.data[i];
             if (void 0 !== dataT) {
                 obj.node.active  = true;
                 obj.time.string  = Helper.getStringDateByTime(dataT.time);
@@ -51,6 +38,6 @@ cc.Class({
             }else{
                 obj.node.active = false;
             }
-        }))
+        });
     },
 });

@@ -31,9 +31,6 @@ cc.Class({
 			type: cc.String,
 		},
 
-    	nodeRed: cc.Node,
-		nodeXu:  cc.Node,
-
 		nodeNotice:   cc.Node,
 		prefabNotice: cc.Prefab,
 		MiniPanel:    cc.Prefab,
@@ -58,7 +55,6 @@ cc.Class({
 		EF_Bonus:      cc.Animation,
 		EF_Free:       cc.Animation,
 
-		buttonCoint:     cc.Node,
 		buttonLine:      cc.Node,
 		buttonSpin:      cc.Node,
 		nodeChangerBetL: cc.Node,
@@ -69,7 +65,6 @@ cc.Class({
 		isAuto:     false,
 		isSpin:     false,
 		isFreeSpin: false,
-		red:        true,
 		betSelect: 0,
     },
 
@@ -78,8 +73,6 @@ cc.Class({
 		var MiniPanel = cc.instantiate(this.MiniPanel);
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
-
-		var self = this;
 
 		this.Line.init(this);
 		this.gameBonus.init(this);
@@ -93,18 +86,18 @@ cc.Class({
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
 		this.EF_Free.on('finished',  this.EF_FreeFinish,  this);
 
-		Promise.all(this.reels.map(function(reel) {
-			reel.init(self);
-		}));
+		this.reels.forEach(function(reel) {
+			reel.init(this);
+		}.bind(this));
 
 		cc.RedT.send({scene:"candy"});
 		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);
 		this.speed = 400;
 
-		if(cc.RedT.isSoundBackground()){
+		//if(cc.RedT.isSoundBackground()){
 			//cc.RedT.setSoundBackground(true);
 			//this.playMusic();
-		}
+		//}
 	},
 	BigWinPlay: function(){
 		var huong = cc.callFunc(function(){
@@ -171,21 +164,16 @@ cc.Class({
 		}
 	},
 	userData: function(data){
-		if (this.red) {
-			this.taikhoan.string = helper.numberWithCommas(data.red);
-		}else{
-			this.taikhoan.string = helper.numberWithCommas(data.xu);
-		}
+		this.taikhoan.string = helper.numberWithCommas(data.red);
 	},
 	Candy: function(data){
-		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				Promise.all(data.cel.map(function(cel, cel_index){
-					Promise.all(cel.map(function(icon, index){
-						self.reels[cel_index].icons[index].setIcon(icon, true);
-					}));
-				}));
+				data.cel.forEach(function(cel, cel_index){
+					cel.forEach(function(icon, index){
+						this.reels[cel_index].icons[index].setIcon(icon, true);
+					}.bind(this));
+				}.bind(this));
 				this.runReels();
 				this.H_line_win = data.line_win;
 				this.H_win      = data.win;
@@ -220,9 +208,8 @@ cc.Class({
 		this.freeLabel.node.active = !!this.H_free
 	},
 	onLineWin: function(bool){
-		var self = this;
-		Promise.all(this.H_line_win.map(function(obj){
-			let TRed = self.Line.mainLines[obj.line-1];
+		this.H_line_win.map(function(obj){
+			let TRed = this.Line.mainLines[obj.line-1];
 			if (bool) {
 				TRed.ef = true;
 				TRed.onShow();
@@ -230,7 +217,7 @@ cc.Class({
 				TRed.ef = false;
 				TRed.onHidden();
 			}
-		}))
+		}.bind(this));
 	},
 	showLineWin: function(bool){
 		this.onLineWin(bool);
@@ -242,8 +229,6 @@ cc.Class({
 	efLineWin: function(bool){
 		if (this.H_line_win.length) {
 			this.node.stopAllActions();
-			var self = this;
-
 			if (void 0 === this.H_line_win[this.eflineN]) {
 				this.eflineN = 0;
 			}
@@ -257,7 +242,6 @@ cc.Class({
 		}
 	},
 	efOneLineWin: function(number, bool){
-		var self = this;
 		number = this.H_line_win[this.eflineN].line;
 		let TRed = this.Line.mainLines[number-1];
 		if (bool) {
@@ -331,13 +315,6 @@ cc.Class({
 		this.tong.string = helper.numberWithCommas(this.Line.data.length * helper.getOnlyNumberInString(this.bet.string));
 		this.onGetHu();
 	},
-	changerCoint: function(){
-		this.red            = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.userData(cc.RedT.user);
-		this.onGetHu();
-	},
 	onClickAuto: function(){
 		cc.RedT.audio.playClick();
 		this.onAuto();
@@ -391,28 +368,28 @@ cc.Class({
 		this.nodeChangerBetR.resumeSystemEvents();
 	},
 	runReels: function(){
-		Promise.all(this.reels.map(function(reel, index) {
+		this.reels.forEach(function(reel, index) {
 			reel.spin(index);
-		}))
+		});
 	},
 	copy: function(){
-		Promise.all(this.reels.map(function(reel){
+		this.reels.forEach(function(reel){
 			reel.icons[reel.icons.length-1].setIcon(reel.icons[2].data);
 			reel.icons[reel.icons.length-2].setIcon(reel.icons[1].data);
 			reel.icons[reel.icons.length-3].setIcon(reel.icons[0].data);
-		}));
+		});
 	},
 	random: function(){
-		Promise.all(this.reels.map(function(reel){
-			Promise.all(reel.icons.map(function(icon, index){
+		this.reels.forEach(function(reel){
+			reel.icons.forEach(function(icon, index){
 				if (index > 2 && index < reel.icons.length-3) {
 					icon.random();
 				}
-			}));
-		}));
+			});
+		});
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{candy:{spin:{cuoc: helper.getOnlyNumberInString(this.bet.string), red: this.red, line: this.Line.data}}}});
+		cc.RedT.send({g:{candy:{spin:{cuoc:helper.getOnlyNumberInString(this.bet.string), line:this.Line.data}}}});
 	},
 	addNotice:function(text){
 		var notice = cc.instantiate(this.prefabNotice)
@@ -432,10 +409,9 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data) {
-			var self = this;
-			var cuoc = helper.getOnlyNumberInString(self.bet.string);
+			var cuoc = helper.getOnlyNumberInString(this.bet.string);
 			Promise.all(cc.RedT.setting.topHu.data['candy'].filter(function(temp){
-				return temp.type == cuoc && temp.red == self.red;
+				return temp.type == cuoc;
 			}))
 			.then(result => {
 				var s = helper.getOnlyNumberInString(this.hu.string);
