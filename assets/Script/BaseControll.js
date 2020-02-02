@@ -127,9 +127,6 @@ module.exports = {
 		if (void 0 !== data.red){
 			this.user.red = data.red;
 		}
-		if (void 0 !== data.xu){
-			this.user.xu = data.xu;
-		}
 		if (void 0 !== data.ketSat){
 			this.user.ketSat = data.ketSat;
 		}
@@ -142,9 +139,7 @@ module.exports = {
 		}
 		if (void 0 !== data.phone){
 			this.user.phone = data.phone;
-		}
-		if (void 0 !== data.email){
-			this.user.email = data.email;
+			this.user.veryphone = !!data.veryphone;
 		}
 		if (void 0 !== data.joinedOn){
 			this.user.joinedOn = data.joinedOn;

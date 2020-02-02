@@ -20,9 +20,9 @@ cc.Class({
     },
     onBack: function(){
     	this.node.stopAllActions();
-    	let x = -(cc.RedT.inGame.node.width+cc.RedT.inGame.node.width/2);
+    	let x = -cc.RedT.inGame.node.width;
 		this.node.runAction(cc.sequence(cc.moveTo(0.3, cc.v2(x, 0)), cc.callFunc(function(){
-    		this.node.x = -x;
+    		this.node.x = cc.RedT.inGame.node.width;
     		this.node.active = false;
 		}, this)));
     },

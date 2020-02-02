@@ -10,10 +10,9 @@ cc.Class({
 		avatar: cc.Sprite,
 		UID: cc.Label,
 		username: cc.Label,
-		phone: cc.Label,
-		email: cc.Label,
+		phone:    cc.Label,
+		phoneStatus: cc.Label,
 		joinedOn: cc.Label,
-		cmt: cc.Label,
 
 		nodeRank: cc.Node,
 		nodeNhan: cc.Node,
@@ -35,14 +34,13 @@ cc.Class({
 	},
 	level: function(data){
 		cc.RedT.userData(data);
-		var self = this;
-		cc.RedT.user.vipHT  = data.vipHT-data.vipPre;
+		cc.RedT.user.vipHT   = data.vipHT-data.vipPre;
 		cc.RedT.user.vipNext = data.vipNext-data.vipPre;
 
 		cc.RedT.inGame.header.level(data.level);
 		cc.RedT.inGame.header.updateEXP(cc.RedT.user.vipHT, cc.RedT.user.vipNext);
 
-		this.vipLevel.string = "VIP"+data.level;
+		this.vipLevel.string = 'VIP'+data.level;
 		this.vipTong.string  = helper.numberWithCommas(data.vipTL);
 		this.vipHien.string  = helper.numberWithCommas(data.vipHT);
 		this.vipTiep.string  = helper.numberWithCommas(data.vipNext);
@@ -51,18 +49,18 @@ cc.Class({
 			if (rank.name <= data.level) {
 				rank.opacity = 255;
 				if(rank.name == data.level){
-					self.nodeNhan.children[index].children[3].active = true;
+					this.nodeNhan.children[index].children[3].active = true;
 				}else{
-					self.nodeNhan.children[index].children[3].active = false;
+					this.nodeNhan.children[index].children[3].active = false;
 				}
 			}else{
 				rank.opacity = 99;
-				self.nodeNhan.children[index].children[3].active = false;
+				this.nodeNhan.children[index].children[3].active = false;
 			}
-		});
+		}.bind(this));
 	},
 	onNhanThuong: function(){
-		cc.RedT.send({user:{nhanthuong: true}});
+		cc.RedT.send({user:{nhanthuong:true}});
 	},
 	onSelectHead: function(event, name){
 		this.header.forEach(function(header) {

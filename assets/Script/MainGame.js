@@ -71,7 +71,6 @@ cc.Class({
 			this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(cc.RedT.user.ketSat);
 			this.dialog.profile.CaNhan.UID.string = cc.RedT.user.UID;
 			this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
-			this.dialog.profile.CaNhan.email.string = cc.RedT.user.email;
 			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
 		}else{
 			this.dialog.settings.setMusic();
@@ -150,8 +149,8 @@ cc.Class({
 			this.Authorized(data.Authorized);
 		}
 		if (void 0 !== data.user){
-			this.dataUser(data.user);
 			cc.RedT.userData(data.user);
+			this.dataUser(data.user);
 		}
 		if (void 0 !== data.mini){
 			cc.RedT.MiniPanel.onData(data.mini);
@@ -243,18 +242,15 @@ cc.Class({
 			this.dialog.profile.BaoMat.DangKyOTP.statusOTP(!helper.isEmpty(data.phone));
 			if (!helper.isEmpty(data.phone)) {
 				this.dialog.profile.BaoMat.DangKyOTP.labelPhone.string = data.phone;
-			}
-		}
-		if (void 0 !== data.email){
-			this.dialog.profile.CaNhan.email.string = data.email;
-			if (!helper.isEmpty(data.email)) {
-				this.dialog.profile.BaoMat.DangKyOTP.labelEmail.string = data.email;
-			}
-		}
-		if (void 0 !== data.cmt){
-			this.dialog.profile.CaNhan.cmt.string = data.cmt;
-			if (!helper.isEmpty(data.cmt)) {
-				this.dialog.profile.BaoMat.DangKyOTP.labelCMT.string = data.cmt;
+				if (cc.RedT.user.veryphone) {
+		            this.dialog.profile.CaNhan.phoneStatus.string = 'Đã Xác Thực';
+		            this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('06B30D');
+		        }else{
+		            this.dialog.profile.CaNhan.phoneStatus.string = 'Chưa Xác Thực';
+		            this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('FF0000');
+		        }
+			}else{
+				this.dialog.profile.CaNhan.phoneStatus.string = '';
 			}
 		}
 		if (void 0 !== data.joinedOn){
