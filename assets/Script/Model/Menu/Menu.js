@@ -79,7 +79,7 @@ cc.Class({
     		screen.height = cc.RedT.inGame.node.height;
     	});
     	this.pageViewContent.x = -(cc.RedT.inGame.node.width/2);
-    	cc.RedT.inGame.MenuRoom.node.x = this.pageViewContent.x;
+    	cc.RedT.inGame.MenuRoom.node.x = cc.RedT.inGame.node.width;
     },
     onWait: function(){
         cc.RedT.audio.playClick();

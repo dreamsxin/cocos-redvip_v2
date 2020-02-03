@@ -19,72 +19,64 @@ cc.Class({
         red: true,
     },
     onBack: function(){
-    	this.node.stopAllActions();
-    	let x = -cc.RedT.inGame.node.width;
-		this.node.runAction(cc.sequence(cc.moveTo(0.3, cc.v2(x, 0)), cc.callFunc(function(){
-    		this.node.x = cc.RedT.inGame.node.width;
-    		this.node.active = false;
-		}, this)));
+    	this.node.active = false;
     },
 	openGame: function(game){
 		this.game = game;
-		this.node.stopAllActions();
 		this.title.string = game.title;
     	this.node.active = true;
-		this.node.runAction(cc.moveTo(0.3, cc.v2(0, 0)));
 	},
 	changerRoom: function(red){
-		var self = this;
 		if (this.game.table2) {
 			if (red) {
 				this.rooms.forEach(function(room, index){
 					if (index < 4) {
-						room.spriteFrame = self.table2[3];
+						room.spriteFrame = this.table2[3];
 					}else if (index < 8) {
-						room.spriteFrame = self.table2[4];
+						room.spriteFrame = this.table2[4];
 					}else{
-						room.spriteFrame = self.table2[5];
+						room.spriteFrame = this.table2[5];
 					}
-				});
+				}.bind(this));
 			}else{
 				this.rooms.forEach(function(room, index){
 					if (index < 4) {
-						room.spriteFrame = self.table2[0];
+						room.spriteFrame = this.table2[0];
 					}else if (index < 8) {
-						room.spriteFrame = self.table2[1];
+						room.spriteFrame = this.table2[1];
 					}else{
-						room.spriteFrame = self.table2[2];
+						room.spriteFrame = this.table2[2];
 					}
-				});
+				}.bind(this));
 			}
 		}else{
 			if (red) {
 				this.rooms.forEach(function(room, index){
 					if (index < 4) {
-						room.spriteFrame = self.table1[3];
+						room.spriteFrame = this.table1[3];
 					}else if (index < 8) {
-						room.spriteFrame = self.table1[4];
+						room.spriteFrame = this.table1[4];
 					}else{
-						room.spriteFrame = self.table1[5];
+						room.spriteFrame = this.table1[5];
 					}
-				});
+				}.bind(this));
 			}else{
 				this.rooms.forEach(function(room, index){
 					if (index < 4) {
-						room.spriteFrame = self.table1[0];
+						room.spriteFrame = this.table1[0];
 					}else if (index < 8) {
-						room.spriteFrame = self.table1[1];
+						room.spriteFrame = this.table1[1];
 					}else{
-						room.spriteFrame = self.table1[2];
+						room.spriteFrame = this.table1[2];
 					}
-				});
+				}.bind(this));
 			}
 		}
 	},
 	onClickRoom: function(event){
 		this.bet = event.target.name;
 		cc.RedT.audio.playClick();
-		if (this.game.game == "poker") {
+		if (this.game.game == 'poker') {
 			cc.RedT.inGame.dialog.showPokerNap(this);
 		}
 	},

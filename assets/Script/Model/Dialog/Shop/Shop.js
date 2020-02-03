@@ -46,16 +46,17 @@ cc.Class({
 		});
 	},
 	superView:function(name){
-		if(name == "NapRed" || name == "ThongTinNapRed" || name == "QuyDinhNapRed"){
-			this.onSelectHead(null, "NapRed");
-			if (name != "NapRed") this.NapRed.onSelectHead(null, name);
-		}else if(name == "TieuRed" || name == "MuaTheNap"){
-			this.onSelectHead(null, "TieuRed");
-			if (name != "TieuRed") this.TieuRed.onSelectHead(null, name);
-		}else if(name == "ChuyenRed"){
-			this.onSelectHead(null, "ChuyenRed");
-		}else if(name == "DaiLy"){
-			this.onSelectHead(null, "DaiLy");
+		//if(name == 'NapRed' || name == 'ThongTinNapRed' || name == 'QuyDinhNapRed'){
+		if(name == 'NapRed'){
+			this.onSelectHead(null, 'NapRed');
+			//if (name != 'NapRed') this.NapRed.onSelectHead(null, name);
+		}else if(name == 'TieuRed' || name == 'MuaTheNap'){
+			this.onSelectHead(null, 'TieuRed');
+			if (name != 'TieuRed') this.TieuRed.onSelectHead(null, name);
+		}else if(name == 'ChuyenRed'){
+			this.onSelectHead(null, 'ChuyenRed');
+		}else if(name == 'DaiLy'){
+			this.onSelectHead(null, 'DaiLy');
 		}
 	},
 	onData: function(data){

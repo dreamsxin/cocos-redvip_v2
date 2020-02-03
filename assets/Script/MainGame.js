@@ -215,7 +215,7 @@ cc.Class({
 				break;
 
 			case 'chargeCard':
-				this.dialog.shop.NapRed.initCaptcha(data.data);
+				this.dialog.shop.NapRed.NapThe.initCaptcha(data.data);
 				break;
 
 			case 'withdrawXu':
