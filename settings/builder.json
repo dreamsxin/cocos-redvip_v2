@@ -49,7 +49,7 @@
   "xxteaKey": "76eb5338-ae61-4e",
   "zipCompressJs": true,
   "android": {
-    "packageName": "org.cocos2d.pro68"
+    "packageName": "org.cocos2d.phattai68"
   },
   "ios": {
     "packageName": "org.cocos2d.pro68"

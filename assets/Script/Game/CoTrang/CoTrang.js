@@ -216,21 +216,16 @@ cc.Class({
 		}
 	},
 	userData: function(data){
-		if (this.red) {
-			this.taikhoan.string = helper.numberWithCommas(data.red);
-		}else{
-			this.taikhoan.string = helper.numberWithCommas(data.xu);
-		}
+		this.taikhoan.string = helper.numberWithCommas(data.red);
 	},
 	LongLan: function(data){
-		var self = this;
 		if (void 0 !== data.status) {
 			if (data.status === 1) {
-				Promise.all(data.cel.map(function(cel, cel_index){
-					Promise.all(cel.map(function(icon, index){
-						self.reels[cel_index].icons[index].setIcon(icon, true);
-					}));
-				}));
+				data.cel.forEach(function(cel, cel_index){
+					cel.forEach(function(icon, index){
+						this.reels[cel_index].icons[index].setIcon(icon, true);
+					}.bind(this));
+				}.bind(this));
 				this.runReels();
 				this.H_line_win = data.line_win;
 				this.H_win      = data.win;
@@ -268,9 +263,8 @@ cc.Class({
 		this.freeLabel.node.active = !!this.H_free
 	},
 	onLineWin: function(bool){
-		var self = this;
-		Promise.all(this.H_line_win.map(function(obj){
-			let TRed = self.Line.mainLines[obj.line-1];
+		this.H_line_win.forEach(function(obj){
+			let TRed = this.Line.mainLines[obj.line-1];
 			if (bool) {
 				TRed.ef = true;
 				TRed.onShow();
@@ -278,7 +272,7 @@ cc.Class({
 				TRed.ef = false;
 				TRed.onHidden();
 			}
-		}))
+		}.bind(this));
 	},
 	showLineWin: function(bool){
 		this.onLineWin(bool);
@@ -290,8 +284,6 @@ cc.Class({
 	efLineWin: function(bool){
 		if (this.H_line_win.length) {
 			this.node.stopAllActions();
-			var self = this;
-
 			if (void 0 === this.H_line_win[this.eflineN]) {
 				this.eflineN = 0;
 			}
@@ -305,7 +297,6 @@ cc.Class({
 		}
 	},
 	efOneLineWin: function(number, bool){
-		var self = this;
 		number = this.H_line_win[this.eflineN].line;
 		let TRed = this.Line.mainLines[number-1];
 		if (bool) {
@@ -374,13 +365,6 @@ cc.Class({
 		this.tong.string = helper.numberWithCommas(this.Line.data.length * helper.getOnlyNumberInString(this.bet.string));
 		this.onGetHu();
 	},
-	changerCoint: function(){
-		this.red            = !this.red;
-		this.nodeRed.active = !this.nodeRed.active;
-		this.nodeXu.active  = !this.nodeXu.active;
-		this.userData(cc.RedT.user);
-		this.onGetHu();
-	},
 	onClickAuto: function(){
 		this._playSFX(this.audioClick);
 		this.onAuto();
@@ -432,28 +416,28 @@ cc.Class({
 		this.buttonBet.resumeSystemEvents();
 	},
 	runReels: function(){
-		Promise.all(this.reels.map(function(reel, index) {
+		this.reels.forEach(function(reel, index) {
 			reel.spin(index);
-		}))
+		});
 	},
 	copy: function(){
-		Promise.all(this.reels.map(function(reel){
+		this.reels.forEach(function(reel){
 			reel.icons[reel.icons.length-1].setIcon(reel.icons[2].data);
 			reel.icons[reel.icons.length-2].setIcon(reel.icons[1].data);
 			reel.icons[reel.icons.length-3].setIcon(reel.icons[0].data);
-		}));
+		});
 	},
 	random: function(){
-		Promise.all(this.reels.map(function(reel){
-			Promise.all(reel.icons.map(function(icon, index){
+		this.reels.forEach(function(reel){
+			reel.icons.forEach(function(icon, index){
 				if (index > 2 && index < reel.icons.length-3) {
 					icon.random();
 				}
-			}));
-		}));
+			});
+		});
 	},
 	onGetSpin: function(){
-		cc.RedT.send({g:{longlan:{spin:{cuoc: helper.getOnlyNumberInString(this.bet.string), red: this.red, line: this.Line.data}}}});
+		cc.RedT.send({g:{longlan:{spin:{cuoc: helper.getOnlyNumberInString(this.bet.string), line: this.Line.data}}}});
 	},
 	addNotice:function(text){
 		var notice = cc.instantiate(this.prefabNotice)
@@ -473,10 +457,9 @@ cc.Class({
 	},
 	onGetHu: function(){
 		if (void 0 !== cc.RedT.setting.topHu.data) {
-			var self = this;
-			var cuoc = helper.getOnlyNumberInString(self.bet.string);
+			var cuoc = helper.getOnlyNumberInString(this.bet.string);
 			Promise.all(cc.RedT.setting.topHu.data['long'].filter(function(temp){
-				return temp.type == cuoc && temp.red == self.red;
+				return temp.type == cuoc;
 			}))
 			.then(result => {
 				var s = helper.getOnlyNumberInString(this.hu.string);

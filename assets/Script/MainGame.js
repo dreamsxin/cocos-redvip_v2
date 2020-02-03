@@ -218,8 +218,8 @@ cc.Class({
 				this.dialog.shop.NapRed.NapThe.initCaptcha(data.data);
 				break;
 
-			case 'withdrawXu':
-				this.dialog.shop.TieuRed.MuaXu.initCaptcha(data.data);
+			case 'regOTP':
+				this.dialog.profile.BaoMat.DangKyOTP.initCaptcha(data.data);
 				break;
 		}
 	},
