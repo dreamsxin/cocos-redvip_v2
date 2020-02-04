@@ -4,18 +4,17 @@ cc.Class({
     init(obj){
         this.RedT = obj;
         this.icons = [];
-        var self  = this;
         var data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         Promise.all(data.map(function(obj, index){
-            var icon = cc.instantiate(self.RedT.icon);
-            self.node.addChild(icon);
+            var icon = cc.instantiate(this.RedT.icon);
+            this.node.addChild(icon);
             icon = icon.getComponent('candy_reel_item');
-            icon.init(self.RedT);
+            icon.init(this.RedT);
             if (index > 2 && index < data.length-3) {
                 icon.random();
             }
             return icon;
-        }))
+        }.bind(this)))
         .then(result => {
             this.icons = result;
             this.icons[this.icons.length-1].setIcon(this.icons[4].random());
@@ -27,8 +26,7 @@ cc.Class({
     },
     spin: function(index){
         this.node.stopAllActions();
-        var self = this;
-        var d = cc.moveTo(1, cc.v2(this.node.x,-(this.node.height-408))).easing(cc.easeInOut(3));
+        var d = cc.moveTo(1, cc.v2(this.node.x, -(this.node.height-489))).easing(cc.easeInOut(3));
         var p2 = cc.callFunc(function() {
             if (index === 0) {
                 this.RedT.copy();

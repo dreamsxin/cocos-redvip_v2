@@ -103,7 +103,6 @@ cc.Class({
 		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
 		this.redhat.insertChild(MiniPanel);
 
-		var self = this;
 		this.Line.init(this);
 
 		cc.RedT.audio.bg.pause();
@@ -113,16 +112,16 @@ cc.Class({
 		this.BigWin.on('play',      this.BigWinPlay,   this);
 		this.EF_Free.on('finished', this.EF_FreeFinish,  this);
 
-		this.NoHu.on('play',     this.NoHuPlay,   this);
+		this.NoHu.on('play', this.NoHuPlay,   this);
 
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
 
 		this.gameBonus.init(this);
 		this.dialog.init();
 
-		Promise.all(this.reels.map(function(reel) {
-			reel.init(self);
-		}));
+		this.reels.forEach(function(reel) {
+			reel.init(this);
+		}.bind(this));
 
 		cc.RedT.send({scene:"longlan"});
 		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);

@@ -154,11 +154,11 @@ cc.Class({
         this.RedT.CaoThap.onGetHu();
         this.RedT.AngryBirds.onGetHu();
         this.RedT.MegaJackpot.onGetHu();
-        /**
+        ///**
         if (void 0 !== cc.RedT.inGame.onGetHu) {
         	cc.RedT.inGame.onGetHu();
         }
-        */
+        //*/
 	},
 	setTop: function(){
 		this.node.parent.insertChild(this.node);

@@ -90,14 +90,13 @@ cc.Class({
 		this.EF_Bonus.on('finished', this.EF_BonusFinish, this);
 		this.EF_Free.on('finished',  this.EF_FreeFinish,  this);
 
-		let self = this;
 		this.gameBonus.init(this);
 		this.Line.init(this);
 		this.dialog.init();
 
 		this.reels.forEach(function(reel) {
-			reel.init(self);
-		});
+			reel.init(this);
+		}.bind(this));
 		cc.RedT.send({scene:"vq_red"});
 		this.taikhoan.string = helper.numberWithCommas(cc.RedT.user.red);
 		this.speed = 400;

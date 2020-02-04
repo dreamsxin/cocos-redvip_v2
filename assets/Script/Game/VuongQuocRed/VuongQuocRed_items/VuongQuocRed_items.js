@@ -28,15 +28,15 @@ cc.Class({
 	setIcon: function(icon, data = false){
 		if (icon === 4) {
 			this.icon4.active = true;
-			this.icon.active = this.icon5.active = this.icon6.active = false;
+			this.icon.node.active = this.icon5.active = this.icon6.active = false;
 		}else if (icon === 5) {
 			this.icon5.active = true;
-			this.icon.active = this.icon4.active = this.icon6.active = false;
+			this.icon.node.active = this.icon4.active = this.icon6.active = false;
 		}else if (icon === 6) {
 			this.icon6.active = true;
-			this.icon.active = this.icon4.active = this.icon5.active = false;
+			this.icon.node.active = this.icon4.active = this.icon5.active = false;
 		} else {
-			this.icon.active = true;
+			this.icon.node.active = true;
 			this.icon4.active = this.icon5.active = this.icon6.active = false;
 			this.icon.spriteFrame = this.RedT.icons[icon];
 		}

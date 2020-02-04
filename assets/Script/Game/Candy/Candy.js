@@ -46,6 +46,7 @@ cc.Class({
 		labelLine:  cc.Label,
 		bet:        cc.Label,
 		freeLabel:  cc.Label,
+		nodeFree:   cc.Node,
 
 		BigWin:        cc.Animation,
 		BigWin_Label:  cc.Label,
@@ -59,6 +60,8 @@ cc.Class({
 		buttonSpin:      cc.Node,
 		nodeChangerBetL: cc.Node,
 		nodeChangerBetR: cc.Node,
+
+		skeleSpin:       sp.Skeleton,
 
 		buttonAuto:      cc.Sprite,
 
@@ -203,9 +206,9 @@ cc.Class({
 	EF_vuathang: function(){
 		this.showLineWin(true);
 		this.vuathang.string       = helper.numberWithCommas(this.H_win);
-		this.buttonSpin.active     = !this.H_free;
-		this.freeLabel.string      = 'Free: ' + this.H_free;
-		this.freeLabel.node.active = !!this.H_free
+		this.freeLabel.string      = this.H_free;
+		this.freeLabel.node.active = !!this.H_free;
+		this.nodeFree.active       = this.freeLabel.node.active;
 	},
 	onLineWin: function(bool){
 		this.H_line_win.map(function(obj){
@@ -352,9 +355,10 @@ cc.Class({
 	setSpin: function(){
 		this.buttonLine.pauseSystemEvents();
 		this.buttonSpin.pauseSystemEvents();
-		this.buttonCoint.pauseSystemEvents();
 		this.nodeChangerBetL.pauseSystemEvents();
 		this.nodeChangerBetR.pauseSystemEvents();
+		this.skeleSpin.setAnimation(0, 'animation', true);
+		this.skeleSpin.paused = false;
 	},
 	resetSpin: function(){
 		if (this.isAuto) {
@@ -363,9 +367,9 @@ cc.Class({
 		this.isSpin = false;
 		this.buttonLine.resumeSystemEvents();
 		this.buttonSpin.resumeSystemEvents();
-		this.buttonCoint.resumeSystemEvents();
 		this.nodeChangerBetL.resumeSystemEvents();
 		this.nodeChangerBetR.resumeSystemEvents();
+		this.skeleSpin.paused = true;
 	},
 	runReels: function(){
 		this.reels.forEach(function(reel, index) {

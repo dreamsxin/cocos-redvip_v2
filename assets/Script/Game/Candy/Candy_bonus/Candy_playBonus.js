@@ -6,22 +6,18 @@ cc.Class({
 
     properties: {
         numberBonus: cc.Label,
+        winBonus:    cc.Label,
         listBox:     cc.Node,
         notice:      cc.Node,
         numberWin:   cc.Label,
-        icons: {
-            default: [],
-            type: cc.SpriteFrame,
-        },
+        iconsOpen:  cc.SpriteFrame,
+        iconsClose: cc.SpriteFrame,
     },
     init: function(obj){
         this.RedT = obj;
-        Promise.all(this.listBox.children.map(function(box){
+        this.listBox = this.listBox.children.map(function(box){
             return box.getComponent('Candy_bonus_item');
-        }))
-        .then(result => {
-            this.listBox = result;
-        })
+        });
     },
     onPlay: function(){
         this.reset();
@@ -40,7 +36,7 @@ cc.Class({
     },
     onData: function(data){
         if (void 0 !== data.box) {
-            var obj = this.listBox[data.box];
+            let obj = this.listBox[data.box];
             obj.text.string = helper.numberWithCommas(data.bet);
             this.numberBonus.string = data.bonus;
         }
@@ -54,11 +50,9 @@ cc.Class({
         cc.RedT.send({g:{candy:{bonus:{box:box}}}});
     },
     reset: function(){
-        var self = this;
-        Promise.all(this.listBox.map(function(box){
-            var icon = (Math.random()*5)>>0;
-            box.item.spriteFrame = self.icons[icon];
+        this.listBox.forEach(function(box){
+            box.item.spriteFrame = this.iconsClose;
             box.text.string      = "";
-        }));
+        }.bind(this));
     },
 });

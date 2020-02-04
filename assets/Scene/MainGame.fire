@@ -2578,7 +2578,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Panda",
+    "_name": "Candy",
     "_objFlags": 0,
     "_parent": {
       "__id__": 12
@@ -3019,8 +3019,8 @@
     },
     "component": "",
     "_componentId": "1763c2/MDpCQ4oC+FaHXfWh",
-    "handler": "onWait",
-    "customEventData": "Panda"
+    "handler": "openGame",
+    "customEventData": "Candy"
   },
   {
     "__type__": "cc.Node",
