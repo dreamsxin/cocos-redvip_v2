@@ -7,7 +7,6 @@ cc.Class({
     	games:       cc.Node,
     	adsContent:  cc.PageView,
     	adsTimeNext: 0,
-    	pageViewContent: cc.Node,
     },
     /**
     onLoad() {
@@ -72,15 +71,6 @@ cc.Class({
     	});
     },
     */
-    start:function(){
-    	this.pageViewContent.height = cc.RedT.inGame.node.height;
-    	this.pageViewContent.children.forEach(function(screen){
-    		screen.width = cc.RedT.inGame.node.width;
-    		screen.height = cc.RedT.inGame.node.height;
-    	});
-    	this.pageViewContent.x = -(cc.RedT.inGame.node.width/2);
-    	cc.RedT.inGame.MenuRoom.node.x = cc.RedT.inGame.node.width;
-    },
     onWait: function(){
         cc.RedT.audio.playClick();
         if (cc.RedT.IS_LOGIN){

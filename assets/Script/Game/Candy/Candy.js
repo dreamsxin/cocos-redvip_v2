@@ -205,10 +205,10 @@ cc.Class({
 	},
 	EF_vuathang: function(){
 		this.showLineWin(true);
-		this.vuathang.string       = helper.numberWithCommas(this.H_win);
-		this.freeLabel.string      = this.H_free;
-		this.freeLabel.node.active = !!this.H_free;
-		this.nodeFree.active       = this.freeLabel.node.active;
+		this.vuathang.string   = helper.numberWithCommas(this.H_win);
+		this.freeLabel.string  = this.H_free;
+		this.buttonSpin.active = !this.H_free;
+		this.nodeFree.active   = !!this.H_free;
 	},
 	onLineWin: function(bool){
 		this.H_line_win.map(function(obj){

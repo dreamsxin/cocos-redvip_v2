@@ -50,7 +50,6 @@ cc.Class({
 			default: null,
 			type: cc.Prefab,
 		},
-		typeOTP: '',
 	},
 	init(){
 		var self = this;
@@ -177,9 +176,6 @@ cc.Class({
 		}
 	},
 	onClickOTP: function(){
-		cc.RedT.send({otp:{type:this.typeOTP}});
-	},
-	changerTypeOTP: function(e){
-		this.typeOTP = e.node.name;
+		cc.RedT.send({otp:true});
 	},
 });

@@ -13,7 +13,6 @@ cc.Class({
 		redPhi:    cc.Label,
 		rednhan:   cc.Label,
 		shop:      cc.Node,
-		typeOTP:  '',
 		isdaily:  false,
 		meDaily:  false,
 	},
@@ -102,15 +101,13 @@ cc.Class({
 	reCheckMeDL: function(){
 		this.meDaily = false;
 		if (this.RedT.DaiLy.daily_list.length) {
-			var self  = this;
-			var regex = new RegExp("^" + cc.RedT.user.name + "$", 'i');
-			Promise.all(this.RedT.DaiLy.daily_list.map(function(daily){
-				!self.meDaily && (self.meDaily = regex.test(daily.NICKNAME.string));
-			}))
+			let regex = new RegExp("^" + cc.RedT.user.name + "$", 'i');
+			this.RedT.DaiLy.daily_list.forEach(function(daily){
+				!this.meDaily && (this.meDaily = regex.test(daily.NICKNAME.string));
+			}.bind(this));
 		}
 	},
 	selectDaiLy: function(daily){
-		var self = this;
 		this.isdaily  = true;
 		this.nickname.string = daily.NICKNAME.string;
 		this.onChangerRed(0, true);
@@ -153,9 +150,6 @@ cc.Class({
 		}
 	},
 	onClickOTP: function(){
-		cc.RedT.send({otp:{type: this.typeOTP}});
-	},
-	changerTypeOTP: function(e){
-		this.typeOTP = e.node.name;
+		cc.RedT.send({otp:true});
 	},
 });
