@@ -165,6 +165,9 @@ cc.Class({
 		if (void 0 !== data.taixiu){
 			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
 		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
 	},
 	userData: function(data){
 		this.taikhoan.string = helper.numberWithCommas(data.red);

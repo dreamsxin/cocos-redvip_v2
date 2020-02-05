@@ -60,34 +60,28 @@ module.exports = {
 	_onSocketError: function(message) {
 	},
 	reconnect: function(){
-		//this.connect('127.0.0.1', '/client');
+		this.connect('127.0.0.1', '/client');
 		//this.connect('pro68.club', '/client');
-		this.connect('phattai68.club', '/client');
+		//this.connect('phattai68.club', '/client');
 	},
 	init: function(){
-		/**
 		cc.view.setResizeCallback(function(){
-			if (cc.RedT.inGame && cc.RedT.inGame.nodeGame) {
+			if (!!cc.RedT.inGame && !!cc.RedT.inGame.nodeGame) {
 				cc.RedT.inGame.nodeGame.x = 0;
 				cc.RedT.inGame.nodeGame.y = 0;
 			}
 		});
 		cc.game.on(cc.game.EVENT_HIDE, function(){
-			if (this.IS_LOGIN){
-				this.timeHide = new Date().getTime();
-			}
+			this.timeHide = new Date().getTime();
 		}, this);
 		cc.game.on(cc.game.EVENT_SHOW, function(){
-			if (this.IS_LOGIN){
+			setTimeout(function(){
 				let check = new Date().getTime();
-				check = check-this.timeHide;
-				if (check > 7000) {
-					this._socket.close();
-					//cc.game.restart();
-				}
-			}
+				check = (check-this.timeHide)/1000;
+				cc.director.getActionManager().update(check);
+				cc.director.getAnimationManager().update(check);
+			}.bind(this), 100);
 		}, this);
-		*/
 		this.initPrototype();
 	},
 	initPrototype: function() {

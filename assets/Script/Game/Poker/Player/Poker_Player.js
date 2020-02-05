@@ -11,6 +11,7 @@ cc.Class({
 		card:     cc.Node,
 		d:        cc.Node,
 		status:   cc.Node,
+		notice:   cc.Node,
 		Progress: cc.ProgressBar,
 		Avatar:   cc.Sprite,
 		item:     {
@@ -99,86 +100,140 @@ cc.Class({
 			}
 		}else{
 			this.node.active = false;
-			this.resetGame();
 		}
 	},
 	infoGame: function(info){
 		if (void 0 !== info.hoa) {
-			this.resetStatus(true);
 			this.miniStatus(cc.RedT.inGame.spriteHoa);
+			info.hoa = info.hoa>>0;
+			if (info.hoa > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.hoa, true, 2.5, 22);
+			}
 		}
 		if (void 0 !== info.to) {
-			cc.RedT.inGame.resetStatus(false);
 			this.miniStatus(cc.RedT.inGame.spriteCuoc);
+			info.to = info.to>>0;
+			if (info.to > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.to, true, 1.5, 22);
+			}
 		}
 		if (void 0 !== info.win) {
-			this.resetStatus(true);
+			info.win = info.win>>0;
+			if (info.win > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.win, true, 3, 28);
+			}
 		}
 		if (void 0 !== info.lost) {
-			this.resetStatus(true);
 			this.miniStatus(cc.RedT.inGame.spriteLost);
+			info.lost = info.lost>>0;
+			if (info.lost > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.lost, false, 2.5, 22);
+			}
 		}
 		if (void 0 !== info.theo) {
 			this.miniStatus(cc.RedT.inGame.spriteTheo);
+			info.theo = info.theo>>0;
+			if (info.theo > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.theo, true, 1.5, 22);
+			}
 		}
 		if (void 0 !== info.xem) {
 			if (!this.isAll && !this.isHuy) {
 				this.miniStatus(cc.RedT.inGame.spriteXem);
 			}
+			info.xem = info.xem>>0;
+			if (info.xem > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.xem, true, 1.5, 22);
+			}
 		}
 		if (void 0 !== info.huy) {
 			this.isHuy = true;
-			this.resetStatus(true);
 			this.miniStatus(cc.RedT.inGame.spriteHuy);
 		}
 		if (void 0 !== info.all) {
 			this.isAll = true;
-			this.resetStatus(true);
 			this.miniStatus(cc.RedT.inGame.spriteAll);
+			info.all = info.all>>0;
+			if (info.all > 0) {
+				// Hiệu ứng cộng tiền
+				this.noticeBet(info.all, true, 1.5, 25);
+			}
 		}
 	},
 	miniStatus: function(sprite){
+		this.status.destroyAllChildren();
 		let status = new cc.Node;
 		status = status.addComponent(cc.Sprite);
 		status.spriteFrame = sprite;
 		this.status.addChild(status.node);
-		let y = 33;
-		if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
-			y = 52;
-		}
-		status.node.runAction(cc.moveTo(0.25, cc.v2(0, y)));
+		status.node.opacity = 50;
+		status.node.scale = 3;
+		status.node.y = cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this ? 52 : 33;
+		status.node.runAction(cc.sequence(cc.spawn(cc.fadeTo(0.1, 255), cc.scaleTo(0.1, 1)), cc.delayTime(2.5), cc.callFunc(function(){
+			this.destroy();
+		}, status.node)));
 	},
 	startProgress: function(time) {
+		this.resetStatus();
 		this.Progress.progress = 0;
 		this.progressTime = time;
+		this.oldTime  = new Date().getTime();
 		this.isUpdate = true;
 	},
 	setProgress: function(time, progress) {
 		this.Progress.progress = progress;
 		this.progressTime = time;
+		this.oldTime  = new Date().getTime();
 		this.isUpdate = true;
 	},
 	resetGame: function(){
 		this.item.forEach(function(item){
 			item.node.active = false;
-		}.bind(this));
+		});
 		this.isAll = false;
 		this.isHuy = false;
-		this.resetStatus(true);
+		this.resetStatus();
 		this.bet.string = '';
 	},
 	resetStatus: function(cp = false){
-		if (!this.isAll && !this.isHuy || cp === true) {
-			this.status.destroyAllChildren();
+		this.status.destroyAllChildren();
+		this.notice.destroyAllChildren();
+	},
+	noticeBet: function(bet, plus = true, time, size){
+		let temp = new cc.Node;
+		temp.addComponent(cc.Label);
+		temp = temp.getComponent(cc.Label);
+		temp.string = (plus ? '+' : '-') + helper.numberWithCommas(bet);
+		temp.font = plus ? cc.RedT.inGame.font1 : cc.RedT.inGame.font2;
+		temp.lineHeight = 40;
+		temp.fontSize   = size;
+		temp.spacingX   = -4;
+		this.notice.addChild(temp.node);
+		let y = 100;
+		let x = plus ? -8 : -3;
+		if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
+			x = plus ? -8 : -4;
+			y = 126;
 		}
+		temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
+			this.destroy();
+		}, temp.node)));
 	},
 	update: function(t){
 		if (this.isUpdate === true) {
-			this.Progress.progress = this.Progress.progress+(t/this.progressTime);
+			let h = new Date().getTime();
+			let progress = ((h-this.oldTime)/1000)/this.progressTime;
+			this.Progress.progress = progress+(t/this.progressTime);
 			if (this.Progress.progress >= 1) {
 				this.Progress.progress = 0;
 				this.progressTime = 0;
-				this.isUpdate = true;
+				this.isUpdate = false;
 			}
 		}
 	},

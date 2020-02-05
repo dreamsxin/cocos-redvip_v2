@@ -137,6 +137,9 @@ cc.Class({
 		if (void 0 !== data.log){
 			this.dialog.Fish_history.onData(data.log);
 		}
+		if (void 0 !== data.user){
+			cc.RedT.userData(data.user);
+		}
 	},
 	round: function(){
 		this.fish = {};

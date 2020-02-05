@@ -7,6 +7,8 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		font1: cc.BitmapFont,
+		font2: cc.BitmapFont,
 		nodeNotice: cc.Node,
 		prefabNotice: cc.Prefab,
 		MiniPanel: cc.Prefab,
@@ -20,6 +22,7 @@ cc.Class({
 		},
 		labelRoom:  cc.Label,
 		mainBet:    cc.Label,
+		labelTimeStart: cc.Label,
 		roomCard:   cc.Node,
 		prefabCard: cc.Node,
 
@@ -79,22 +82,29 @@ cc.Class({
 		if (!!data.taixiu){
 			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
 		}
-
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
+		if (void 0 !== data.user){
+			cc.RedT.userData(data.user);
+		}
 		if (!!data.infoGhe) {  // thông tin các ghế
+			console.log(data.infoGhe);
 			this.infoGhe(data.infoGhe);
 		}
-
 		if (!!data.infoRoom) { // thông tin phòng
+			console.log(data.infoRoom);
 			this.infoRoom(data.infoRoom);
 		}
-
 		if (!!data.ingame) {  // có người vào phòng
+			console.log(data.ingame);
 			this.ingame(data.ingame);
 		}
 		if (!!data.outgame) {  // có người ra khỏi phòng
+			console.log(data.outgame);
 			this.outgame(data.outgame);
 		}
-		if (!!data.game) {  // có người ra khỏi phòng
+		if (!!data.game) {
 			console.log(data.game);
 			this.game(data.game);
 		}
@@ -119,11 +129,6 @@ cc.Class({
 		this.nodeNotice.destroyAllChildren();
 		Object.values(this.player).forEach(function(player){
 			player.resetGame();
-		});
-	},
-	resetStatus: function(cp = false){
-		Object.values(this.player).forEach(function(player){
-			player.resetStatus(cp);
 		});
 	},
 	gameInfo: function(data){
@@ -151,9 +156,6 @@ cc.Class({
 		}
 		this.botton.active = false;
 		this.nodeTo.active = false;
-		Object.values(this.player).forEach(function(player){
-			player.resetStatus();
-		});
 	},
 	game: function(data){
 		if (!!data.start) {
@@ -266,7 +268,6 @@ cc.Class({
 		}
 	},
 	infoGhe: function(info){
-		let self = this;
 		let player = {};
 		let newGhe = [];
 		if (this.meMap != 1) {
@@ -276,13 +277,12 @@ cc.Class({
 			newGhe = info;
 		}
 		newGhe.forEach(function(obj, index){
-			let item = self.player[index];
+			let item = this.player[index];
 			player[obj.ghe] = item;
 			item.setInfo(obj.data);
 			return void 0;
-		});
+		}.bind(this));
 		this.player = player;
-		self   = null;
 		player = null;
 		newGhe = null;
 	},
@@ -292,6 +292,26 @@ cc.Class({
 		}
 		if (data.bet !== void 0) {
 			this.mainBet.string = helper.numberWithCommas(data.bet);
+		}
+		if (data.isStop !== void 0) {
+			this.labelTimeStart.node.active = false;
+			clearInterval(this.regTime1);
+		}
+		if (data.isPlay !== void 0) {
+			if (data.isPlay == true && data.time_start !== void 0) {
+				this.resetGame();
+				this.time_start = data.time_start>>0;
+				this.labelTimeStart.node.active = true;
+				this.labelTimeStart.string = '';
+				this.regTime1 = setInterval(function(){
+					this.labelTimeStart.string = helper.numberPad(this.time_start, 2);
+					if (this.time_start < 0) {
+						this.labelTimeStart.node.active = false;
+						clearInterval(this.regTime1);
+					}
+					this.time_start--;
+				}.bind(this), 1000);
+			}
 		}
 	},
 	ingame: function(data){
@@ -303,7 +323,8 @@ cc.Class({
 	backGame: function(){
 		cc.RedT.send({g:{poker:{outgame:true}}});
 		this.loading.active = true;
-		void 0 !== this.timeOut && clearTimeout(this.timeOut);
+		//!!this.timeOut && clearTimeout(this.timeOut);
+		!!this.regTime1 && clearInterval(this.regTime1);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
