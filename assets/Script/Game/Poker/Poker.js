@@ -2,11 +2,13 @@
 var helper        = require('Helper'),
 	notice        = require('Notice'),
 	module_player = require('Poker_Player');
+var player_nap    = require('PokerNapGame');
 
 cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		player_nap:player_nap,
 		font1: cc.BitmapFont,
 		font2: cc.BitmapFont,
 		nodeNotice: cc.Node,
@@ -15,6 +17,7 @@ cc.Class({
 		loading:   cc.Node,
 		redhat:    cc.Node,
 		bo_bai:    cc.Node,
+		nodeout:   cc.Node,
 		notice:    notice,
 		player: {
 			default: [],
@@ -52,7 +55,6 @@ cc.Class({
 		this.redhat.insertChild(MiniPanel);
 
 		this.game_player = null;
-		this.game_d      = null;
 
 		cc.RedT.audio.bg.pause();
 		//cc.RedT.audio.bg = cc.RedT.audio.bgSlot1;
@@ -62,7 +64,6 @@ cc.Class({
 			player.init();
 		});
 		cc.RedT.send({scene:'poker', g:{poker:{ingame:true}}});
-
 		/**
 		if(cc.RedT.isSoundBackground()){
 			this.playMusic();
@@ -89,25 +90,33 @@ cc.Class({
 			cc.RedT.userData(data.user);
 		}
 		if (!!data.infoGhe) {  // thông tin các ghế
-			console.log(data.infoGhe);
 			this.infoGhe(data.infoGhe);
 		}
 		if (!!data.infoRoom) { // thông tin phòng
-			console.log(data.infoRoom);
 			this.infoRoom(data.infoRoom);
 		}
 		if (!!data.ingame) {  // có người vào phòng
-			console.log(data.ingame);
 			this.ingame(data.ingame);
 		}
 		if (!!data.outgame) {  // có người ra khỏi phòng
-			console.log(data.outgame);
 			this.outgame(data.outgame);
 		}
 		if (!!data.game) {
-			console.log(data.game);
 			this.game(data.game);
 		}
+		if (!!data.kick) {
+			this.kick();
+		}
+		if (void 0 !== data.notice){
+			this.notice.show(data.notice);
+		}
+		if (void 0 !== data.load){
+			this.loading.active = data.load;
+		}
+		if (void 0 !== data.nap){
+			this.player_nap.node.active = data.nap;
+		}
+		
 	},
 	gameStart: function(data){
 		data.forEach(function(player){
@@ -144,9 +153,9 @@ cc.Class({
 	},
 	gameStop: function(){
 		this.offSelect();
-	},
-	gameFinish: function(){
-		this.offSelect();
+		this.labelTimeStart.string = '';
+		this.labelTimeStart.node.active = false;
+		clearInterval(this.regTime1);
 	},
 	offSelect: function(){
 		if (!!this.game_player) {
@@ -165,7 +174,7 @@ cc.Class({
 			this.gameStop();
 		}
 		if (!!data.finish) {
-			this.gameFinish();
+			this.gameStop();
 		}
 		if (!!data.chia_bai) {
 			this.ChiaBai(data.chia_bai);
@@ -289,6 +298,7 @@ cc.Class({
 	infoRoom: function(data){
 		if (data.game !== void 0) {
 			this.labelRoom.string = helper.numberWithCommas(data.game);
+			this.player_nap.init(data.game);
 		}
 		if (data.bet !== void 0) {
 			this.mainBet.string = helper.numberWithCommas(data.bet);
@@ -313,12 +323,25 @@ cc.Class({
 				}.bind(this), 1000);
 			}
 		}
+		if (data.first !== void 0) {
+			data.first.forEach(function(player){
+				let get_player = this.player[player.id];
+				get_player.noticeBet(player.bet, '', 2, 22, cc.RedT.inGame.font1);
+				get_player.bet.string = helper.numberWithCommas(player.bet);
+			}.bind(this));
+		}
 	},
 	ingame: function(data){
 		this.player[data.ghe].setInfo(data.data);
 	},
 	outgame: function(data){
 		this.player[data].setInfo(null);
+	},
+	kick: function(){
+		this.loading.active = true;
+		//!!this.timeOut && clearTimeout(this.timeOut);
+		!!this.regTime1 && clearInterval(this.regTime1);
+		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
 		cc.RedT.send({g:{poker:{outgame:true}}});
@@ -337,5 +360,11 @@ cc.Class({
 	},
 	toggleTo: function(){
 		this.nodeTo.active = !this.nodeTo.active;
+	},
+	toggleNap: function(){
+		this.player_nap.node.active = !this.player_nap.node.active;
+	},
+	toggleOut: function(){
+		this.nodeout.active = !this.nodeout.active;
 	},
 });

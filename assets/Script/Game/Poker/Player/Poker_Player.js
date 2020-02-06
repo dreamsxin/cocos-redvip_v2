@@ -9,7 +9,6 @@ cc.Class({
 		balans:   cc.Label,
 		bet:      cc.Label,
 		card:     cc.Node,
-		d:        cc.Node,
 		status:   cc.Node,
 		notice:   cc.Node,
 		Progress: cc.ProgressBar,
@@ -82,13 +81,6 @@ cc.Class({
 			if (!!data.progress) {
 				this.startProgress(data.progress);
 			}
-			if (data.d === true){
-				this.d.active = true;
-				if (cc.RedT.inGame.game_d) {
-					cc.RedT.inGame.game_d.d.active = false;
-				}
-				cc.RedT.inGame.game_d = this;
-			}
 			if (data.bet !== void 0) {
 				this.bet.string = helper.numberWithCommas(data.bet);
 			}
@@ -103,43 +95,44 @@ cc.Class({
 		}
 	},
 	infoGame: function(info){
+		if (void 0 !== info.nap) {
+			info.nap = info.nap>>0;
+			if (info.nap > 0) {
+				this.noticeBet(info.nap, '+', 2.5, 22, cc.RedT.inGame.font1);
+			}
+		}
 		if (void 0 !== info.hoa) {
 			this.miniStatus(cc.RedT.inGame.spriteHoa);
 			info.hoa = info.hoa>>0;
 			if (info.hoa > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.hoa, true, 2.5, 22);
+				this.noticeBet(info.hoa, '+', 3.5, 22, cc.RedT.inGame.font1);
 			}
 		}
 		if (void 0 !== info.to) {
 			this.miniStatus(cc.RedT.inGame.spriteCuoc);
 			info.to = info.to>>0;
 			if (info.to > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.to, true, 1.5, 22);
+				this.noticeBet(info.to, '+', 2.5, 22, cc.RedT.inGame.font1);
 			}
 		}
 		if (void 0 !== info.win) {
 			info.win = info.win>>0;
 			if (info.win > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.win, true, 3, 28);
+				this.noticeBet(info.win, '+', 3.5, 28, cc.RedT.inGame.font1);
 			}
 		}
 		if (void 0 !== info.lost) {
 			this.miniStatus(cc.RedT.inGame.spriteLost);
 			info.lost = info.lost>>0;
 			if (info.lost > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.lost, false, 2.5, 22);
+				this.noticeBet(info.lost, '-', 3.5, 22, cc.RedT.inGame.font2);
 			}
 		}
 		if (void 0 !== info.theo) {
 			this.miniStatus(cc.RedT.inGame.spriteTheo);
 			info.theo = info.theo>>0;
 			if (info.theo > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.theo, true, 1.5, 22);
+				this.noticeBet(info.theo, '+', 2.5, 22, cc.RedT.inGame.font1);
 			}
 		}
 		if (void 0 !== info.xem) {
@@ -148,8 +141,7 @@ cc.Class({
 			}
 			info.xem = info.xem>>0;
 			if (info.xem > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.xem, true, 1.5, 22);
+				this.noticeBet(info.xem, '+', 2.5, 22, cc.RedT.inGame.font1);
 			}
 		}
 		if (void 0 !== info.huy) {
@@ -161,8 +153,7 @@ cc.Class({
 			this.miniStatus(cc.RedT.inGame.spriteAll);
 			info.all = info.all>>0;
 			if (info.all > 0) {
-				// Hiệu ứng cộng tiền
-				this.noticeBet(info.all, true, 1.5, 25);
+				this.noticeBet(info.all, '+', 2.5, 25, cc.RedT.inGame.font1);
 			}
 		}
 	},
@@ -180,7 +171,6 @@ cc.Class({
 		}, status.node)));
 	},
 	startProgress: function(time) {
-		this.resetStatus();
 		this.Progress.progress = 0;
 		this.progressTime = time;
 		this.oldTime  = new Date().getTime();
@@ -205,20 +195,20 @@ cc.Class({
 		this.status.destroyAllChildren();
 		this.notice.destroyAllChildren();
 	},
-	noticeBet: function(bet, plus = true, time, size){
+	noticeBet: function(bet, t, time, size, font){
 		let temp = new cc.Node;
 		temp.addComponent(cc.Label);
 		temp = temp.getComponent(cc.Label);
-		temp.string = (plus ? '+' : '-') + helper.numberWithCommas(bet);
-		temp.font = plus ? cc.RedT.inGame.font1 : cc.RedT.inGame.font2;
+		temp.string = t + helper.numberWithCommas(bet);
+		temp.font = font;
 		temp.lineHeight = 40;
 		temp.fontSize   = size;
 		temp.spacingX   = -4;
 		this.notice.addChild(temp.node);
 		let y = 100;
-		let x = plus ? -8 : -3;
+		let x = t.length == 0 ? 0 : (t == '+' ? -8 : -3);
 		if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
-			x = plus ? -8 : -4;
+			x = t.length == 0 ? 0 : (t == '+' ? -8 : -4);
 			y = 126;
 		}
 		temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
