@@ -70,8 +70,22 @@ cc.Class({
 			this.header.userRed.string = this.dialog.profile.KetSat.redHT.string = helper.numberWithCommas(cc.RedT.user.red);
 			this.dialog.profile.KetSat.redKet.string = helper.numberWithCommas(cc.RedT.user.ketSat);
 			this.dialog.profile.CaNhan.UID.string = cc.RedT.user.UID;
-			this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
 			this.dialog.profile.CaNhan.joinedOn.string = helper.getStringDateByTime(cc.RedT.user.joinedOn);
+
+			this.dialog.profile.CaNhan.phone.string = cc.RedT.user.phone;
+			this.dialog.profile.BaoMat.DangKyOTP.statusOTP(!helper.isEmpty(cc.RedT.user.phone));
+			if (!helper.isEmpty(cc.RedT.user.phone)) {
+				this.dialog.profile.BaoMat.DangKyOTP.labelPhone.string = cc.RedT.user.phone;
+				if (cc.RedT.user.veryphone) {
+					this.dialog.profile.CaNhan.phoneStatus.string = 'Đã Xác Thực';
+					this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('06B30D');
+				}else{
+					this.dialog.profile.CaNhan.phoneStatus.string = 'Chưa Xác Thực';
+					this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('FF0000');
+				}
+			}else{
+				this.dialog.profile.CaNhan.phoneStatus.string = '';
+			}
 		}else{
 			this.dialog.settings.setMusic();
 		}
@@ -83,9 +97,9 @@ cc.Class({
 
 		if (cc.sys.isBrowser) {
 			history.pushState(null, null, location.href);
-		    window.onpopstate = function () {
-		        history.go(1);
-		    };
+			window.onpopstate = function () {
+				history.go(1);
+			};
 		}
 	},
 	start: function(){
@@ -243,12 +257,12 @@ cc.Class({
 			if (!helper.isEmpty(data.phone)) {
 				this.dialog.profile.BaoMat.DangKyOTP.labelPhone.string = data.phone;
 				if (cc.RedT.user.veryphone) {
-		            this.dialog.profile.CaNhan.phoneStatus.string = 'Đã Xác Thực';
-		            this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('06B30D');
-		        }else{
-		            this.dialog.profile.CaNhan.phoneStatus.string = 'Chưa Xác Thực';
-		            this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('FF0000');
-		        }
+					this.dialog.profile.CaNhan.phoneStatus.string = 'Đã Xác Thực';
+					this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('06B30D');
+				}else{
+					this.dialog.profile.CaNhan.phoneStatus.string = 'Chưa Xác Thực';
+					this.dialog.profile.CaNhan.phoneStatus.node.color  = this.dialog.profile.CaNhan.phoneStatus.node.color.fromHEX('FF0000');
+				}
 			}else{
 				this.dialog.profile.CaNhan.phoneStatus.string = '';
 			}
