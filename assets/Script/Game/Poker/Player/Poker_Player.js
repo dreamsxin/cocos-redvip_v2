@@ -11,6 +11,7 @@ cc.Class({
 		card:     cc.Node,
 		status:   cc.Node,
 		notice:   cc.Node,
+		bgWin:    cc.Node,
 		Progress: cc.ProgressBar,
 		Avatar:   cc.Sprite,
 		item:     {
@@ -42,8 +43,10 @@ cc.Class({
 				cc.delayTime(0.1),
 				cc.scaleTo(0.1, 0, 1),
 				cc.callFunc(function() {
-					item.spriteFrame = cc.RedT.util.card.getCard(data.card, data.type);
-				}, this),
+					this.spriteFrame = cc.RedT.util.card.getCard(data.card, data.type);
+					this.bai = data;
+					data = null;
+				}, item),
 				cc.scaleTo(0.1, 1, 1),
 			));
 		}else{
@@ -65,17 +68,29 @@ cc.Class({
 			item.node.runAction(cc.sequence(
 				cc.scaleTo(0.1, 0, 1),
 				cc.callFunc(function() {
-					item.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
-				}, this),
+					this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+					this.bai = card;
+					card = null;
+				}, item),
 				cc.scaleTo(0.1, 1, 1),
 			));
 		});
 	},
-	setInfo: function(data){
+	setInfo: function(data, isWin = false){
 		if (!!data) {
 			this.node.active = true;
 			if (data.balans !== void 0) {
-				this.balans.string = helper.numberWithCommas(data.balans);
+				if (isWin) {
+					this.node.runAction(cc.sequence(
+						cc.delayTime(1),
+						cc.callFunc(function() {
+							this.balans.string = helper.numberWithCommas(data.balans);
+							data = null;
+						}, this),
+					));
+				}else{
+					this.balans.string = helper.numberWithCommas(data.balans);
+				}
 			}
 			!!data.name && (this.nickname.string = data.name);
 			if (!!data.progress) {
@@ -91,10 +106,11 @@ cc.Class({
 				this.openCard(data.openCard);
 			}
 		}else{
+			this.resetGame();
 			this.node.active = false;
 		}
 	},
-	infoGame: function(info){
+	infoGame: function(info, isWin = false){
 		if (void 0 !== info.nap) {
 			info.nap = info.nap>>0;
 			if (info.nap > 0) {
@@ -116,17 +132,31 @@ cc.Class({
 			}
 		}
 		if (void 0 !== info.win) {
-			info.win = info.win>>0;
-			if (info.win > 0) {
-				this.noticeBet(info.win, '+', 3.5, 28, cc.RedT.inGame.font1);
-			}
+			this.node.runAction(cc.sequence(
+				cc.delayTime(1),
+				cc.callFunc(function(){
+					this.status.destroyAllChildren();
+					info.win = info.win>>0;
+					if (info.win > 0) {
+						this.noticeBet(info.win, '+', 3.5, 28, cc.RedT.inGame.font1);
+					}
+					this.bgWin.active = true;
+					info = null;
+				}, this),
+			));
 		}
 		if (void 0 !== info.lost) {
-			this.miniStatus(cc.RedT.inGame.spriteLost);
-			info.lost = info.lost>>0;
-			if (info.lost > 0) {
-				this.noticeBet(info.lost, '-', 3.5, 22, cc.RedT.inGame.font2);
-			}
+			this.node.runAction(cc.sequence(
+				cc.delayTime(1),
+				cc.callFunc(function() {
+					this.miniStatus(cc.RedT.inGame.spriteLost);
+					info.lost = info.lost>>0;
+					if (info.lost > 0) {
+						this.noticeBet(info.lost, '-', 3.5, 22, cc.RedT.inGame.font2);
+					}
+					info = null;
+				}, this),
+			));
 		}
 		if (void 0 !== info.theo) {
 			this.miniStatus(cc.RedT.inGame.spriteTheo);
@@ -136,9 +166,7 @@ cc.Class({
 			}
 		}
 		if (void 0 !== info.xem) {
-			if (!this.isAll && !this.isHuy) {
-				this.miniStatus(cc.RedT.inGame.spriteXem);
-			}
+			this.miniStatus(cc.RedT.inGame.spriteXem);
 			info.xem = info.xem>>0;
 			if (info.xem > 0) {
 				this.noticeBet(info.xem, '+', 2.5, 22, cc.RedT.inGame.font1);
@@ -184,11 +212,14 @@ cc.Class({
 	},
 	resetGame: function(){
 		this.item.forEach(function(item){
+			item.node.color  = item.node.color.fromHEX('FFFFFF');
 			item.node.active = false;
+			item.bai = null;
 		});
 		this.isAll = false;
 		this.isHuy = false;
 		this.resetStatus();
+		this.bgWin.active = false;
 		this.bet.string = '';
 	},
 	resetStatus: function(cp = false){

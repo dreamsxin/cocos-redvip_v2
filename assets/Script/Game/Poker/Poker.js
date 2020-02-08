@@ -141,21 +141,55 @@ cc.Class({
 		});
 	},
 	gameInfo: function(data){
-		data.forEach(function(player){
+		data.data.forEach(function(player){
 			let obj = this.player[player.ghe];
 			if (player.data !== void 0) {
-				obj.setInfo(player.data);
+				obj.setInfo(player.data, !!data.win);
 			}
 			if (player.info !== void 0) {
 				obj.infoGame(player.info);
 			}
 		}.bind(this));
+		if(!!data.win){
+			this.node.runAction(cc.sequence(
+				cc.delayTime(1),
+				cc.callFunc(function() {
+					Object.values(this.player).forEach(function(player){
+						player.item.forEach(function(item){
+							item.node.color = item.node.color.fromHEX('999999');
+						});
+					});
+					this.roomCard.children.forEach(function(item){
+						item.children[0].color = item.children[0].color.fromHEX('999999');
+						data.win.bo.forEach(function(bo){
+							if (item.card.card == bo.card && item.card.type == bo.type) {
+								item.children[0].color = item.children[0].color.fromHEX('FFFFFF');
+							}
+						});
+					});
+					this.player[data.win.ghe].item.forEach(function(item){
+						if (!!item.bai) {
+							data.win.bo.forEach(function(bo){
+								if (item.bai.card == bo.card && item.bai.type == bo.type) {
+									item.node.color = item.node.color.fromHEX('FFFFFF');
+								}
+							});
+						}
+					});
+				}, this),
+			));
+		}
 	},
 	gameStop: function(){
 		this.offSelect();
 		this.labelTimeStart.string = '';
 		this.labelTimeStart.node.active = false;
 		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
+		this.regTime2 = setTimeout(function(){
+			clearTimeout(this.regTime2);
+			this.resetGame();
+		}.bind(this), 5000);
 	},
 	offSelect: function(){
 		if (!!this.game_player) {
@@ -234,9 +268,6 @@ cc.Class({
 			this.nodeTo.active = false;
 		}
 	},
-	infoPlayer: function(data){
-
-	},
 	mainCard: function(data){
 		let time = 0.1;
 		let position = this.bo_bai.parent.convertToWorldSpaceAR(this.bo_bai.position);
@@ -244,7 +275,6 @@ cc.Class({
 			let node = cc.instantiate(this.prefabCard);
 			this.roomCard.addChild(node);
 			let component = node.children[0].getComponent(cc.Sprite);
-			node = null;
 			component.node.runAction(
 				cc.sequence(
 					cc.delayTime(time),
@@ -259,7 +289,10 @@ cc.Class({
 					cc.scaleTo(0.1, 0, 1),
 					cc.callFunc(function(){
 						component.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+						node.card = card;
 						component = null;
+						card = null;
+						node = null;
 					}, this),
 					cc.scaleTo(0.1, 1, 1)
 				)
@@ -339,15 +372,15 @@ cc.Class({
 	},
 	kick: function(){
 		this.loading.active = true;
-		//!!this.timeOut && clearTimeout(this.timeOut);
-		!!this.regTime1 && clearInterval(this.regTime1);
+		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
 		cc.RedT.send({g:{poker:{outgame:true}}});
 		this.loading.active = true;
-		//!!this.timeOut && clearTimeout(this.timeOut);
-		!!this.regTime1 && clearInterval(this.regTime1);
+		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
