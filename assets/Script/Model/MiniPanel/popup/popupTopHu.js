@@ -73,7 +73,15 @@ cc.Class({
 		this.ttOffset2 = cc.v2(e.touch.getLocationX() - (e.touch.getLocationX() - this.node.position.x), e.touch.getLocationY() - (e.touch.getLocationY() - this.node.position.y))
 	},
 	eventMove: function(e){
-		this.node.position = cc.v2(e.touch.getLocationX() - this.ttOffset.x, e.touch.getLocationY() - this.ttOffset.y);
+		let x = e.touch.getLocationX()-this.ttOffset.x;
+		let y = e.touch.getLocationY()-this.ttOffset.y;
+		if (Math.abs(x) > cc.RedT.inGame.node.width/2-50) {
+			x = x < 0 ? (-cc.RedT.inGame.node.width/2)+50 : (cc.RedT.inGame.node.width/2)-50;
+		}
+		if (Math.abs(y) > cc.RedT.inGame.node.height/2-50) {
+			y = y < 0 ? (-cc.RedT.inGame.node.height/2)+50 : (cc.RedT.inGame.node.height/2)-50;
+		}
+		this.node.position = cc.v2(x, y);
 	},
 	eventEnd: function(e){
 		cc.RedT.setting.topHu.position = this.node.position;

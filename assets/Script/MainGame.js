@@ -40,6 +40,7 @@ cc.Class({
 		url:          '',
 		fileAPK:      '',
 		dataOn: true,
+		newsOn: true,
 	},
 	onLoad: function () {
 		if (void 0 === cc.RedT) {
@@ -194,7 +195,7 @@ cc.Class({
 			if (void 0 !== data.notice){
 				this.notice.show(data.notice);
 			}
-			if (void 0 !== data.news){
+			if (void 0 !== data.news && this.newsOn){
 				this.newsContents.onData(data.news);
 			}
 			if (void 0 !== data.captcha) {

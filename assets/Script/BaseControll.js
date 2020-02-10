@@ -73,8 +73,10 @@ module.exports = {
 		});
 		cc.game.on(cc.game.EVENT_HIDE, function(){
 			this.timeHide = new Date().getTime();
+			this.inGame.newsOn = false;
 		}, this);
 		cc.game.on(cc.game.EVENT_SHOW, function(){
+			this.inGame.newsOn = true;
 			setTimeout(function(){
 				let check = new Date().getTime();
 				check = (check-this.timeHide)/1000;
