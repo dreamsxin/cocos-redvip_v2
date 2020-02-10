@@ -95,6 +95,7 @@ cc.Class({
 		isFreeSpin: false,
 		red:        true,
 		betSelect:  0,
+		dataOn:     true,
 	},
 
 	onLoad () {
@@ -194,24 +195,26 @@ cc.Class({
 		this.hieuUng();
 	},
 	onData: function(data) {
-		if (void 0 !== data.user){
-			this.userData(data.user);
-			cc.RedT.userData(data.user);
-		}
-		if (void 0 !== data.longlan){
-			this.LongLan(data.longlan);
-		}
-		if (void 0 !== data.mini){
-			cc.RedT.MiniPanel.onData(data.mini);
-		}
-		if (void 0 !== data.TopHu){
-			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-		}
-		if (void 0 !== data.taixiu){
-			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-		}
-		if (void 0 !== data.vipp) {
-			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		if (this.dataOn) {
+			if (void 0 !== data.user){
+				this.userData(data.user);
+				cc.RedT.userData(data.user);
+			}
+			if (void 0 !== data.longlan){
+				this.LongLan(data.longlan);
+			}
+			if (void 0 !== data.mini){
+				cc.RedT.MiniPanel.onData(data.mini);
+			}
+			if (void 0 !== data.TopHu){
+				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+			}
+			if (void 0 !== data.taixiu){
+				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+			}
+			if (void 0 !== data.vipp) {
+				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+			}
 		}
 	},
 	userData: function(data){
@@ -445,11 +448,14 @@ cc.Class({
 		this.nodeNotice.addChild(notice);
 	},
 	backGame: function(){
+		this.dataOn = false;
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
+		this.dataOn = false;
+		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});

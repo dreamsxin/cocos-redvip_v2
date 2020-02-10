@@ -60,9 +60,9 @@ module.exports = {
 	_onSocketError: function(message) {
 	},
 	reconnect: function(){
-		this.connect('127.0.0.1', '/client');
+		//this.connect('127.0.0.1', '/client');
 		//this.connect('pro68.club', '/client');
-		//this.connect('phattai68.club', '/client');
+		this.connect('phattai68.club', '/client');
 	},
 	init: function(){
 		cc.view.setResizeCallback(function(){
@@ -115,6 +115,15 @@ module.exports = {
 		return check == "true"
 	},
 	userData: function(data){
+		if (void 0 !== data.avatar){
+			this.user.avatar = data.avatar;
+		}
+		if (void 0 !== data.rights){
+			this.user.rights = data.rights;
+		}
+		if (void 0 !== data.name){
+			this.user.name = data.name;
+		}
 		if (void 0 !== data.name){
 			this.user.name = data.name;
 		}

@@ -54,6 +54,7 @@ cc.Class({
 		},
 		cointMe:    cc.SpriteFrame,
 		cointOther: cc.SpriteFrame,
+		dataOn: true,
 	},
 	onLoad: function(){
 		this.volumeNhacNen = 0;
@@ -88,57 +89,59 @@ cc.Class({
 		this.dialog.showNap();
 	},
 	onData: function(data) {
-		if (void 0 !== data.fish){
-			this.fishData(data.fish);
-		}
-		if (void 0 !== data.fishs){
-			this.fishsData(data.fishs);
-		}
-		if (void 0 !== data.round){
-			this.round();
-		}
-		if (void 0 !== data.scene){
-			this.scene(data.scene);
-		}
-		if (void 0 !== data.meMap){
-			this.MeMap = data.meMap;
-			this.dataMeMap(data.meMap);
-		}
-		if (void 0 !== data.infoGhe){
-			this.dataInfoGhe(data.infoGhe);
-		}
-		if (void 0 !== data.ingame){
-			this.dataIngame(data.ingame);
-		}
-		if (void 0 !== data.outgame){
-			this.dataOutGame(data.outgame);
-		}
-		if (void 0 !== data.other){
-			this.dataOther(data.other);
-		}
-		if (void 0 !== data.me){
-			this.dataMe(data.me);
-		}
-		if (void 0 !== data.otherEat){
-			this.otherEat(data.otherEat);
-		}
-		if (void 0 !== data.meEat){
-			this.meEat(data.meEat);
-		}
-		if (void 0 !== data.lock){
-			this.fishLock(data.lock);
-		}
-		if (void 0 !== data.unlock){
-			this.fishUnLock(data.unlock);
-		}
-		if (void 0 !== data.notice){
-			this.notice.show(data.notice);
-		}
-		if (void 0 !== data.log){
-			this.dialog.Fish_history.onData(data.log);
-		}
-		if (void 0 !== data.user){
-			cc.RedT.userData(data.user);
+		if (this.dataOn) {
+			if (void 0 !== data.fish){
+				this.fishData(data.fish);
+			}
+			if (void 0 !== data.fishs){
+				this.fishsData(data.fishs);
+			}
+			if (void 0 !== data.round){
+				this.round();
+			}
+			if (void 0 !== data.scene){
+				this.scene(data.scene);
+			}
+			if (void 0 !== data.meMap){
+				this.MeMap = data.meMap;
+				this.dataMeMap(data.meMap);
+			}
+			if (void 0 !== data.infoGhe){
+				this.dataInfoGhe(data.infoGhe);
+			}
+			if (void 0 !== data.ingame){
+				this.dataIngame(data.ingame);
+			}
+			if (void 0 !== data.outgame){
+				this.dataOutGame(data.outgame);
+			}
+			if (void 0 !== data.other){
+				this.dataOther(data.other);
+			}
+			if (void 0 !== data.me){
+				this.dataMe(data.me);
+			}
+			if (void 0 !== data.otherEat){
+				this.otherEat(data.otherEat);
+			}
+			if (void 0 !== data.meEat){
+				this.meEat(data.meEat);
+			}
+			if (void 0 !== data.lock){
+				this.fishLock(data.lock);
+			}
+			if (void 0 !== data.unlock){
+				this.fishUnLock(data.unlock);
+			}
+			if (void 0 !== data.notice){
+				this.notice.show(data.notice);
+			}
+			if (void 0 !== data.log){
+				this.dialog.Fish_history.onData(data.log);
+			}
+			if (void 0 !== data.user){
+				cc.RedT.userData(data.user);
+			}
 		}
 	},
 	round: function(){
@@ -430,6 +433,7 @@ cc.Class({
 	},
 	backGame: function(){
 		this.playClick();
+		this.dataOn = false;
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame');
@@ -450,6 +454,8 @@ cc.Class({
 		}
 	},
 	signOut: function(){
+		this.dataOn = false;
+		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});

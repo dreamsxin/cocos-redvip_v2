@@ -15,6 +15,10 @@ cc.Class({
 	extends: cc.Component,
 	properties: {
 		MenuRoom: MenuRoom,
+		avatars: {
+			default: [],
+			type: cc.SpriteFrame
+		},
 		PrefabT: {
 			default: [],
 			type: cc.Prefab
@@ -35,13 +39,15 @@ cc.Class({
 		ThongBaoNoHu: ThongBaoNoHu,
 		url:          '',
 		fileAPK:      '',
+		dataOn: true,
 	},
 	onLoad: function () {
 		if (void 0 === cc.RedT) {
 			cc.RedT = baseControll;
 			cc.RedT.init();
-			cc.RedT.audio = this.PrefabT[0].data.getComponent('MainAudio');
+			cc.RedT.audio    = this.PrefabT[0].data.getComponent('MainAudio');
 			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
+			cc.RedT.avatars  = this.avatars;
 		}else{
 			cc.RedT.audio.bg.pause();
 			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
@@ -86,6 +92,7 @@ cc.Class({
 			}else{
 				this.dialog.profile.CaNhan.phoneStatus.string = '';
 			}
+			this.setAvatar(cc.RedT.user.avatar);
 		}else{
 			this.dialog.settings.setMusic();
 		}
@@ -113,7 +120,7 @@ cc.Class({
 			}.bind(this), 300);
 		}
 		cc.RedT.width  = this.node.width;
-        cc.RedT.height = this.node.height;
+		cc.RedT.height = this.node.height;
 	},
 	autoAuth: function(obj) {
 		this.loading.active = true;
@@ -157,59 +164,60 @@ cc.Class({
 		}
 	},
 	onData: function(data){
-		//console.log(data);
-		if (void 0 !== data['unauth']){
-			this.unAuthorized(data['unauth']);
-		}
-		if (void 0 !== data.Authorized){
-			this.Authorized(data.Authorized);
-		}
-		if (void 0 !== data.user){
-			cc.RedT.userData(data.user);
-			this.dataUser(data.user);
-		}
-		if (void 0 !== data.mini){
-			cc.RedT.MiniPanel.onData(data.mini);
-		}
-		if (void 0 !== data.TopHu){
-			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-			this.dialog.DEvent.onHU(data.TopHu);
-		}
-		if (void 0 !== data.taixiu){
-			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-		}
-		if (void 0 !== data.shop){
-			this.dialog.shop.onData(data.shop);
-		}
-		if (void 0 !== data.profile){
-			this.dialog.profile.onData(data.profile);
-		}
-		if (void 0 !== data.notice){
-			this.notice.show(data.notice);
-		}
-		if (void 0 !== data.news){
-			this.newsContents.onData(data.news);
-		}
-		if (void 0 !== data.captcha) {
-			this.captcha(data.captcha);
-		}
-		if (void 0 !== data.pushnohu) {
-			this.ThongBaoNoHu.onData(data.pushnohu);
-		}
-		if (void 0 !== data.loading) {
-			this.bgLoading.onData(data.loading);
-		}
-		if (void 0 !== data.event) {
-			this.dialog && this.dialog.DEvent.onData(data.event);
-		}
-		if (void 0 !== data.vipp) {
-			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-		}
-		if (!!data.toGame) {
-			this.MenuRoom.onData(data.toGame);
-		}
-		if (!!data.message) {
-			this.dialog.iMessage.onData(data.message);
+		if (this.dataOn) {
+			if (void 0 !== data['unauth']){
+				this.unAuthorized(data['unauth']);
+			}
+			if (void 0 !== data.Authorized){
+				this.Authorized(data.Authorized);
+			}
+			if (void 0 !== data.user){
+				cc.RedT.userData(data.user);
+				this.dataUser(data.user);
+			}
+			if (void 0 !== data.mini){
+				cc.RedT.MiniPanel.onData(data.mini);
+			}
+			if (void 0 !== data.TopHu){
+				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+				this.dialog.DEvent.onHU(data.TopHu);
+			}
+			if (void 0 !== data.taixiu){
+				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+			}
+			if (void 0 !== data.shop){
+				this.dialog.shop.onData(data.shop);
+			}
+			if (void 0 !== data.profile){
+				this.dialog.profile.onData(data.profile);
+			}
+			if (void 0 !== data.notice){
+				this.notice.show(data.notice);
+			}
+			if (void 0 !== data.news){
+				this.newsContents.onData(data.news);
+			}
+			if (void 0 !== data.captcha) {
+				this.captcha(data.captcha);
+			}
+			if (void 0 !== data.pushnohu) {
+				this.ThongBaoNoHu.onData(data.pushnohu);
+			}
+			if (void 0 !== data.loading) {
+				this.bgLoading.onData(data.loading);
+			}
+			if (void 0 !== data.event) {
+				this.dialog && this.dialog.DEvent.onData(data.event);
+			}
+			if (void 0 !== data.vipp) {
+				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+			}
+			if (!!data.toGame) {
+				this.MenuRoom.onData(data.toGame);
+			}
+			if (!!data.message) {
+				this.dialog.iMessage.onData(data.message);
+			}
 		}
 	},
 	captcha: function(data){
@@ -239,7 +247,20 @@ cc.Class({
 				break;
 		}
 	},
+	setAvatar: function(data){
+		data = data>>0;
+		if (cc.RedT.avatars[data] !== void 0) {
+			this.header.avatar.spriteFrame = cc.RedT.avatars[data];
+			this.dialog.profile.CaNhan.avatar.spriteFrame = cc.RedT.avatars[data];
+		}else{
+			this.header.avatar.spriteFrame = cc.RedT.avatars[0];
+			this.dialog.profile.CaNhan.avatar.spriteFrame = cc.RedT.avatars[0];
+		}
+	},
 	dataUser: function(data){
+		if (void 0 !== data.avatar){
+			this.setAvatar(data.avatar);
+		}
 		if (void 0 !== data.name){
 			this.header.userName.string = data.name;
 			this.dialog.profile.CaNhan.username.string = data.name;

@@ -6,6 +6,7 @@ cc.Class({
 
 	properties: {
 		header: cc.Node,
+		nodeAvatar: cc.Node,
 		body:   cc.Node,
 		avatar: cc.Sprite,
 		UID: cc.Label,
@@ -28,6 +29,12 @@ cc.Class({
 	},
 	onEnable: function () {
 		this.getLevel();
+	},
+	onDisable: function () {
+		this.nodeAvatar.active = false;
+	},
+	toggleNodeA: function(){
+		this.nodeAvatar.active = !this.nodeAvatar.active;
 	},
 	getLevel: function(){
 		cc.RedT.send({user:{getLevel: true}});
@@ -77,5 +84,12 @@ cc.Class({
 				body.active = false;
 			}
 		});
+	},
+	selectAvatar: function(e){
+		this.toggleNodeA();
+		let avatar = e.target.name;
+		cc.RedT.inGame.setAvatar(avatar);
+		cc.RedT.user.avatar = avatar;
+		cc.RedT.send({user:{avatar:avatar}});
 	},
 });

@@ -85,7 +85,7 @@ cc.Class({
 		loading:   cc.Node,
 		notice:    notice,
 		dialog:    dialog,
-
+		dataOn:     true,
 	},
 	ctor: function(){
 		this.logs = [];
@@ -159,43 +159,46 @@ cc.Class({
 		cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
 	},
 	onData: function(data) {
-		//console.log(data);
-		if (void 0 !== data.user){
-			this.userData(data.user);
-			cc.RedT.userData(data.user);
-		}
-		if (void 0 !== data.xocxoc){
-			this.xocxoc(data.xocxoc);
-		}
-		if (void 0 !== data.mini){
-			cc.RedT.MiniPanel.onData(data.mini);
-		}
-		if (void 0 !== data.TopHu){
-			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-		}
-		if (void 0 !== data.taixiu){
-			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-		}
-		if (void 0 !== data.vipp) {
-			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		if (this.dataOn) {
+			if (void 0 !== data.user){
+				this.userData(data.user);
+				cc.RedT.userData(data.user);
+			}
+			if (void 0 !== data.xocxoc){
+				this.xocxoc(data.xocxoc);
+			}
+			if (void 0 !== data.mini){
+				cc.RedT.MiniPanel.onData(data.mini);
+			}
+			if (void 0 !== data.TopHu){
+				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+			}
+			if (void 0 !== data.taixiu){
+				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+			}
+			if (void 0 !== data.vipp) {
+				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+			}
 		}
 	},
 	backGame: function(){
+		this.dataOn = false;
 		clearInterval(this.timeInterval);
 		cc.RedT.send({g:{xocxoc:{outgame:true}}});
 		this.loading.active = true;
-		void 0 !== this.timeOut && clearTimeout(this.timeOut);
-		void 0 !== this.regTimeOut1 && clearTimeout(this.regTimeOut1);
-		void 0 !== this.regTimeOut2 && clearTimeout(this.regTimeOut2);
-		void 0 !== this.regTimeOut3 && clearTimeout(this.regTimeOut3);
-		cc.director.loadScene('MainGame');
-	},
-	signOut: function(){
-		clearInterval(this.timeInterval);
+		clearTimeout(this.timeOut);
 		clearTimeout(this.regTimeOut1);
 		clearTimeout(this.regTimeOut2);
 		clearTimeout(this.regTimeOut3);
+		cc.director.loadScene('MainGame');
+	},
+	signOut: function(){
+		this.dataOn = false;
+		clearInterval(this.timeInterval);
 		clearTimeout(this.timeOut);
+		clearTimeout(this.regTimeOut1);
+		clearTimeout(this.regTimeOut2);
+		clearTimeout(this.regTimeOut3);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});

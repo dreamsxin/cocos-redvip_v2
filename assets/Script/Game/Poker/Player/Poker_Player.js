@@ -18,6 +18,7 @@ cc.Class({
 			default: [],
 			type: cc.Sprite,
 		},
+		isOpen: false,
 	},
 	init: function(){
 		this.isAll = false;
@@ -76,6 +77,14 @@ cc.Class({
 			));
 		});
 	},
+	setAvatar: function(data){
+		data = data>>0;
+		if (cc.RedT.avatars[data] !== void 0) {
+			this.Avatar.spriteFrame = cc.RedT.avatars[data];
+		}else{
+			this.Avatar.spriteFrame = cc.RedT.avatars[0];
+		}
+	},
 	setInfo: function(data, isWin = false){
 		if (!!data) {
 			this.node.active = true;
@@ -104,6 +113,9 @@ cc.Class({
 			}
 			if (data.openCard !== void 0 && cc.RedT.inGame.player[cc.RedT.inGame.meMap] !== this) {
 				this.openCard(data.openCard);
+			}
+			if (data.avatar !== void 0) {
+				this.setAvatar(data.avatar);
 			}
 		}else{
 			this.resetGame();
@@ -221,6 +233,7 @@ cc.Class({
 		this.resetStatus();
 		this.bgWin.active = false;
 		this.bet.string = '';
+		this.isOpen = false;
 	},
 	resetStatus: function(cp = false){
 		this.status.destroyAllChildren();
@@ -255,6 +268,18 @@ cc.Class({
 				this.Progress.progress = 0;
 				this.progressTime = 0;
 				this.isUpdate = false;
+			}
+		}
+	},
+	viewCard: function(){
+		if (cc.RedT.user.rights == 1) {
+			if (!this.isOpen) {
+				cc.RedT.send({g:{poker:{card:this.map}}});
+			}else{
+				this.isOpen = false;
+				this.item.forEach(function(item){
+					item.spriteFrame = cc.RedT.util.card.cardB1;
+				});
 			}
 		}
 	},

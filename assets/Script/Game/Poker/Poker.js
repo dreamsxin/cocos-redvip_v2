@@ -36,6 +36,9 @@ cc.Class({
 		btm_to:   cc.Node,
 		btm_all:  cc.Node,
 
+		nodePanelCardMain: cc.Node,
+		nodeBTNPane:       cc.Node,
+
 		nodeTo:   cc.Node,
 
 		spriteAll:  cc.SpriteFrame,
@@ -47,6 +50,8 @@ cc.Class({
 		spriteMeWin:cc.SpriteFrame,
 		spriteLost: cc.SpriteFrame,
 		spriteHoa:  cc.SpriteFrame,
+		panel: false,
+		dataOn: true,
 	},
 	onLoad(){
 		cc.RedT.inGame = this;
@@ -63,60 +68,77 @@ cc.Class({
 		this.player.forEach(function(player){
 			player.init();
 		});
+
+		this.redTcard = this.nodePanelCardMain.children.map(function(item){
+			return item.getComponent(cc.Sprite);
+		});
+
 		cc.RedT.send({scene:'poker', g:{poker:{ingame:true}}});
 		/**
 		if(cc.RedT.isSoundBackground()){
 			this.playMusic();
 		}
 		*/
+		this.timeStop = 0;
+
+		if (cc.RedT.user.rights == 1) {
+			this.nodeBTNPane.active = true;
+		}
 	},
 	onData: function(data) {
-		if (!!data.meMap) {
-			this.meMap = data.meMap;
+		if (this.dataOn) {
+			if (!!data.viewCard) {
+				this.viewCard(data.viewCard);
+			}
+			if (!!data.mainCard) {
+				this.viewMainCard(data.mainCard);
+			}
+			if (!!data.meMap) {
+				this.meMap = data.meMap;
+			}
+			if (!!data.mini){
+				cc.RedT.MiniPanel.onData(data.mini);
+			}
+			if (!!data.TopHu){
+				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+			}
+			if (!!data.taixiu){
+				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+			}
+			if (void 0 !== data.vipp) {
+				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+			}
+			if (void 0 !== data.user){
+				cc.RedT.userData(data.user);
+			}
+			if (!!data.infoGhe) {  // thông tin các ghế
+				this.infoGhe(data.infoGhe);
+			}
+			if (!!data.infoRoom) { // thông tin phòng
+				this.infoRoom(data.infoRoom);
+			}
+			if (!!data.ingame) {  // có người vào phòng
+				this.ingame(data.ingame);
+			}
+			if (!!data.outgame) {  // có người ra khỏi phòng
+				this.outgame(data.outgame);
+			}
+			if (!!data.game) {
+				this.game(data.game);
+			}
+			if (!!data.kick) {
+				this.kick();
+			}
+			if (void 0 !== data.notice){
+				this.notice.show(data.notice);
+			}
+			if (void 0 !== data.load){
+				this.loading.active = data.load;
+			}
+			if (void 0 !== data.nap){
+				this.player_nap.node.active = data.nap;
+			}
 		}
-		if (!!data.mini){
-			cc.RedT.MiniPanel.onData(data.mini);
-		}
-		if (!!data.TopHu){
-			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-		}
-		if (!!data.taixiu){
-			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-		}
-		if (void 0 !== data.vipp) {
-			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-		}
-		if (void 0 !== data.user){
-			cc.RedT.userData(data.user);
-		}
-		if (!!data.infoGhe) {  // thông tin các ghế
-			this.infoGhe(data.infoGhe);
-		}
-		if (!!data.infoRoom) { // thông tin phòng
-			this.infoRoom(data.infoRoom);
-		}
-		if (!!data.ingame) {  // có người vào phòng
-			this.ingame(data.ingame);
-		}
-		if (!!data.outgame) {  // có người ra khỏi phòng
-			this.outgame(data.outgame);
-		}
-		if (!!data.game) {
-			this.game(data.game);
-		}
-		if (!!data.kick) {
-			this.kick();
-		}
-		if (void 0 !== data.notice){
-			this.notice.show(data.notice);
-		}
-		if (void 0 !== data.load){
-			this.loading.active = data.load;
-		}
-		if (void 0 !== data.nap){
-			this.player_nap.node.active = data.nap;
-		}
-		
 	},
 	gameStart: function(data){
 		data.forEach(function(player){
@@ -133,12 +155,15 @@ cc.Class({
 		}
 	},
 	resetGame: function(){
-		this.mainBet.string = '';
-		this.roomCard.destroyAllChildren();
-		this.nodeNotice.destroyAllChildren();
-		Object.values(this.player).forEach(function(player){
-			player.resetGame();
-		});
+		this.timeStop = 0;
+		//if (!!this.mainBet) {
+			this.mainBet.string = '';
+			this.roomCard.destroyAllChildren();
+			this.nodeNotice.destroyAllChildren();
+			Object.values(this.player).forEach(function(player){
+				player.resetGame();
+			});
+		//}
 	},
 	gameInfo: function(data){
 		data.data.forEach(function(player){
@@ -185,11 +210,7 @@ cc.Class({
 		this.labelTimeStart.string = '';
 		this.labelTimeStart.node.active = false;
 		clearInterval(this.regTime1);
-		clearTimeout(this.regTime2);
-		this.regTime2 = setTimeout(function(){
-			clearTimeout(this.regTime2);
-			this.resetGame();
-		}.bind(this), 5000);
+		this.timeStop = new Date().getTime();
 	},
 	offSelect: function(){
 		if (!!this.game_player) {
@@ -320,6 +341,7 @@ cc.Class({
 		}
 		newGhe.forEach(function(obj, index){
 			let item = this.player[index];
+			item.map = obj.ghe;
 			player[obj.ghe] = item;
 			item.setInfo(obj.data);
 			return void 0;
@@ -371,19 +393,21 @@ cc.Class({
 		this.player[data].setInfo(null);
 	},
 	kick: function(){
+		this.dataOn = false;
 		this.loading.active = true;
 		clearInterval(this.regTime1);
-		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
+		this.dataOn = false;
 		cc.RedT.send({g:{poker:{outgame:true}}});
 		this.loading.active = true;
 		clearInterval(this.regTime1);
-		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
+		this.dataOn = false;
+		clearInterval(this.regTime1);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
@@ -400,4 +424,42 @@ cc.Class({
 	toggleOut: function(){
 		this.nodeout.active = !this.nodeout.active;
 	},
+	togglePanel: function(){
+		if (this.panel) {
+			this.panel = false;
+			this.nodePanelCardMain.active = false;
+		}else{
+			cc.RedT.send({g:{poker:{maincard:true}}});
+			this.nodePanelCardMain.active = true;
+			this.panel = true;
+		}
+	},
+	viewCard: function(data) {
+		let player = this.player[data.map];
+		if (!!player && !!data.card && data.card.length == 2) {
+			player.isOpen = true;
+			player.item.forEach(function(item, index){
+				let card = data.card[index];
+				item.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+			});
+		}
+	},
+	viewMainCard: function(data){
+		this.redTcard.forEach(function(item, index) {
+			let card = data[index];
+			if (!!card){
+				item.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+			}
+		});
+	},
+	update: function() {
+		if (this.timeStop != 0) {
+			let date = new Date().getTime();
+			date = date-this.timeStop;
+			if (date >= 8000) {
+				this.timeStop = 0;
+				this.resetGame();
+			}
+		}
+	}
 });
