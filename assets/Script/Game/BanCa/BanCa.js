@@ -10,6 +10,8 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		avatar: cc.Sprite,
+
 		audioClick: cc.AudioSource,
 		audioPhao:  cc.AudioSource,
 		audioFire:  cc.AudioSource,
@@ -81,7 +83,17 @@ cc.Class({
 		this.CollisionManager.enabled = true;
 
 		this.dialog.init();
-		this.room = {1:100,2:1000, 3:10000};
+		this.room = {1:10,2:100, 3:1000};
+
+		this.setAvatar(cc.RedT.user.avatar);
+	},
+	setAvatar: function(data){
+		data = data>>0;
+		if (cc.RedT.avatars[data] !== void 0) {
+			this.avatar.spriteFrame = cc.RedT.avatars[data];
+		}else{
+			this.avatar.spriteFrame = cc.RedT.avatars[0];
+		}
 	},
 	onRegGame: function(event){
 		this.playClick();

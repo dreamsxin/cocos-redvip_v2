@@ -52,7 +52,7 @@ cc.Class({
 		this.offsetX = {localX: e.touch.getLocationX(), x: this.touch.position.x};
 	},
 	eventMove: function(e){
-		var x = e.touch.getLocationX()-this.offsetX.localX+this.offsetX.x;
+		let x = e.touch.getLocationX()-this.offsetX.localX+this.offsetX.x;
 		if (x < 0) {
 			x = 0;
 		}else if(x > 401){
@@ -60,7 +60,7 @@ cc.Class({
 		}
 		this.mask.width = x;
 		this.touch.position = cc.v2(x, 0);
-		var bet = (((x/401)*(this.betMax-this.betMin))+this.betMin)>>0;
+		let bet = (((x/401)*(this.betMax-this.betMin))+this.betMin)>>0;
 		this.labelBet.string = Helper.numberWithCommas(bet*this.h);
 	},
 	eventEnd: function(){
@@ -68,11 +68,10 @@ cc.Class({
 	},
 	onOkClick: function(){
 		cc.RedT.inGame.loading.active = true;
-		//cc.RedT.inGame.autoNap = this.toggle.isChecked;
 		if(this.outGame === true){
 			cc.RedT.send({g:{fish:{nap:Helper.getOnlyNumberInString(this.labelBet.string)}}});
 		}else{
-			cc.RedT.send({g:{fish:{reg:{room:cc.RedT.inGame.regGame, red:cc.RedT.inGame.room[cc.RedT.inGame.regGame], balans:Helper.getOnlyNumberInString(this.labelBet.string)}}}});
+			cc.RedT.send({g:{fish:{reg:{room:cc.RedT.inGame.regGame, balans:Helper.getOnlyNumberInString(this.labelBet.string)}}}});
 		}
 	},
 	onCancelClick: function(){

@@ -120,8 +120,6 @@ cc.Class({
 				}
 			}.bind(this), 300);
 		}
-		cc.RedT.width  = this.node.width;
-		cc.RedT.height = this.node.height;
 	},
 	autoAuth: function(obj) {
 		this.loading.active = true;

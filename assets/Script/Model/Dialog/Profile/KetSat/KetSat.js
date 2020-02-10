@@ -42,40 +42,36 @@ cc.Class({
             type:    cc.EditBox,
         },
         isGui: true,
-        typeOTP: '',
     },
     init(){
-    	Promise.all(this.header.children.map(function(obj) {
+    	this.header = this.header.children.map(function(obj) {
             return obj.getComponent('itemContentMenu');
-        }))
-        .then(result => {
-            this.header = result;
         });
     },
     onSelectHead: function(event, name){
-        Promise.all(this.header.map(function(header) {
+        this.header.forEach(function(header) {
             if (header.node.name == name) {
                 header.select();
             }else{
                 header.unselect();
             }
-        }));
-        Promise.all(this.body.children.map(function(body) {
+        });
+        this.body.children.forEach(function(body) {
             if (body.name == name) {
                 body.active = true;
             }else{
                 body.active = false;
             }
-        }));
+        });
         this.clear();
         if (this.body.children[0].active) {
         	this.isGui = true;
-        	this.buttonALL.string = "GỬI TOÀN BỘ";
-	        this.buttonAc.string = "GỬI";
+        	this.buttonALL.string = 'GỬI TOÀN BỘ';
+	        this.buttonAc.string = 'GỬI';
         }else{
         	this.isGui = false;
-        	this.buttonALL.string = "RÚT TOÀN BỘ";
-	        this.buttonAc.string = "RÚT";
+        	this.buttonALL.string = 'RÚT TOÀN BỘ';
+	        this.buttonAc.string = 'RÚT';
         }
     },
     onClickHuy: function(){
@@ -86,13 +82,13 @@ cc.Class({
     	if (this.isGui) {
     		data.gui = helper.getOnlyNumberInString(this.inputGui.string);
     		if (data.gui < 10000) {
-    			cc.RedT.inGame.notice.show({title: "GỬI RED", text: "Số tiền gửi phải lớn hơn 10.000"});
+    			cc.RedT.inGame.notice.show({title: 'GỬI RED', text: 'Số tiền gửi phải lớn hơn 10.000'});
     			return void 0;
     		}
     	}else{
     		data.rut = {red: helper.getOnlyNumberInString(this.inputRut.string), otp: this.inputOTP.string};
     		if (data.rut < 10000) {
-    			cc.RedT.inGame.notice.show({title: "RÚT RED", text: "Số tiền rút phải lớn hơn 10.000"});
+    			cc.RedT.inGame.notice.show({title: 'RÚT RED', text: 'Số tiền rút phải lớn hơn 10.000'});
     			return void 0;
     		}
     	}
@@ -115,18 +111,15 @@ cc.Class({
     onChangerInput: function(value){
     	value = helper.numberWithCommas(helper.getOnlyNumberInString(value));
     	if (this.isGui) {
-    		this.inputGui.string = value == "0" ? "" : value;
+    		this.inputGui.string = value == '0' ? '' : value;
     	}else{
-    		this.inputRut.string = value == "0" ? "" : value;
+    		this.inputRut.string = value == '0' ? '' : value;
     	}
     },
     clear: function(){
-    	this.inputGui.string = this.inputRut.string = this.inputOTP.string = "";
-    },
-    changerTypeOTP: function(e){
-        this.typeOTP = e.node.name;
+    	this.inputGui.string = this.inputRut.string = this.inputOTP.string = '';
     },
     onClickOTP: function(){
-        cc.RedT.send({otp:{type: this.typeOTP}});
+        cc.RedT.send({otp:true});
     },
 });
