@@ -192,7 +192,7 @@
       "array": [
         0,
         0,
-        527.5113346004325,
+        527.4094709047232,
         0,
         0,
         0,
@@ -26125,7 +26125,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 67.38,
+      "width": 94.94,
       "height": 34.13
     },
     "_anchorPoint": {
@@ -26176,8 +26176,8 @@
       }
     ],
     "_useOriginalSize": true,
-    "_string": "10 - 100",
-    "_N$string": "10 - 100",
+    "_string": "100 - 1.000",
+    "_N$string": "100 - 1.000",
     "_fontSize": 14,
     "_lineHeight": 78,
     "_enableWrapText": true,
@@ -26412,7 +26412,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 94.94,
+      "width": 103.69,
       "height": 34.13
     },
     "_anchorPoint": {
@@ -26463,8 +26463,8 @@
       }
     ],
     "_useOriginalSize": true,
-    "_string": "100 - 1.000",
-    "_N$string": "100 - 1.000",
+    "_string": "500 - 5.000",
+    "_N$string": "500 - 5.000",
     "_fontSize": 14,
     "_lineHeight": 78,
     "_enableWrapText": true,
@@ -44665,20 +44665,20 @@
       }
     ],
     "typeBet1": [
-      "10",
-      "20",
-      "30",
-      "50",
-      "70",
-      "100"
-    ],
-    "typeBet2": [
       "100",
       "200",
       "300",
       "500",
       "700",
       "1000"
+    ],
+    "typeBet2": [
+      "500",
+      "1000",
+      "1500",
+      "2500",
+      "3500",
+      "5000"
     ],
     "typeBet3": [
       "1000",

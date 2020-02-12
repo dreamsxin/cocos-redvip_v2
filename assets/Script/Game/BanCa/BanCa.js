@@ -83,7 +83,7 @@ cc.Class({
 		this.CollisionManager.enabled = true;
 
 		this.dialog.init();
-		this.room = {1:10,2:100, 3:1000};
+		this.room = {1:100,2:500, 3:1000};
 
 		this.setAvatar(cc.RedT.user.avatar);
 	},
