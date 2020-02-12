@@ -108,9 +108,6 @@ cc.Class({
 			if (data.bet !== void 0) {
 				this.bet.string = helper.numberWithCommas(data.bet);
 			}
-			if (data.card !== void 0) {
-				this.ChiaBai(data.card);
-			}
 			if (data.openCard !== void 0 && cc.RedT.inGame.player[cc.RedT.inGame.meMap] !== this) {
 				this.openCard(data.openCard);
 			}

@@ -362,27 +362,36 @@ cc.Class({
 			this.labelTimeStart.node.active = false;
 			clearInterval(this.regTime1);
 		}
-		if (data.isPlay !== void 0) {
-			if (data.isPlay == true && data.time_start !== void 0) {
-				this.resetGame();
-				this.time_start = data.time_start>>0;
-				this.labelTimeStart.node.active = true;
-				this.labelTimeStart.string = '';
-				this.regTime1 = setInterval(function(){
-					this.labelTimeStart.string = helper.numberPad(this.time_start, 2);
-					if (this.time_start < 0) {
-						this.labelTimeStart.node.active = false;
-						clearInterval(this.regTime1);
-					}
-					this.time_start--;
-				}.bind(this), 1000);
-			}
+		if (data.isPlay == true && data.time_start !== void 0) {
+			this.resetGame();
+			this.time_start = data.time_start>>0;
+			this.labelTimeStart.node.active = true;
+			this.labelTimeStart.string = '';
+			this.regTime1 = setInterval(function(){
+				this.labelTimeStart.string = helper.numberPad(this.time_start, 2);
+				if (this.time_start < 0) {
+					this.labelTimeStart.node.active = false;
+					clearInterval(this.regTime1);
+				}
+				this.time_start--;
+			}.bind(this), 1000);
 		}
 		if (data.first !== void 0) {
 			data.first.forEach(function(player){
 				let get_player = this.player[player.id];
 				get_player.noticeBet(player.bet, '', 2, 22, cc.RedT.inGame.font1);
 				get_player.bet.string = helper.numberWithCommas(player.bet);
+			}.bind(this));
+		}
+		if (data.card !== void 0) {
+			data.card.forEach(function(obj){
+				let player = this.player[obj.ghe];
+				if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] !== player) {
+					player.item.forEach(function(item){
+						item.node.active = true;
+						item.spriteFrame = cc.RedT.util.card.cardB1;
+					});
+				}
 			}.bind(this));
 		}
 	},
