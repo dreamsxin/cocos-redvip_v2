@@ -97,6 +97,7 @@ cc.Class({
 	openGame: function(e, name){
 		cc.RedT.audio.playClick();
 		if (cc.RedT.IS_LOGIN){
+			cc.RedT.MiniPanel.node.parent = null;
 			cc.RedT.inGame.dataOn = false;
 			cc.RedT.inGame.loading.active = true;
 			cc.director.loadScene(name);

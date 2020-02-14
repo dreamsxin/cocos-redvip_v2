@@ -57,11 +57,14 @@ cc.Class({
 				cc.RedT.inGame.dialog.showPokerNap(this);
 				break;
 			case '3cay':
+				cc.RedT.inGame.loading.active = true;
+				cc.RedT.send({g:{bacay:{reg:this.bet}}});
 				console.log('3 Cay', this.bet);
 				break;
 		}
 	},
 	onData: function(game){
+		cc.RedT.MiniPanel.node.parent = null;
 		cc.director.loadScene(game);
 	},
 });

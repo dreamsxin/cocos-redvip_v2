@@ -13,7 +13,6 @@ cc.Class({
 		font2: cc.BitmapFont,
 		nodeNotice: cc.Node,
 		prefabNotice: cc.Prefab,
-		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		redhat:    cc.Node,
 		bo_bai:    cc.Node,
@@ -55,9 +54,7 @@ cc.Class({
 	},
 	onLoad(){
 		cc.RedT.inGame = this;
-		let MiniPanel = cc.instantiate(this.MiniPanel);
-		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
-		this.redhat.insertChild(MiniPanel);
+		cc.RedT.MiniPanel.node.parent = this.redhat;
 
 		this.game_player = null;
 
@@ -86,6 +83,21 @@ cc.Class({
 		}
 	},
 	onData: function(data) {
+		if (!!data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (!!data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (!!data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
+		if (void 0 !== data.user){
+			cc.RedT.userData(data.user);
+		}
 		if (this.dataOn) {
 			if (!!data.viewCard) {
 				this.viewCard(data.viewCard);
@@ -95,21 +107,6 @@ cc.Class({
 			}
 			if (!!data.meMap) {
 				this.meMap = data.meMap;
-			}
-			if (!!data.mini){
-				cc.RedT.MiniPanel.onData(data.mini);
-			}
-			if (!!data.TopHu){
-				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-			}
-			if (!!data.taixiu){
-				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-			}
-			if (void 0 !== data.vipp) {
-				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-			}
-			if (void 0 !== data.user){
-				cc.RedT.userData(data.user);
 			}
 			if (!!data.infoGhe) {  // thông tin các ghế
 				this.infoGhe(data.infoGhe);
@@ -335,7 +332,7 @@ cc.Class({
 		let newGhe = [];
 		if (this.meMap != 1) {
 			let map = this.meMap-1;
-			newGhe = [...info.slice(map), ...info.slice(0, map)];
+			newGhe = newGhe.concat(info.slice(map),info.slice(0, map));
 		}else{
 			newGhe = info;
 		}
@@ -402,12 +399,14 @@ cc.Class({
 		this.player[data].setInfo(null);
 	},
 	kick: function(){
+		cc.RedT.MiniPanel.node.parent = null;
 		this.dataOn = false;
 		this.loading.active = true;
 		clearInterval(this.regTime1);
 		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
+		cc.RedT.MiniPanel.node.parent = null;
 		this.dataOn = false;
 		cc.RedT.send({g:{poker:{outgame:true}}});
 		this.loading.active = true;
@@ -415,6 +414,7 @@ cc.Class({
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
+		cc.RedT.MiniPanel.node.parent = null;
 		this.dataOn = false;
 		clearInterval(this.regTime1);
 		cc.director.loadScene('MainGame', function(){

@@ -14,7 +14,6 @@ cc.Class({
 		today:        cc.Label,
 		nodeNotice:   cc.Node,
 		prefabNotice: cc.Prefab,
-		MiniPanel:    cc.Prefab,
 		loading:      cc.Node,
 		notice:       notice,
 
@@ -22,13 +21,10 @@ cc.Class({
 
 		games:       cc.Node,
 		position:    '',
-		dataOn:     true,
 	},
 	onLoad () {
 		cc.RedT.inGame = this;
-		var MiniPanel = cc.instantiate(this.MiniPanel);
-		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
-		this.redhat.insertChild(MiniPanel);
+		cc.RedT.MiniPanel.node.parent = this.redhat;
 
 		cc.RedT.send({scene:'xo_so'});
 		this.username.string = cc.RedT.user.name;
@@ -37,29 +33,27 @@ cc.Class({
 		this.XoSo_Main.init(this);
 	},
 	onData: function(data) {
-		if (this.dataOn) {
-			if (void 0 !== data.user){
-				this.userData(data.user);
-				cc.RedT.userData(data.user);
-			}
-			if (void 0 !== data.XoSo){
-				this.XoSo(data.XoSo);
-			}
-			if (void 0 !== data.mini){
-				cc.RedT.MiniPanel.onData(data.mini);
-			}
-			if (void 0 !== data.TopHu){
-				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-			}
-			if (void 0 !== data.taixiu){
-				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-			}
-			if (void 0 !== data.notice){
-				this.notice.show(data.notice);
-			}
-			if (void 0 !== data.vipp) {
-				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-			}
+		if (void 0 !== data.user){
+			this.userData(data.user);
+			cc.RedT.userData(data.user);
+		}
+		if (void 0 !== data.XoSo){
+			this.XoSo(data.XoSo);
+		}
+		if (void 0 !== data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (void 0 !== data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (void 0 !== data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+		if (void 0 !== data.notice){
+			this.notice.show(data.notice);
+		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
 		}
 	},
 	XoSo: function(data){
@@ -85,7 +79,7 @@ cc.Class({
 	backGame: function(){
 		switch(this.position) {
 			case 'Main':
-				this.dataOn = false;
+				cc.RedT.MiniPanel.node.parent = null;
 				this.loading.active = true;
 				cc.director.loadScene('MainGame');
 				break;
@@ -103,7 +97,7 @@ cc.Class({
 		}
 	},
 	signOut: function(){
-		this.dataOn = false;
+		cc.RedT.MiniPanel.node.parent = null;
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});

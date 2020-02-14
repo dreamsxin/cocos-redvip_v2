@@ -30,4 +30,12 @@ cc.Class({
             return item.getComponent(cc.Sprite);
         });
     },
+    setAvatar: function(data){
+        data = data>>0;
+        if (cc.RedT.avatars[data] !== void 0) {
+            this.avatar.spriteFrame = cc.RedT.avatars[data];
+        }else{
+            this.avatar.spriteFrame = cc.RedT.avatars[0];
+        }
+    },
 });

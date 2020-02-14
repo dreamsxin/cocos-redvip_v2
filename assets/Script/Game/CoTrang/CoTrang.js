@@ -61,7 +61,6 @@ cc.Class({
 
 		nodeNotice:   cc.Node,
 		prefabNotice: cc.Prefab,
-		MiniPanel:    cc.Prefab,
 		loading:      cc.Node,
 
 		notice:     notice,
@@ -95,15 +94,11 @@ cc.Class({
 		isFreeSpin: false,
 		red:        true,
 		betSelect:  0,
-		dataOn:     true,
 	},
 
 	onLoad () {
 		cc.RedT.inGame = this;
-		var MiniPanel = cc.instantiate(this.MiniPanel);
-		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
-		this.redhat.insertChild(MiniPanel);
-
+		cc.RedT.MiniPanel.node.parent = this.redhat;
 		this.Line.init(this);
 
 		cc.RedT.audio.bg.pause();
@@ -130,10 +125,10 @@ cc.Class({
 
 		if(cc.RedT.isSoundBackground()){
 			cc.RedT.audio.bg.play();
-            this.audioIcon.spriteFrame = this.audioIcons[1];
-    	}else{
+			this.audioIcon.spriteFrame = this.audioIcons[1];
+		}else{
 			this.audioIcon.spriteFrame = this.audioIcons[0];
-    	}
+		}
 	},
 	_playSFX: function(clip) {
 		if (cc.RedT.IS_SOUND){
@@ -195,26 +190,24 @@ cc.Class({
 		this.hieuUng();
 	},
 	onData: function(data) {
-		if (this.dataOn) {
-			if (void 0 !== data.user){
-				this.userData(data.user);
-				cc.RedT.userData(data.user);
-			}
-			if (void 0 !== data.longlan){
-				this.LongLan(data.longlan);
-			}
-			if (void 0 !== data.mini){
-				cc.RedT.MiniPanel.onData(data.mini);
-			}
-			if (void 0 !== data.TopHu){
-				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-			}
-			if (void 0 !== data.taixiu){
-				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-			}
-			if (void 0 !== data.vipp) {
-				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-			}
+		if (void 0 !== data.user){
+			this.userData(data.user);
+			cc.RedT.userData(data.user);
+		}
+		if (void 0 !== data.longlan){
+			this.LongLan(data.longlan);
+		}
+		if (void 0 !== data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (void 0 !== data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (void 0 !== data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
 		}
 	},
 	userData: function(data){
@@ -448,13 +441,13 @@ cc.Class({
 		this.nodeNotice.addChild(notice);
 	},
 	backGame: function(){
-		this.dataOn = false;
+		cc.RedT.MiniPanel.node.parent = null;
 		this.loading.active = true;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
-		this.dataOn = false;
+		cc.RedT.MiniPanel.node.parent = null;
 		void 0 !== this.timeOut && clearTimeout(this.timeOut);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
@@ -474,19 +467,19 @@ cc.Class({
 			});
 		}
 	},
-    onSetAudio: function(){
-    	if(cc.RedT.isSoundBackground()){
-        	cc.RedT.setSoundBackground(false);
-            cc.RedT.audio.bg.pause();
-            cc.RedT.IS_SOUND = false;
-            cc.RedT.setSoundGame(false);
+	onSetAudio: function(){
+		if(cc.RedT.isSoundBackground()){
+			cc.RedT.setSoundBackground(false);
+			cc.RedT.audio.bg.pause();
+			cc.RedT.IS_SOUND = false;
+			cc.RedT.setSoundGame(false);
 			this.audioIcon.spriteFrame = this.audioIcons[0];
-    	}else{
-    		cc.RedT.setSoundBackground(true);
-            cc.RedT.audio.bg.play();
-            cc.RedT.IS_SOUND = true;
-            cc.RedT.setSoundGame(true);
-            this.audioIcon.spriteFrame = this.audioIcons[1];
-    	}
-    },
+		}else{
+			cc.RedT.setSoundBackground(true);
+			cc.RedT.audio.bg.play();
+			cc.RedT.IS_SOUND = true;
+			cc.RedT.setSoundGame(true);
+			this.audioIcon.spriteFrame = this.audioIcons[1];
+		}
+	},
 });

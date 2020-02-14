@@ -1,41 +1,79 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+
+var helper   = require('Helper');
+var	notice   = require('Notice');
+var	mePlayer = require('3Cay_player');
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+    	nodeNotice: cc.Node,
+		prefabNotice: cc.Prefab,
+		loading:   cc.Node,
+		redhat:    cc.Node,
+		notice:    notice,
+		mePlayer: mePlayer,
+		panel: false,
+		dataOn: false,
     },
+    onLoad(){
+    	cc.RedT.inGame = this;
+		cc.RedT.MiniPanel.node.parent = this.redhat;
+		this.dataOn = true;
+		cc.RedT.send({scene:'bacay', g:{bacay:{ingame:true}}});
 
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
-
-    start () {
-
+		this.mePlayer.nickname.string = cc.RedT.user.name;
+		this.mePlayer.balans.string = helper.numberWithCommas(cc.RedT.user.red);
+		this.mePlayer.setAvatar(cc.RedT.user.avatar);
     },
+    onData: function(data) {
+		if (!!data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (!!data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (!!data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
+		}
+		if (void 0 !== data.user){
+			cc.RedT.userData(data.user);
+		}
+		if (this.dataOn) {
+			if (!!data.kick) {
+				this.kick();
+			}
+			if (void 0 !== data.notice){
+				this.notice.show(data.notice);
+			}
+		}
+	},
 
+	kick: function(){
+		cc.RedT.MiniPanel.node.parent = null;
+		this.dataOn = false;
+		this.loading.active = true;
+		clearInterval(this.regTime1);
+		cc.director.loadScene('MainGame');
+	},
+	backGame: function(){
+		cc.RedT.MiniPanel.node.parent = null;
+		this.dataOn = false;
+		cc.RedT.send({g:{bacay:{outgame:true}}});
+		this.loading.active = true;
+		clearInterval(this.regTime1);
+		cc.director.loadScene('MainGame');
+	},
+	signOut: function(){
+		cc.RedT.MiniPanel.node.parent = null;
+		this.dataOn = false;
+		clearInterval(this.regTime1);
+		cc.director.loadScene('MainGame', function(){
+			cc.RedT.inGame.signOut();
+		});
+	},
     // update (dt) {},
 });

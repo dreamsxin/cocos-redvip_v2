@@ -81,11 +81,9 @@ cc.Class({
 
 		bet:     cc.Node,
 
-		MiniPanel: cc.Prefab,
 		loading:   cc.Node,
 		notice:    notice,
 		dialog:    dialog,
-		dataOn:     true,
 	},
 	ctor: function(){
 		this.logs = [];
@@ -131,9 +129,7 @@ cc.Class({
 	},
 	onLoad () {
 		cc.RedT.inGame = this;
-		var MiniPanel = cc.instantiate(this.MiniPanel);
-		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
-		this.redH.insertChild(MiniPanel);
+		cc.RedT.MiniPanel.node.parent = this.redH;
 
 		this.logMain = this.logMain.children.map(function(obj){
 			return obj.children[0].getComponent(cc.Sprite);
@@ -159,30 +155,28 @@ cc.Class({
 		cc.RedT.send({scene:"xocxoc", g:{xocxoc:{ingame:true}}});
 	},
 	onData: function(data) {
-		if (this.dataOn) {
-			if (void 0 !== data.user){
-				this.userData(data.user);
-				cc.RedT.userData(data.user);
-			}
-			if (void 0 !== data.xocxoc){
-				this.xocxoc(data.xocxoc);
-			}
-			if (void 0 !== data.mini){
-				cc.RedT.MiniPanel.onData(data.mini);
-			}
-			if (void 0 !== data.TopHu){
-				cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
-			}
-			if (void 0 !== data.taixiu){
-				cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
-			}
-			if (void 0 !== data.vipp) {
-				cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
-			}
+		if (void 0 !== data.user){
+			this.userData(data.user);
+			cc.RedT.userData(data.user);
+		}
+		if (void 0 !== data.xocxoc){
+			this.xocxoc(data.xocxoc);
+		}
+		if (void 0 !== data.mini){
+			cc.RedT.MiniPanel.onData(data.mini);
+		}
+		if (void 0 !== data.TopHu){
+			cc.RedT.MiniPanel.TopHu.onData(data.TopHu);
+		}
+		if (void 0 !== data.taixiu){
+			cc.RedT.MiniPanel.TaiXiu.TX_Main.onData(data.taixiu);
+		}
+		if (void 0 !== data.vipp) {
+			cc.RedT.MiniPanel.Dialog.VipPoint.onData(data.vipp);
 		}
 	},
 	backGame: function(){
-		this.dataOn = false;
+		cc.RedT.MiniPanel.node.parent = null;
 		clearInterval(this.timeInterval);
 		cc.RedT.send({g:{xocxoc:{outgame:true}}});
 		this.loading.active = true;
@@ -193,7 +187,7 @@ cc.Class({
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
-		this.dataOn = false;
+		cc.RedT.MiniPanel.node.parent = null;
 		clearInterval(this.timeInterval);
 		clearTimeout(this.timeOut);
 		clearTimeout(this.regTimeOut1);

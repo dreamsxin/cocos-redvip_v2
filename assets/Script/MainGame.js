@@ -43,25 +43,25 @@ cc.Class({
 		newsOn: true,
 	},
 	onLoad: function () {
+		this.dialog.init();
+		this.newsContents.init(this);
+
 		if (void 0 === cc.RedT) {
 			cc.RedT = baseControll;
 			cc.RedT.init();
+			cc.RedT.inGame = this;
 			cc.RedT.audio    = this.PrefabT[0].data.getComponent('MainAudio');
 			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
 			cc.RedT.avatars  = this.avatars;
+			cc.RedT.MiniPanel = cc.instantiate(this.PrefabT[1]);
+			cc.RedT.MiniPanel = cc.RedT.MiniPanel.getComponent('MiniPanel');
 		}else{
+			cc.RedT.inGame = this;
 			cc.RedT.audio.bg.pause();
 			cc.RedT.audio.bg = cc.RedT.audio.mainBackground;
 		}
+		cc.RedT.MiniPanel.node.parent = this.redhat;
 		cc.RedT.reconnect();
-
-		this.dialog.init();
-		this.newsContents.init(this);
-		cc.RedT.inGame = this;
-
-		var MiniPanel = cc.instantiate(this.PrefabT[1]);
-		cc.RedT.MiniPanel = MiniPanel.getComponent('MiniPanel');
-		this.redhat.insertChild(MiniPanel);
 
 		//this.iconCandy   = this.iconCandy.getComponent('iconGameHu');
 		//this.iconVQRed   = this.iconVQRed.getComponent('iconGameHu');
