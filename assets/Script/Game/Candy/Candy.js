@@ -69,7 +69,6 @@ cc.Class({
 		isFreeSpin: false,
 		betSelect: 0,
     },
-
     onLoad () {
 		cc.RedT.inGame = this;
 		cc.RedT.MiniPanel.node.parent = this.redhat;

@@ -7,19 +7,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+    	gameRoom: cc.Label,
     	nodeNotice: cc.Node,
 		prefabNotice: cc.Prefab,
 		loading:   cc.Node,
 		redhat:    cc.Node,
+		noticeOut: cc.Node,
 		notice:    notice,
 		mePlayer: mePlayer,
 		panel: false,
-		dataOn: false,
+		dataOn: true,
     },
     onLoad(){
     	cc.RedT.inGame = this;
 		cc.RedT.MiniPanel.node.parent = this.redhat;
-		this.dataOn = true;
 		cc.RedT.send({scene:'bacay', g:{bacay:{ingame:true}}});
 
 		this.mePlayer.nickname.string = cc.RedT.user.name;
@@ -74,6 +75,9 @@ cc.Class({
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
+	},
+	toggleNoticeOut: function(){
+		this.noticeOut.active = !this.noticeOut.active;
 	},
     // update (dt) {},
 });
