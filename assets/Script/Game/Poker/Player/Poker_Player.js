@@ -183,7 +183,23 @@ cc.Class({
 		}
 		if (void 0 !== info.huy) {
 			this.isHuy = true;
-			this.miniStatus(cc.RedT.inGame.spriteHuy);
+			if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
+				this.status.destroyAllChildren();
+				let status = new cc.Node;
+				status = status.addComponent(cc.Sprite);
+				status.spriteFrame = cc.RedT.inGame.spriteHuy;
+				this.status.addChild(status.node);
+				status.node.opacity = 50;
+				status.node.scale = 3;
+				status.node.y = cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this ? 52 : 33;
+				status.node.runAction(cc.sequence(cc.spawn(cc.fadeTo(0.1, 255), cc.scaleTo(0.1, 1)), cc.delayTime(2.5)));
+			}else{
+				this.miniStatus(cc.RedT.inGame.spriteHuy);
+			}
+
+			this.item.forEach(function(item){
+				item.node.color = item.node.color.fromHEX('999999');
+			});
 		}
 		if (void 0 !== info.all) {
 			this.isAll = true;
