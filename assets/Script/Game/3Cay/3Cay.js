@@ -3,11 +3,16 @@ var helper   = require('Helper');
 var	notice   = require('Notice');
 var	mePlayer = require('3Cay_player');
 var	cuoc     = require('3Cay_cuoc');
+var touchCard = require('3Cay_touchCard');
 
 cc.Class({
 	extends: cc.Component,
 
 	properties: {
+
+		font1: cc.BitmapFont,
+		font2: cc.BitmapFont,
+
 		nodeSelectChuong:  cc.Node,
 		labelSelectChuong: cc.Label,
 
@@ -30,6 +35,10 @@ cc.Class({
 		notice:    notice,
 		mePlayer: mePlayer,
 		cuoc: cuoc,
+		touchCard: {
+			default: [],
+			type: touchCard,
+		},
 		player: {
 			default: [],
 			type: mePlayer,
@@ -129,6 +138,12 @@ cc.Class({
 		if (!!data.notice) {
 			this.addNotice(data.notice);
 		}
+		if (!!data.lat) {
+			let player = this.player[data.lat.map];
+			player.openCard(data.lat);
+		}
+		if (!!data.lats) {
+		}
 	},
 	ChiaBai: function(data){
 		let time = 0;
@@ -138,6 +153,19 @@ cc.Class({
 				time += 0.05;
 			}.bind(this));
 		}
+		this.gameStatus.string = 'XEM BÀI...';
+		clearInterval(this.regTime1);
+		this.time_start = 10;
+		this.labelTimeStart.node.active = true;
+		this.labelTimeStart.string = '';
+		this.regTime1 = setInterval(function(){
+			this.labelTimeStart.string = helper.numberPad(this.time_start, 2);
+			if (this.time_start < 0) {
+				this.labelTimeStart.node.active = false;
+				clearInterval(this.regTime1);
+			}
+			this.time_start--;
+		}.bind(this), 1000);
 	},
 	infoGhe: function(info){
 		console.log(info);
@@ -272,6 +300,12 @@ cc.Class({
 	onClickLat: function(){
 		this.btn_lat.active = false;
 		cc.RedT.send({g:{bacay:{lat:true}}});
+		this.mePlayer.item.forEach(function(item){
+			item.node.runAction(cc.spawn(cc.moveTo(0.1, item.node.defaultPosition), cc.rotateTo(0.1, item.node.defaultAngle), cc.scaleTo(0.1, 1)));
+		});
+		this.touchCard.forEach(function(card){
+			card.onDisable();
+		});
 	},
 	addNotice:function(text){
 		let notice = cc.instantiate(this.prefabNotice)

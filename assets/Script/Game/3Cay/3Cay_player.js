@@ -20,8 +20,7 @@ cc.Class({
 		progress: cc.ProgressBar,
 		avatar:   cc.Sprite,
 		isOpen:   false,
-		isAll:    false,
-		isHuy:    false,
+		isLat:    false,
 	},
 	onDisable: function() {
 		this.ic_dealer.active = false;
@@ -50,11 +49,11 @@ cc.Class({
 			item.node.position = item.node.parent.convertToNodeSpaceAR(position);
 			item.node.scaleX = base.nodeCard.width/item.node.width;
 			item.node.scaleY = base.nodeCard.height/item.node.height;
-			item.node.angle  = 0;
+			item.node.angle  = 3;
 			item.node.active = true;
 			item.spriteFrame = cc.RedT.util.card.cardB1;
 			item.node.runAction(cc.sequence(cc.delayTime(time),
-				cc.spawn(cc.moveTo(0.1, item.node.defaultPosition), cc.rotateTo(0.1, item.node.defaultAngle), cc.scaleTo(0.1, 1)),
+				cc.spawn(cc.moveTo(0.1, cc.v2()), cc.scaleTo(0.1, 1)),
 				cc.delayTime(0.1),
 				cc.scaleTo(0.1, 0, 1),
 				cc.callFunc(function() {
@@ -75,7 +74,6 @@ cc.Class({
 				cc.spawn(cc.moveTo(0.1, item.node.defaultPosition), cc.rotateTo(0.1, item.node.defaultAngle), cc.scaleTo(0.1, 1)),
 			));
 		}
-		this.startProgress(22);
 	},
 	setInfo: function(data, isWin = false){
 		if (!!data) {
@@ -109,7 +107,10 @@ cc.Class({
 				cc.RedT.inGame.nodeSelectGa.active = true;
 			}
 			if (void 0 !== data.bet) {
-				
+				let bet = data.bet>>0;
+				if (bet > 0) {
+					this.noticeBet(bet, '', 3.5, 28, cc.RedT.inGame.font1, true);
+				}
 			}
 			if (data.openCard !== void 0 && cc.RedT.inGame.player[cc.RedT.inGame.meMap] !== this) {
 				this.openCard(data.openCard);
@@ -136,6 +137,19 @@ cc.Class({
 			this.node.active = false;
 		}
 	},
+	openCard: function(data){
+		this.isLat = true;
+		this.item.forEach(function(item, index){
+			let card = data.card[index];
+			item.node.runAction(cc.sequence(
+				cc.scaleTo(0.1, 0, 1),
+				cc.callFunc(function() {
+					this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+				}, item),
+				cc.scaleTo(0.1, 1, 1),
+			));
+		});
+	},
 	startProgress: function(time) {
 		this.progress.progress = 0;
 		this.progressTime = time;
@@ -149,10 +163,35 @@ cc.Class({
 		});
 		this.nodeChicken.active = false;
 		this.nodeDealer.active = false;
+		this.isLat = false;
+		this.status.destroyAllChildren();
+
 		//this.resetStatus();
 		//this.bgWin.active = false;
 		//this.bet.string = '';
 		this.isOpen = false;
+	},
+	noticeBet: function(bet, t, time, size, font, destroy = false){
+		let temp = new cc.Node;
+		temp.addComponent(cc.Label);
+		temp = temp.getComponent(cc.Label);
+		temp.string = t + helper.numberWithCommas(bet);
+		temp.font = font;
+		temp.lineHeight = 40;
+		temp.fontSize   = size;
+		temp.spacingX   = -4;
+		this.status.addChild(temp.node);
+		let y = 33;
+		let x = t.length == 0 ? 0 : (t == '+' ? -8 : -3);
+		if (cc.RedT.inGame.mePlayer === this) {
+			x = t.length == 0 ? 0 : (t == '+' ? -8 : -4);
+			y = 59;
+		}
+		if (destroy) {
+			temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
+				this.destroy();
+			}, temp.node)));
+		}
 	},
 	update: function(t){
 		if (this.isUpdate === true) {
