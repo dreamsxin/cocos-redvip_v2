@@ -130,6 +130,12 @@ cc.Class({
 				player.setInfo(player_data);
 			}.bind(this));
 		}
+		if (!!data.done) {
+			data.done.forEach(function(player_data){
+				let player = this.player[player_data.map];
+				player.setInfo(player_data, true);
+			}.bind(this));
+		}
 		if (data.btn_lat) {
 			this.nodeSelectChuong.active = false;
 			this.nodeSelectGa.active     = false;
@@ -153,7 +159,7 @@ cc.Class({
 				time += 0.05;
 			}.bind(this));
 		}
-		this.gameStatus.string = 'XEM BÀI...';
+		this.gameStatus.string = 'XEM BÀI';
 		clearInterval(this.regTime1);
 		this.time_start = 10;
 		this.labelTimeStart.node.active = true;

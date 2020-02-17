@@ -138,17 +138,19 @@ cc.Class({
 		}
 	},
 	openCard: function(data){
-		this.isLat = true;
-		this.item.forEach(function(item, index){
-			let card = data.card[index];
-			item.node.runAction(cc.sequence(
-				cc.scaleTo(0.1, 0, 1),
-				cc.callFunc(function() {
-					this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
-				}, item),
-				cc.scaleTo(0.1, 1, 1),
-			));
-		});
+		if (!this.isLat) {
+			this.isLat = true;
+			this.item.forEach(function(item, index){
+				let card = data.card[index];
+				item.node.runAction(cc.sequence(
+					cc.scaleTo(0.1, 0, 1),
+					cc.callFunc(function() {
+						this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+					}, item),
+					cc.scaleTo(0.1, 1, 1),
+				));
+			});
+		}
 	},
 	startProgress: function(time) {
 		this.progress.progress = 0;
