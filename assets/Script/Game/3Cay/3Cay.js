@@ -47,6 +47,7 @@ cc.Class({
 		dataOn: true,
 	},
 	onLoad(){
+		this.game_round = 0;
 		cc.RedT.inGame = this;
 		cc.RedT.MiniPanel.node.parent = this.redhat;
 
@@ -106,6 +107,7 @@ cc.Class({
 	game: function(data){
 		console.log(data);
 		if (!!data.chia_bai) {
+			this.game_round = 2;
 			this.gameStatus.string = '';
 			this.nodeSelectChuong.active = false;
 			this.nodeSelectGa.active     = false;
@@ -141,6 +143,7 @@ cc.Class({
 			}.bind(this));
 		}
 		if (data.btn_lat) {
+			this.game_round = 2;
 			this.nodeSelectChuong.active = false;
 			this.nodeSelectGa.active     = false;
 			this.btn_lat.active          = true;
@@ -241,6 +244,7 @@ cc.Class({
 			}.bind(this));
 		}
 		if (data.round !== void 0) {
+			this.game_round = data.round;
 			if (data.round == 0) {
 				this.gameStatus.string = 'VÁN MỚI TRONG';
 			}
@@ -264,6 +268,7 @@ cc.Class({
 		}
 	},
 	resetGame: function(){
+		this.game_round = 0;
 		this.nodeBetGa.active = false;
 		this.mainBetGa.string = '';
 		this.gameStatus.string = '';

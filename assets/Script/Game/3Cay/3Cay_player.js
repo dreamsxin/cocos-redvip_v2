@@ -5,6 +5,7 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		point:       cc.Label,
 		nickname:    cc.Label,
 		balans:      cc.Label,
 		ic_dealer:   cc.Node,
@@ -54,13 +55,11 @@ cc.Class({
 			item.spriteFrame = cc.RedT.util.card.cardB1;
 			item.node.runAction(cc.sequence(cc.delayTime(time),
 				cc.spawn(cc.moveTo(0.1, cc.v2()), cc.scaleTo(0.1, 1)),
-				cc.delayTime(2),
-				cc.scaleTo(0.1, 0, 1),
+				cc.delayTime(1),
 				cc.callFunc(function() {
 					this.spriteFrame = cc.RedT.util.card.getCard(data.card, data.type);
 					data = null;
 				}, item),
-				cc.scaleTo(0.1, 1, 1),
 			));
 		}else{
 			item.spriteFrame = cc.RedT.util.card.cardB1;
@@ -103,13 +102,13 @@ cc.Class({
 				this.nodeChicken.active = !!data.betGa;
 				this.betChicken.string = helper.numberWithCommas(data.betGa);
 			}
-			if (data.isBetChuong && cc.RedT.inGame.mePlayer === this) {
+			if (data.isBetChuong && cc.RedT.inGame.mePlayer === this && cc.RedT.inGame.game_round !== 2) {
 				cc.RedT.inGame.nodeSelectGa.active = true;
 			}
 			if (void 0 !== data.bet) {
 				let bet = data.bet>>0;
 				if (bet > 0) {
-					this.noticeBet(bet, '', 2, 22, cc.RedT.inGame.font1, true);
+					this.noticeBet(bet, '', 2, 25, cc.RedT.inGame.font1, true);
 				}
 			}
 			if (void 0 !== data.totall) {
@@ -163,9 +162,17 @@ cc.Class({
 							this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
 						}, item),
 						cc.scaleTo(0.1, 1, 1),
+						cc.callFunc(function() {
+							this.point.node.active = true;
+							this.point.string = data.point;
+						}, this),
 					));
-				});
+				}.bind(this));
 			}
+		}
+		if (cc.RedT.inGame.mePlayer === this) {
+			this.point.node.active = true;
+			this.point.string = data.point;
 		}
 		this.isLat = true;
 	},
@@ -188,6 +195,8 @@ cc.Class({
 		this.betDealer.string = '';
 		this.betChicken.string = '';
 
+		this.point.node.active = false;
+
 		this.isLat = false;
 		this.status.destroyAllChildren();
 
@@ -202,13 +211,12 @@ cc.Class({
 		temp.font = font;
 		temp.lineHeight = 40;
 		temp.fontSize   = size;
-		temp.spacingX   = -4;
 		this.status.addChild(temp.node);
-		let y = 33;
+		let y = 55;
 		let x = t.length == 0 ? 0 : (t == '+' ? -8 : -3);
 		if (cc.RedT.inGame.mePlayer === this) {
 			x = t.length == 0 ? 0 : (t == '+' ? -8 : -4);
-			y = 59;
+			y = 69;
 		}
 		temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
 			if (destroy) {
