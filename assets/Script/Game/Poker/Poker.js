@@ -49,6 +49,12 @@ cc.Class({
 		spriteMeWin:cc.SpriteFrame,
 		spriteLost: cc.SpriteFrame,
 		spriteHoa:  cc.SpriteFrame,
+
+		titleCard: {
+			default: [],
+			type: cc.SpriteFrame,
+		},
+
 		panel: false,
 		dataOn: true,
 	},
@@ -189,7 +195,8 @@ cc.Class({
 							}
 						});
 					});
-					this.player[data.win.ghe].item.forEach(function(item){
+					let player = this.player[data.win.ghe];
+					player.item.forEach(function(item){
 						if (!!item.bai) {
 							data.win.bo.forEach(function(bo){
 								if (item.bai.card == bo.card && item.bai.type == bo.type) {
@@ -198,6 +205,40 @@ cc.Class({
 							});
 						}
 					});
+					console.log(data);
+					if (data.win.code == 2) {
+						// đôi
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[0];
+					}else if (data.win.code == 3) {
+						// 2 đôi
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[0];
+					}else if (data.win.code == 4) {
+						// Sám
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[1];
+					}else if (data.win.code == 5) {
+						// Sảnh
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[2];
+					}else if (data.win.code == 6) {
+						// Thùng
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[3];
+					}else if (data.win.code == 7) {
+						// Cù Lũ
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[4];
+					}else if (data.win.code == 8) {
+						// Tứ Quý
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[5];
+					}else if (data.win.code == 9) {
+						// Thùng phá sảnh
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[6];
+					}
 				}, this),
 			));
 		}

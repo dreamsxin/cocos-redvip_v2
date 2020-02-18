@@ -442,7 +442,7 @@
         "__id__": 46
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 47
@@ -12580,7 +12580,7 @@
       }
     ],
     "_prefab": null,
-    "_opacity": 255,
+    "_opacity": 148,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,

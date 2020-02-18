@@ -25,8 +25,8 @@ cc.Class({
         }
 
         let bet     = Helper.getOnlyNumberInString(cc.RedT.inGame.labelRoom.string);
-        this.betMin = bet*0.5;
-        this.h      = this.betMin < 100 ? 50 : (this.betMin < 1000 ? 500 : (this.betMin < 10000 ? 1000 : (this.betMin < 100000 ? 10000 : 1000000)));
+        this.betMin = bet>>0;
+        this.h      = this.betMin <= 100 ? 50 : (this.betMin < 1000 ? 500 : (this.betMin < 10000 ? 1000 : (this.betMin < 100000 ? 10000 : 1000000)));
 
         this.labelMin.string = this.labelBet.string = Helper.numberWithCommas(this.betMin);
         this.labelMax.string = Helper.numberWithCommas(this.betMax);

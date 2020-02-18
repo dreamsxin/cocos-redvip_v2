@@ -130,7 +130,11 @@ cc.Class({
 				player.setInfo(player_data);
 			}.bind(this));
 		}
-		if (!!data.done) {
+		if (!!data.done){
+			this.gameStatus.string = 'LẬT BÀI';
+			this.nodeSelectChuong.active = false;
+			this.nodeSelectGa.active     = false;
+			this.btn_lat.active          = false;
 			data.done.forEach(function(player_data){
 				let player = this.player[player_data.map];
 				player.setInfo(player_data, true);

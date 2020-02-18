@@ -117,7 +117,7 @@ cc.Class({
 				if (totall >= 0) {
 					this.noticeBet(totall, '+', 3.5, 28, cc.RedT.inGame.font1);
 				}else{
-					this.noticeBet(totall, '-', 3.5, 28, cc.RedT.inGame.font2);
+					this.noticeBet(Math.abs(totall), '-', 3.5, 28, cc.RedT.inGame.font2);
 				}
 			}
 			if (data.openCard !== void 0) {
@@ -210,11 +210,12 @@ cc.Class({
 			x = t.length == 0 ? 0 : (t == '+' ? -8 : -4);
 			y = 59;
 		}
-		if (destroy) {
-			temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
+		temp.node.runAction(cc.sequence(cc.moveTo(0.2, cc.v2(x, y)), cc.delayTime(time), cc.callFunc(function(){
+			if (destroy) {
 				this.destroy();
-			}, temp.node)));
-		}
+			}
+			destroy = null;
+		}, temp.node)));
 	},
 	update: function(t){
 		if (this.isUpdate === true) {

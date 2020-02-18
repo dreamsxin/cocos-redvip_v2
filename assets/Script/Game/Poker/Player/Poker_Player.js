@@ -14,6 +14,7 @@ cc.Class({
 		bgWin:    cc.Node,
 		Progress: cc.ProgressBar,
 		Avatar:   cc.Sprite,
+		titleCard:cc.Sprite,
 		item:     {
 			default: [],
 			type: cc.Sprite,
@@ -247,6 +248,7 @@ cc.Class({
 		this.bgWin.active = false;
 		this.bet.string = '';
 		this.isOpen = false;
+		this.titleCard.node.active = false;
 	},
 	resetStatus: function(cp = false){
 		this.status.destroyAllChildren();
