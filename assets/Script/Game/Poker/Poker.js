@@ -205,39 +205,42 @@ cc.Class({
 							});
 						}
 					});
-					console.log(data);
 					if (data.win.code == 2) {
-						// đôi
+						// Đôi
 						player.titleCard.node.active = true;
 						player.titleCard.spriteFrame = this.titleCard[0];
 					}else if (data.win.code == 3) {
-						// 2 đôi
+						// 2 đôi (Thú)
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[0];
+						player.titleCard.spriteFrame = this.titleCard[1];
 					}else if (data.win.code == 4) {
 						// Sám
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[1];
+						player.titleCard.spriteFrame = this.titleCard[2];
 					}else if (data.win.code == 5) {
 						// Sảnh
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[2];
+						player.titleCard.spriteFrame = this.titleCard[3];
 					}else if (data.win.code == 6) {
 						// Thùng
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[3];
+						player.titleCard.spriteFrame = this.titleCard[4];
 					}else if (data.win.code == 7) {
 						// Cù Lũ
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[4];
+						player.titleCard.spriteFrame = this.titleCard[5];
 					}else if (data.win.code == 8) {
 						// Tứ Quý
 						player.titleCard.node.active = true;
-						player.titleCard.spriteFrame = this.titleCard[5];
-					}else if (data.win.code == 9) {
-						// Thùng phá sảnh
-						player.titleCard.node.active = true;
 						player.titleCard.spriteFrame = this.titleCard[6];
+					}else if (data.win.code == 9) {
+						// Sảnh Thùng
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[7];
+					}else if (data.win.code == 10) {
+						// Thùng Phá Sảnh
+						player.titleCard.node.active = true;
+						player.titleCard.spriteFrame = this.titleCard[8];
 					}
 				}, this),
 			));
