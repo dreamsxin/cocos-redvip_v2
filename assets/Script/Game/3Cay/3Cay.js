@@ -266,6 +266,9 @@ cc.Class({
 		this.btn_lat.active   = false;
 		this.nodeSelectChuong.active = false;
 		this.nodeSelectGa.active     = false;
+		Object.values(this.player).forEach(function(player){
+			player.resetGame();
+		});
 	},
 	ingame: function(data){
 		this.player[data.ghe].setInfo(data.data);
@@ -304,6 +307,7 @@ cc.Class({
 		cc.RedT.send({g:{bacay:{cuocG:true}}});
 	},
 	onClickLat: function(){
+		this.mePlayer.isLat = true;
 		this.btn_lat.active = false;
 		cc.RedT.send({g:{bacay:{lat:true}}});
 		this.mePlayer.item.forEach(function(item){

@@ -54,7 +54,7 @@ cc.Class({
 			item.spriteFrame = cc.RedT.util.card.cardB1;
 			item.node.runAction(cc.sequence(cc.delayTime(time),
 				cc.spawn(cc.moveTo(0.1, cc.v2()), cc.scaleTo(0.1, 1)),
-				cc.delayTime(0.1),
+				cc.delayTime(2),
 				cc.scaleTo(0.1, 0, 1),
 				cc.callFunc(function() {
 					this.spriteFrame = cc.RedT.util.card.getCard(data.card, data.type);
@@ -90,7 +90,7 @@ cc.Class({
 				}else{
 					this.balans.string = helper.numberWithCommas(data.balans);
 				}
-				if (cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
+				if (cc.RedT.inGame.mePlayer === this) {
 					cc.RedT.user.red = data.balans;
 				}
 			}
@@ -103,16 +103,24 @@ cc.Class({
 				this.nodeChicken.active = !!data.betGa;
 				this.betChicken.string = helper.numberWithCommas(data.betGa);
 			}
-			if (data.isBetChuong && cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
+			if (data.isBetChuong && cc.RedT.inGame.mePlayer === this) {
 				cc.RedT.inGame.nodeSelectGa.active = true;
 			}
 			if (void 0 !== data.bet) {
 				let bet = data.bet>>0;
 				if (bet > 0) {
-					this.noticeBet(bet, '', 3.5, 28, cc.RedT.inGame.font1, true);
+					this.noticeBet(bet, '', 2, 22, cc.RedT.inGame.font1, true);
 				}
 			}
-			if (data.openCard !== void 0 && cc.RedT.inGame.player[cc.RedT.inGame.meMap] !== this) {
+			if (void 0 !== data.totall) {
+				let totall = data.totall>>0;
+				if (totall >= 0) {
+					this.noticeBet(totall, '+', 3.5, 28, cc.RedT.inGame.font1);
+				}else{
+					this.noticeBet(totall, '-', 3.5, 28, cc.RedT.inGame.font2);
+				}
+			}
+			if (data.openCard !== void 0) {
 				this.openCard(data.openCard);
 			}
 			if (data.avatar !== void 0) {
@@ -122,7 +130,7 @@ cc.Class({
 				this.startProgress(data.progress);
 			}
 			if (data.round !== void 0) {
-				if (data.round == 1 && cc.RedT.inGame.player[cc.RedT.inGame.meMap] === this) {
+				if (data.round == 1 && cc.RedT.inGame.mePlayer === this) {
 					if (this.ic_dealer.active) {
 						cc.RedT.inGame.nodeSelectChuong.active = false;
 						cc.RedT.inGame.nodeSelectGa.active = true;
@@ -139,18 +147,27 @@ cc.Class({
 	},
 	openCard: function(data){
 		if (!this.isLat) {
-			this.isLat = true;
-			this.item.forEach(function(item, index){
-				let card = data.card[index];
-				item.node.runAction(cc.sequence(
-					cc.scaleTo(0.1, 0, 1),
-					cc.callFunc(function() {
-						this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
-					}, item),
-					cc.scaleTo(0.1, 1, 1),
-				));
-			});
+			if (cc.RedT.inGame.mePlayer === this) {
+				cc.RedT.inGame.mePlayer.item.forEach(function(item){
+					item.node.runAction(cc.spawn(cc.moveTo(0.1, item.node.defaultPosition), cc.rotateTo(0.1, item.node.defaultAngle), cc.scaleTo(0.1, 1)));
+				});
+				cc.RedT.inGame.touchCard.forEach(function(card){
+					card.onDisable();
+				});
+			}else{
+				this.item.forEach(function(item, index){
+					let card = data.card[index];
+					item.node.runAction(cc.sequence(
+						cc.scaleTo(0.1, 0, 1),
+						cc.callFunc(function() {
+							this.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+						}, item),
+						cc.scaleTo(0.1, 1, 1),
+					));
+				});
+			}
 		}
+		this.isLat = true;
 	},
 	startProgress: function(time) {
 		this.progress.progress = 0;
@@ -159,18 +176,22 @@ cc.Class({
 		this.isUpdate = true;
 	},
 	resetGame: function(){
+		this.isUpdate = false;
+		this.progress.progress = 0;
+		this.progressTime = 0;
 		this.item.forEach(function(item){
 			item.node.color  = item.node.color.fromHEX('FFFFFF');
 			item.node.active = false;
 		});
 		this.nodeChicken.active = false;
 		this.nodeDealer.active = false;
+		this.betDealer.string = '';
+		this.betChicken.string = '';
+
 		this.isLat = false;
 		this.status.destroyAllChildren();
 
-		//this.resetStatus();
 		//this.bgWin.active = false;
-		//this.bet.string = '';
 		this.isOpen = false;
 	},
 	noticeBet: function(bet, t, time, size, font, destroy = false){
