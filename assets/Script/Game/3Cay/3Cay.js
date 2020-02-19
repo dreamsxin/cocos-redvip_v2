@@ -304,13 +304,14 @@ cc.Class({
 		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
-		cc.RedT.MiniPanel.node.parent = null;
-		this.dataOn = false;
+		//cc.RedT.MiniPanel.node.parent = null;
+		//this.dataOn = false;
+		this.noticeOut.active = false;
 		cc.RedT.send({g:{bacay:{outgame:true}}});
-		this.loading.active = true;
-		clearInterval(this.regTime1);
-		clearTimeout(this.regTime2);
-		cc.director.loadScene('MainGame');
+		this.loading.active = false;
+		//clearInterval(this.regTime1);
+		//clearTimeout(this.regTime2);
+		//cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
 		cc.RedT.MiniPanel.node.parent = null;
