@@ -155,7 +155,15 @@ cc.Class({
 			let player = this.player[data.lat.map];
 			player.openCard(data.lat);
 		}
-		if (!!data.lats) {
+		if (void 0 !== data.stop) {
+			data.stop = data.stop>>0;
+			if (data.stop == 0) {
+				this.resetGame();
+			}else{
+				this.regTime2 = setTimeout(function(){
+					this.resetGame();
+				}.bind(this), 4);
+			}
 		}
 	},
 	ChiaBai: function(data){
@@ -215,6 +223,7 @@ cc.Class({
 		if (data.isStop !== void 0) {
 			this.labelTimeStart.node.active = false;
 			clearInterval(this.regTime1);
+			clearTimeout(this.regTime2);
 		}
 		if (data.isPlay == true && data.time_start !== void 0) {
 			this.resetGame();
@@ -222,6 +231,7 @@ cc.Class({
 			this.time_start = data.time_start>>0;
 			this.labelTimeStart.node.active = true;
 			this.labelTimeStart.string = '';
+			clearTimeout(this.regTime2);
 			clearInterval(this.regTime1);
 			this.regTime1 = setInterval(function(){
 				this.labelTimeStart.string = helper.numberPad(this.time_start, 2);
@@ -290,6 +300,7 @@ cc.Class({
 		this.dataOn = false;
 		this.loading.active = true;
 		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	backGame: function(){
@@ -298,12 +309,14 @@ cc.Class({
 		cc.RedT.send({g:{bacay:{outgame:true}}});
 		this.loading.active = true;
 		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame');
 	},
 	signOut: function(){
 		cc.RedT.MiniPanel.node.parent = null;
 		this.dataOn = false;
 		clearInterval(this.regTime1);
+		clearTimeout(this.regTime2);
 		cc.director.loadScene('MainGame', function(){
 			cc.RedT.inGame.signOut();
 		});
