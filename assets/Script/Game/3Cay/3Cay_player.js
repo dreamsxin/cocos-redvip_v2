@@ -5,6 +5,7 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		regOut:      cc.Node,
 		point:       cc.Label,
 		nickname:    cc.Label,
 		balans:      cc.Label,
@@ -122,6 +123,9 @@ cc.Class({
 			if (data.openCard !== void 0) {
 				this.openCard(data.openCard);
 			}
+			if (data.setCard !== void 0) {
+				this.setCard(data.setCard);
+			}
 			if (data.avatar !== void 0) {
 				this.setAvatar(data.avatar);
 			}
@@ -143,6 +147,14 @@ cc.Class({
 			this.resetGame();
 			this.node.active = false;
 		}
+	},
+	setCard:function(data){
+		console.log(data);
+		this.item.forEach(function(item, index){
+			let card = data[index];
+			item.node.active = true;
+			item.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+		}.bind(this));
 	},
 	openCard: function(data){
 		if (!this.isLat) {
@@ -196,6 +208,7 @@ cc.Class({
 		this.betChicken.string = '';
 
 		this.point.node.active = false;
+		this.regOut.active = false;
 
 		this.isLat = false;
 		this.status.destroyAllChildren();

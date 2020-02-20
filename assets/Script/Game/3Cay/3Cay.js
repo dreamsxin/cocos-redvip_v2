@@ -105,7 +105,11 @@ cc.Class({
 		}
 	},
 	game: function(data){
-		console.log(data);
+		//console.log(data);
+		if (void 0 !== data.regOut) {
+			let player = this.player[data.regOut.map];
+			player.regOut.active = data.regOut.reg;
+		}
 		if (!!data.chia_bai) {
 			this.game_round = 2;
 			this.gameStatus.string = '';
@@ -176,7 +180,7 @@ cc.Class({
 		}
 		this.gameStatus.string = 'XEM BÀI';
 		clearInterval(this.regTime1);
-		this.time_start = 10;
+		this.time_start = 7;
 		this.labelTimeStart.node.active = true;
 		this.labelTimeStart.string = '';
 		this.regTime1 = setInterval(function(){
@@ -189,7 +193,7 @@ cc.Class({
 		}.bind(this), 1000);
 	},
 	infoGhe: function(info){
-		console.log(info);
+		//console.log(info);
 		let player = {};
 		let newGhe = [];
 		if (this.meMap != 1) {
@@ -210,15 +214,15 @@ cc.Class({
 		newGhe = null;
 	},
 	infoRoom: function(data){
-		console.log(data);
+		//console.log(data);
 		if (data.game !== void 0) {
 			this.gameRoom.string = helper.numberWithCommas(data.game);
 			this.labelSelectGa.string = helper.numberWithCommas(data.game);
 			this.cuoc.init(data.game);
 		}
 		if (data.betGa !== void 0) {
-			this.nodeBetGa.active = true;
-			this.mainBetGa.string = helper.numberWithCommas(data.betGa);
+			this.nodeBetGa.active = !!data.betGa;
+			this.mainBetGa.string = helper.numberWithCommas(data.betGa>>0);
 		}
 		if (data.isStop !== void 0) {
 			this.labelTimeStart.node.active = false;
@@ -226,7 +230,7 @@ cc.Class({
 			clearTimeout(this.regTime2);
 		}
 		if (data.isPlay == true && data.time_start !== void 0) {
-			this.resetGame();
+			data.time_start > 0 && this.resetGame();
 			this.gameStatus.string = 'VÁN MỚI TRONG';
 			this.time_start = data.time_start>>0;
 			this.labelTimeStart.node.active = true;
@@ -307,7 +311,7 @@ cc.Class({
 		//cc.RedT.MiniPanel.node.parent = null;
 		//this.dataOn = false;
 		this.noticeOut.active = false;
-		cc.RedT.send({g:{bacay:{outgame:true}}});
+		cc.RedT.send({g:{bacay:{regOut:true}}});
 		this.loading.active = false;
 		//clearInterval(this.regTime1);
 		//clearTimeout(this.regTime2);
