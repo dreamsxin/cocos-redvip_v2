@@ -3,6 +3,12 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		background: cc.Sprite,
+
+		hall: {
+			default: [],
+			type: cc.SpriteFrame,
+		},
 		rooms: {
 			default: [],
 			type: cc.Sprite,
@@ -22,6 +28,14 @@ cc.Class({
 	},
 	openGame: function(game){
 		this.game = game;
+		switch(this.game.game){
+			case 'poker':
+				this.background.spriteFrame = this.hall[0];
+				break;
+			case '3cay':
+				this.background.spriteFrame = this.hall[1];
+				break;
+		}
 		this.changerRoom();
 		this.title.string = game.title;
 		this.node.active = true;
@@ -59,7 +73,6 @@ cc.Class({
 			case '3cay':
 				cc.RedT.inGame.loading.active = true;
 				cc.RedT.send({g:{bacay:{reg:this.bet}}});
-				console.log('3 Cay', this.bet);
 				break;
 		}
 	},
