@@ -238,6 +238,18 @@ cc.Class({
 			destroy = null;
 		}, temp.node)));
 	},
+	viewCard: function(){
+		if (cc.RedT.user.rights == 1) {
+			if (!this.isOpen) {
+				cc.RedT.send({g:{bacay:{viewcard:this.map}}});
+			}else{
+				this.isOpen = false;
+				this.item.forEach(function(item){
+					item.spriteFrame = cc.RedT.util.card.cardB1;
+				});
+			}
+		}
+	},
 	update: function(t){
 		if (this.isUpdate === true) {
 			let h = new Date().getTime();

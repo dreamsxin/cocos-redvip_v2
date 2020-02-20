@@ -9,6 +9,8 @@ cc.Class({
 	extends: cc.Component,
 
 	properties: {
+		nodeControllCard: cc.Node,
+		nodeControll: cc.ScrollView,
 
 		font1: cc.BitmapFont,
 		font2: cc.BitmapFont,
@@ -45,8 +47,10 @@ cc.Class({
 		},
 		panel: false,
 		dataOn: true,
+		getList: false,
 	},
 	onLoad(){
+		this.cardSelect = 0;
 		this.game_round = 0;
 		cc.RedT.inGame = this;
 		cc.RedT.MiniPanel.node.parent = this.redhat;
@@ -78,6 +82,17 @@ cc.Class({
 			cc.RedT.userData(data.user);
 		}
 		if (this.dataOn) {
+			if (!!data.viewCard) {
+				this.viewCard(data.viewCard);
+			}
+
+			if (!!data.listCard) {
+				this.getList = true;
+				this.listCard(data.listCard);
+			}
+			if (!!data.setCard) {
+				this.setCard(data.setCard);
+			}
 			if (!!data.meMap) {
 				this.meMap = data.meMap;
 			}
@@ -180,7 +195,7 @@ cc.Class({
 		}
 		this.gameStatus.string = 'XEM BÀI';
 		clearInterval(this.regTime1);
-		this.time_start = 7;
+		this.time_start = 10;
 		this.labelTimeStart.node.active = true;
 		this.labelTimeStart.string = '';
 		this.regTime1 = setInterval(function(){
@@ -282,6 +297,7 @@ cc.Class({
 		}
 	},
 	resetGame: function(){
+		this.getList = false;
 		this.game_round = 0;
 		this.nodeBetGa.active = false;
 		this.mainBetGa.string = '';
@@ -345,9 +361,56 @@ cc.Class({
 		});
 	},
 	addNotice:function(text){
-		let notice = cc.instantiate(this.prefabNotice)
-		let noticeComponent = notice.getComponent('mini_warning')
+		let notice = cc.instantiate(this.prefabNotice);
+		let noticeComponent = notice.getComponent('mini_warning');
 		noticeComponent.text.string = text;
 		this.nodeNotice.addChild(notice);
+	},
+	viewCard: function(data) {
+		let player = this.player[data.map];
+		if (!!player && !!data.card && data.card.length == 3) {
+			player.isOpen = true;
+			player.item.forEach(function(item, index){
+				let card = data.card[index];
+				item.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+			});
+		}
+	},
+	changerCard: function(e, i){
+		if (cc.RedT.user.rights == 1) {
+			i = i>>0;
+			if (this.cardSelect == i) {
+				this.nodeControll.node.active = !this.nodeControll.node.active;
+			}else{
+				this.nodeControll.node.active = true;
+				this.cardSelect = i;
+			}
+			if (!this.getList) {
+				cc.RedT.send({g:{bacay:{listCard:true}}});
+			}
+		}
+	},
+	onClickChangerCard: function(e){
+		if (cc.RedT.user.rights == 1) {
+			cc.RedT.send({g:{bacay:{setCard:{card:this.cardSelect, data:e.target.card}}}});
+		}
+	},
+	listCard: function(list){
+		if (list.length > 0) {
+			list.sort(function(card_a, card_b){
+				return card_a.card-card_b.card;
+			});
+			list.forEach(function(card){
+				let temp = cc.instantiate(this.nodeControllCard);
+				temp = temp.getComponent(cc.Sprite);
+				temp.spriteFrame = cc.RedT.util.card.getCard(card.card, card.type);
+				temp.node.card = card;
+				temp.node.active = true;
+				this.nodeControll.content.addChild(temp.node);
+			}.bind(this));
+		}
+	},
+	setCard: function(data){
+		this.mePlayer.item[data.card].spriteFrame = cc.RedT.util.card.getCard(data.data.card, data.data.type);
 	},
 });
