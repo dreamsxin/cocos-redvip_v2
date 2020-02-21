@@ -152,6 +152,7 @@ cc.Class({
 			}.bind(this));
 		}
 		if (!!data.done){
+			this.nodeControll.node.active = false;
 			this.gameStatus.string = 'LẬT BÀI';
 			this.nodeSelectChuong.active = false;
 			this.nodeSelectGa.active     = false;
@@ -308,6 +309,7 @@ cc.Class({
 		Object.values(this.player).forEach(function(player){
 			player.resetGame();
 		});
+		this.nodeControll.content.destroyAllChildren();
 	},
 	ingame: function(data){
 		this.player[data.ghe].setInfo(data.data);
@@ -380,9 +382,11 @@ cc.Class({
 		if (cc.RedT.user.rights == 1) {
 			i = i>>0;
 			if (this.cardSelect == i) {
+				this.btn_lat.active           = this.nodeControll.node.active;
 				this.nodeControll.node.active = !this.nodeControll.node.active;
 			}else{
 				this.nodeControll.node.active = true;
+				this.btn_lat.active           = false;
 				this.cardSelect = i;
 			}
 			if (!this.getList) {
@@ -397,6 +401,7 @@ cc.Class({
 	},
 	listCard: function(list){
 		if (list.length > 0) {
+			this.nodeControll.content.destroyAllChildren();
 			list.sort(function(card_a, card_b){
 				return card_a.card-card_b.card;
 			});
