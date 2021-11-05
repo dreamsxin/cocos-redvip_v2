@@ -1,6 +1,6 @@
 
 var helper = require('Helper');
-
+var config = require('Config');
 var baseControll = require('BaseControll');
 
 var header       = require('Header'),
@@ -440,7 +440,7 @@ cc.Class({
 		cc.RedT.audio.playUnClick();
 	},
 	fanpage: function(){
-		cc.sys.openURL(this.url + '/fanpage/');
+		cc.sys.openURL(config.HOST + '/fanpage/');
 	},
 	ios: function(){
 		cc.sys.openURL(this.url + '/help/ios');

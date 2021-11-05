@@ -1,3 +1,4 @@
+var config = require('Config');
 
 module.exports = {
 	IS_LOGIN:    false,
@@ -62,7 +63,7 @@ module.exports = {
 	reconnect: function(){
 		//this.connect('127.0.0.1', '/client');
 		//this.connect('pro68.club', '/client');
-		this.connect('phattai68.club', '/client');
+		this.connect(config.SOCKET, '/client'); //'ec2-13-232-56-69.ap-south-1.compute.amazonaws.com:8088'
 	},
 	init: function(){
 		cc.view.setResizeCallback(function(){
